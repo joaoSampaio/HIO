@@ -1,0 +1,217 @@
+@extends('app')
+
+@section('header')
+<link href="{{ asset('css/video-js.css') }}" rel="stylesheet">
+<style>
+
+.navbar-default {
+    background-color: #222 !important;
+    border-color: transparent;
+}
+.img-responsive{
+        width: 100%;
+}
+
+.btn-default:hover {
+    color: #fff;
+    background-color: #00CE6C;
+    border-color: #00CE6C;
+}
+.btn-default {
+    color: #fff;
+    background-color: #00CE6C;
+    border-color: #00CE6C;
+    border-radius: 0px;
+}
+.form-control{
+border-radius: 0px;
+}
+
+.intro-lead-in{
+color: #eb1946;
+    text-transform: uppercase;
+}
+
+.full-width-tabs > ul.nav.nav-tabs {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+        .full-width-tabs > ul.nav.nav-tabs > li {
+            float: none;
+            display: table-cell;
+        }
+        .full-width-tabs > ul.nav.nav-tabs > li > a {
+            text-align: center;
+        }
+        .take-all-space-you-can{
+            width:100%;
+        }
+        .take-all-space-you-can.active a{
+                background-color: #f7f7f7 !important;
+        }
+
+        .nav-tabs {
+            border-bottom: 0px solid #ddd;
+        }
+
+
+
+    .title-proof{
+        font-size: 22pt;
+        text-transform: uppercase;
+        margin-top: 35px;
+        text-align: center;
+    }
+
+    .primary{
+        color: #eb1946;
+    }
+
+</style>
+
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" id="st_insights_js" src="https://ws.sharethis.com/button/buttons.js?publisher=e31fe21a-7dbd-457b-a0cd-cf86f734af91"></script>
+<script type="text/javascript">stLight.options({publisher: "e31fe21a-7dbd-457b-a0cd-cf86f734af91", doNotHash: false, doNotCopy: false, hashAddressBar: true});</script>
+
+@endsection
+
+@section('content')
+
+<!-- Header -->
+
+<script>(function(d, s, id) {
+                      var js, fjs = d.getElementsByTagName(s)[0];
+                      if (d.getElementById(id)) return;
+                      js = d.createElement(s); js.id = id;
+                      js.src = "//connect.facebook.net/pt_PT/sdk.js#xfbml=1&version=v2.5&appId=948239501878979";
+                      fjs.parentNode.insertBefore(js, fjs);
+                    }(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+    <!-- Portfolio Grid Section -->
+    <section id="portfolio" style="margin-top: 80px">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 ">
+                    <div style=" font-size: 22pt;">
+                        <a href="/challenge/{{$sonChallenge->uuid}}" class="" title="{{$sonChallenge->title}}" style="color: #333;text-decoration: none;">
+                            <i class="fa fa-chevron-circle-left" style=" font-size: 44pt;vertical-align: middle;" aria-hidden="true"></i>   Back to
+                            <a href="/challenge/{{$sonChallenge->uuid}}" class="" title="{{$sonChallenge->title}}">{{$sonChallenge->title}}</a>
+                        </a>
+                    </div>
+
+                </div>
+                <div class="col-lg-12 text-center">
+
+
+                    @if($sonChallenge->type == 1)
+
+                        <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="100%" height="480"
+                          poster="{{ asset('uploads/challenge/'. pathinfo(asset('uploads/challenge/'. $sonChallenge->filename), PATHINFO_FILENAME) . '.jpg')  }}" data-setup="{}" style="width: 100%">
+                            <source src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" type='video/mp4'>
+                            {{--<source src="MY_VIDEO.webm" type='video/webm'>--}}
+                            <p class="vjs-no-js">
+                              To view this video please enable JavaScript, and consider upgrading to a web browser that
+                              <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                            </p>
+                          </video>
+
+
+                        {{--<video width="100%" controls>--}}
+                          {{--<source src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" type="video/mp4">--}}
+                        {{--Your browser does not support the video tag.--}}
+                        {{--</video>--}}
+                    @else
+                        <img src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" class="img-responsive"  style="    height: 100%;margin: 0 auto;" alt="">
+
+                    @endif
+
+                </div>
+
+                <div class="col-lg-12 title-proof">
+                    <a href="{{"/profile/".$sonChallenge->user_id}}" class="" title="" style="color: #333;text-decoration: none;">{{$sonChallenge->name }}
+                    </a>
+                    <a href="/challenge/{{$sonChallenge->uuid}}" class="" title="{{$sonChallenge->title}}">{{$sonChallenge->title}}</a>
+                    <i id="vote" class="fa fa-heart primary" style="margin-left: 50px;margin-right: 15px;"></i><span id="likes_num">{{$sonChallenge->likes}}</span>
+                    <i class="fa fa-eye primary" style="margin-left: 35px;margin-right: 15px;"></i> <span style="text-transform: none;">{{$userViews}} Views</span>
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            {{--<div class="challenges">--}}
+                {{--@include('partials.challenge')--}}
+            {{--</div>--}}
+
+        </div>
+    </section>
+
+    <div>
+    <span class='st_facebook_hcount' displayText='Facebook'></span>
+    <span class='st_twitter_hcount' displayText='Tweet'></span>
+    <span class='st_googleplus_hcount' displayText='Google +'></span>
+    <span class='st_email_hcount' displayText='Email'></span>
+
+    </div>
+
+
+    <section class="bg-light-gray" id="portfolio">
+        <div class="container">
+            <div class="row">
+
+
+                <div class="col-sm-12 col-md-12 text-center">
+                    <div class="fb-comments" data-href="http://hio.mobilebysampaio.eu/proof/{{$sonChallenge->uuid}}/{{$sonChallenge->user_id}}" data-numposts="6"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+@endsection
+
+@section('footer')
+<script src="{{ asset('js/video.js') }}"></script>
+<script>
+
+$("#vote").click(function(){
+        $.ajax({
+            url: "{{ action('HomeController@likeFile', $sonChallenge->id) }}",
+            type:"POST",
+            dataType : 'json',
+            data: { '_token': '{{ csrf_token() }}' },
+            success:function(data){
+               var success = data.status;
+               if(success){
+                    var countVotes = data.count;
+                    console.log("count:" + countVotes);
+                    if(countVotes != null)
+                        $( "#likes_num" ).text(countVotes+"");
+
+               }
+            },error:function(){
+                //console.log("count:" + countVotes);
+            }
+        }); //end of ajax
+            return false;
+        });
+
+
+</script>
+
+
+@endsection
