@@ -3,9 +3,12 @@
         <div class="col-lg-2 col-xs-2 padding5">
             <a href="{{"/profile/".$challenge->user_id}}" class="portfolio-link container-add-prof" title="">
 
-                <img src="{{'https://graph.facebook.com/v2.5/'. $challenge->facebook_id  .'/picture?width=100&height=100'}}"
-                                                                        class=" img-circle img-responsive">
+                @if($challenge->photo == "")
+                    <img src="/uploads/users/default_user.png" alt="{{$challenge->name}}" title="{{$challenge->name}}" class="img-circle img-responsive same-height" style="height: 100px; width: 100px">
+                @else
+                    <img src="{{'/uploads/users/'. $challenge->photo }}" alt="{{$challenge->name}}" title="{{$challenge->name}}" class="img-circle img-responsive same-height" style="height: 100px; width: 100px">
 
+                @endif
             </a>
         </div>
         <div class="col-lg-7 col-xs-7">

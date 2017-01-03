@@ -4,15 +4,29 @@
 
 <style>
 
+    .jumbotron {
+
+        background-color: #fff;
+    }
+    .list-group-item {
+
+        border: 0px solid #ddd;
+    }
+
+    .img-thumbnail {
+        border: 0px solid #ddd;
+
+    }
+
 /*<link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">*/
 .list-content{
  min-height:300px;
 }
 .list-content .list-group .title{
-  background:#5bc0de;
-  border:2px solid #DDDDDD;
+  background:#eee;
+  /*border:2px solid #DDDDDD;*/
   font-weight:bold;
-  color:#FFFFFF;
+  color:#eb1946;
 }
 .list-group-item img {
     height:80px;
@@ -72,9 +86,74 @@ margin-right: -15px;
                <div class="jumbotron list-content">
 
 
+                   <ul class="list-group">
+                       <li href="#" class="list-group-item title text-right search-select2">
+                           {!! Form::select('emailFriend[]', array(),null,array('required', 'data-validation'=>'required',  'class'=>'form-control js-data-example-ajax', 'multiple'=>'multiple')) !!}
 
-                    {!! Form::select('emailFriend[]', array(),null,array('required', 'data-validation'=>'required',  'class'=>'form-control js-data-example-ajax', 'multiple'=>'multiple')) !!}
+                       </li>
+                   </ul>
 
+
+                   <ul class="list-group">
+                       <li href="#" class="list-group-item title">
+                           New Friend Requests
+                       </li>
+
+                       <div class="row">
+
+                           @foreach ($friendRequests as $friendRequest)
+                               <li href="#" class="list-group-item text-left">
+                                   <a href="{{"/profile/".$friendRequest->id}}">
+                                       @if($friendRequest->photo == "")
+                                           <img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">
+                                       @else
+                                           <img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >
+
+                                       @endif
+                                   </a>
+                                   <label class="name">
+                                       <a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>
+                                   </label>
+                                   <label class="pull-right">
+                                       <form class="pull-right" role="form" method="POST"action="{{ url('/friend') }}">
+                                           {{ csrf_field() }}
+                                           <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
+                                           <input type="hidden" name="action" value="1">
+                                           <button type="submit" class="btn btn-success btn-xs glyphicon glyphicon-ok ">
+                                               <i class="fa fa-btn fa-user"></i> Accept
+                                           </button>
+                                       </form>
+
+                                       <form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">
+                                           {{ csrf_field() }}
+                                           <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
+                                           <input type="hidden" name="action" value="2">
+                                           <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-trash ">
+                                               <i class="fa fa-btn fa-user"></i> Decline
+                                           </button>
+                                       </form>
+
+                                       <form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">
+                                           {{ csrf_field() }}
+                                           <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
+                                           <input type="hidden" name="action" value="3">
+                                           <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-hand-paper-o ">
+                                               <i class="fa fa-btn fa-user"></i> Block
+                                           </button>
+                                       </form>
+
+
+                                   </label>
+                                   <div class="break"></div>
+                               </li>
+                           @endforeach
+                           <li href="#" class="list-group-item ">
+                               {!! $friendRequests->links() !!}
+                           </li>
+
+
+
+                   </ul>
 
                    <ul class="list-group">
                      <li href="#" class="list-group-item title">
@@ -85,10 +164,17 @@ margin-right: -15px;
 
                      @foreach ($sentFriendRequests as $friendRequest)
                          <li href="#" class="list-group-item text-left">
-                            <img class="img-thumbnail" src="http://bootdey.com/img/Content/User_for_snippets.png">
-                            <label class="name">
-                                {{$friendRequest->name}}<br>
-                            </label>
+                             <a href="{{"/profile/".$friendRequest->id}}">
+                                 @if($friendRequest->photo == "")
+                                     <img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">
+                                 @else
+                                     <img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >
+
+                                 @endif
+                             </a>
+                             <label class="name">
+                                 <a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>
+                             </label>
                             <label class="pull-right">
                                 <form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">
                                     {{ csrf_field() }}
@@ -106,80 +192,14 @@ margin-right: -15px;
                           </li>
                      @endforeach
                      <li href="#" class="list-group-item ">
-                       {{--{!! $friendRequests->links() !!}--}}
+                       {!! $sentFriendRequests->links() !!}
                       </li>
 
-
-                     <li href="#" class="list-group-item text-left">
-                       <a class="btn btn-block btn-primary">
-                           <i class="glyphicon glyphicon-refresh"></i>
-                           Load more...
-                       </a>
-                     </li>
 
                    </ul>
 
 
 
-                   <ul class="list-group">
-                    <li href="#" class="list-group-item title">
-                      New Friend Requests
-                    </li>
-
-                    <div class="row">
-
-                    @foreach ($friendRequests as $friendRequest)
-                        <li href="#" class="list-group-item text-left">
-                           <img class="img-thumbnail" src="http://bootdey.com/img/Content/User_for_snippets.png">
-                           <label class="name">
-                               {{$friendRequest->name}}<br>
-                           </label>
-                           <label class="pull-right">
-                                <form class="pull-right" role="form" method="POST"action="{{ url('/friend') }}">
-                                    {{ csrf_field() }}
-                                    <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                    <input type="hidden" name="action" value="1">
-                                    <button type="submit" class="btn btn-success btn-xs glyphicon glyphicon-ok ">
-                                        <i class="fa fa-btn fa-user"></i> Accept
-                                    </button>
-                                </form>
-
-                                <form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">
-                                    {{ csrf_field() }}
-                                    <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                    <input type="hidden" name="action" value="2">
-                                    <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-trash ">
-                                        <i class="fa fa-btn fa-user"></i> Decline
-                                    </button>
-                                </form>
-
-                                <form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">
-                                    {{ csrf_field() }}
-                                    <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                    <input type="hidden" name="action" value="3">
-                                    <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-hand-paper-o ">
-                                        <i class="fa fa-btn fa-user"></i> Block
-                                    </button>
-                                </form>
-
-
-                           </label>
-                           <div class="break"></div>
-                         </li>
-                    @endforeach
-                    <li href="#" class="list-group-item ">
-                      {{--{!! $friendRequests->links() !!}--}}
-                     </li>
-
-
-                    <li href="#" class="list-group-item text-left">
-                      <a class="btn btn-block btn-primary">
-                          <i class="glyphicon glyphicon-refresh"></i>
-                          Load more...
-                      </a>
-                    </li>
-
-                  </ul>
 
                   <ul class="list-group">
                       <li href="#" class="list-group-item title">
@@ -190,10 +210,17 @@ margin-right: -15px;
 
                       @foreach ($friends as $friendRequest)
                           <li href="#" class="list-group-item text-left">
-                             <img class="img-thumbnail" src="http://bootdey.com/img/Content/User_for_snippets.png">
-                             <label class="name">
-                                 {{$friendRequest->name}}<br>
-                             </label>
+                              <a href="{{"/profile/".$friendRequest->id}}">
+                                  @if($friendRequest->photo == "")
+                                      <img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">
+                                  @else
+                                      <img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >
+
+                                  @endif
+                              </a>
+                              <label class="name">
+                                  <a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>
+                              </label>
                              <label class="pull-right">
                                 <form class="pull-right" role="form" method="POST" action="{{ url('/friend') }}">
                                     {{ csrf_field() }}
@@ -220,17 +247,11 @@ margin-right: -15px;
                              <div class="break"></div>
                            </li>
                       @endforeach
-                      <li href="#" class="list-group-item">
-                        {{--{!! $friendRequests->links() !!}--}}
+                      <li href="#" class="list-group-item 222">
+                        {!! $friends->links() !!}
                        </li>
 
 
-                      <li href="#" class="list-group-item text-left">
-                        <a class="btn btn-block btn-primary">
-                            <i class="glyphicon glyphicon-refresh"></i>
-                            Load more...
-                        </a>
-                      </li>
 
                     </ul>
 
@@ -246,10 +267,17 @@ margin-right: -15px;
 
                       @foreach ($blockedFriends as $friendRequest)
                           <li href="#" class="list-group-item text-left">
-                             <img class="img-thumbnail" src="http://bootdey.com/img/Content/User_for_snippets.png">
-                             <label class="name">
-                                 {{$friendRequest->name}}<br>
-                             </label>
+                              <a href="{{"/profile/".$friendRequest->id}}">
+                                  @if($friendRequest->photo == "")
+                                      <img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">
+                                  @else
+                                      <img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >
+
+                                  @endif
+                              </a>
+                              <label class="name">
+                                  <a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>
+                              </label>
                              <label class="pull-right">
                                 <form class="pull-right" role="form" method="POST" action="{{ url('/friend') }}">
                                     {{ csrf_field() }}
@@ -264,17 +292,12 @@ margin-right: -15px;
                              <div class="break"></div>
                            </li>
                       @endforeach
-                      <li href="#" class="list-group-item">
-                        {{--{!! $friendRequests->links() !!}--}}
+                      <li href="#" class="list-group-item 222">
+                        {!! $blockedFriends->links() !!}
                        </li>
 
 
-                      <li href="#" class="list-group-item text-left">
-                        <a class="btn btn-block btn-primary">
-                            <i class="glyphicon glyphicon-refresh"></i>
-                            Load more...
-                        </a>
-                      </li>
+
 
                     </ul>
 

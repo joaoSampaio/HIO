@@ -33,7 +33,7 @@
     <link href="{{ asset('css/hio.css') }}" rel="stylesheet">
 
     <style>
-        .select2-container{
+        .search-select2 .select2-container{
             width: 200px !important;
             /*padding: 10px 15px;*/
         }
@@ -312,6 +312,17 @@ margin-top: 20px;
     z-index: 0;
 }
 
+
+     @media (min-width: 0px) {
+
+         .menu-lateral{
+             display: none;
+         }
+
+     }
+
+
+
      </style>
 
 
@@ -356,7 +367,7 @@ margin-top: 20px;
                         <a  href="{{ url('challenges') }}">Challenges</a>
                     </li>
 
-                    <li>{!! Form::select('emailFriend[]', array(),null,array( 'class'=>'form-control hidden search-ajax', 'multiple'=>'multiple')) !!}</li>
+                    <li class="search-select2">{!! Form::select('search[]', array(),null,array( 'class'=>'form-control hidden search-ajax', 'multiple'=>'multiple')) !!}</li>
 
 
 
@@ -400,7 +411,7 @@ margin-top: 20px;
   {{--<header>--}}
     {{--<h2>Menu</h2>--}}
   {{--</header>--}}
-  <ul class="" style="padding-left: 0" >
+  <ul class="menu-lateral" style="padding-left: 0" >
 
 
     @if(Auth::check())
@@ -427,9 +438,9 @@ margin-top: 20px;
 
                       <li>
                           <form class="search-form" role="search" _lpchecked="1">
-                              <div class="form-group form-control-search">
+                              <div class="form-group form-control-search search-select2">
                                   {{--<input type="text" class="form-control nav-side-search" placeholder="Search">--}}
-                                  {!! Form::select('emailFriend[]', array(),null,array( 'class'=>'form-control hidden nav-side-search search-ajax', 'multiple'=>'multiple')) !!}
+                                  {!! Form::select('search[]', array(),null,array( 'class'=>'form-control hidden nav-side-search search-ajax', 'multiple'=>'multiple')) !!}
                               </div>
                           </form>
                       </li>
@@ -602,8 +613,10 @@ $(".search-ajax").show();
 $('.search-ajax').on('select2:select', function (evt) {
     if(evt.params.data.type == 0){
         window.location = "/profile/"+evt.params.data.id;
-    }else{
+    }else if(evt.params.data.type == 1){
         window.location = "/challenge/"+evt.params.data.id;
+    } else if(evt.params.data.type == 2){
+        window.location = "/challenges/"+evt.params.data.id;
     }
 
     });
@@ -613,8 +626,6 @@ $('.search-ajax').on('select2:select', function (evt) {
     function formatRepo (repo) {
           if (repo.loading) return;
 
-            if(repo.text == repo.id)
-                return;
             if(repo.selected)
             return;
             if(repo.text == null)
@@ -631,9 +642,11 @@ $('.search-ajax').on('select2:select', function (evt) {
 
             var type = "";
             if(repo.type == 0){
-            type = 'User';
-            }else{
-            type = 'Challenge';
+                type = 'User';
+            }else if(repo.type == 1){
+                type = 'Challenge';
+            }else if(repo.type == 2){
+                type = 'Category';
             }
 
            var markup =
@@ -660,6 +673,8 @@ $('.search-ajax').on('select2:select', function (evt) {
             if(type == 0){
                 return (image == "")? "/uploads/users/default_user.png" : "/uploads/users/"+image;
             }else if(type == 1){
+                return categoryToUrl(image);
+            }else if(type == 2){
                 return categoryToUrl(image);
             }
 
@@ -758,6 +773,9 @@ $('.search-ajax').on('select2:select', function (evt) {
               return "/img/categories/"+url;
           }
 
+$(window).load(function () {
+    $('.menu-lateral').show();
+});
 
 
 </script>

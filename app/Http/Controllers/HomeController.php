@@ -167,7 +167,7 @@ class HomeController extends Controller {
             ->when(!$showPrivate, function ($query) {
                 return $query->where('challenges.public', '=', 1);
             })
-            ->orderBy('deadLine', 'asc')
+            ->orderBy('deadLine', 'desc')
             ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'myChallenges', $page = null);
 
 
@@ -250,7 +250,7 @@ class HomeController extends Controller {
             ->when(!$showPrivate, function ($query) {
                 return $query->where('challenges.public', '=', 1);
             })
-            ->orderBy('deadLine', 'asc')
+            ->orderBy('deadLine', 'desc')
             ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'myChallenges', $page = null);
 
 
@@ -981,7 +981,7 @@ class HomeController extends Controller {
         $latest = DB::table('files')
             ->join('challenges', 'challenges.id', '=', 'files.challenge_id')->where('challenges.public', '=' , 1)
             ->join('users', 'files.user_id', '=', 'users.id')
-            ->select('users.name','users.id', 'files.id', 'users.facebook_id', 'files.*', 'challenges.title', 'challenges.uuid')
+            ->select('users.name','users.id', 'files.id', 'users.photo', 'files.*', 'challenges.title', 'challenges.uuid')
             ->orderBy('views', 'desc')
             ->take(5)->get();
         return json_encode(view('partials.home_stats')->with('challenges',$latest)->render());
@@ -1209,11 +1209,13 @@ class HomeController extends Controller {
 
 //        $friendRequests = Auth::user()->getFriendRequests($perPage = 20);
 //        $friendRequests = Auth::user()->getPendingFriendships($perPage = 20);
-        $sentFriendRequests = $this->getSentFriendRequests();
-        $friendRequests = $this->getFriendRequests();
-        $friends = $this->getAllFriends(Auth::user()->id);
-        $blockedFriends = $this->getBlockedFriends();
-        echo "lll".json_encode($friendRequests);
+        $sentFriendRequests = $this->getSentFriendRequests(2);
+        $friendRequests = $this->getFriendRequests(2);
+        $friends = $this->getAllFriends(Auth::user()->id, NULL, 2);
+        $blockedFriends = $this->getBlockedFriends(2);
+//        echo "friends--->".json_encode($friends);
+//        echo "<br>";
+//        echo "sentFriendRequests--->".json_encode($sentFriendRequests);
         return view('friendList')
             ->with('friendRequests', $friendRequests)
             ->with('sentFriendRequests', $sentFriendRequests)
@@ -1231,6 +1233,35 @@ class HomeController extends Controller {
         $search = $request->input('q');
 
 
+        $category = [
+            'Awesome Stuff'=>'Awesome Stuff',
+            'Basketball'=>'Basketball',
+            'Bodyboard'=>'Bodyboard',
+            'Boxe'=>'Boxe',
+            'Cycling'=>'Cycling',
+            'Fitness'=>'Fitness',
+            'Football'=>'Football',
+            'Golf'=>'Golf',
+            'Gym'=>'Gym',
+            'Gymnastics'=>'Gymnastics',
+            'Hockey'=>'Hockey',
+            'Jiu-Jitsu'=>'Jiu-Jitsu',
+            'Judo'=>'Judo',
+            'Karate'=>'Karate',
+            'Kickboxing'=>'Kickboxing',
+            'MMA'=>'MMA',
+            'Muay Thai'=>'Muay Thai',
+            'Rugby'=>'Rugby',
+            'Running'=>'Running',
+            'Snow Sports'=>'Snow Sports',
+            'Surf'=>'Surf',
+            'Swimming'=>'Swimming',
+            'Taekwondo'=>'Taekwondo',
+            'Tennis'=>'Tennis',
+            'Trail'=>'Trail',
+            'Volleyball'=>'Volleyball',
+        ];
+
 
 
 
@@ -1241,6 +1272,25 @@ class HomeController extends Controller {
             ->select(['title as name','uuid as id', 'category as image', DB::raw('1 as type')])
             ->union($queryUsers)
             ->get();
+
+
+        $search = strtolower($search);
+//        $string = 'my domain name is website3.com';
+        foreach ($category as $url) {
+            //if (strstr($string, $url)) { // mine version
+            if (str_contains(strtolower($url), $search)) { // Yoshi version
+//{"name":"nada","id":"708f2c23-a338-43e1-8320-8824f8c5daeb","image":"Karate","type":1}
+                $temp = [
+                    'name'=>$url,
+                    'id'=>$url,
+                    'image'=>$url,
+                    'type'=>'2',
+                ];
+                array_push($queryUsers, $temp);
+
+            }
+        }
+
 
 //        $queryUser = DB::table('users')
 //            ->where('id', '=', Auth::user()->id)

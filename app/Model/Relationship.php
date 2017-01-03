@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Relationship extends Model
 {
 
+    const FRIEND = 0;
+    const SENT_FRIEND = 1;
+    const RECEIVED_FRIEND = 2;
+    const BLOCKED = 3;
+
     public static $timestamp = true;
     /**
      * The database table used by the model.

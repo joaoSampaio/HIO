@@ -365,18 +365,18 @@ button:focus {
                                  </div>
                               </div>
 
-                              <div class="col-lg-6 col-md-6">
-                                   <div class='input-group' >
-                                    <div class="col-lg-6 col-md-6">
-                                          <label style="float: left; margin-top: 7px;">Publish on Facebook</label>
-                                      </div>
-                                      <div class="col-lg-6 col-md-6">
-                                        <div class="checkbox checkbox-circle checkbox-info" style="float: left; margin-top: -7px; margin-left: 10px;">
-                                              <input type="checkbox" name="post_facebook" checked value="yes" data-on-text="Publish" data-off-text="Private" data-on-color="primary" data-off-color="primary">
-                                          </div>
-                                      </div>
-                                   </div>
-                                </div>
+                              {{--<div class="col-lg-6 col-md-6">--}}
+                                   {{--<div class='input-group' >--}}
+                                    {{--<div class="col-lg-6 col-md-6">--}}
+                                          {{--<label style="float: left; margin-top: 7px;">Publish on Facebook</label>--}}
+                                      {{--</div>--}}
+                                      {{--<div class="col-lg-6 col-md-6">--}}
+                                        {{--<div class="checkbox checkbox-circle checkbox-info" style="float: left; margin-top: -7px; margin-left: 10px;">--}}
+                                              {{--<input type="checkbox" name="post_facebook" checked value="yes" data-on-text="Publish" data-off-text="Private" data-on-color="primary" data-off-color="primary">--}}
+                                          {{--</div>--}}
+                                      {{--</div>--}}
+                                   {{--</div>--}}
+                                {{--</div>--}}
 
                             </div>
 

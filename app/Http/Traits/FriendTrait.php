@@ -15,16 +15,17 @@ use Illuminate\Support\Facades\DB;
 trait  FriendTrait {
 
 
+
     /**
      * Get all the friends list for the currently loggedin user
      *
      * @return array Relationship Objects
      */
-    public function getAllFriends($id, $search = NULL)
+    public function getAllFriends($id, $search = NULL, $perPage = 0)
     {
 
         if ($search == NULL) {
-            $users = DB::table('relationship')
+            $queryBuilder = DB::table('relationship')
                 ->where(function ($query) use ($id) {
                     $query->where('user_one_id', $id)
                         ->orWhere('user_two_id', $id);
@@ -34,8 +35,10 @@ trait  FriendTrait {
                     $join->on('users.id', '=', 'relationship.user_one_id')->where('users.id', '!=', $id)
                         ->orOn('users.id', '=', 'relationship.user_two_id')->where('users.id', '!=', $id);
                 })
-                ->select('users.name', 'users.id', 'users.photo', 'users.email')
-                ->get();
+                ->select('users.name', 'users.id', 'users.photo', 'users.email');
+
+                 $users = $this->getOrPaginate($queryBuilder, $perPage, Relationship::FRIEND);
+
         }else{
             $search = strtolower($search);
 //            echo "str_contains->".str_contains(strtolower (Auth::user()->name), $search);
@@ -103,7 +106,7 @@ trait  FriendTrait {
             })
             ->select('users.*');
 
-        return $this->getOrPaginate($queryBuilder, $perPage);
+        return $this->getOrPaginate($queryBuilder, $perPage, Relationship::SENT_FRIEND);
 
 
     }
@@ -130,7 +133,7 @@ trait  FriendTrait {
             ->select('users.*');
 
 
-        return $this->getOrPaginate($queryBuilder, $perPage);
+        return $this->getOrPaginate($queryBuilder, $perPage, Relationship::RECEIVED_FRIEND);
     }
 
     /**
@@ -155,7 +158,7 @@ trait  FriendTrait {
             ->select('users.*');
 
 
-        return $this->getOrPaginate($queryBuilder, $perPage);
+        return $this->getOrPaginate($queryBuilder, $perPage, Relationship::BLOCKED);
     }
 
 
@@ -368,11 +371,23 @@ trait  FriendTrait {
 
 
 
-    protected function getOrPaginate($builder, $perPage)
+    protected function getOrPaginate($builder, $perPage, $type)
     {
         if ($perPage == 0) {
             return $builder->get();
         }
+
+        if($type == Relationship::FRIEND){
+            return $builder->paginate($perPage, $columns = ['*'], $pageName = 'friendpage', $page = null);
+        } else if($type == Relationship::SENT_FRIEND){
+            return $builder->paginate($perPage, $columns = ['*'], $pageName = 'sentfriendpage', $page = null);
+        } else if($type == Relationship::RECEIVED_FRIEND){
+            return $builder->paginate($perPage, $columns = ['*'], $pageName = 'receivedfriendpage', $page = null);
+        }else if($type == Relationship::BLOCKED){
+            return $builder->paginate($perPage, $columns = ['*'], $pageName = 'blockedfriendpage', $page = null);
+        }
+
+        //->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ended', $page = null);
         return $builder->paginate($perPage);
     }
 

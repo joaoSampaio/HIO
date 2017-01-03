@@ -301,7 +301,7 @@ color: white;
             @endif
 
             <div class="col-sm-12 col-md-12">
-                <?php $sports = multiexplode(array(",",".","|",":",' '),$user->sports) ?>
+                <?php $sports = multiexplode(array(",",".","|",":"),$user->sports) ?>
                 @foreach ($sports as $sport)
                     <a href="{{action('HomeController@showChallenges', $sport)}}">#{{$sport}}</a>
 
