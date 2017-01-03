@@ -2,7 +2,7 @@
 
 namespace App\Factories;
 
-use App\User;
+use App\Model\User;
 use App\Repositories\ActivationRepository;
 use Illuminate\Mail\Mailer;
 use Illuminate\Mail\Message;

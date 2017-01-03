@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Vote extends Model
+class FileHio extends Model
 {
 
     public static $timestamp = true;
@@ -13,17 +13,18 @@ class Vote extends Model
      *
      * @var string
      */
-    protected $table = 'votes';
+    protected $table = 'files';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-         'user_id',
-    ];
 
+    //type -> integer (0-> image, 1->video)
+    protected $fillable = [
+         'views', 'likes','filename', 'created_at', 'id', 'user_id', 'challenge_id', 'type'
+    ];
 
 
 

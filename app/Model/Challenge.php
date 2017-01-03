@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -30,13 +30,13 @@ class Challenge extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('App\User');
+        return $this->belongsToMany('App\Model\User');
     }
 
-    public function votes()
-    {
-        return $this->hasMany('App\Vote');
-    }
+//    public function votes()
+//    {
+//        return $this->hasMany('App\Vote');
+//    }
 
     public function scopeClosed($query)
     {

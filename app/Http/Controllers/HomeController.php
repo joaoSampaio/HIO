@@ -1,9 +1,8 @@
 <?php namespace App\Http\Controllers;
 
 use App;
-use App\Challenge;
-use App\FileHio;
-use App\Vote;
+use App\Model\Challenge;
+use App\Model\FileHio;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,10 +11,10 @@ use Input;
 use Log;
 use Auth;
 use Mail;
-use App\ChallengeUserAssociation;
-use App\User;
-use App\FileViews;
-use App\FileLikes;
+use App\Model\ChallengeUserAssociation;
+use App\Model\User;
+use App\Model\FileViews;
+use App\Model\FileLikes;
 use DateTime;
 use Facebook;
 use Facebook\FacebookRequest;
@@ -25,10 +24,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use FFMpeg\FFMpeg;
 use FFMpeg\Coordinate\TimeCode;
 use FFMpeg\Format\Video;
-use App\CustomVideo;
+use App\Model\CustomVideo;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Facades;
-use App\Relationship;
+use App\Model\Relationship;
 
 use App\Http\Traits\FriendTrait;
 
@@ -563,38 +562,38 @@ class HomeController extends Controller {
 
     }
 
-    public function voteChallenge($uuid)
-    {
-        //preciso de table de votes para que nao seja possivel votar varias vezes
+//    public function voteChallenge($uuid)
+//    {
+//        //preciso de table de votes para que nao seja possivel votar varias vezes
+//
+//        $success = false;
+//        $error = "";
+//        $count = 0;
+//        if ($challenge = Challenge::where('uuid', $uuid)->first()) {
+//
+//            //se nao tiver votado
+//            if(!$this->getVote($challenge)){
+//                $vote = new Vote(['user_id' => Auth::user()->id,]);
+//                $challenge->votes()->save($vote);
+//                $success = true;
+//                $count = $challenge->votes()->count();
+//            }
+//        }
+//        $arr = array('status' => $success, 'count' => $count);
+//
+//        return json_encode($arr);
+//
+//    }
 
-        $success = false;
-        $error = "";
-        $count = 0;
-        if ($challenge = Challenge::where('uuid', $uuid)->first()) {
-
-            //se nao tiver votado
-            if(!$this->getVote($challenge)){
-                $vote = new Vote(['user_id' => Auth::user()->id,]);
-                $challenge->votes()->save($vote);
-                $success = true;
-                $count = $challenge->votes()->count();
-            }
-        }
-        $arr = array('status' => $success, 'count' => $count);
-
-        return json_encode($arr);
-
-    }
-
-    public function getVote($challenge) {
-        $vote = $challenge->votes()->where('user_id', Auth::user()->id)->first();
-        return ($vote) ? $vote : false;
-    }
-
-    public function getVoteCount($challenge) {
-        $vote = $challenge->votes()->count();
-        return $vote;
-    }
+//    public function getVote($challenge) {
+//        $vote = $challenge->votes()->where('user_id', Auth::user()->id)->first();
+//        return ($vote) ? $vote : false;
+//    }
+//
+//    public function getVoteCount($challenge) {
+//        $vote = $challenge->votes()->count();
+//        return $vote;
+//    }
 
     private function isUserInChallenge($challenge){
         $user = $challenge->users()->where('user_id', Auth::user()->id)->first();
@@ -623,7 +622,8 @@ class HomeController extends Controller {
             if(Auth::check()){
                 $participating = $this->isUserInChallenge($challenge);
             }
-            $countVotes = $this->getVoteCount($challenge);
+//            $countVotes = $this->getVoteCount($challenge);
+            //->with('countVotes', $countVotes)
             $creatorUser = User::where('id', $challenge->creator_id)->first();
             $creator = $creatorUser->name;
             $peopleParticipating = $challenge->users()->select('name', 'user_id', 'facebook_id')->get();
@@ -632,7 +632,7 @@ class HomeController extends Controller {
 
             if($isPublic == 1 || $participating) {
                 return view('challengeDetail')->with('challenge', $challenge)->with('isValid', $isValid)
-                    ->with('countVotes', $countVotes)->with('participating', $participating)
+                    ->with('participating', $participating)
                     ->with('creator', $creator)->with('peopleParticipating', $peopleParticipating)
                     ->with('sonChallenges', $sonChallenges);
             }else{

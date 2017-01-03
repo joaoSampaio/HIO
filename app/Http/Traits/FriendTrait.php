@@ -9,8 +9,8 @@
 namespace app\Http\Traits;
 
 use Auth;
-use App\User;
-use App\Relationship;
+use App\Model\User;
+use App\Model\Relationship;
 use Illuminate\Support\Facades\DB;
 trait  FriendTrait {
 

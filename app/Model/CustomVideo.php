@@ -6,7 +6,7 @@
  * Time: 22:11
  */
 
-namespace app;
+namespace App\Model;
 
 use FFMpeg\Format\Video;
 class CustomVideo extends Video\DefaultVideo

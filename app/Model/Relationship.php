@@ -1,10 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FileViews extends Model
+
+class Relationship extends Model
 {
 
     public static $timestamp = true;
@@ -13,16 +14,25 @@ class FileViews extends Model
      *
      * @var string
      */
-    protected $table = 'files_views';
+    protected $table = 'relationship';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
+
+    //type -> integer (0-> image, 1->video)
     protected $fillable = [
-         'id', 'user_id', 'file_id'
+         'user_one_id', 'user_two_id','status', 'action_user_id',
     ];
+
+
+
+
+
+
+
 
 
 

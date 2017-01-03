@@ -1,14 +1,13 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Challenge;
+use App\Model\Challenge;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Hootlex\Friendships\Traits\Friendable;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
@@ -49,6 +48,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function challenges()
     {
-        return $this->belongsToMany('App\Challenge');
+        return $this->belongsToMany('App\Model\Challenge');
     }
 }
