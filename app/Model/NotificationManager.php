@@ -28,7 +28,7 @@ class NotificationManager {
         return DB::table('notifications')
             ->where('recipient_id',  '=', $user->id)->where('unread', '=' , 1)
             ->join('users', 'notifications.sender_id', '=', 'users.id')
-            ->select('users.name','users.id', 'notifications.id', 'notifications.*')
+            ->select('users.name', 'notifications.id', 'notifications.*')
             ->take($limit)->get();
     }
 

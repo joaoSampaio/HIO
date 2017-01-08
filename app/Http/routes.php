@@ -26,7 +26,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('ola', 'HomeController@uploadFile');
 
     Route::get('/proof/{uuid}/{file_id}', 'HomeController@showSonChallenge');
-    Route::get('/vote/proof/{file_id}', 'HomeController@likeFile');
+    Route::post('/vote/proof/{file_id}', 'HomeController@likeFile');
     Route::post('/delete/proof/{file_id}', 'HomeController@deleteProof');
     Route::get('challenge-proofs/{id}', 'HomeController@getSonChallenges');
 
@@ -88,6 +88,8 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('list', 'HomeController@listFriends');
         Route::get('notifications', 'HomeController@getNotifications');
+        Route::get('notifications/{id}', 'HomeController@markRead');
+
 
         Route::get('teste', 'HomeController@teste');
         Route::get('amigos', 'SocialAuthController@getFriends');

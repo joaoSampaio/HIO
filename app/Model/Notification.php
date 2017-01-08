@@ -5,7 +5,7 @@ namespace App\Model;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-abstract class Notification extends Model
+class Notification extends Model
 {
 
     const TYPE_RELATIONSHIP_INVITE = 0;
@@ -33,9 +33,9 @@ abstract class Notification extends Model
     /**
      * Message generators that have to be defined in subclasses
      */
-    abstract protected function messageForNotification($notification);
-//    abstract protected function messageForNotification(Notification $notification);
-    abstract protected function messageForNotifications(array $notifications);
+//    abstract protected function messageForNotification($notification);
+////    abstract protected function messageForNotification(Notification $notification);
+//    abstract protected function messageForNotifications(array $notifications);
 
     /**
      * Generate message of the current notification.

@@ -322,8 +322,77 @@ margin-top: 20px;
      }
 
 
+     .badge-notify{
+         background: red;
+         position: relative;
+         top: -40px;
+         left: 31px;
+     }
 
      </style>
+
+    <style>
+        .dropdown {
+            display:inline-block;
+            margin-left:20px;
+            padding:10px;
+        }
+
+
+        .glyphicon-bell {
+
+            font-size:1.5rem;
+        }
+
+        .notifications {
+            min-width:420px;
+        }
+
+        .notifications-wrapper {
+            overflow:auto;
+            max-height:250px;
+        }
+
+        .menu-title {
+            color:#ff7788;
+            font-size:1.5rem;
+            display:inline-block;
+        }
+
+        .glyphicon-circle-arrow-right {
+            margin-left:10px;
+        }
+
+
+        .notification-heading, .notification-footer  {
+            padding:2px 10px;
+        }
+
+
+        .dropdown-menu.divider {
+            margin:5px 0;
+        }
+
+        .item-title {
+
+            font-size:1.3rem;
+            color:#000;
+
+        }
+
+        .notifications a.content {
+            text-decoration:none;
+            background:#ccc;
+
+        }
+
+        .notification-item {
+            padding:10px;
+            margin:5px;
+            background:#ccc;
+            border-radius:4px;
+        }
+    </style>
 
 
     @yield('header')
@@ -386,6 +455,74 @@ margin-top: 20px;
                                 My Profile
                             </a>
                         </li>
+
+
+                        <li style="width: 60px;">
+
+                            <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html" style="background-color: rgba(148, 0, 211, 0);">
+                                <i class="glyphicon glyphicon-bell"></i>
+                            </a>
+                            <span class="badge badge-notify">3</span>
+
+
+                        <ul class="dropdown-menu notifications pull-right" role="menu" aria-labelledby="dLabel">
+
+                            <div class="notification-heading"><h4 class="menu-title">Notifications</h4><h4 class="menu-title pull-right">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4>
+                            </div>
+                            <li class="divider"></li>
+                            <div class="notifications-wrapper">
+                                {{--<a class="content" href="#">--}}
+
+                                    <div class="notification-item">
+                                        <h4 class="item-title">Evaluation Deadline 1 · day ago</h4>
+                                        <p class="item-info">Marketing 101, Video Assignment</p>
+                                    </div>
+
+                                {{--</a>--}}
+                                <a class="content" href="#">
+                                    <div class="notification-item">
+                                        <h4 class="item-title">Evaluation Deadline 1 · day ago</h4>
+                                        <p class="item-info">Marketing 101, Video Assignment</p>
+                                    </div>
+                                </a>
+                                <a class="content" href="#">
+                                    <div class="notification-item">
+                                        <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
+                                        <p class="item-info">Marketing 101, Video Assignment</p>
+                                    </div>
+                                </a>
+                                <a class="content" href="#">
+                                    <div class="notification-item">
+                                        <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
+                                        <p class="item-info">Marketing 101, Video Assignment</p>
+                                    </div>
+
+                                </a>
+                                <a class="content" href="#">
+                                    <div class="notification-item">
+                                        <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
+                                        <p class="item-info">Marketing 101, Video Assignment</p>
+                                    </div>
+                                </a>
+                                <a class="content" href="#">
+                                    <div class="notification-item">
+                                        <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
+                                        <p class="item-info">Marketing 101, Video Assignment</p>
+                                    </div>
+                                </a>
+
+                            </div>
+                            <li class="divider"></li>
+                            <div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
+                        </ul>
+
+
+                        </li>
+
+
+
+
+
                     @endif
 
                     @if(Auth::check())
@@ -566,6 +703,43 @@ margin-top: 20px;
 function goBack() {
     window.history.back()
 }
+
+
+@if(Auth::check())
+$.ajax({
+    type: 'GET',
+    url: '{{URL::action('HomeController@getNotifications')}}',
+    dataType: 'json',
+    success: function(jsonData) {
+        $(".notifications-wrapper").html(jsonData);
+
+
+        $('.badge-notify').html($('.notifications .notification-item').length);
+
+
+
+        $('.notification-item a').click(function (event){
+            //event.preventDefault();
+            $.ajax({
+                url: '/notifications/' + $(this).attr('data-notification')
+                ,success: function(response) {
+                    //alert(response)
+                }
+            })
+            //return true; //for good measure
+        });
+
+
+
+
+
+    },
+    error: function() {
+        //alert('Error loading PatientID=' + id);
+    }
+});
+@endif
+
 
 $(".search-ajax").select2({
             ajax: {

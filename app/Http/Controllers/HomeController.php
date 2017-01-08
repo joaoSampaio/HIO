@@ -1186,6 +1186,13 @@ class HomeController extends Controller {
         if($action == 0){
 //            Auth::user()->befriend(User::find($friendId));
             $this->befriendWithId($friendId);
+
+            $notificationManager = new NotificationManager();
+            //'recipient_id', 'sender_id', 'unread', 'type', 'parameters', 'reference_id',
+            $notification = new LikedChallengeNotification(['recipient_id' =>  $friendId, 'sender_id' => Auth::user()->id, 'unread' => 1,
+                'type' => App\Model\Notification::TYPE_RELATIONSHIP_INVITE, 'parameters' => "", 'reference_id' => 0]);
+            $notificationManager->add($notification);
+
         }else if($action == 1){
             $this->acceptFriendRequest($friendId);
         }else if($action == 2){
@@ -1295,6 +1302,19 @@ class HomeController extends Controller {
         return json_encode($queryUsers);
     }
 
+
+    public function markRead($id){
+
+
+//        $notification = DB::table('notifications')->where('id', '=', $id)->first();
+
+        $notification = App\Model\Notification::find($id);
+        $notificationManager = new NotificationManager();
+        $notificationManager->markRead(array($notification));
+
+    }
+
+
     public function getNotifications(){
         if (Auth::check() ) {
             $id = Auth::user()->id;
@@ -1303,12 +1323,7 @@ class HomeController extends Controller {
 
             $results = $notificationManager->get(Auth::user());
 
-            $array = [];
-            foreach($results as $notification){
-                echo ((new LikedChallengeNotification())->messageForNotification($notification));
-            }
-            echo "<br>";
-            return json_encode($results);
+            return json_encode(view('partials.notifications')->with('notifications',$results)->render());
 
         }
         return "nao";
