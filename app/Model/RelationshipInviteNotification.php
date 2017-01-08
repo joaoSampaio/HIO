@@ -4,8 +4,9 @@ namespace App\Model;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use App\Model\Notification;
 
-class RelationshipInviteNotification extends \Notification
+class RelationshipInviteNotification extends Notification
 {
 
 

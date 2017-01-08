@@ -4,8 +4,9 @@ namespace App\Model;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use App\Model\Notification;
 
-class LikedChallengeNotification extends \Notification
+class LikedChallengeNotification extends Notification
 {
 
 
@@ -20,9 +21,11 @@ class LikedChallengeNotification extends \Notification
      * @param Notification              $notification
      * @return string
      */
-    public function messageForNotification(Notification $notification)
+    public function messageForNotification($notification)
     {
-        return $this->sender->getName() . 'has liked your comment: ' . substr($this->reference->text, 0, 10) . '...';
+
+//        return "oooooooooooo";
+        return $notification->name . ' has liked your <a href="/proof/0/' . $notification->reference_id .'">challenge<//a>';
     }
 
 /**

@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 abstract class Notification extends Model
 {
 
+    const TYPE_RELATIONSHIP_INVITE = 0;
+    const TYPE_LIKED_CHALLENGE = 1;
+
     public static $timestamp = true;
     /**
      * The database table used by the model.
@@ -30,7 +33,8 @@ abstract class Notification extends Model
     /**
      * Message generators that have to be defined in subclasses
      */
-    abstract protected function messageForNotification(Notification $notification);
+    abstract protected function messageForNotification($notification);
+//    abstract protected function messageForNotification(Notification $notification);
     abstract protected function messageForNotifications(array $notifications);
 
     /**

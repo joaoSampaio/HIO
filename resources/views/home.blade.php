@@ -230,6 +230,10 @@ color: #eb1946;
         dataType: 'json',
         success: function(jsonData) {
           $("#mostViewed").html(jsonData);
+          var cw = $('.same-height').width();
+                    $('.same-height').css({
+                        'height': cw + 'px'
+                    });
         },
         error: function() {
           //alert('Error loading PatientID=' + id);

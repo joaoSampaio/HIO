@@ -26,7 +26,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('ola', 'HomeController@uploadFile');
 
     Route::get('/proof/{uuid}/{file_id}', 'HomeController@showSonChallenge');
-    Route::post('/vote/proof/{file_id}', 'HomeController@likeFile');
+    Route::get('/vote/proof/{file_id}', 'HomeController@likeFile');
     Route::post('/delete/proof/{file_id}', 'HomeController@deleteProof');
     Route::get('challenge-proofs/{id}', 'HomeController@getSonChallenges');
 
@@ -71,7 +71,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::group(['middleware' => 'auth'], function () {
 
         Route::post('join/{uuid}', 'HomeController@joinChallenge');
-        Route::post('vote/{uuid}', 'HomeController@voteChallenge');
+//        Route::post('vote/{uuid}', 'HomeController@voteChallenge');
 
         Route::get('new/challenge/{userFB?}', 'HomeController@createChallenge');
         Route::post('new/challenge', 'HomeController@storeChallenge');
@@ -87,7 +87,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('friend', 'HomeController@sendFriendAction');
 
         Route::get('list', 'HomeController@listFriends');
-
+        Route::get('notifications', 'HomeController@getNotifications');
 
         Route::get('teste', 'HomeController@teste');
         Route::get('amigos', 'SocialAuthController@getFriends');

@@ -601,14 +601,7 @@ $(".search-ajax").select2({
           });
 
 $(".search-ajax").show();
-//    $( ".select2-container" )
-//      .focusout(function() {
-//        console.log("focus out");
-//        var select2 = $('.js-data-example-ajax').data('select2');
-//        console.log("evt:", $('.js-data-example-ajax').data('select2'));
-//      }).blur(function() {
-//            console.log("blur out");
-//          });
+
 
 $('.search-ajax').on('select2:select', function (evt) {
     if(evt.params.data.type == 0){

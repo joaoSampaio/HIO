@@ -330,7 +330,7 @@ button:focus {
                             <div class="form-group">
 
                                 <div class="col-md-offset-3 col-md-6 col-sm-12 col-xs-12" style="text-align: center;margin-bottom: 30px">
-                                      <h4 >Dare to reward your friends. If they fail, feel free to penalty them or yourself</h4>
+                                      <h4 >DARE TO REWARD YOU AND/OR YOUR FRIENDS. IF YOU/THEY FAIL, FEEL FREE TO PENALTY THEM AND/OR YOURSELF</h4>
                                 </div>
 
                                 <div class="col-lg-6 col-md-6" style="margin-bottom: 15px;">
@@ -343,7 +343,7 @@ button:focus {
                                 </div>
 
                                 <h5 style="text-transform: none;" class="col-lg-12">
-                                    We are not responsible for the nature of your rewards and penalties. Don't make anything capable of hurting yourself and your friends.
+                                    We are not responsible for the nature of your rewards and penalties. Don't make anything capable of hurting yourself and/or your friends.
                                  </h5>
                             </div>
 

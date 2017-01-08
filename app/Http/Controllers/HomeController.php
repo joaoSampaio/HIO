@@ -3,7 +3,10 @@
 use App;
 use App\Model\Challenge;
 use App\Model\FileHio;
+use App\Model\LikedChallengeNotification;
 use Carbon\Carbon;
+use App\Model\NotificationManager;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -765,6 +768,12 @@ class HomeController extends Controller {
                 $file->likes = $file->likes + 1;
                 $file->save();
                 $arr = array('status' => true, 'count' => $file->likes);
+
+                $notificationManager = new NotificationManager();
+                //'recipient_id', 'sender_id', 'unread', 'type', 'parameters', 'reference_id',
+                $notification = new LikedChallengeNotification(['recipient_id' =>  $file->user_id, 'sender_id' => Auth::user()->id, 'unread' => 1,
+                    'type' => App\Model\Notification::TYPE_LIKED_CHALLENGE, 'parameters' => "", 'reference_id' => $file->id]);
+                $notificationManager->add($notification);
             }
         }
         return json_encode($arr);
@@ -1207,15 +1216,11 @@ class HomeController extends Controller {
     {
 
 
-//        $friendRequests = Auth::user()->getFriendRequests($perPage = 20);
-//        $friendRequests = Auth::user()->getPendingFriendships($perPage = 20);
         $sentFriendRequests = $this->getSentFriendRequests(2);
         $friendRequests = $this->getFriendRequests(2);
         $friends = $this->getAllFriends(Auth::user()->id, NULL, 2);
         $blockedFriends = $this->getBlockedFriends(2);
-//        echo "friends--->".json_encode($friends);
-//        echo "<br>";
-//        echo "sentFriendRequests--->".json_encode($sentFriendRequests);
+
         return view('friendList')
             ->with('friendRequests', $friendRequests)
             ->with('sentFriendRequests', $sentFriendRequests)
@@ -1275,11 +1280,8 @@ class HomeController extends Controller {
 
 
         $search = strtolower($search);
-//        $string = 'my domain name is website3.com';
         foreach ($category as $url) {
-            //if (strstr($string, $url)) { // mine version
             if (str_contains(strtolower($url), $search)) { // Yoshi version
-//{"name":"nada","id":"708f2c23-a338-43e1-8320-8824f8c5daeb","image":"Karate","type":1}
                 $temp = [
                     'name'=>$url,
                     'id'=>$url,
@@ -1290,25 +1292,38 @@ class HomeController extends Controller {
 
             }
         }
-
-
-//        $queryUser = DB::table('users')
-//            ->where('id', '=', Auth::user()->id)
-//            ->select('name', 'id', 'photo')
-//            ->union($queryUsers)
-//            ->get();
-//        $users = $queryUser;
-
-
-
-
-//     DB::table('modules')->get(['url', DB::raw('1 as active')]);
-
-
-
-
         return json_encode($queryUsers);
     }
+
+    public function getNotifications(){
+        if (Auth::check() ) {
+            $id = Auth::user()->id;
+
+            $notificationManager = new NotificationManager();
+
+            $results = $notificationManager->get(Auth::user());
+
+            $array = [];
+            foreach($results as $notification){
+                echo ((new LikedChallengeNotification())->messageForNotification($notification));
+            }
+            echo "<br>";
+            return json_encode($results);
+
+        }
+        return "nao";
+
+    }
+
+//    public function dummyNotification(){
+//
+//
+//        $notificationManager = new NotificationManager;
+//        //'recipient_id', 'sender_id', 'unread', 'type', 'parameters', 'reference_id',
+//        $notification = new RelationshipInviteNotification(['recipient_id' => Auth::user()->id, 'sender_id' => $creator_id, 'unread' => 1,
+//            'type' => App\Model\Notification::TYPE_RELATIONSHIP_INVITE, 'parameters' => "", 'reference_id' => 0]);
+//    }
+
 
 
     public function sendEmail($challenge, $users, $total)

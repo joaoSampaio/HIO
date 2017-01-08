@@ -12,7 +12,7 @@
             </a>
         </div>
         <div class="col-lg-7 col-xs-7">
-            <span style="font-size: 20px;line-height: 0;">{{$challenge->name}}</span><br>
+            <span style="font-size: 20px;line-height: 0;"><a style="color: #333;text-decoration: none;" href="{{"/profile/".$challenge->user_id}}">{{$challenge->name}}</a> </span><br>
             <a href="{{ action('HomeController@showSonChallenge', [ 'uuid' => $challenge->uuid, 'user_id'=>$challenge->id]) }}" class="" title="">{{$challenge->title}}</a>
         </div>
         <div class="col-lg-3 col-xs-3">
