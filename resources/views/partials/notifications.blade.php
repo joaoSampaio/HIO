@@ -12,6 +12,10 @@
                     <p class="item-info">
                             <a href="/profile/{{$notification->sender_id}}" data-notification="{{ $notification->id}}">{{ $notification->name}}</a> has liked your <a href="/proof/0/{{ $notification->reference_id}}" data-notification="{{ $notification->id}}">challenge</a>
                     </p>
+            @elseif($notification->type == 2)
+                <p class="item-info">
+                    <a href="/profile/{{$notification->sender_id}}" data-notification="{{ $notification->id}}">{{ $notification->name}}</a> has challenged you to <a href="/challenge/{{ $notification->reference_id}}" data-notification="{{ $notification->id}}">{{$notification->parameters}}</a>
+                </p>
             @endif
     </div>
 

@@ -10,6 +10,7 @@ class Notification extends Model
 
     const TYPE_RELATIONSHIP_INVITE = 0;
     const TYPE_LIKED_CHALLENGE = 1;
+    const TYPE_INVITE_CHALLENGE = 2;
 
     public static $timestamp = true;
     /**

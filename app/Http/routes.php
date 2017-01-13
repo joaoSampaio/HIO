@@ -62,6 +62,7 @@ Route::group(['middleware' => ['web']], function () {
 
 
     Route::get('search', 'HomeController@search');
+    Route::get('users/search', 'HomeController@searchUsers');
 
     Route::auth();
     Route::get('user/activation/{token}', 'Auth\AuthController@activateUser')->name('user.activate');
@@ -85,6 +86,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('friends', 'HomeController@getFriends');
         Route::get('friends/search', 'HomeController@searchFriend');
         Route::post('friend', 'HomeController@sendFriendAction');
+
+
 
         Route::get('list', 'HomeController@listFriends');
         Route::get('notifications', 'HomeController@getNotifications');

@@ -191,7 +191,7 @@ button:focus {
                 <h1 style="    text-align: center;margin-bottom: 10px;margin-top: 40px;">New Challenge</h1>
 
                 <div class="col-md-offset-1 col-md-10 col-sm-12 col-xs-12 personal-info">
-                    {!! Form::open(array('action' => array('HomeController@storeChallenge'), 'class' => 'form-horizontal', 'id' => 'formulario', 'autocomplete' => 'off')) !!}
+                    {!! Form::open(array('action' => array('HomeController@storeChallenge'), 'class' => 'form-horizontal', 'id' => 'form-challenge', 'autocomplete' => 'off')) !!}
 
                         <ul class="ch-grid">
                             <li class="show-friends">
@@ -241,9 +241,9 @@ button:focus {
 
                                 <div class="col-lg-12">
                                 @if(Auth::user()->role == "brand")
-                                    {!! Form::select('emailFriend[]', array(),null,array( 'class'=>'form-control js-data-example-ajax', 'multiple'=>'multiple')) !!}
+                                    {!! Form::select('emailFriend[]', array(),null,array('id'=>'friends-cha', 'class'=>'form-control js-data-example-ajax', 'multiple'=>'multiple')) !!}
                                 @else
-                                    {!! Form::select('emailFriend[]', array(),null,array('required', 'data-validation'=>'required',  'class'=>'form-control js-data-example-ajax', 'multiple'=>'multiple')) !!}
+                                    {!! Form::select('emailFriend[]', array(),null,array('id'=>'friends-cha','required', 'data-validation'=>'required',  'class'=>'form-control js-data-example-ajax', 'multiple'=>'multiple')) !!}
                                 @endif
                                 </div>
 
@@ -426,10 +426,10 @@ button:focus {
 {{--<script src="js/bootstrap-datetimepicker.min.js"></script>--}}
 
     <script src="{{ asset('js/moment-with-locales.min.js') }}"></script>
-    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+{{--    <script src="{{ asset('js/bootstrap.min.js') }}"></script>--}}
 
     <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
-    <script src="{{ asset('js/bootstrap-tokenfield.js') }}"></script>
+{{--    <script src="{{ asset('js/bootstrap-tokenfield.js') }}"></script>--}}
 
 
 
@@ -448,6 +448,9 @@ button:focus {
 
 <script src="{{ asset('js/bootstrap-switch.min.js') }}"></script>
 
+
+<sript src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js"></sript>
+
     <script type="text/javascript">
 
 
@@ -458,7 +461,7 @@ $( "#submeter" ).click(function( event ) {
 
 $(".js-data-example-ajax").select2({
             ajax: {
-                url: "{{ action('HomeController@searchFriend') }}",
+                url: "{{ action('HomeController@searchUsers') }}",
                 dataType: 'json',
 
                 delay: 250,
@@ -490,16 +493,20 @@ $(".js-data-example-ajax").select2({
             templateResult: formatRepo, // omitted for brevity, see the source of this page
             templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
           });
+$('.js-data-example-ajax').on('change', function() {  // when the value changes
+    $(this).valid(); // trigger validation on this element
+});
 
 
-    $( ".select2-container" )
-      .focusout(function() {
-        console.log("focus out");
-        var select2 = $('.js-data-example-ajax').data('select2');
-        console.log("evt:", $('.js-data-example-ajax').data('select2'));
-      }).blur(function() {
-            console.log("blur out");
-          });
+
+//    $( ".select2-container" )
+//      .focusout(function() {
+//        console.log("focus out");
+//        var select2 = $('.js-data-example-ajax').data('select2');
+//        console.log("evt:", $('.js-data-example-ajax').data('select2'));
+//      }).blur(function() {
+//            console.log("blur out");
+//          });
 
 
     @if(isset($targetUser))
@@ -615,12 +622,51 @@ $("#circle4").click(function() {
 });
 
 
+    function hasErrors(page) {
+        if(page == 1){
+            return !$('#friends-cha').val();
+        }else if(page == 2){
+
+        }
+        return false;
+
+    }
+
+$(function() {
+    $('#form-challenge').validate({
+        rules: {
+            thisval: "required"
+        }
+    });
+    console.info($('#form-challenge').valid());
+});
+
+    function showErrors(page) {
+        if(page == 1){
+
+//            $("#formulario").validate();
+//            var validator = $( "#formulario" ).validate();
+            $("#friends-cha").valid();
+
+        }else if(page == 2){
+
+        }
+    }
+
     $("#nextp1").click(function() {
-       showPage(2);
+        if(hasErrors(1)){
+            showErrors(1);
+        }else
+        showPage(2);
     });
     $("#next_control").click(function() {
 
-        if(currentPage == 4){
+        //se houver erros
+        if(hasErrors(currentPage)){
+
+            showErrors(currentPage);
+
+        }else if(currentPage == 4){
 
         $( "#enviar" ).click();
 

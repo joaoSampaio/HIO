@@ -4,6 +4,7 @@ use App;
 use App\Model\Challenge;
 use App\Model\FileHio;
 use App\Model\LikedChallengeNotification;
+use App\Model\Notification;
 use Carbon\Carbon;
 use App\Model\NotificationManager;
 
@@ -405,6 +406,7 @@ class HomeController extends Controller {
 //        print_r($emails);
         $challengeMyself = false;
         $total = 0;
+        $notificationManager = new NotificationManager();
         if (is_array($emails) || is_object($emails)) {
             foreach ($emails as $email) {
                 if (str_contains($email, '@')) {
@@ -412,11 +414,8 @@ class HomeController extends Controller {
                     $total++;
                     array_push($emailsToSendString, $email);
                 } else if (is_numeric($email)) {
-                    //pode ser um id facebook
-//                if($email == Auth::user()->facebook_id){
-//                    $challengeMyself = true;
-//
-//                }
+
+
                     if ($email == Auth::user()->id) {
                         $challengeMyself = true;
 //                    $total++;
@@ -489,7 +488,21 @@ class HomeController extends Controller {
             $challenge->save();
         }
 
-//        Auth::user()->challenges()->save($challenge);
+
+        if (is_array($emails) || is_object($emails)) {
+            foreach ($emails as $email) {
+                if (is_numeric($email)) {
+
+                    $notification = new Notification(['recipient_id' =>  $email, 'sender_id' => Auth::user()->id, 'unread' => 1,
+                        'type' => App\Model\Notification::TYPE_INVITE_CHALLENGE, 'parameters' => $challenge->title, 'reference_id' => $challenge->uuid]);
+                    $notificationManager->add($notification);
+
+                }
+            }
+        }
+
+
+
 
 
         //send post to facebook
@@ -1235,6 +1248,29 @@ class HomeController extends Controller {
             ->with('blockedFriends', $blockedFriends);
     }
 
+    public function searchUsers(Request $request){
+        $search = $request->input('q');
+
+        $search = strtolower($search);
+        if(($search == "me" || str_contains(strtolower (Auth::user()->name), $search))&& Auth::check()  ){
+            $queryUsers = DB::table('users')
+                ->where('name', 'like', '%'.$search.'%')
+                ->select('name', 'id', 'photo');
+
+            $queryUser = DB::table('users')
+                ->where('id', '=', Auth::user()->id)
+                ->select('name', 'id', 'photo')
+                ->union($queryUsers)
+                ->get();
+            $users = $queryUser;
+        }else{
+            $users = DB::table('users')
+                ->where('name', 'like', '%'.$search.'%')
+                ->select('name', 'id', 'photo')
+                ->get();
+        }
+        return json_encode($users);
+    }
 
     public function searchFriend(Request $request){
         $q = $request->input('q');

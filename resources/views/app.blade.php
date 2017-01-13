@@ -392,6 +392,18 @@ margin-top: 20px;
             background:#ccc;
             border-radius:4px;
         }
+
+
+        .navbar-default .nav li a {
+            color: #eb1946;
+        }
+        .navbar-default .nav li a:hover {
+            color: #fff;
+        }
+
+
+
+
     </style>
 
 
