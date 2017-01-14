@@ -26,10 +26,12 @@ class NotificationManager {
 
     public function get(User $user, $limit = 20, $offset = 0){
         return DB::table('notifications')
-            ->where('recipient_id',  '=', $user->id)->where('unread', '=' , 1)
+            ->where('recipient_id',  '=', $user->id)
             ->join('users', 'notifications.sender_id', '=', 'users.id')
+            ->orderBy('id', 'desc')
             ->select('users.name', 'notifications.id', 'notifications.*')
             ->take($limit)->get();
+        //->where('unread', '=' , 1)
     }
 
 } 

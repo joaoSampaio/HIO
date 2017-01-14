@@ -32,377 +32,21 @@
 
     <link href="{{ asset('css/hio.css') }}" rel="stylesheet">
 
-    <style>
-        .search-select2 .select2-container{
-            width: 200px !important;
-            /*padding: 10px 15px;*/
-        }
 
-.select2-dropdown{
-    width: 400px !important;
-}
-
-    .search-img{
-        box-shadow: inset 0 0 30px rgba(0,0,0,.3);
-        margin: 10px;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-    }
-
-                        .dropdown-header {
-                            border-width: 0 0 1px 0;
-                            text-transform: uppercase;
-                        }
-
-                        .dropdown-header > span {
-                            display: inline-block;
-                            padding: 10px;
-                        }
-
-                        .dropdown-header > span:first-child {
-                            width: 50px;
-                        }
-
-                        .k-list-container > .k-footer {
-                            padding: 10px;
-                        }
-
-                        .select2-container .select2-results__option {
-                            line-height: 1em;
-                            min-width: 300px;
-                        }
-
-                        /* Material Theme padding adjustment*/
-
-                        .k-material .select2-container .select2-results__option,
-                        .k-material .select2-container .select2-results__option.k-state-hover,
-                        .k-materialblack .select2-container .select2-results__option,
-                        .k-materialblack .select2-container .select2-results__option.k-state-hover {
-                            padding-left: 5px;
-                            border-left: 0;
-                        }
-
-                        .select2-container .select2-results__option > span {
-                            -webkit-box-sizing: border-box;
-                            -moz-box-sizing: border-box;
-                            box-sizing: border-box;
-                            display: inline-block;
-                            vertical-align: top;
-                            margin: 20px 10px 10px 5px;
-                        }
-
-                        .select2-container .select2-results__option > span:first-child {
-                            -moz-box-shadow: inset 0 0 30px rgba(0,0,0,.3);
-                            -webkit-box-shadow: inset 0 0 30px rgba(0,0,0,.3);
-                            box-shadow: inset 0 0 30px rgba(0,0,0,.3);
-                            margin: 10px;
-                            width: 50px;
-                            height: 50px;
-                            border-radius: 50%;
-                            background-size: 100%;
-                            background-repeat: no-repeat;
-                        }
-
-                        .select2-container h3 {
-                            font-size: 1.2em;
-                            font-weight: normal;
-                            margin: 0 0 1px 0;
-                            padding: 0;
-                        }
-
-                        .select2-container p {
-                            margin: 0;
-                            padding: 0;
-                            font-size: .8em;
-                        }
+              {{--<script src="{{ asset('js/jquery.js') }}"></script>--}}
 
 
-                        .menu-icon{
-                            background: center center no-repeat transparent;
-                            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAGXRFW…FBYtMq3BiHT3DRPU4YR4NrNAmPJuHRJDyahEeT8Ii3BCDAAF0WBj5Er5idAAAAAElFTkSuQmCC);
-                            display: block;
-                            width: 40px;
-                            height: 40px;
-                            position: absolute;
-                            top: 0;
-                            left: 20px;
-                            margin-top: 200px;
-                        }
-
-
-    </style>
-
-
-
-
-              <script src="{{ asset('js/jquery.js') }}"></script>
-
-     <style>
-     body {
-       width: 100%;
-       height: 100%;
-     }
-
-     .slideout-menu {
-       position: fixed;
-       top: 0;
-       bottom: 0;
-       width: 256px;
-       min-height: 100vh;
-       overflow-y: scroll;
-       -webkit-overflow-scrolling: touch;
-       z-index: 0;
-       display: none;
-     }
-
-     .slideout-menu-left {
-       left: 0;
-     }
-
-     .slideout-menu-right {
-       right: 0;
-     }
-
-     .slideout-panel {
-       position: relative;
-       z-index: 1;
-       /*will-change: transform;*/
-       background-color: #FFF; /* A background-color is required */
-       min-height: 100vh;
-     }
-
-     .slideout-open,
-     .slideout-open body,
-     .slideout-open .slideout-panel {
-       overflow: hidden;
-     }
-
-     .slideout-open .slideout-menu {
-       display: block;
-     }
-
-
-
-
-     /*.profile-wrapper {*/
-         /*padding-left: 33%;*/
-         /*padding-right: 33%;*/
-         /*padding-top: 10%;*/
-     /*}*/
-
-
-
-
-
-.profile-wrapper {
-    background: url(http://mdbootstrap.com/images/sidenavs/mdb.jpg) center center no-repeat;
-    background-size: cover;
-}
-@media (max-height: 910px){
-    .profile-wrapper a {
-        height: 80px;
-    }
-}
-.profile-side-img {
-         max-width: 60px;
-            /*padding: 20px 10px;*/
-            float: left;
-                    margin-top: 25px;
-                    margin-right: 15px;
-                margin-left: 20px;
-            /*padding: 20% 50px;*/
-    }
-
-@media only screen and (max-height: 910px){
-    .profile-side-img {
-        /*max-width: 50px;*/
-        /*vertical-align: middle;*/
-        /*border: 3px solid #294a65;*/
-        /*padding: 7% 50px;*/
-    }
-    .profile-wrapper {
-
-
-     }
-}
-
-.nav-side-search{
-border-bottom: 1px solid #fff;
-    font-weight: 300;
-    padding-left: 30px;
-    color: #fff;
-    background-color: transparent;
-        border: none;
-        border-radius: 0;
-        outline: 0;
-        height: 2.1rem;
-        width: 100% !important;
-        font-size: 1rem;
-        box-shadow: none;
-        -webkit-box-sizing: content-box;
-        -moz-box-sizing: content-box;
-        box-sizing: content-box;
-        transition: all .3s;
-        border-bottom: 1px solid #fff;
-}
-
-ul, ul li {
-    list-style-type: none;
-}
-
-
-.search-form .select2-container{
-    width: 100% !important;
-}
-
-.nav-list-item{
-    padding-right: 1rem;
-    padding-left: 1rem;
-    border-radius: 2px;
-}
-
-
-.nav-list-item a{
-    margin-bottom: 5px;
-    color: #fff;
-    font-weight: 300;
-    font-size: 18px;
-    height: 45px;
-    line-height: 45px;
-    padding-left: 20px;
-        display: block;
-}
-
-.nav-list-item .fa {
-    font-size: 20px;
-    margin-right: 13px;
-    color: rgba(227,242,253,.64);
-}
-
-.form-control-search:focus {
-    background: 0 0;
-}
-.form-control-search .select2-container--default .select2-selection--multiple{
-background-color: transparent;
-border-radius: 0px;
-
-height: 67px;
-    border: 0px solid #aaa;
-    border-bottom: 1px solid #fff;
-}
-
-.search-form{
-color: white;
-}
-.form-control-search .select2-container--default .select2-selection--multiple .select2-selection__rendered{
-margin-top: 20px;
-    padding-left: 25px;
-}
-
-.profile-wrapper p {
-    font-size: 15px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    margin: 0;
-}
-
-.modal-backdrop{
-    left: auto;
-    z-index: 0;
-}
-
-
-     @media (min-width: 0px) {
-
-         .menu-lateral{
-             display: none;
-         }
-
-     }
-
-
-     .badge-notify{
-         background: red;
-         position: relative;
-         top: -40px;
-         left: 31px;
-     }
-
-     </style>
 
     <style>
-        .dropdown {
-            display:inline-block;
-            margin-left:20px;
-            padding:10px;
+
+
+
+        .unread{
+            background-color: #eb1946;
         }
-
-
-        .glyphicon-bell {
-
-            font-size:1.5rem;
+        .unread a{
+            color: #ffffff !important;
         }
-
-        .notifications {
-            min-width:420px;
-        }
-
-        .notifications-wrapper {
-            overflow:auto;
-            max-height:250px;
-        }
-
-        .menu-title {
-            color:#ff7788;
-            font-size:1.5rem;
-            display:inline-block;
-        }
-
-        .glyphicon-circle-arrow-right {
-            margin-left:10px;
-        }
-
-
-        .notification-heading, .notification-footer  {
-            padding:2px 10px;
-        }
-
-
-        .dropdown-menu.divider {
-            margin:5px 0;
-        }
-
-        .item-title {
-
-            font-size:1.3rem;
-            color:#000;
-
-        }
-
-        .notifications a.content {
-            text-decoration:none;
-            background:#ccc;
-
-        }
-
-        .notification-item {
-            padding:10px;
-            margin:5px;
-            background:#ccc;
-            border-radius:4px;
-        }
-
-
-        .navbar-default .nav li a {
-            color: #eb1946;
-        }
-        .navbar-default .nav li a:hover {
-            color: #fff;
-        }
-
-
-
 
     </style>
 
@@ -414,7 +58,7 @@ margin-top: 20px;
 
 
 
-<body id="page-top" class="index">
+<body data-spy="scroll" data-target=".navbar" id="page-top" class="index">
 
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -469,9 +113,9 @@ margin-top: 20px;
                         </li>
 
 
-                        <li style="width: 60px;">
+                        <li style="width: 60px;" id="full-nav">
 
-                            <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html" style="background-color: rgba(148, 0, 211, 0);">
+                            <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="#" aria-haspopup="true" aria-expanded="false" style="background-color: rgba(148, 0, 211, 0);">
                                 <i class="glyphicon glyphicon-bell"></i>
                             </a>
                             <span class="badge badge-notify">3</span>
@@ -483,45 +127,14 @@ margin-top: 20px;
                             </div>
                             <li class="divider"></li>
                             <div class="notifications-wrapper">
+
                                 {{--<a class="content" href="#">--}}
-
-                                    <div class="notification-item">
-                                        <h4 class="item-title">Evaluation Deadline 1 · day ago</h4>
-                                        <p class="item-info">Marketing 101, Video Assignment</p>
-                                    </div>
-
+                                    {{--<div class="notification-item">--}}
+                                        {{--<h4 class="item-title">Evaluation Deadline 1 · day ago</h4>--}}
+                                        {{--<p class="item-info">Marketing 101, Video Assignment</p>--}}
+                                    {{--</div>--}}
                                 {{--</a>--}}
-                                <a class="content" href="#">
-                                    <div class="notification-item">
-                                        <h4 class="item-title">Evaluation Deadline 1 · day ago</h4>
-                                        <p class="item-info">Marketing 101, Video Assignment</p>
-                                    </div>
-                                </a>
-                                <a class="content" href="#">
-                                    <div class="notification-item">
-                                        <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
-                                        <p class="item-info">Marketing 101, Video Assignment</p>
-                                    </div>
-                                </a>
-                                <a class="content" href="#">
-                                    <div class="notification-item">
-                                        <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
-                                        <p class="item-info">Marketing 101, Video Assignment</p>
-                                    </div>
 
-                                </a>
-                                <a class="content" href="#">
-                                    <div class="notification-item">
-                                        <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
-                                        <p class="item-info">Marketing 101, Video Assignment</p>
-                                    </div>
-                                </a>
-                                <a class="content" href="#">
-                                    <div class="notification-item">
-                                        <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
-                                        <p class="item-info">Marketing 101, Video Assignment</p>
-                                    </div>
-                                </a>
 
                             </div>
                             <li class="divider"></li>
@@ -556,73 +169,92 @@ margin-top: 20px;
         <!-- /.container-fluid -->
     </nav>
 
-<nav id="menu" style="margin-top: 67px;    background: linear-gradient(135deg,#000 0,#3f729b 100%);">
-  {{--<header>--}}
-    {{--<h2>Menu</h2>--}}
-  {{--</header>--}}
-  <ul class="menu-lateral" style="padding-left: 0" >
+    <nav id="sidebar-wrapper" style="margin-top: 67px;">
+      {{--<header>--}}
+        {{--<h2>Menu</h2>--}}
+      {{--</header>--}}
+      <ul class="menu-lateral" style="padding-left: 0" >
 
 
-    @if(Auth::check())
+        @if(Auth::check())
 
-        <li>
-            <div class="profile-wrapper">
-                  <a href="{{ url('profile', 'me') }}">
-                        @if(Auth::user()->photo == "")
-                            <img src="/uploads/users/default_user.png" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle profile-side-img" style="height: 40px; width: 40px">
-                        @else
-                            <img src="{{'/uploads/users/'. Auth::user()->photo }}" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle profile-side-img" style="height: 40px; width: 40px">
+            <li>
+                <div class="profile-wrapper">
+                      <a href="{{ url('profile', 'me') }}">
+                            @if(Auth::user()->photo == "")
+                                <img src="/uploads/users/default_user.png" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle profile-side-img" style="height: 90px; width: 90px">
+                            @else
+                                <img src="{{'/uploads/users/'. Auth::user()->photo }}" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle profile-side-img" style="height: 90px; width: 90px">
 
-                        @endif
-                    </a>
-                    <div class="rgba-stylish-strong" style="color: #ffffff">
-                        <p class="user white-text">{{Auth::user()->name}}<br><a href="#" style="color: #ffffff">Messages<i class="fa fa-angle-down rotate-icon"></i> <span class="badge">42</span></a>
-                        </p>
-                    </div>
-              </div>
+                            @endif
+                        </a>
+                        {{--<div class="rgba-stylish-strong" style="color: #ffffff">--}}
+                            {{--<p class="user white-text">{{Auth::user()->name}}<br><a href="#" style="color: #ffffff">Messages<i class="fa fa-angle-down rotate-icon"></i> <span class="badge">42</span></a>--}}
+                            {{--</p>--}}
+                        {{--</div>--}}
+                  </div>
+              </li>
+
+
+              <li class="nav-list-item" id="mobile-notifications">
+
+                  <a id="dLabel2" role="button" data-toggle="dropdown" data-target="#" href="#" aria-haspopup="true" aria-expanded="false" style="background-color: rgba(148, 0, 211, 0);">
+                      <i class="glyphicon glyphicon-bell"></i>Notifications <span class="badge badge-notify">3</span>
+                  </a>
+
+
+
+                  <ul class="dropdown-menu notifications pull-right" role="menu" aria-labelledby="dLabel2" style="position: inherit;">
+
+                      <div class="notification-heading"><h4 class="menu-title">Notifications</h4><h4 class="menu-title pull-right">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4>
+                      </div>
+                      <li class="divider"></li>
+                      <div class="notifications-wrapper">
+
+                      </div>
+                      <li class="divider"></li>
+                      <div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
+                  </ul>
+
+
+              </li>
+
+
+          @endif
+
+
+          <li>
+              <form class="search-form" role="search" _lpchecked="1">
+                  <div class="form-group form-control-search search-select2">
+                      {{--<input type="text" class="form-control nav-side-search" placeholder="Search">--}}
+                      {!! Form::select('search[]', array(),null,array( 'class'=>'form-control hidden nav-side-search search-ajax', 'multiple'=>'multiple')) !!}
+                  </div>
+              </form>
           </li>
 
-      @endif
 
-
-                      <li>
-                          <form class="search-form" role="search" _lpchecked="1">
-                              <div class="form-group form-control-search search-select2">
-                                  {{--<input type="text" class="form-control nav-side-search" placeholder="Search">--}}
-                                  {!! Form::select('search[]', array(),null,array( 'class'=>'form-control hidden nav-side-search search-ajax', 'multiple'=>'multiple')) !!}
-                              </div>
-                          </form>
-                      </li>
-
-
-                      <li class="nav-list-item {{{Request::is('profile/me') ? ' active' : ''}}}">
-                        <a class="arrow-r" href="{{ url('challenges') }}">
-                            <i class="fa fa-user"></i> Challenges<i class="fa fa-angle-down rotate-icon"></i>
-                        </a>
-                      </li>
+          <li class="nav-list-item {{{Request::is('profile/me') ? ' active' : ''}}}">
+            <a class="arrow-r" href="{{ url('challenges') }}">
+                <i class="fa fa-user"></i> Challenges<i class="fa fa-angle-down rotate-icon"></i>
+            </a>
+          </li>
 
 
 
-                      {{--<li {{{Request::is('challenges') ? 'class=active' : ''}}} >--}}
-                          {{--<a  href="{{ url('challenges') }}">Challenges</a>--}}
-                      {{--</li>--}}
 
-                      {{--<li>{!! Form::select('emailFriend[]', array(),null,array( 'class'=>'form-control hidden search-ajax', 'multiple'=>'multiple')) !!}</li>--}}
-
-
-                      @if(Auth::check())
-                          <li class="nav-list-item" >
-                              <a class="nav-logout" href="{{ action('SocialAuthController@logout') }}">
-                                <i class="fa fa-sign-out"></i>Logout
-                                </a>
-                          </li>
-                      @else
-                          <li class="nav-profile nav-list-item">
-                              <a id="login_btn"  href="{{ url('/login') }}"><i class="fa fa-sign-in"></i>Login</a>
-                          </li>
-                      @endif
-                  </ul>
-</nav>
+          @if(Auth::check())
+              <li class="nav-list-item" >
+                  <a class="nav-logout" href="{{ action('SocialAuthController@logout') }}">
+                    <i class="fa fa-sign-out"></i>Logout
+                    </a>
+              </li>
+          @else
+              <li class="nav-profile nav-list-item">
+                  <a id="login_btn"  href="{{ url('/login') }}"><i class="fa fa-sign-in"></i>Login</a>
+              </li>
+          @endif
+      </ul>
+    </nav>
 
 <main id="panel">
 
@@ -677,26 +309,26 @@ margin-top: 20px;
 {{--<script src="{{ asset('js/bootstrap.min.js') }}"></script>--}}
 {{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>--}}
     <!-- Plugin JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>--}}
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-
-    <script src="{{ asset('js/jquery.easing.min.js') }}"></script>
-
-
-    <script src="{{ asset('js/classie.js') }}"></script>
-    <script src="{{ asset('js/cbpAnimatedHeader.js') }}"></script>
+{{--    <script src="{{ asset('js/jquery.easing.min.js') }}"></script>--}}
 
 
-    <script src="{{ asset('js/jqBootstrapValidation.js') }}"></script>
-    <script src="{{ asset('js/contact_me.js') }}"></script>
+
+
+{{--    <script src="{{ asset('js/jqBootstrapValidation.js') }}"></script>--}}
+{{--    <script src="{{ asset('js/contact_me.js') }}"></script>--}}
 
     <script src="{{ asset('js/agency.js') }}"></script>
     <script src="{{ asset('js/select2.full.min.js') }}"></script>
+    <script src="http://timeago.yarp.com/jquery.timeago.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slideout/1.0.1/slideout.min.js"></script>
 <script>
   var slideout = new Slideout({
     'panel': document.getElementById('panel'),
-    'menu': document.getElementById('menu'),
+    'menu': document.getElementById('sidebar-wrapper'),
     'padding': 256,
     'tolerance': 70
   });
@@ -706,7 +338,7 @@ margin-top: 20px;
           slideout.toggle();
         });
 
-        document.querySelector('#menu').addEventListener('click', function(eve) {
+        document.querySelector('#sidebar-wrapper').addEventListener('click', function(eve) {
           if (eve.target.nodeName === 'A') { slideout.close(); }
         });
 </script>
@@ -726,8 +358,10 @@ $.ajax({
         $(".notifications-wrapper").html(jsonData);
 
 
-        $('.badge-notify').html($('.notifications .notification-item').length);
-
+        $('.badge-notify').html($('.notifications .notification-item').length/2);
+        jQuery(document).ready(function() {
+          jQuery("time.timeago").timeago();
+        });
 
 
         $('.notification-item a').click(function (event){
@@ -833,7 +467,6 @@ $('.search-ajax').on('select2:select', function (evt) {
 
                                                      "<span class='k-state-default'><h3>"+repo.text+"</h3><p>#"+ type +"</p></span>";
 
-//"<span class='k-state-default' style='background-image: url(\""+url+"\")'></span>" +
           return markup;
         }
 
@@ -952,10 +585,16 @@ $('.search-ajax').on('select2:select', function (evt) {
               return "/img/categories/"+url;
           }
 
-$(window).load(function () {
+$(function () {
     $('.menu-lateral').show();
 });
 
+$('#dLabel2').on('click', function (e) {
+    e.stopPropagation();
+    //mobile-notifications
+    $('#mobile-notifications').toggleClass('open');
+//    $(this).next('.dropdown').find('[data-toggle=dropdown]').dropdown('toggle');
+});
 
 </script>
     @yield('footer')

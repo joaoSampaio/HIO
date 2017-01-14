@@ -642,7 +642,7 @@ class HomeController extends Controller {
             //->with('countVotes', $countVotes)
             $creatorUser = User::where('id', $challenge->creator_id)->first();
             $creator = $creatorUser->name;
-            $peopleParticipating = $challenge->users()->select('name', 'user_id', 'facebook_id')->get();
+            $peopleParticipating = $challenge->users()->select('name', 'user_id', 'facebook_id', 'photo')->get();
 
             $sonChallenges = $this->getHelperPaginatorSon($challenge->id);
 

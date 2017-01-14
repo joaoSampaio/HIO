@@ -3,17 +3,7 @@
 @section('header')
 
 
-<style>
-  .carousel-inner > .item > img,
-  .carousel-inner > .item > a > img {
-      width: 70%;
-      margin: auto;
-  }
-  </style>
 
-
-<link href="{{ asset('css/owl.carousel.css') }}" rel="stylesheet" type="text/css">
-<link href="{{ asset('css/owl.theme.css') }}" rel="stylesheet" type="text/css">
 <style>
 
 .glyphicon.spinning {
@@ -60,20 +50,6 @@ color: #eb1946;
 }
 
 
-.title-challenge{
-    text-transform: capitalize;
-}
-
-.slider-title{
-    font-size: 40px;
-}
-.slider-subtitle{
-    font-size: 22px;
-}
-
-.slider-bullet li{
-    margin-left: 10px !important;
-}
 
 #latest {
     margin-top: 50px;
@@ -201,7 +177,7 @@ color: #eb1946;
 
 
 
-<script src="{{ asset('js/jquery.mobile.custom.min.js') }}"></script>
+{{--<script src="{{ asset('js/jquery.mobile.custom.min.js') }}"></script>--}}
 
 
     <script>
@@ -255,21 +231,6 @@ color: #eb1946;
           //alert('Error loading PatientID=' + id);
         }
       });
-
-
-
-
-
-
-//$(document).ready(function() {
-//   $("#myCarousel").swiperight(function() {
-//      $(this).carousel('prev');
-//    });
-//   $("#myCarousel").swipeleft(function() {
-//      $(this).carousel('next');
-//   });
-//});
-
 
 
     </script>

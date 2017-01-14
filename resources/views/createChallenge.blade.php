@@ -58,19 +58,19 @@ label.custom-select {
     width: 100%;
 }
 
-.custom-select:after {
-    content: "▼";
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    bottom: 2px;
-    font-size: 90%;
-    line-height: 35px;
-    padding: 3px 15px;
-    background: #E1E2E4;
-    color: white;
-    pointer-events: none;
-}
+/*.custom-select:after {*/
+    /*content: "▼";*/
+    /*position: absolute;*/
+    /*top: 2px;*/
+    /*right: 2px;*/
+    /*bottom: 2px;*/
+    /*font-size: 90%;*/
+    /*line-height: 35px;*/
+    /*padding: 3px 15px;*/
+    /*background: #E1E2E4;*/
+    /*color: white;*/
+    /*pointer-events: none;*/
+/*}*/
 
 .no-pointer-events .custom-select:after {
     content: none;
@@ -165,10 +165,20 @@ label.custom-select {
     padding: 11px 28px;
 }
 
-
+.form-section{
+    margin-top: 35px;
+    display: none;
+}
+.form-section.current {
+    display: inherit;
+}
 
 .select2-container{
 width: 100% !important;
+}
+
+.form-section .select2-search__field{
+width: 200px !important;
 }
 
 
@@ -231,7 +241,7 @@ button:focus {
 
 
 
-                        <div style="margin-top: 35px;" id="page1">
+                        <div class="form-section" id="page1">
 
                             <div class="form-group">
                                 <div class="col-md-offset-3 col-md-6 col-sm-12 col-xs-12" style="text-align: center;margin-bottom: 30px">
@@ -275,7 +285,7 @@ button:focus {
                             </div>
                         </div>
 
-                        <div style="margin-top: 35px;" id="page2">
+                        <div class="form-section" id="page2">
                             <div class="form-group">
                               <div class="col-md-offset-3 col-md-6 col-sm-12 col-xs-12" style="text-align: center;margin-bottom: 30px">
                                   <h4 >Let them know what is waiting for them</h4>
@@ -306,7 +316,7 @@ button:focus {
 
                         </div>
 
-                        <div style="margin-top: 35px;" id="page3">
+                        <div class="form-section" id="page3">
                             <div class="form-group">
 
                                 <div class="col-md-offset-3 col-md-6 col-sm-12 col-xs-12" style="text-align: center;margin-bottom: 30px">
@@ -326,7 +336,7 @@ button:focus {
 
                         </div>
 
-                        <div style="margin-top: 35px;" id="page4">
+                        <div class="form-section" id="page4">
                             <div class="form-group">
 
                                 <div class="col-md-offset-3 col-md-6 col-sm-12 col-xs-12" style="text-align: center;margin-bottom: 30px">
@@ -423,33 +433,19 @@ button:focus {
 @endsection
 
 @section('footer')
-{{--<script src="js/bootstrap-datetimepicker.min.js"></script>--}}
 
     <script src="{{ asset('js/moment-with-locales.min.js') }}"></script>
-{{--    <script src="{{ asset('js/bootstrap.min.js') }}"></script>--}}
 
     <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
-{{--    <script src="{{ asset('js/bootstrap-tokenfield.js') }}"></script>--}}
 
-
-
-    <script src="{{ asset('js/transition.js') }}"></script>
-    <script src="{{ asset('js/collapse.js') }}"></script>
-
-
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
 
     <script src="{{ asset('js/bootstrap-datetimepicker.pt-BR.js') }}"></script>
 
 
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
-
-<script src="{{ asset('js/bootstrap-switch.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap-switch.min.js') }}"></script>
 
 
-<sript src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js"></sript>
+    <script src="{{ asset('js/parsley2.min.js') }}"></script>
 
     <script type="text/javascript">
 
@@ -493,46 +489,21 @@ $(".js-data-example-ajax").select2({
             templateResult: formatRepo, // omitted for brevity, see the source of this page
             templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
           });
-$('.js-data-example-ajax').on('change', function() {  // when the value changes
-    $(this).valid(); // trigger validation on this element
-});
-
-
-
-//    $( ".select2-container" )
-//      .focusout(function() {
-//        console.log("focus out");
-//        var select2 = $('.js-data-example-ajax').data('select2');
-//        console.log("evt:", $('.js-data-example-ajax').data('select2'));
-//      }).blur(function() {
-//            console.log("blur out");
-//          });
 
 
     @if(isset($targetUser))
 
-        var fbId = <?php echo $targetUser->id; ?>;
+        var targetId = <?php echo $targetUser->id; ?>;
         var nameFb = "<?php echo $targetUser->name; ?>";
 
 
         $('.js-data-example-ajax').append($('<option>', {
-                value: fbId,
+                value: targetId,
                 text : nameFb
             })).trigger("change");
 
-        $(".js-data-example-ajax").val([ fbId]).trigger("change");
-
-    @else
-        //$(".js-data-example-ajax").val([<?php echo Auth::user()->facebook_id; ?>]).trigger("change");
+        $(".js-data-example-ajax").val([ targetId]).trigger("change");
     @endif
-
-
-
-
-
-
-
-
 
 
     function formatRepo (repo) {
@@ -579,113 +550,60 @@ $('.js-data-example-ajax').on('change', function() {  // when the value changes
     });
 
 
-    var currentPage = 0;
-    function showPage(page){
-        console.log("page:" + page);
-        currentPage = page;
-        for (i = 1; i <= 4; i++) {
-            $("#page"+i).addClass("hide");
-            $("#circle"+i).removeClass("btn-active");
-
-        }
-         $("#circle"+page).addClass("btn-active");
-         $("#page"+page).removeClass("hide");
-
-
-        if(page == 1){
-            $("#controls").addClass("hide");
-        }else{
-            $("#controls").removeClass("hide");
-        }
-
-        if(page == 4){
-            $("#next_control").val("Create Challenge");
-        }else{
-            $("#next_control").val("Next");
-        }
-    }
-
-$("#circle1").click(function() {
-   showPage(1);
-});
-
-$("#circle2").click(function() {
-   showPage(2);
-});
-
-$("#circle3").click(function() {
-   showPage(3);
-});
-
-$("#circle4").click(function() {
-   showPage(4);
-});
+//    var currentPage = 0;
+//    function showPage(page){
+//        console.log("page:" + page);
+//        currentPage = page;
+//        for (i = 1; i <= 4; i++) {
+//            $("#page"+i).addClass("hide");
+//            $("#circle"+i).removeClass("btn-active");
+//
+//        }
+//         $("#circle"+page).addClass("btn-active");
+//         $("#page"+page).removeClass("hide");
+//
+//
+//        if(page == 1){
+//            $("#controls").addClass("hide");
+//        }else{
+//            $("#controls").removeClass("hide");
+//        }
+//
+//        if(page == 4){
+//            $("#next_control").val("Create Challenge");
+//        }else{
+//            $("#next_control").val("Next");
+//        }
+//    }
 
 
-    function hasErrors(page) {
-        if(page == 1){
-            return !$('#friends-cha').val();
-        }else if(page == 2){
 
-        }
-        return false;
+//    $("#nextp1").click(function() {
+//
+//        showPage(2);
+//    });
+//    $("#next_control").click(function() {
+//
+//        //se houver erros
+//        if(hasErrors(currentPage)){
+//
+//            showErrors(currentPage);
+//
+//        }else if(currentPage == 4){
+//
+//        $( "#enviar" ).click();
+//
+//        }else{
+//            showPage(currentPage+1);
+//        }
+//    });
+//
+//    $("#back_control").click(function() {
+//       showPage(currentPage-1);
+//    });
 
-    }
 
-$(function() {
-    $('#form-challenge').validate({
-        rules: {
-            thisval: "required"
-        }
-    });
-    console.info($('#form-challenge').valid());
-});
-
-    function showErrors(page) {
-        if(page == 1){
-
-//            $("#formulario").validate();
-//            var validator = $( "#formulario" ).validate();
-            $("#friends-cha").valid();
-
-        }else if(page == 2){
-
-        }
-    }
-
-    $("#nextp1").click(function() {
-        if(hasErrors(1)){
-            showErrors(1);
-        }else
-        showPage(2);
-    });
-    $("#next_control").click(function() {
-
-        //se houver erros
-        if(hasErrors(currentPage)){
-
-            showErrors(currentPage);
-
-        }else if(currentPage == 4){
-
-        $( "#enviar" ).click();
-
-        }else{
-            showPage(currentPage+1);
-        }
-    });
-
-    $("#back_control").click(function() {
-       showPage(currentPage-1);
-    });
-
-  $.validate({
-    lang: 'es',
-    form : '#formulario'
-
-  });
-
-    showPage(1);
+//    showPage(1);
 
     function changeState(el) {
         if (el.readOnly) el.checked=el.readOnly=false;
@@ -699,6 +617,101 @@ $(function() {
 
 </script>
 
+<script type="text/javascript">
+$(function () {
+  var $sections = $('.form-section');
+
+  function navigateTo(index) {
+    // Mark the current section with the class 'current'
+    $sections
+      .removeClass('current')
+      .eq(index)
+        .addClass('current');
+    // Show only the navigation buttons that make sense for the current section:
+    $('#back_control').toggle(index > 0);
+    $('#nextp1').toggle(index == 0);
+
+
+    var atTheEnd = index >= $sections.length - 1;
+//    $('#next_control').toggle(!atTheEnd);
+    $('#next_control').toggle(index > 0);
+    //$('#form-challenge [type=submit]').toggle(atTheEnd);
+
+
+
+
+
+    for (i = 1; i <= 4; i++) {
+        $("#circle"+i).removeClass("btn-active");
+
+    }
+     $("#circle"+(index+1)).addClass("btn-active");
+
+
+    if(atTheEnd){
+        $("#next_control").val("Create Challenge");
+    }else{
+        $("#next_control").val("Next");
+    }
+
+
+
+  }
+
+  function curIndex() {
+    // Return the current index by looking at which section has the class 'current'
+    return $sections.index($sections.filter('.current'));
+  }
+
+  // Previous button is easy, just go back
+  $('#back_control').click(function() {
+    navigateTo(curIndex() - 1);
+  });
+
+  $('#nextp1').click(function() {
+      if ($('#form-challenge').parsley().validate({group: 'block-' + curIndex()})){
+          navigateTo(curIndex() + 1);
+        }
+    });
+
+  // Next button goes forward iff current block validates
+  $('#next_control').click(function() {
+    if ($('#form-challenge').parsley().validate({group: 'block-' + curIndex()})){
+        var atTheEnd = curIndex() >= $sections.length - 1;
+        if(atTheEnd){
+            $( "#enviar" ).click();
+        }else{
+            navigateTo(curIndex() + 1);
+        }
+
+      }
+  });
+
+  // Prepare sections by setting the `data-parsley-group` attribute to 'block-0', 'block-1', etc.
+  $sections.each(function(index, section) {
+    $(section).find(':input').attr('data-parsley-group', 'block-' + index);
+  });
+
+
+  $("#circle1").click(function() {
+     navigateTo(0);
+  });
+
+  $("#circle2").click(function() {
+     navigateTo(1);
+  });
+
+  $("#circle3").click(function() {
+     navigateTo(2);
+  });
+
+  $("#circle4").click(function() {
+     navigateTo(3);
+  });
+
+  navigateTo(0); // Start at the beginning
+});
+</script>
 
 
 
