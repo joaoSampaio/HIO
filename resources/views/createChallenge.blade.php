@@ -229,6 +229,7 @@ button:focus {
 
                         </ul>
 
+                    <div id="top-create"></div>
 @if (count($errors) > 0)
                               <div class="alert alert-danger">
                                   <ul>
@@ -308,7 +309,7 @@ button:focus {
 
                             <div class="form-group">
                               <div class="col-lg-12">
-                                {{ Form::textarea('description', null,array('required', 'class'=>'form-control', 'placeholder'=>'Describe your challenge ...')) }}
+                                {{ Form::textarea('description', null,array('required', 'rows'=> 5, 'class'=>'form-control', 'placeholder'=>'Describe your challenge ...')) }}
 
                               </div>
                             </div>
@@ -666,11 +667,14 @@ $(function () {
   // Previous button is easy, just go back
   $('#back_control').click(function() {
     navigateTo(curIndex() - 1);
+      moveTopCreate();
   });
 
   $('#nextp1').click(function() {
       if ($('#form-challenge').parsley().validate({group: 'block-' + curIndex()})){
+
           navigateTo(curIndex() + 1);
+          moveTopCreate();
         }
     });
 
@@ -681,7 +685,9 @@ $(function () {
         if(atTheEnd){
             $( "#enviar" ).click();
         }else{
+
             navigateTo(curIndex() + 1);
+            moveTopCreate();
         }
 
       }
@@ -711,6 +717,17 @@ $(function () {
 
   navigateTo(0); // Start at the beginning
 });
+
+
+function moveTopCreate() {
+
+    $('html, body').animate({
+        scrollTop: $('#top-create').offset().top - 20
+    }, 'slow');
+
+
+}
+
 </script>
 
 

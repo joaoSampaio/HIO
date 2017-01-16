@@ -48,6 +48,20 @@
             color: #ffffff !important;
         }
 
+        .clickable {
+            height: 100%;
+            width: 100%;
+            left: 0;
+            top: 0;
+            position: absolute;
+            z-index: 1;
+        }
+
+        .clickable-link{
+            z-index: 2;
+            position: relative;
+        }
+
     </style>
 
 
@@ -118,7 +132,7 @@
                             <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="#" aria-haspopup="true" aria-expanded="false" style="background-color: rgba(148, 0, 211, 0);">
                                 <i class="glyphicon glyphicon-bell"></i>
                             </a>
-                            <span class="badge badge-notify">3</span>
+                            <span class="badge badge-notify">0</span>
 
 
                         <ul class="dropdown-menu notifications pull-right" role="menu" aria-labelledby="dLabel">
@@ -358,7 +372,7 @@ $.ajax({
         $(".notifications-wrapper").html(jsonData);
 
 
-        $('.badge-notify').html($('.notifications .notification-item').length/2);
+        $('.badge-notify').html($('.notifications .notification-item.unread').length/2);
         jQuery(document).ready(function() {
           jQuery("time.timeago").timeago();
         });

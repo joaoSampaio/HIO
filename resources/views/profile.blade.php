@@ -389,7 +389,7 @@ color: white;
             <li class="active take-all-space-you-can">
                 <a href="#ongoing" aria-controls="ongoing" data-toggle="tab">
                     <h3>{{$challenges->total()}}</h3>
-                    <h4 class="text-capitalize">On Going</h4>
+                    <h4 class="text-capitalize">Active</h4>
                 </a>
             </li>
             <li class="take-all-space-you-can">
@@ -402,7 +402,7 @@ color: white;
             <li class="take-all-space-you-can">
                 <a href="#mychallenges" aria-controls="mychallenges" data-toggle="tab">
                     <h3>{{$myChallenges->total()}}</h3>
-                    <h4 class="text-capitalize">My Challenges</h4>
+                    <h4 class="text-capitalize">Created Challenges</h4>
                 </a>
             </li>
         </ul>

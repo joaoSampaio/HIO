@@ -659,7 +659,21 @@ cursor: pointer;
                           'X-CSRFToken': $( "input[name='_token']" ).val()
                       },
                   init: function() {
+
+                      this.on("uploadprogress", function(file, progress, bytesSent) {
+
+                          console.log("p:"+ progress);
+                            if(progress == 100){
+
+                            }
+
+                      });
+
                       this.on("success", function(file, response) {
+
+                          //myModal
+                          $('#myModal').modal('hide');
+
 
                         //$( "#proofs> .proof-item:nth-child(3)" )
                         var tamanho = $("#proofs > .proof-item").length;
