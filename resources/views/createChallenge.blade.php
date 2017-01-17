@@ -247,7 +247,7 @@ button:focus {
                             <div class="form-group">
                                 <div class="col-md-offset-3 col-md-6 col-sm-12 col-xs-12" style="text-align: center;margin-bottom: 30px">
                                     <h4 >Nominate who you want to take the challenge</h4>
-                                    <h4 >(Yes, you can challenge yourself):</h4>
+                                    <h4 >(Yes, you can challenge only yourself)</h4>
                                 </div>
 
                                 <div class="col-lg-12">
@@ -292,7 +292,7 @@ button:focus {
                                   <h4 >Let them know what is waiting for them</h4>
                               </div>
                               <div class="col-lg-12">
-                                {!! Form::text('title', null,array('required', 'data-validation'=>'required', 'class'=>'form-control', 'placeholder'=>'Title')) !!}
+                                {!! Form::text('title', null,array('required', 'data-validation'=>'required', 'class'=>'form-control', 'placeholder'=>'Challenge Title')) !!}
                               </div>
                             </div>
 
@@ -309,7 +309,7 @@ button:focus {
 
                             <div class="form-group">
                               <div class="col-lg-12">
-                                {{ Form::textarea('description', null,array('required', 'rows'=> 5, 'class'=>'form-control', 'placeholder'=>'Describe your challenge ...')) }}
+                                {{ Form::textarea('description', null,array('required', 'rows'=> 5, 'class'=>'form-control', 'placeholder'=>'Describe your challenge')) }}
 
                               </div>
                             </div>
@@ -321,7 +321,7 @@ button:focus {
                             <div class="form-group">
 
                                 <div class="col-md-offset-3 col-md-6 col-sm-12 col-xs-12" style="text-align: center;margin-bottom: 30px">
-                                      <h4 >It is a matter of time until the end, how much will they have to succeed?</h4>
+                                      <h4 >It is a matter of time until the end,<br> how much will they have to succeed?</h4>
                                 </div>
 
                               <div class="col-lg-12 col-md-12">
@@ -341,7 +341,7 @@ button:focus {
                             <div class="form-group">
 
                                 <div class="col-md-offset-3 col-md-6 col-sm-12 col-xs-12" style="text-align: center;margin-bottom: 30px">
-                                      <h4 >DARE TO REWARD YOU AND/OR YOUR FRIENDS. IF YOU/THEY FAIL, FEEL FREE TO PENALTY THEM AND/OR YOURSELF</h4>
+                                      <h4 >Dare to reward the participants. If someone fails, feel free to penalty them and/or yourself</h4>
                                 </div>
 
                                 <div class="col-lg-6 col-md-6" style="margin-bottom: 15px;">
@@ -551,61 +551,6 @@ $(".js-data-example-ajax").select2({
     });
 
 
-//    var currentPage = 0;
-//    function showPage(page){
-//        console.log("page:" + page);
-//        currentPage = page;
-//        for (i = 1; i <= 4; i++) {
-//            $("#page"+i).addClass("hide");
-//            $("#circle"+i).removeClass("btn-active");
-//
-//        }
-//         $("#circle"+page).addClass("btn-active");
-//         $("#page"+page).removeClass("hide");
-//
-//
-//        if(page == 1){
-//            $("#controls").addClass("hide");
-//        }else{
-//            $("#controls").removeClass("hide");
-//        }
-//
-//        if(page == 4){
-//            $("#next_control").val("Create Challenge");
-//        }else{
-//            $("#next_control").val("Next");
-//        }
-//    }
-
-
-
-//    $("#nextp1").click(function() {
-//
-//        showPage(2);
-//    });
-//    $("#next_control").click(function() {
-//
-//        //se houver erros
-//        if(hasErrors(currentPage)){
-//
-//            showErrors(currentPage);
-//
-//        }else if(currentPage == 4){
-//
-//        $( "#enviar" ).click();
-//
-//        }else{
-//            showPage(currentPage+1);
-//        }
-//    });
-//
-//    $("#back_control").click(function() {
-//       showPage(currentPage-1);
-//    });
-
-
-//    showPage(1);
-
     function changeState(el) {
         if (el.readOnly) el.checked=el.readOnly=false;
         else if (!el.checked) el.readOnly=el.indeterminate=true;
@@ -704,15 +649,28 @@ $(function () {
   });
 
   $("#circle2").click(function() {
-     navigateTo(1);
+      if ($('#form-challenge').parsley().validate({group: 'block-' + 0})){
+          moveTopCreate();
+          navigateTo(1);
+      }
   });
 
   $("#circle3").click(function() {
-     navigateTo(2);
+      $('#form-challenge').parsley().validate({group: 'block-' + 0})
+      if ($('#form-challenge').parsley().validate({group: 'block-' + 1})){
+          moveTopCreate();
+          navigateTo(2);
+      }
   });
 
   $("#circle4").click(function() {
-     navigateTo(3);
+      //campo 2 é o calendario e esta sempre ok
+      $('#form-challenge').parsley().validate({group: 'block-' + 0})
+      if ($('#form-challenge').parsley().validate({group: 'block-' + 1})){
+          moveTopCreate();
+          navigateTo(3);
+      }
+
   });
 
   navigateTo(0); // Start at the beginning

@@ -62,6 +62,18 @@
             position: relative;
         }
 
+        @media (min-width: 768px) {
+            .navbar-default {
+
+                padding-bottom: 0px;
+
+            }
+        }
+
+        .img-circle {
+            object-fit: cover;
+        }
+
     </style>
 
 
@@ -336,7 +348,8 @@
 
     <script src="{{ asset('js/agency.js') }}"></script>
     <script src="{{ asset('js/select2.full.min.js') }}"></script>
-    <script src="http://timeago.yarp.com/jquery.timeago.js"></script>
+    <script src="{{ asset('js/jquery.timeago.js') }}"></script>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slideout/1.0.1/slideout.min.js"></script>
 <script>

@@ -180,7 +180,6 @@ class HomeController extends Controller {
             $canBeFriend = $this->canBeFriend($idUser);
         }
 
-
         $userFriends = $this->getAllFriends($idUser);
 
 
@@ -347,7 +346,7 @@ class HomeController extends Controller {
         //$uuid = Uuid::uuid4();
 
         $category = [
-            ''=>'Choose your Category',
+            ''=>'Choose your Sport',
             'Awesome Stuff'=>'Awesome Stuff',
             'Basketball'=>'Basketball',
             'Bodyboard'=>'Bodyboard',
@@ -759,11 +758,20 @@ class HomeController extends Controller {
             ->select('users.name', 'files.*', 'challenges.title', 'challenges.uuid')
             ->first();
 
+
+        $hasLiked = false;
+        if (Auth::check() && $challenge = FileLikes::find( $file_id . Auth::user()->id)) {
+            $hasLiked = true;
+        }
+
 //        $userViews = 3;
         $userViews = FileViews::where('file_id', $file_id)->count();
 
 //        return json_encode($sonChallenge);
-        return view('challengeDetailSon')->with('sonChallenge', $sonChallenge)->with('userViews',$userViews);
+        return view('challengeDetailSon')
+            ->with('sonChallenge', $sonChallenge)
+            ->with('userViews',$userViews)
+            ->with('hasLiked',$hasLiked);
     }
 
     public function likeFile($file_id){
@@ -1220,7 +1228,7 @@ class HomeController extends Controller {
             $this->unfriend($friendId);
         }
 
-        return back()->withInput();
+        return back()->withInput(\Illuminate\Support\Facades\Input::all());
 
 
 

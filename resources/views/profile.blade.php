@@ -228,6 +228,16 @@ color: white;
 
     <section  style="padding-top: 190px">
         <div class="container">
+
+            @if(old('friendId') > 0)
+                <div class="alert alert-success col-sm-12 col-md-6 col-md-offset-3">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Invitation Sent.</strong>
+                </div>
+            @endif
+
+
+
              @if(Session::has('challengeCreated'))
 {{--             @if($challengeCreated)--}}
 
@@ -317,6 +327,7 @@ color: white;
             </div>
 
             <div class="col-sm-12 col-md-12" style="margin-top: 30px">
+
                 @if($canBeFriend && Auth::check() && Auth::user()->id != $user->id)
 
                 <form class="form-horizontal form-brand" role="form" method="POST" style="    margin-top: 30px;" action="{{ url('/friend') }}">

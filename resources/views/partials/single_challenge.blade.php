@@ -18,7 +18,7 @@
         </h3>
         <a class="category-challenge" href="{{action('HomeController@showChallenges', $challenge->category)}}">{{$challenge->category}}</a>
 {{--        <h3 class="category-challenge">{{$challenge->category}}</h3>--}}
-        <p class="text-muted">{{$challenge->deadLine}}</p>
+        <p class="text-muted">Deadline {{$challenge->deadLine}}</p>
     </div>
 </div>
 

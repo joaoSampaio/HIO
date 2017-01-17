@@ -96,12 +96,12 @@ color: #eb1946;
         <div class="container" style="    background-image: url({{ asset('img/header-bg.jpg')}});background-size: cover;">
             <div class="intro-text">
                 @if(Auth::check())
-                    <div class="intro-lead-in">HI {{Auth::user()->name}}, WELCOME TO HIO.</div>
+                    <div class="intro-lead-in">{{Auth::user()->name}}, WELCOME TO HIO</div>
                 @else
-                    <div class="intro-lead-in">WELCOME TO HIO.</div>
+                    <div class="intro-lead-in">WELCOME TO HIO</div>
                 @endif
 
-                <div class="intro-heading">READY TO CHALLENGE?</div>
+                <div class="intro-heading">ARE YOU READY?</div>
                 <a href="{{ action('HomeController@createChallenge') }}" class="page-scroll btn btn-xl">CREATE CHALLENGE</a>
 
 
@@ -164,7 +164,7 @@ color: #eb1946;
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <h2 class="section-heading" style="color: #eb1946;margin-bottom: 5px;">Latest Events</h2>
+                    <h2 class="section-heading" style="color: #eb1946;margin-bottom: 5px;">New Challenges</h2>
                 </div>
             </div>
             <div class="row" id="latest"></div>

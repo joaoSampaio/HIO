@@ -68,11 +68,11 @@ color: #eb1946;
         color: #eb1946;
     }
 
-</style>
+    .pointer{
+        cursor: pointer;
+    }
 
-<script type="text/javascript">var switchTo5x=true;</script>
-<script type="text/javascript" id="st_insights_js" src="https://ws.sharethis.com/button/buttons.js?publisher=e31fe21a-7dbd-457b-a0cd-cf86f734af91"></script>
-<script type="text/javascript">stLight.options({publisher: "e31fe21a-7dbd-457b-a0cd-cf86f734af91", doNotHash: false, doNotCopy: false, hashAddressBar: true});</script>
+</style>
 
 @endsection
 
@@ -135,7 +135,11 @@ color: #eb1946;
                     <a href="{{"/profile/".$sonChallenge->user_id}}" class="" title="" style="color: #333;text-decoration: none;">{{$sonChallenge->name }}
                     </a>
                     <a href="/challenge/{{$sonChallenge->uuid}}" class="" title="{{$sonChallenge->title}}">{{$sonChallenge->title}}</a>
-                    <i id="vote" class="fa fa-heart primary" style="margin-left: 50px;margin-right: 15px;"></i><span id="likes_num">{{$sonChallenge->likes}}</span>
+
+
+
+                    <i id="vote" class="fa {{$hasLiked? 'fa-heart' : 'fa-heart-o pointer'}} primary" style="margin-left: 50px;margin-right: 15px;"></i><span id="likes_num">{{$sonChallenge->likes}}</span>
+
                     <i class="fa fa-eye primary" style="margin-left: 35px;margin-right: 15px;"></i> <span style="text-transform: none;">{{$userViews}} Views</span>
                 </div>
 
@@ -160,13 +164,7 @@ color: #eb1946;
         </div>
     </section>
 
-    <div>
-    <span class='st_facebook_hcount' displayText='Facebook'></span>
-    <span class='st_twitter_hcount' displayText='Tweet'></span>
-    <span class='st_googleplus_hcount' displayText='Google +'></span>
-    <span class='st_email_hcount' displayText='Email'></span>
 
-    </div>
 
 
     <section class="bg-light-gray" id="portfolio">
@@ -188,7 +186,8 @@ color: #eb1946;
 <script src="{{ asset('js/video.js') }}"></script>
 <script>
 
-$("#vote").click(function(){
+@if(!$hasLiked)
+    $("#vote").click(function(){
         $.ajax({
             url: "{{ action('HomeController@likeFile', $sonChallenge->id) }}",
             type:"POST",
@@ -199,8 +198,13 @@ $("#vote").click(function(){
                if(success){
                     var countVotes = data.count;
                     console.log("count:" + countVotes);
-                    if(countVotes != null)
-                        $( "#likes_num" ).text(countVotes+"");
+                    if(countVotes != null) {
+                        $("#likes_num").text(countVotes + "");
+                        $("#vote").removeClass('fa-heart-o');
+                        $("#vote").removeClass('pointer');
+                        $("#vote").addClass('fa-heart');
+
+                    }
 
                }
             },error:function(){
@@ -209,7 +213,7 @@ $("#vote").click(function(){
         }); //end of ajax
             return false;
         });
-
+@endif
 
 </script>
 
