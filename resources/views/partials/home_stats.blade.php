@@ -16,7 +16,7 @@
             <a href="{{ action('HomeController@showSonChallenge', [ 'uuid' => $challenge->uuid, 'user_id'=>$challenge->id]) }}" class="" title="">{{$challenge->title}}</a>
         </div>
         <div class="col-lg-3 col-xs-3">
-            {{$challenge->views}} <i class="fa fa-eye primary"></i>
+            {{$challenge->views}} <i class="fa fa-eye primary challenge-views pointer " data-toggle="tooltip" data-placement="top" title="" data-id="{{$challenge->id}}"></i>
         </div>
     </div>
 @endforeach

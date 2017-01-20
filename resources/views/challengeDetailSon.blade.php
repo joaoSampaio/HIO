@@ -68,9 +68,7 @@ color: #eb1946;
         color: #eb1946;
     }
 
-    .pointer{
-        cursor: pointer;
-    }
+
 
 </style>
 

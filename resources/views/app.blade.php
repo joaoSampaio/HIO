@@ -74,6 +74,82 @@
             object-fit: cover;
         }
 
+
+
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
+}
+
+.margin-bottom{
+    margin-bottom: 10px;
+}
+
+.center-middle{
+    position: absolute;
+    top: 50%;
+    transform: translate(0%,-50%);
+}
+
+.modal-dialog{
+    overflow-y: initial !important
+}
+.modal-body{
+    height: 350px;
+    overflow-y: auto;
+}
+
+.pointer{
+        cursor: pointer;
+    }
+
+@media only screen
+and (max-device-width : 1024px) {
+    .tooltip {
+        display: none !important;
+    }
+ }
+
+.same-height-modal-views{
+    /*width: 62px;*/
+    /*height: 62px;*/
+        /*max-height: 95vh;*/
+}
+
+
+        .modal-dialog {
+          display: -webkit-box;
+          display: -webkit-flex;
+          display: -moz-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-orient: vertical;
+          -webkit-box-direction: normal;
+          -webkit-flex-direction: column;
+             -moz-box-orient: vertical;
+             -moz-box-direction: normal;
+              -ms-flex-direction: column;
+                  flex-direction: column;
+          -webkit-box-pack: center;
+          -webkit-justify-content: center;
+             -moz-box-pack: center;
+              -ms-flex-pack: center;
+                  justify-content: center;
+          overflow-y: auto;
+          min-height: -webkit-calc(100vh - 60px);
+          min-height: -moz-calc(100vh - 60px);
+          min-height: calc(100vh - 60px);
+        }
+        @media (max-width: 767px) {
+          .modal-dialog {
+            min-height: -webkit-calc(100vh + 30px);
+            min-height: -moz-calc(100vh + 30px);
+            min-height: calc(100vh + 30px);
+          }
+        }
+
     </style>
 
 

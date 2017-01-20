@@ -1374,6 +1374,20 @@ class HomeController extends Controller {
 
     }
 
+
+    public function getChallengeSonViews($fileId){
+
+
+
+        $sonChallenges = DB::table('files_views')->where('files_views.file_id', $fileId)
+            ->join('users', 'files_views.user_id', '=', 'users.id')
+            ->select('users.name', 'users.photo', 'users.id as userId', 'files_views.*')
+            ->get();
+
+
+        return json_encode($sonChallenges);
+    }
+
 //    public function dummyNotification(){
 //
 //

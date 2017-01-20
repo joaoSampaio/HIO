@@ -171,17 +171,56 @@ color: #eb1946;
         </div>
     </section>
 
+
+
+    <div class="modal fade" id="challenge-views-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Views</h4>
+                </div>
+
+                <div class="modal-body" id="modal-views-content">
+
+
+                   <div class="padding5 row row-eq-height margin-bottom">
+                           <div class="col-lg-2 col-xs-2 padding5">
+                               <a href="/profile/" class="portfolio-link container-add-prof" title="">
+                                   @if(true)
+                                       <img src="/uploads/users/default_user.png" class="img-circle img-responsive">
+                                   @else
+                                       <img src="{{'/uploads/users/'. $challenge->photo }}" alt="{{$challenge->name}}" title="{{$challenge->name}}" class="img-circle img-responsive same-height">
+                                   @endif
+                               </a>
+                           </div>
+                           <div class="col-lg-7 col-xs-7">
+                               <a href="link" class="center-middle" title="">nome pessoa</a>
+                           </div>
+                       </div>
+                    </div>
+
+                {{--<div class="modal-footer">--}}
+                    {{--<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>--}}
+                    {{--<a class="btn btn-danger btn-ok btn-proof-delete">Delete</a>--}}
+                {{--</div>--}}
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('footer')
 
 
-
+{{--<script type="text/javascript" src="path-to-file/jquery.actual.js"></script>--}}
 {{--<script src="{{ asset('js/jquery.mobile.custom.min.js') }}"></script>--}}
 
 
     <script>
 
+        var dict = {};
 
         $.ajax({
           type: 'GET',
@@ -206,10 +245,15 @@ color: #eb1946;
         dataType: 'json',
         success: function(jsonData) {
           $("#mostViewed").html(jsonData);
+
           var cw = $('.same-height').width();
                     $('.same-height').css({
                         'height': cw + 'px'
                     });
+            enableChallengeViews();
+
+            $('[data-toggle="tooltip"]').tooltip();
+
         },
         error: function() {
           //alert('Error loading PatientID=' + id);
@@ -231,6 +275,97 @@ color: #eb1946;
           //alert('Error loading PatientID=' + id);
         }
       });
+
+
+
+
+    function enableChallengeViews(){
+      $('.challenge-views').click(function(e){
+        $('#challenge-views-modal').modal('show');
+           $.ajax({
+               url: "/views/proof/"+$(e.currentTarget).data("id"),
+               type:"GET",
+               dataType : 'json',
+               success:function(data){
+
+//                 console.log(JSON.stringify(data));
+                    var challengeViews="";
+                    for (index = 0; index < data.length; ++index) {
+//                        console.log(data[index]);
+
+                        challengeViews += "<div class=\"padding5 row row-eq-height margin-bottom\">";
+                         challengeViews += "                           <div class=\"col-lg-2 col-xs-2 padding5\">";
+                         challengeViews += "                               <a href=\"\/profile\/"+data[index].userId+"\" class=\"container-modal-views-link\" title=\"\">";
+                         if(data[index].photo == "")
+                            challengeViews += "                                       <img src=\"\/uploads\/users\/default_user.png\" class=\"img-circle img-responsive same-height-modal-views\">";
+                         else
+                            challengeViews += "                                       <img src=\"\/uploads\/users\/"+data[index].photo+"\" class=\"img-circle img-responsive same-height-modal-views\">";
+                         challengeViews += "                               <\/a>";
+                         challengeViews += "                           <\/div>";
+                         challengeViews += "                           <div class=\"col-lg-7 col-xs-7\">";
+                         challengeViews += "                               <a href=\"\/profile\/"+data[index].userId+"\" class=\"center-middle\" title=\"\">"+data[index].name+"<\/a>";
+                         challengeViews += "                           <\/div>";
+                         challengeViews += "                       <\/div>";
+                         challengeViews += "                    <\/div>";
+                    }
+                    $("#modal-views-content").html(challengeViews);
+
+                    $('#challenge-views-modal').on('shown.bs.modal', function() {
+                        var wid = $('.same-height-modal-views').width();
+                         $('.same-height-modal-views').css({
+                             'height': wid + 'px'
+                         });
+                    })
+
+               },error:function(){
+                   //console.log("count:" + countVotes);
+               }
+           }); //end of ajax
+               return false;
+           });
+
+       $( ".challenge-views" ).hover(function(e) {
+            var id = $(e.currentTarget).data("id");
+            if(!(id in dict)){
+                 $.ajax({
+                                url: "/views/proof/"+id,
+                                type:"GET",
+                                dataType : 'json',
+                                success:function(data){
+                                    dict[id] = data;
+                                  console.log(JSON.stringify(data));
+                                  $(e.currentTarget).prop('title', getViewsNames(dict[id]));
+                                  $(e.currentTarget).attr('data-original-title', getViewsNames(dict[id]));
+                                  $(e.currentTarget).tooltip('show');
+                                },error:function(){
+                                    //console.log("count:" + countVotes);
+                                }
+                            }); //end of ajax
+           }else {
+           $(e.currentTarget).prop('title', getViewsNames(dict[id]));
+           $(e.currentTarget).attr('data-original-title', getViewsNames(dict[id]));
+
+           $(e.currentTarget).tooltip('show');
+           }
+       });
+    }
+
+    function getViewsNames(data){
+        var challengeViews="";
+
+        if(data.length>= 5){
+            challengeViews += data[0].name + ", " +  data[1].name + ", " +  data[2].name + " and " + (data.length - 3) + " other people";
+        }else{
+            for (index = 0; index < data.length; ++index) {
+                challengeViews += data[index].name + ", ";
+            }
+            if(data.length > 0)
+                challengeViews = challengeViews.slice(0, -2);
+        }
+
+
+        return challengeViews;
+    }
 
 
     </script>
