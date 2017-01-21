@@ -1106,8 +1106,6 @@ class HomeController extends Controller {
     }
 
 
-
-
     public function sendLinkToFacebook($link, $message){
         $fb = new Facebook\Facebook([
             'app_id' => '948239501878979',
@@ -1244,10 +1242,10 @@ class HomeController extends Controller {
     {
 
 
-        $sentFriendRequests = $this->getSentFriendRequests(2);
-        $friendRequests = $this->getFriendRequests(2);
-        $friends = $this->getAllFriends(Auth::user()->id, NULL, 2);
-        $blockedFriends = $this->getBlockedFriends(2);
+        $sentFriendRequests = $this->getSentFriendRequests(10);
+        $friendRequests = $this->getFriendRequests(10);
+        $friends = $this->getAllFriends(Auth::user()->id, NULL, 10);
+        $blockedFriends = $this->getBlockedFriends(10);
 
         return view('friendList')
             ->with('friendRequests', $friendRequests)
@@ -1445,7 +1443,7 @@ class HomeController extends Controller {
                     'nameCreator' => $nameCreator, 'total' => $total, 'nameUser' => '', 'deadline' => $deadline], function ($m) use ( $total, $challenge, $nameCreator, $email, $deadline) {
                     $m->from('norelpy@hiolegends.com', 'HIO - Challenge');
 
-                    $m->to($email)->subject($nameCreator . ' challenged you! - '.$challenge->title);
+                    $m->to($email)->subject($nameCreator.' challenged you! - '.$challenge->title);
                 });
 
             }

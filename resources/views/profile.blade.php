@@ -353,7 +353,7 @@ color: white;
                         @if($countFriends == 6)
                             <li class="show-friends">
                                 <div class="ch-item ch-img-1">
-                                    <button type="button" class="btn btn-info btn-circle btn-xl friends"><i class="glyphicon glyphicon-plus"></i><span style="font-size: 40px;">{{count($friends) - 5}}</span></button>
+                                    <button type="button" class="btn btn-info btn-circle btn-xl friends"><i class="glyphicon glyphicon-plus"></i><span style="font-size: 40px;">{{count($userFriends) - 5}}</span></button>
                                 </div>
                             </li>
                         @endif

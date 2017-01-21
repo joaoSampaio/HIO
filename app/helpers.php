@@ -6,6 +6,12 @@
  * Time: 18:44
  */
 
+function getFirstName($string){
+    $words = explode(" ", $string);
+
+    return $words[0];
+}
+
 function multiexplode ($delimiters,$string) {
     $ary = explode($delimiters[0],$string);
     array_shift($delimiters);

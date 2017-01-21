@@ -96,7 +96,7 @@
 .modal-dialog{
     overflow-y: initial !important
 }
-.modal-body{
+#challenge-views-modal .modal-body{
     height: 350px;
     overflow-y: auto;
 }

@@ -187,6 +187,13 @@ button:focus {
     background-color: #eb1946 !important;
 }
 
+.form-section .btn-xl{
+    width: 290px;
+}
+
+    .parsley-required{
+        color: #eb1946;
+    }
 
 </style>
 @endsection
@@ -254,7 +261,7 @@ button:focus {
                                 @if(Auth::user()->role == "brand")
                                     {!! Form::select('emailFriend[]', array(),null,array('id'=>'friends-cha', 'class'=>'form-control js-data-example-ajax', 'multiple'=>'multiple')) !!}
                                 @else
-                                    {!! Form::select('emailFriend[]', array(),null,array('id'=>'friends-cha','required', 'data-validation'=>'required',  'class'=>'form-control js-data-example-ajax', 'multiple'=>'multiple')) !!}
+                                    {!! Form::select('emailFriend[]', array(),null,array('id'=>'friends-cha','required', 'data-validation'=>'required','data-parsley-required-message'=>'*information required',  'class'=>'form-control js-data-example-ajax', 'multiple'=>'multiple')) !!}
                                 @endif
                                 </div>
 
@@ -281,7 +288,8 @@ button:focus {
 
                             <div class="form-group" style="margin-top: 70px; text-align: center;" >
                               <div class="col-md-12 col-xs-12">
-                                    <input class="btn btn-primary btn-xl" value="Next" id="nextp1">
+                                    {{--<input class="btn btn-primary btn-xl" value="Next" id="nextp1">--}}
+                                  <button type="button" class="btn btn-primary btn-xl" id="nextp1">Next</button>
                               </div>
                             </div>
                         </div>
@@ -292,7 +300,7 @@ button:focus {
                                   <h4 >Let them know what is waiting for them</h4>
                               </div>
                               <div class="col-lg-12">
-                                {!! Form::text('title', null,array('required', 'data-validation'=>'required', 'class'=>'form-control', 'placeholder'=>'Challenge Title')) !!}
+                                {!! Form::text('title', null,array('required', 'data-validation'=>'required', 'data-parsley-required-message'=>'*information required', 'class'=>'form-control', 'placeholder'=>'Challenge Title')) !!}
                               </div>
                             </div>
 
@@ -300,7 +308,7 @@ button:focus {
                               <div class="col-lg-6 col-md-6">
 
                               <label class="custom-select">
-                                    {!! Form::select('category', $category,'teste',array('required', 'class'=>'form-control')) !!}
+                                    {!! Form::select('category', $category,'teste',array('required', 'data-parsley-required-message'=>'*information required', 'class'=>'form-control')) !!}
 
                               </label>
 
@@ -309,7 +317,7 @@ button:focus {
 
                             <div class="form-group">
                               <div class="col-lg-12">
-                                {{ Form::textarea('description', null,array('required', 'rows'=> 5, 'class'=>'form-control', 'placeholder'=>'Describe your challenge')) }}
+                                {{ Form::textarea('description', null,array('required', 'data-parsley-required-message'=>'*information required', 'rows'=> 5, 'class'=>'form-control', 'placeholder'=>'Describe your challenge')) }}
 
                               </div>
                             </div>
@@ -340,17 +348,17 @@ button:focus {
                         <div class="form-section" id="page4">
                             <div class="form-group">
 
-                                <div class="col-md-offset-3 col-md-6 col-sm-12 col-xs-12" style="text-align: center;margin-bottom: 30px">
+                                <div class="col-md-offset-2 col-md-8 col-sm-12 col-xs-12" style="text-align: center;margin-bottom: 30px">
                                       <h4 >Dare to reward the participants. If someone fails, feel free to penalty them and/or yourself</h4>
                                 </div>
 
                                 <div class="col-lg-6 col-md-6" style="margin-bottom: 15px;">
-                                    {!! Form::text('reward', null,array('required', 'class'=>'form-control','placeholder'=>'Reward')) !!}
+                                    {!! Form::text('reward', null,array('required', 'data-parsley-required-message'=>'*information required', 'class'=>'form-control','placeholder'=>'Reward')) !!}
                                 </div>
 
 
                                 <div class="col-lg-6 col-md-6">
-                                    {!! Form::text('penalty', null,array('required', 'class'=>'form-control', 'placeholder'=>'Penalty')) !!}
+                                    {!! Form::text('penalty', null,array('required', 'data-parsley-required-message'=>'*information required', 'class'=>'form-control', 'placeholder'=>'Penalty')) !!}
                                 </div>
 
                                 <h5 style="text-transform: none;" class="col-lg-12">
@@ -404,11 +412,13 @@ button:focus {
                               <div class="col-md-12 col-xs-12">
 
                                 <div class="col-xs-12 col-md-6" style="margin-bottom: 20px;">
-                                    <input class="btn btn-default btn-xl btn-cancel-hio" value="Back" id="back_control" >
+                                    <button type="button" class="btn btn-default btn-xl btn-cancel-hio" id="back_control">Back</button>
+                                    {{--<input class="btn btn-default btn-xl btn-cancel-hio" value="Back" id="back_control" >--}}
                                 </div>
 
                                 <div class="col-xs-12 col-md-6">
-                                    <input class="btn btn-primary btn-xl btn-create-hio" value="Next" id="next_control">
+                                    <button type="button" class="btn btn-primary btn-xl btn-create-hio" id="next_control">Next</button>
+                                    {{--<input class="btn btn-primary btn-xl btn-create-hio" value="Next" id="next_control">--}}
                                 </div>
 
 

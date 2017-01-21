@@ -96,12 +96,12 @@ color: #eb1946;
         <div class="container" style="    background-image: url({{ asset('img/header-bg.jpg')}});background-size: cover;">
             <div class="intro-text">
                 @if(Auth::check())
-                    <div class="intro-lead-in">{{Auth::user()->name}}, WELCOME TO HIO</div>
+                    <div class="intro-lead-in">{{getFirstName(Auth::user()->name)}}, WELCOME TO HIO</div>
                 @else
                     <div class="intro-lead-in">WELCOME TO HIO</div>
                 @endif
 
-                <div class="intro-heading">ARE YOU READY?</div>
+                <div class="intro-heading">READY TO CHALLENGE?</div>
                 <a href="{{ action('HomeController@createChallenge') }}" class="page-scroll btn btn-xl">CREATE CHALLENGE</a>
 
 

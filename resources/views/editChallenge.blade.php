@@ -62,7 +62,7 @@ background-color: #222;
 
                         <div class="form-group">
 
-                          <label class="col-lg-12 control-label" style="text-align: start; margin-bottom: 10px">Show them what you got. Share your challenge with your friends:</label>
+                          <label class="col-lg-12 control-label" style="text-align: start; margin-bottom: 10px">Share your challenge with your friends and defy them to join:</label>
                           <div class="col-lg-12">
 
 

@@ -358,7 +358,7 @@ cursor: pointer;
                     <p>Created by: <a href="{{"/profile/".$challenge->creator_id}}">{{$creator}}</a></p>
 
                     <p style="color: #333; margin-bottom: 30px"> {{count($peopleParticipating)}} participants</p>
-                        <ul class="ch-grid">
+                        <ul class="ch-grid" id="participants-list">
                             <?php $countFriends=0; ?>
                             @foreach ($peopleParticipating as $friend)
                                 <?php $countFriends++; ?>
@@ -424,7 +424,7 @@ cursor: pointer;
 
                     <div class="col-sm-12 col-md-10 col-md-offset-1" style="margin-top: 30px">
 
-                        <p>Time to prove yourself. Share pictures or videos through #HIO #SelfMadeLegends #ChallengeAccepted</p>
+                        <p>Raise to the occasion, prove you can do it!</p>
                     </div>
 
                 </div>
@@ -489,6 +489,27 @@ cursor: pointer;
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         <a class="btn btn-danger btn-ok btn-proof-delete">Delete</a>
                     </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="upload-video-msg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Converting Video</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>Your video is beeing converted. It will be available soon.</p>
+                        <p>You can close this page and return in a few minutes.</p>
+                        <p class="debug-url"></p>
+                    </div>
+
+
                 </div>
             </div>
         </div>
@@ -581,18 +602,45 @@ cursor: pointer;
                                     $('#showmore').hide();
                                     $('#otherpeople').show();
                                 });
-                           $('#join_resposta').text('Join Success');
+                           $('#join_resposta').text('You are now taking this challenge');
                            $( "#join" ).remove();
-                       }else{
-                       $('#join_resposta').text('Already joined');
-                       }
-                    },error:function(){
-                        $('#join_resposta').text('Joining problem');
-                    }
-                }); //end of ajax
+
+
+
+                           addUserToParticipants();
+
+
+
+
+                      }else{
+                      $('#join_resposta').text('Already joined');
+                      }
+                   },error:function(){
+                       $('#join_resposta').text('Joining problem');
+                   }
+               }); //end of ajax
             }
             return false;
         });
+
+        function addUserToParticipants() {
+                    @if(Auth::check())
+
+            var userprofile="";
+            userprofile += "<li> <div class=\"ch-item ch-img-1\">";
+            @if(Auth::user()->photo == "")
+                userprofile += "<img src=\"\/uploads\/users\/default_user.png\"  class=\"img-circle friends \" style=\"height: 70px; width: 70px\">";
+            @else
+                userprofile += "<img src=\"{{'/uploads/users/'. Auth::user()->photo }}\"  class=\"img-circle friends \" style=\"height: 70px; width: 70px\">";
+            @endif
+            userprofile += "<div class=\"ch-info\">";
+            userprofile += "<p><a href=\"{{'/profile/'.Auth::user()->id}}\">{{Auth::user()->name}}<\/a><\/p>";
+            userprofile += "<\/div> <\/div><\/li>";
+
+            $("#participants-list").append(userprofile);
+
+            @endif
+        }
 
         $(".show-friends").click(function(){
             $(".hide-friend").removeClass("hide-friend");
@@ -655,6 +703,7 @@ cursor: pointer;
                     }
                     else { done(); }
                   },
+                  addRemoveLinks:true,
                   headers: {
                           'X-CSRFToken': $( "input[name='_token']" ).val()
                       },
@@ -664,6 +713,16 @@ cursor: pointer;
 
                           console.log("p:"+ progress);
                             if(progress == 100){
+
+                                if(file.type != "video/mp4" && !file.type.startsWith("image")){
+                                    $('#myModal').modal('hide');
+                                    $('#upload-video-msg').modal('show');
+
+                                }
+
+
+                                console.log(file);
+
 
                             }
 

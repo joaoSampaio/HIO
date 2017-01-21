@@ -6,6 +6,7 @@ use App\Model\User;
 use App\Repositories\ActivationRepository;
 use Illuminate\Mail\Mailer;
 use Illuminate\Mail\Message;
+use Mail;
 
 class ActivationFactory
 {
@@ -28,11 +29,26 @@ class ActivationFactory
         $token = $this->activationRepo->createActivation($user);
 
         $link = route('user.activate', $token);
-        $message = sprintf('Activate account %s', $link, $link);
+//        $message = sprintf('Activate account %s', $link, $link);
+//
+//        $this->mailer->raw($message, function (Message $m) use ($user) {
+//            $m->to($user->email)->subject('Activation mail');
+//        });
 
-        $this->mailer->raw($message, function (Message $m) use ($user) {
-            $m->to($user->email)->subject('Activation mail');
+
+
+
+
+        $email = $user->email;
+        Mail::send('mail.emailSignUpUser', ['name' => $user->name, 'email' => $email, 'link' => $link], function ($m) use ( $email, $link) {
+            $m->from('norelpy@hiolegends.com', 'HIO - Contact');
+
+            $m->to($email, '')->subject('HIO - activate account');
         });
+
+
+
+
     }
 
     public function sendActivationMailBrand($user)
