@@ -93,7 +93,7 @@ color: #eb1946;
     <header>
 
 
-        <div class="container" style="    background-image: url({{ asset('img/header-bg.jpg')}});background-size: cover;">
+        <div class="container" style="    background-image: url({{ asset('img/header-bg.png')}});background-size: 115%;background-repeat: no-repeat;background-position: center;">
             <div class="intro-text">
                 @if(Auth::check())
                     <div class="intro-lead-in">{{getFirstName(Auth::user()->name)}}, WELCOME TO HIO</div>

@@ -154,12 +154,12 @@ html{
 }
 
 .search-select2 .select2-container{
-    width: 200px !important;
+    width: 100% !important;
     /*padding: 10px 15px;*/
 }
 
 .select2-dropdown{
-    width: 400px !important;
+    /*width: 400px !important;*/
 }
 
 .search-img{
@@ -390,7 +390,7 @@ ul, ul li {
 #full-nav .badge-notify{
     position: relative;
     top: -40px;
-    left: 31px;
+    left: 7px;
 }
 .badge-notify{
     background: #eb1946;
@@ -405,7 +405,7 @@ ul, ul li {
 
 .glyphicon-bell {
 
-    font-size:1.5rem;
+    font-size:12pt;
 }
 
 #full-nav .notifications {
@@ -469,4 +469,23 @@ ul, ul li {
 .navbar-fixed-top.scrolled {
     background-color: #222 !important;
     transition: background-color 200ms linear;
+}
+
+.badge{
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+header{
+    /*background-image:url(../img/header-bg.jpg);background-repeat:none;background-attachment:scroll;background-position:center center;-webkit-background-size:cover;-moz-background-size:cover;background-size:cover;-o-background-size:cover;*/
+    text-align:center;
+    color:#fff;
+    background-color: #191c20;
+
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-position: center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
 }

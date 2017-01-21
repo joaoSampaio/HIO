@@ -12,6 +12,13 @@ function getFirstName($string){
     return $words[0];
 }
 
+function getFirstLastName($string){
+    $words = explode(" ", $string);
+    if(count($words) > 1)
+        return $words[0] . " " . $words[count($words) - 1];
+    return $words[0];
+}
+
 function multiexplode ($delimiters,$string) {
     $ary = explode($delimiters[0],$string);
     array_shift($delimiters);

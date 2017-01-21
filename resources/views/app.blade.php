@@ -20,7 +20,7 @@
     <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 
-<link href='https://fonts.googleapis.com/css?family=Roboto:700,900' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Roboto:700,900,400,500' rel='stylesheet' type='text/css'>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -150,6 +150,69 @@ and (max-device-width : 1024px) {
           }
         }
 
+        .header-link {
+            color: #ffffff !important;
+            font-size: 16pt;
+        }
+        .header-link-secondary {
+            color: #43484c !important;
+            font-size: 16pt;
+        }
+
+        .navbar .navbar-nav {
+          display: inline-block;
+          float: none;
+          vertical-align: top;
+        }
+
+        .navbar .navbar-collapse {
+          text-align: center;
+        }
+        /*font-family: "Myriad pro Semibold"*/
+
+        /*Medium*/
+        /*font-family: "Roboto";*/
+        /*font-weight: 500;*/
+
+
+.navbar-nav .active:after {
+    position: absolute;
+    bottom: 7px;
+    left: 15px;
+    right: 15px;
+    /*margin-left: -5px;*/
+    vertical-align: middle;
+    content: " ";
+    border-bottom: 3px solid;
+    color: #eb1946;
+}
+/*.modal-backdrop {*/
+        /*height: 100%;*/
+    /*}*/
+
+
+    #search-modal .select2-container--default .select2-search--inline .select2-search__field{
+        width: 100% !important;
+    }
+
+    .select2-results__message {
+    display: none;
+    }
+    .select2-dropdown {
+        background-color: white;
+        border: 0px solid #aaa;
+        }
+#search-modal .select2-container .select2-search--inline {
+     float: inherit;
+}
+#search-modal .select2-selection__choice{
+    display: none;
+}
+
+body{
+font-weight: 600;
+}
+
     </style>
 
 
@@ -183,23 +246,29 @@ and (max-device-width : 1024px) {
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-left nav-hio" >
-                    <li class="hidden">
-                        <a href="#page-top"></a>
-                    </li>
+                <ul class="nav navbar-nav nav-hio">
+                    {{--<li class="hidden">--}}
+                        {{--<a href="#page-top"></a>--}}
+                    {{--</li>--}}
 
-
+                    <li {{{Request::is('HIO-Mission') ? 'class=active' : ''}}}><a  class="header-link" href="{{ url('HIO-Mission') }}">HIO Mission</a></li>
 
                     <li {{{Request::is('challenges') ? 'class=active' : ''}}} >
-                        <a  href="{{ url('challenges') }}">Challenges</a>
+                        <a class="header-link"  href="{{ url('challenges') }}">Challenges</a>
                     </li>
 
-                    <li class="search-select2">{!! Form::select('search[]', array(),null,array( 'class'=>'form-control hidden search-ajax', 'multiple'=>'multiple')) !!}</li>
 
+                    {{--<li class="search-select2">{!! Form::select('search[]', array(),null,array( 'class'=>'form-control hidden search-ajax', 'multiple'=>'multiple')) !!}</li>--}}
+                    <li><i class="fa fa-search header-link main-search pointer" style="font-size: 14pt;padding-top: 15px" aria-hidden="true"></i></li>
+
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right nav-hio" >
 
 
                     @if(Auth::check())
-                        <li class="nav-profile{{{Request::is('profile/me') ? ' active' : ''}}}" >
+                        <li class="{{{Request::is('profile/me') ? ' active' : ''}}}" >
                             <a style="padding-top: 0px;" href="{{ url('profile', 'me') }}">
 
                                 @if(Auth::user()->photo == "")
@@ -208,16 +277,17 @@ and (max-device-width : 1024px) {
                                     <img src="{{'/uploads/users/'. Auth::user()->photo }}" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle" style="height: 50px; width: 50px">
 
                                 @endif
-
-
-                                My Profile
                             </a>
                         </li>
+                        <li>
+                            {{--<p class="header-link" style=" margin-bottom: 5px;text-align: left;">{{getFirstLastName(Auth::user()->name)}}</p>--}}
+                            <a class="header-link" href="{{ url('profile', 'me') }}" style=" margin-bottom: 5px;text-align: left; padding-left: 0px;text-transform: capitalize;padding: 5px 0px 0px 0px;">{{getFirstLastName(Auth::user()->name)}}</a>
 
-
+                            <a class="nav-logout header-link-secondary" style="padding-top: 0px;text-align: left;" href="{{ action('SocialAuthController@logout') }}">Logout</a>
+                        </li>
                         <li style="width: 60px;" id="full-nav">
 
-                            <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="#" aria-haspopup="true" aria-expanded="false" style="background-color: rgba(148, 0, 211, 0);">
+                            <a id="dLabel" class="header-link" role="button" data-toggle="dropdown" data-target="#" href="#" aria-haspopup="true" aria-expanded="false" style="padding-left: 0px;padding-top: 5px;background-color: rgba(148, 0, 211, 0);">
                                 <i class="glyphicon glyphicon-bell"></i>
                             </a>
                             <span class="badge badge-notify">0</span>
@@ -230,14 +300,6 @@ and (max-device-width : 1024px) {
                             <li class="divider"></li>
                             <div class="notifications-wrapper">
 
-                                {{--<a class="content" href="#">--}}
-                                    {{--<div class="notification-item">--}}
-                                        {{--<h4 class="item-title">Evaluation Deadline 1 · day ago</h4>--}}
-                                        {{--<p class="item-info">Marketing 101, Video Assignment</p>--}}
-                                    {{--</div>--}}
-                                {{--</a>--}}
-
-
                             </div>
                             <li class="divider"></li>
                             <div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
@@ -246,23 +308,17 @@ and (max-device-width : 1024px) {
 
                         </li>
 
-
-
-
-
                     @endif
 
-                    @if(Auth::check())
+                    @if(!Auth::check())
                         <li >
-                            <a class="nav-logout" href="{{ action('SocialAuthController@logout') }}">Logout</a>
+                            <a class="header-link" id="login_btn"  href="{{ url('/login') }}">Login</a>
                         </li>
-                    @else
-                        <li class="nav-profile">
-                            <a id="login_btn"  href="{{ url('/login') }}">Login</a>
+                        <li >
+                            <a class="header-link-secondary"  href="{{ url('/login') }}">Register</a>
                         </li>
                     @endif
                 </ul>
-
 
 
             </div>
@@ -363,6 +419,26 @@ and (max-device-width : 1024px) {
     @yield('content')
 
 
+
+<div class="modal fade" id="search-modal" tabindex="-1" role="dialog" aria-labelledby="searchLabel" aria-hidden="true">
+        <div class="modal-dialog" style="min-height: calc(40vh - 30px);">
+            <div class="modal-content">
+
+
+                <div class="modal-body" style="padding: 0px;    font-size: 27pt;    font-weight: 400;" >
+
+                   <div class=" row search-select2" >
+                        {!! Form::select('search[]', array(),null,array( 'id'=>'search-input', 'class'=>'form-control hidden search-ajax', 'multiple'=>'multiple')) !!}
+
+                    </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <footer>
             <div class="container">
                 <div class="row">
@@ -452,6 +528,14 @@ function goBack() {
 }
 
 
+$('.main-search').click(function(e){
+        $('#search-modal').on('shown.bs.modal', function () {
+            $('#search-input').select2('open');
+        });
+        $('#search-modal').modal('show');
+});
+
+
 @if(Auth::check())
 $.ajax({
     type: 'GET',
@@ -460,12 +544,10 @@ $.ajax({
     success: function(jsonData) {
         $(".notifications-wrapper").html(jsonData);
 
-
         $('.badge-notify').html($('.notifications .notification-item.unread').length/2);
         jQuery(document).ready(function() {
           jQuery("time.timeago").timeago();
         });
-
 
         $('.notification-item a').click(function (event){
             //event.preventDefault();
@@ -475,16 +557,9 @@ $.ajax({
                     //alert(response)
                 }
             })
-            //return true; //for good measure
         });
-
-
-
-
-
     },
     error: function() {
-        //alert('Error loading PatientID=' + id);
     }
 });
 @endif
@@ -494,17 +569,17 @@ $(".search-ajax").select2({
             ajax: {
                 url: "{{ action('HomeController@search') }}",
                 dataType: 'json',
-
                 delay: 250,
                 selectOnClose: true,
                 selectOnBlur: true,
-                allowClear: true,
+                tags: false,
+                maximumSelectionLength: 0,
+                multiple: false,
                 data: function (params) {
-              console.log('params:'+params);
-                return {
-                  q: params.term, // search term
-                  page: params.page
-                };
+                    return {
+                      q: params.term, // search term
+                      page: params.page
+                    };
               },
               processResults: function (data, params) {
                 return {
@@ -519,27 +594,27 @@ $(".search-ajax").select2({
             placeholder: "Search",
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
             minimumInputLength: 1,
-            templateResult: formatRepo, // omitted for brevity, see the source of this page
-            templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+            templateResult: formatRepoSearch, // omitted for brevity, see the source of this page
+            templateSelection: formatRepoSelectionSearch // omitted for brevity, see the source of this page
           });
 
 $(".search-ajax").show();
 
 
 $('.search-ajax').on('select2:select', function (evt) {
-    if(evt.params.data.type == 0){
-        window.location = "/profile/"+evt.params.data.id;
-    }else if(evt.params.data.type == 1){
-        window.location = "/challenge/"+evt.params.data.id;
-    } else if(evt.params.data.type == 2){
-        window.location = "/challenges/"+evt.params.data.id;
-    }
-
+//    if(evt.params.data.type == 0){
+//        window.location = "/profile/"+evt.params.data.id;
+//    }else if(evt.params.data.type == 1){
+//        window.location = "/challenge/"+evt.params.data.id;
+//    } else if(evt.params.data.type == 2){
+//        window.location = "/challenges/"+evt.params.data.id;
+//    }
+        return false;
     });
 
 
 
-    function formatRepo (repo) {
+    function formatRepoSearch (repo) {
           if (repo.loading) return;
 
             if(repo.selected)
@@ -573,15 +648,22 @@ $('.search-ajax').on('select2:select', function (evt) {
           return markup;
         }
 
+    function formatRepoSelectionSearch (repo) {
+        console.log("formatRepoSelection" + repo)
+            if(repo.type == 0){
+                window.location = "/profile/"+repo.id;
+            }else if(repo.type == 1){
+                window.location = "/challenge/"+repo.id;
+            } else if(repo.type == 2){
+                window.location = "/challenges/"+repo.id;
+            }
 
+//$('#search-input').val(null).trigger("change");
 
-
-
-        function formatRepoSelection (repo) {
-            if(repo.text == null)
-                return repo.id;
-            return repo.text;
-        }
+//            if(repo.text == null)
+//                return repo.id;
+//            return repo.text;
+    }
 
         function getPhotoUrl (type, image) {
 
