@@ -418,7 +418,7 @@ ul, ul li {
 }
 
 .menu-title {
-    color:#ff7788;
+    color: #000;
     font-size:1.5rem;
     display:inline-block;
 }
@@ -453,7 +453,7 @@ ul, ul li {
 .notification-item {
     padding:10px;
     margin:5px;
-    background:#ccc;
+    /*background:#ccc;*/
     border-radius:4px;
     position: relative;
 }

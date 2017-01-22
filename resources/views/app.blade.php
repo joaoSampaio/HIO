@@ -42,10 +42,18 @@
 
 
         .unread{
-            background-color: #eb1946;
+            color: #eb1946;
         }
-        .unread a{
-            color: #ffffff !important;
+        /*.unread a{*/
+            /*color: #ffffff !important;*/
+        /*}*/
+
+        .notifications a:hover {
+            color: #000 !important;
+        }
+
+        .notifications .col-md-8{
+            padding: 0px;
         }
 
         .clickable {
@@ -213,6 +221,18 @@ body{
 font-weight: 600;
 }
 
+        .notification-text a{
+            text-transform: capitalize !important;
+        }
+
+        .text-color1{
+            color: #003333;
+        }
+
+        .notification-time{
+            color: #999999;
+        }
+
     </style>
 
 
@@ -295,14 +315,15 @@ font-weight: 600;
 
                         <ul class="dropdown-menu notifications pull-right" role="menu" aria-labelledby="dLabel">
 
-                            <div class="notification-heading"><h4 class="menu-title">Notifications</h4><h4 class="menu-title pull-right">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4>
+                            <div class="notification-heading text-color1">
+                                <h4 class="menu-title col-md-offset-1">Your Notifications</h4>
                             </div>
                             <li class="divider"></li>
                             <div class="notifications-wrapper">
 
                             </div>
-                            <li class="divider"></li>
-                            <div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
+                            {{--<li class="divider"></li>--}}
+                            {{--<div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>--}}
                         </ul>
 
 
@@ -544,7 +565,9 @@ $.ajax({
     success: function(jsonData) {
         $(".notifications-wrapper").html(jsonData);
 
-        $('.badge-notify').html($('.notifications .notification-item.unread').length/2);
+        //numberUnread
+        $('.badge-notify').html($('#numberUnread').data('number-unread'));
+//        $('.badge-notify').html($('.notifications .notification-item.unread').length/2);
         jQuery(document).ready(function() {
           jQuery("time.timeago").timeago();
         });

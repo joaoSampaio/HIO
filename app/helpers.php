@@ -19,6 +19,11 @@ function getFirstLastName($string){
     return $words[0];
 }
 
+function truncateString($string, $len){
+    return str_limit($string, $len);
+}
+
+
 function multiexplode ($delimiters,$string) {
     $ary = explode($delimiters[0],$string);
     array_shift($delimiters);

@@ -381,7 +381,7 @@ cursor: pointer;
 
                                             @endif
                                             <div class="ch-info">
-                                                <p><a href="{{"/profile/".$friend->id}}">{{$friend->name}}</a></p>
+                                                <p><a href="{{"/profile/".$friend->user_id}}">{{$friend->name}}</a></p>
                                             </div>
 
 

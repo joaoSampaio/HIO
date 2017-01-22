@@ -1363,9 +1363,13 @@ class HomeController extends Controller {
 
             $notificationManager = new NotificationManager();
 
+            $numberUnread = $notificationManager->getNumberUnread(Auth::user());
             $results = $notificationManager->get(Auth::user());
 
-            return json_encode(view('partials.notifications')->with('notifications',$results)->render());
+            return json_encode(view('partials.notifications')
+                ->with('notifications',$results)
+                ->with('numberUnread',$numberUnread)
+                ->render());
 
         }
         return "nao";
