@@ -528,47 +528,51 @@ class HomeController extends Controller {
         $success = false;
         $message = " ";
         if ($challenge = Challenge::where('uuid', $uuid)->first()) {
-            Auth::user()->challenges()->save($challenge);
-            $success = true;
 
+            //nao permitir aceitar duas vezes
+            if (!ChallengeUserAssociation::where('challenge_id', $challenge->id)->where('user_id', Auth::user()->id)->first()) {
+
+
+                Auth::user()->challenges()->save($challenge);
+                $success = true;
 
 
 //            $countVotes = $this->getVoteCount($challenge);
 
 
-            $creator = $challenge->users()->where('user_id', $challenge->creator_id)->value('name');
-            $creator = '<a href="/profile/'.$challenge->creator_id.'">'.$creator . '</a>';
-            $peopleParticipating = $challenge->users()->select('name', 'user_id')->get();
+                $creator = $challenge->users()->where('user_id', $challenge->creator_id)->value('name');
+                $creator = '<a href="/profile/' . $challenge->creator_id . '">' . $creator . '</a>';
+                $peopleParticipating = $challenge->users()->select('name', 'user_id')->get();
 
-            $end = $creator . '<span> is challenging </span>';
-            $count = 0;
+                $end = $creator . '<span> is challenging </span>';
+                $count = 0;
 
 
+                $otherPeople = "";
+                //$array = array_except($array, ['price']);
+                foreach ($peopleParticipating as $people) {
+                    if ($people->user_id == $challenge->creator_id) {
+                        continue;
+                    }
+                    $count++;
 
-            $otherPeople = "";
-            //$array = array_except($array, ['price']);
-            foreach( $peopleParticipating as $people){
-                if (  $people->user_id == $challenge->creator_id ){
-                    continue;
+                    if ($count > 2) {
+                        $otherPeople = $otherPeople . ' <a href="/profile/' . $people->user_id . '"> ' . $people->name . '</a>,';
+                    } else {
+                        $end = $end . '<a href="/profile/' . $people->user_id . '"> ' . $people->name . '</a>,';
+                    }
                 }
-                $count++;
+                $end = rtrim($end, ",");
 
-                if($count > 2){
-                    $otherPeople = $otherPeople .' <a href="/profile/'.$people->user_id.'"> '.$people->name . '</a>,';
-                }else{
-                    $end=  $end  .'<a href="/profile/'.$people->user_id.'"> '.$people->name . '</a>,';
+                if (count($peopleParticipating) > 3) {
+                    $otherPeople = rtrim($otherPeople, ",");
+                    $end = $end . '  <span>and</span> <span id="showmore" class="label label-info"> ' . (count($peopleParticipating) - 3) .
+                        ' other people.</span> <span id="otherpeople" style="display: none;">' . $otherPeople . '</span>';
+
                 }
+
+                $message = $end;
             }
-            $end = rtrim($end, ",");
-
-            if(count($peopleParticipating) > 3) {
-                $otherPeople = rtrim($otherPeople, ",");
-                $end = $end . '  <span>and</span> <span id="showmore" class="label label-info"> ' . (count($peopleParticipating) - 3) .
-                    ' other people.</span> <span id="otherpeople" style="display: none;">' . $otherPeople . '</span>';
-
-            }
-
-            $message = $end;
 
         }
         $arr = array('status' => $success, 'message' => $message);
