@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <title>HIO - Challenge Your Friends</title>
 
 
 
@@ -79,12 +79,16 @@ color: #fff;
 
 
 .login-bg{
-background-image: url({{ asset('img/HIGHLIGHT.png')}});background-size: 115%;background-repeat: no-repeat;background-position: center;
+background-image: url({{ asset('img/HIGHLIGHT.png')}});background-size: 115%;background-repeat: no-repeat;background-position: center top;
+}
+
+.main-container{
+    margin-top: 300px;margin-bottom: 130px
 }
 
 @media (max-width: 992px){
     .login-bg{
-        background-image: url({{ asset('img/HIGHLIGHT.png')}});background-size: 200%;background-repeat: no-repeat;background-position: center;
+        background-image: url({{ asset('img/HIGHLIGHT.png')}});background-size: 200%;background-repeat: no-repeat;background-position: center top;
     }
     .footer-links li{
         display: block;
@@ -93,7 +97,73 @@ background-image: url({{ asset('img/HIGHLIGHT.png')}});background-size: 115%;bac
     .footer-links li:nth-child(even) {
         display: none;
     }
+
+    .main-container{
+        margin-top: 200px;margin-bottom: 130px
+    }
+
+    .margin15-mobile{
+        margin-bottom: 15px;
+    }
 }
+
+.alert-register{
+    position: absolute;
+    left: 50%;
+    margin-top: 200px;
+}
+.alert-register-label{
+    position: relative;
+    left: -50%;
+}
+
+
+.login-input{
+    font-family: "Roboto";
+    background-color: transparent !important;
+    border: 0;
+    border-bottom: 2px solid rgba(188, 188, 188, 0.2);
+    padding: 0px;
+    font-size: 16px;
+    color: #ffffff !important;
+
+}
+
+.login-input::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:    #ffffff;
+}
+.login-input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #ffffff;
+    opacity:  1;
+}
+.login-input::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #ffffff;
+    opacity:  1;
+}
+.login-input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color:    #ffffff;
+}
+
+.login-input:focus {
+    border-color: transparent;
+    outline: 0;
+    box-shadow:none;
+
+    /*-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(235,25,70,.6);*/
+    /*box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(235,25,70,.6);*/
+}
+
+.extra-register, .extra-register a  {
+    font-size: 16px;
+    font-family: "Roboto";
+    color: rgb(188, 188, 188);
+    line-height: 1.2;
+    text-align: center;
+    /*padding: 6px 12px;*/
+}
+
+
+
 
 </style>
     @yield('header')
@@ -101,7 +171,7 @@ background-image: url({{ asset('img/HIGHLIGHT.png')}});background-size: 115%;bac
 <body id="app-layout">
 
 
-    <a class="logo-center" href="{{ url('/') }}"><img style="display: inherit;" src="/img/logo-login.png" alt="HIO"></a>
+    <a class="logo-center" href="{{ url('/auth') }}"><img style="display: inherit;" src="/img/logo-login.png" alt="HIO"></a>
 
 
     {{--<nav class="navbar navbar-default navbar-static-top">--}}
@@ -122,7 +192,7 @@ background-image: url({{ asset('img/HIGHLIGHT.png')}});background-size: 115%;bac
     @yield('content')
 
 
-    <div style="text-align: center" class="container">
+    <div style="text-align: center; margin-bottom: 15px" class="container">
             <div style="margin-bottom: 40px" class="row">
                 <div class="col-md-12">
                     <ul class="list-inline footer-icon">

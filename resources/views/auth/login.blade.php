@@ -4,50 +4,7 @@
 
     <style>
 
-.login-input{
-font-family: "Roboto";
-background-color: transparent !important;
-border: 0;
-border-bottom: 2px solid rgba(188, 188, 188, 0.2);
-padding: 0px;
-font-size: 16px;
-color: #ffffff !important;
 
-}
-
-.login-input::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-    color:    #ffffff;
-}
-.login-input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-   color:    #ffffff;
-   opacity:  1;
-}
-.login-input::-moz-placeholder { /* Mozilla Firefox 19+ */
-   color:    #ffffff;
-   opacity:  1;
-}
-.login-input:-ms-input-placeholder { /* Internet Explorer 10-11 */
-   color:    #ffffff;
-}
-
-.login-input:focus {
-    border-color: transparent;
-    outline: 0;
-    box-shadow:none;
-
-    /*-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(235,25,70,.6);*/
-    /*box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(235,25,70,.6);*/
-}
-
-
-.extra-register, .extra-register a  {
-  font-size: 16px;
-  font-family: "Roboto";
-  color: rgb(188, 188, 188);
-  line-height: 1.2;
-  text-align: center;
-    padding: 6px 12px;
-}
 
 
 
@@ -57,11 +14,26 @@ color: #ffffff !important;
 @endsection
 @section('content')
 
+    @if (session('activationStatus'))
+        <div class="alert-register">
+            <div class="alert alert-success alert-register-label">
+                <span class="">{{ trans('auth.activationStatus') }}</span>
+            </div>
+        </div>
+    @endif
+
+    @if (session('activationWarning'))
+        <div class="alert-register">
+            <div class="alert alert-warning alert-register-label">
+                <span class="">{{ trans('auth.activationWarning') }}</span>
+            </div>
+        </div>
+    @endif
 
 
-        <div class="row" style="margin-top: 300px;margin-bottom: 130px">
+    <div class="row main-container">
 
-            <form class="col-md-4 col-md-offset-4 col-xs-6 col-xs-offset-3 form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
+            <form class="col-md-4 col-md-offset-4 col-xs-10 col-xs-offset-1 form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
                 {{ csrf_field() }}
 
                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">

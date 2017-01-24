@@ -94,6 +94,12 @@ input[type=radio]:checked ~ .inside::before {
     background: rgb(188, 188, 188);
 }
 
+    .btn-normal-login{
+        margin-top: 30px;
+    }
+
+
+
 </style>
 
 
@@ -102,40 +108,44 @@ input[type=radio]:checked ~ .inside::before {
 
 
 
-    <div class="row" style="margin-top: 300px;margin-bottom: 130px">
-
-<div class="radio-choice">
-
-  <label for="male"><input id="male" class="radio" type="radio" name="choice" value="user">
-  <div class="inside"></div>
-  USER
-  </label>
-  <label for="female">
-  <input id="female" class="radio" type="radio" name="choice" value="brand">
-  <div class="inside"></div>
-  BRAND</label>
-</div>
 
 
+    <div class="row main-container">
+
+        <div class="radio-choice">
+
+          <label for="radio-user">
+              <input id="radio-user" class="radio" type="radio" name="choice" value="user">
+            <div class="inside"></div>
+          User
+          </label>
+          <label for="radio-brand">
+              <input id="radio-brand" class="radio" type="radio" name="choice" value="brand">
+              <div class="inside"></div>
+              Brand|Athelete
+          </label>
+        </div>
 
 
-         <form class="form-horizontal form-user" role="form" method="POST" style="    margin-top: 30px;" action="{{ url('/register') }}">
+
+
+         <form class="form-horizontal form-user col-md-4 col-md-offset-4 col-xs-10 col-xs-offset-1" role="form" method="POST" style="    margin-top: 30px;" action="{{ url('/register') }}">
             {{ csrf_field() }}
 
             <div class="form-group{{ $errors->has('name-reg') ? ' has-error' : '' }}">
 
-                <div class="col-md-6" style="margin-bottom: 15px;">
-                    <input id="name" type="text" class="form-control" placeholder="First Name" name="name-reg" value="{{ old('name-reg') }}">
+                <div class="col-md-6 margin15-mobile">
+                    <input id="name" type="text" class="form-control login-input" placeholder="First Name" name="name-reg" value="{{ old('name-reg') }}">
                 </div>
                 <div class="col-md-6">
-                    <input id="apelido" type="text" class="form-control" placeholder="Last name" name="apelido-reg" value="{{ old('apelido-reg') }}">
+                    <input id="apelido" type="text" class="form-control login-input" placeholder="Last name" name="apelido-reg" value="{{ old('apelido-reg') }}">
                 </div>
             </div>
 
             <div class="form-group{{ $errors->has('email-reg') ? ' has-error' : '' }}">
 
                 <div class="col-md-12">
-                    <input id="email" type="email" class="form-control" placeholder="Email" name="email-reg" value="{{ old('email-reg') }}">
+                    <input id="email" type="email" class="form-control login-input" placeholder="Email" name="email-reg" value="{{ old('email-reg') }}">
                     @if ($errors->has('email-reg'))
                         <span class="help-block">
                             <strong>{{ $errors->first('email-reg') }}</strong>
@@ -147,7 +157,7 @@ input[type=radio]:checked ~ .inside::before {
             <div class="form-group{{ $errors->has('password-reg') ? ' has-error' : '' }}">
 
                 <div class="col-md-12">
-                    <input id="password" type="password" placeholder="Password" class="form-control" name="password-reg">
+                    <input id="password" type="password" placeholder="Password" class="form-control login-input" name="password-reg">
 
                     @if ($errors->has('password-reg'))
                         <span class="help-block">
@@ -160,7 +170,7 @@ input[type=radio]:checked ~ .inside::before {
             <div class="form-group{{ $errors->has('password-reg_confirmation') ? ' has-error' : '' }}">
 
                 <div class="col-md-12">
-                    <input id="password-confirm" type="password" placeholder="Confirm Password" class="form-control" name="password-reg_confirmation">
+                    <input id="password-confirm" type="password" placeholder="Confirm Password" class="form-control login-input" name="password-reg_confirmation">
 
                     @if ($errors->has('password-reg_confirmation'))
                         <span class="help-block">
@@ -175,20 +185,20 @@ input[type=radio]:checked ~ .inside::before {
 
             <div class="form-group">
                 <div class="col-md-12">
-                    <button type="submit" class="btn btn-success col-md-12">
-                        <i class="fa fa-btn fa-user"></i> Register
+                    <button type="submit" class="btn btn-normal-login">
+                        Register
                     </button>
                 </div>
             </div>
         </form>
 
-        <form class="form-horizontal form-brand" role="form" method="POST" style="    margin-top: 30px;" action="{{ url('/register-brand') }}">
+        <form class="form-horizontal form-brand col-md-4 col-md-offset-4 col-xs-10 col-xs-offset-1" role="form" method="POST" style="    margin-top: 30px;" action="{{ url('/register-brand') }}">
             {{ csrf_field() }}
 
             <div class="form-group{{ $errors->has('name-brand') ? ' has-error' : '' }}">
 
                 <div class="col-md-12">
-                    <input id="name" type="text" class="form-control" placeholder="Name" name="name-brand" value="{{ old('name-brand') }}">
+                    <input id="name" type="text" class="form-control login-input" placeholder="Name" name="name-brand" value="{{ old('name-brand') }}">
                     @if ($errors->has('name-brand'))
                         <span class="help-block">
                             <strong>{{ $errors->first('name-brand') }}</strong>
@@ -200,7 +210,7 @@ input[type=radio]:checked ~ .inside::before {
             <div class="form-group{{ $errors->has('email-brand') ? ' has-error' : '' }}">
 
                 <div class="col-md-12">
-                    <input id="email" type="email" class="form-control" placeholder="Email" name="email-brand" value="{{ old('email-brand') }}">
+                    <input id="email" type="email" class="form-control login-input" placeholder="Email" name="email-brand" value="{{ old('email-brand') }}">
                     @if ($errors->has('email-brand'))
                         <span class="help-block">
                             <strong>{{ $errors->first('email-brand') }}</strong>
@@ -212,7 +222,7 @@ input[type=radio]:checked ~ .inside::before {
             <div class="form-group{{ $errors->has('email-brand') ? ' has-error' : '' }}">
 
                 <div class="col-md-12">
-                    <input id="email" type="text" class="form-control" placeholder="Address" name="address-brand" value="{{ old('address-brand') }}">
+                    <input id="email" type="text" class="form-control login-input" placeholder="Address" name="address-brand" value="{{ old('address-brand') }}">
                     @if ($errors->has('address-brand'))
                         <span class="help-block">
                             <strong>{{ $errors->first('address-brand') }}</strong>
@@ -224,7 +234,7 @@ input[type=radio]:checked ~ .inside::before {
             <div class="form-group{{ $errors->has('password-brand') ? ' has-error' : '' }}">
 
                 <div class="col-md-12">
-                    <input id="password" type="password" placeholder="Password" class="form-control" name="password-brand">
+                    <input id="password" type="password" placeholder="Password" class="form-control login-input" name="password-brand">
 
                     @if ($errors->has('password-brand'))
                         <span class="help-block">
@@ -237,7 +247,7 @@ input[type=radio]:checked ~ .inside::before {
             <div class="form-group{{ $errors->has('password-brand_confirmation') ? ' has-error' : '' }}">
 
                 <div class="col-md-12">
-                    <input id="password-confirm" type="password" placeholder="Confirm Password" class="form-control" name="password-brand_confirmation">
+                    <input id="password-confirm" type="password" placeholder="Confirm Password" class="form-control login-input" name="password-brand_confirmation">
 
                     @if ($errors->has('password-brand_confirmation'))
                         <span class="help-block">
@@ -252,13 +262,14 @@ input[type=radio]:checked ~ .inside::before {
 
             <div class="form-group">
                 <div class="col-md-12">
-                    <button type="submit" class="btn btn-success col-md-12">
-                        <i class="fa fa-btn fa-user"></i> Register
+                    <button type="submit" class="btn btn-success btn-normal-login">
+                        Register
                     </button>
                 </div>
             </div>
         </form>
 
+    </div>
 
 
 
@@ -269,19 +280,18 @@ input[type=radio]:checked ~ .inside::before {
 
 
 
+        {{--<form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">--}}
+            {{--{{ csrf_field() }}--}}
 
-        <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
-            {{ csrf_field() }}
+            {{--<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">--}}
 
-            <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-
-                <div class="col-md-6">
-                    <input id="name" type="text" class="form-control" placeholder="Nome" name="name" value="{{ old('name') }}">
-                </div>
-                <div class="col-md-6">
-                    <input id="apelido" type="text" class="form-control" placeholder="Apelido" name="apelido" value="{{ old('apelido') }}">
-                </div>
-            </div>
+                {{--<div class="col-md-6">--}}
+                    {{--<input id="name" type="text" class="form-control" placeholder="Nome" name="name" value="{{ old('name') }}">--}}
+                {{--</div>--}}
+                {{--<div class="col-md-6">--}}
+                    {{--<input id="apelido" type="text" class="form-control" placeholder="Apelido" name="apelido" value="{{ old('apelido') }}">--}}
+                {{--</div>--}}
+            {{--</div>--}}
 
 
             {{--<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">--}}
@@ -298,57 +308,57 @@ input[type=radio]:checked ~ .inside::before {
                 {{--</div>--}}
             {{--</div>--}}
 
-            <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                <label for="email" class="col-md-4 control-label">E-Mail Address</label>
+            {{--<div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">--}}
+                {{--<label for="email" class="col-md-4 control-label">E-Mail Address</label>--}}
 
-                <div class="col-md-6">
-                    <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}">
+                {{--<div class="col-md-6">--}}
+                    {{--<input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}">--}}
 
-                    @if ($errors->has('email'))
-                        <span class="help-block">
-                            <strong>{{ $errors->first('email') }}</strong>
-                        </span>
-                    @endif
-                </div>
-            </div>
+                    {{--@if ($errors->has('email'))--}}
+                        {{--<span class="help-block">--}}
+                            {{--<strong>{{ $errors->first('email') }}</strong>--}}
+                        {{--</span>--}}
+                    {{--@endif--}}
+                {{--</div>--}}
+            {{--</div>--}}
 
-            <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                <label for="password" class="col-md-4 control-label">Password</label>
+            {{--<div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">--}}
+                {{--<label for="password" class="col-md-4 control-label">Password</label>--}}
 
-                <div class="col-md-6">
-                    <input id="password" type="password" class="form-control" name="password">
+                {{--<div class="col-md-6">--}}
+                    {{--<input id="password" type="password" class="form-control" name="password">--}}
 
-                    @if ($errors->has('password'))
-                        <span class="help-block">
-                            <strong>{{ $errors->first('password') }}</strong>
-                        </span>
-                    @endif
-                </div>
-            </div>
+                    {{--@if ($errors->has('password'))--}}
+                        {{--<span class="help-block">--}}
+                            {{--<strong>{{ $errors->first('password') }}</strong>--}}
+                        {{--</span>--}}
+                    {{--@endif--}}
+                {{--</div>--}}
+            {{--</div>--}}
 
-            <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
+            {{--<div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">--}}
+                {{--<label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>--}}
 
-                <div class="col-md-6">
-                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
+                {{--<div class="col-md-6">--}}
+                    {{--<input id="password-confirm" type="password" class="form-control" name="password_confirmation">--}}
 
-                    @if ($errors->has('password_confirmation'))
-                        <span class="help-block">
-                            <strong>{{ $errors->first('password_confirmation') }}</strong>
-                        </span>
-                    @endif
-                </div>
-            </div>
+                    {{--@if ($errors->has('password_confirmation'))--}}
+                        {{--<span class="help-block">--}}
+                            {{--<strong>{{ $errors->first('password_confirmation') }}</strong>--}}
+                        {{--</span>--}}
+                    {{--@endif--}}
+                {{--</div>--}}
+            {{--</div>--}}
 
-            <div class="form-group">
-                <div class="col-md-6 col-md-offset-4">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-btn fa-user"></i> Register
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
+            {{--<div class="form-group">--}}
+                {{--<div class="col-md-6 col-md-offset-4">--}}
+                    {{--<button type="submit" class="btn btn-primary">--}}
+                        {{--<i class="fa fa-btn fa-user"></i> Register--}}
+                    {{--</button>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</form>--}}
+    {{--</div>--}}
 
 @endsection
 

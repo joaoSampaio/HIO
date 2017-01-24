@@ -24,7 +24,7 @@
 
                 <div class="col-sm-3 col-md-3">
                     <a class="clickable-link" href="/profile/{{$notification->sender_id}}" data-notification="{{ $notification->id}}">
-                        <img src="/uploads/users/default_user.png"  class="img-circle img-responsive clickable-link">
+                        <img src="/user/photo/{{$notification->sender_id}}"  class="img-circle img-responsive clickable-link">
                     </a>
                 </div>
 
@@ -56,7 +56,7 @@
 
                 <div class="col-sm-3 col-md-3">
                     <a class="clickable-link" href="/profile/{{$notification->sender_id}}" data-notification="{{ $notification->id}}">
-                        <img src="/uploads/users/default_user.png"  class="img-circle img-responsive clickable-link">
+                        <img src="/user/photo/{{$notification->sender_id}}"  class="img-circle img-responsive clickable-link">
                     </a>
                 </div>
 
@@ -79,7 +79,7 @@
 
             <div class="col-sm-3 col-md-3">
                 <a class="clickable-link" href="/profile/{{$notification->sender_id}}" data-notification="{{ $notification->id}}">
-                    <img src="/uploads/users/default_user.png"  class="img-circle img-responsive clickable-link">
+                    <img src="/user/photo/{{$notification->sender_id}}"  class="img-circle img-responsive clickable-link">
                 </a>
             </div>
 

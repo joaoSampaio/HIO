@@ -40,6 +40,9 @@
     <style>
 
 
+        .read{
+            color: #999999;
+        }
 
         .unread{
             color: #eb1946;
@@ -333,10 +336,10 @@ font-weight: 600;
 
                     @if(!Auth::check())
                         <li >
-                            <a class="header-link" id="login_btn"  href="{{ url('/login') }}">Login</a>
+                            <a class="header-link" id="login_btn"  href="{{ url('/auth') }}">Login</a>
                         </li>
                         <li >
-                            <a class="header-link-secondary"  href="{{ url('/login') }}">Register</a>
+                            <a class="header-link-secondary"  href="{{ url('/auth') }}">Register</a>
                         </li>
                     @endif
                 </ul>

@@ -15,6 +15,7 @@ use Input;
 use Log;
 use Auth;
 use Mail;
+use Storage;
 use App\Model\ChallengeUserAssociation;
 use App\Model\User;
 use App\Model\FileViews;
@@ -1393,6 +1394,21 @@ class HomeController extends Controller {
 
         return json_encode($sonChallenges);
     }
+
+
+    public function getProfileImage($id){
+
+
+        if($user = User::where('id', $id)->first()){
+            if($user->photo != ""){
+
+                return response()->file(base_path() . '/public/uploads/users/'.$user->photo);
+            }
+        }
+
+        return response()->file(base_path() . '/public/uploads/users/default_user.png');
+    }
+
 
 //    public function dummyNotification(){
 //

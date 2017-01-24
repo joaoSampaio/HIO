@@ -86,13 +86,21 @@ color: #fff;
 @section('content')
 
 
+        <div class="main-container">
+            <div class="row" style="margin-bottom: 15px">
+                <a href="{{ action('SocialAuthController@redirectToProvider') }}" class="btn btn-facebook">Facebook Login</a>
+            </div>
 
-        <div class="row" style="margin-top: 300px; margin-bottom: 15px">
-            <a href="#" class="btn btn-facebook">Facebook Login</a>
-        </div>
+            <div class="row">
+                <a href="/login" class="btn btn-normal-login">Login</a>
+            </div>
 
-        <div class="row" style="margin-bottom: 130px">
-            <a href="/login" class="btn btn-normal-login">Login</a>
+
+            <div class="row extra-register" style="margin-bottom: 130px; margin-top: 15px">
+                <a  href="{{ url('/password/reset') }}">Forgot my Password </a>
+                |
+                <a href="{{ url('/register') }}">Register</a>
+            </div>
         </div>
 
             {{--<div class="col-md-6">--}}

@@ -23,6 +23,9 @@ Route::group(['middleware' => ['web']], function () {
 //        return 'User '.$id;
 //    });
 
+    Route::get('/user/photo/{id}', 'HomeController@getProfileImage');
+
+
     Route::get('/auth', 'Auth\AuthController@getGeneralLogin');
 
     Route::post('ola', 'HomeController@uploadFile');
@@ -33,7 +36,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/views/proof/{file_id}', 'HomeController@getChallengeSonViews');
     Route::get('challenge-proofs/{id}', 'HomeController@getSonChallenges');
 
-    Route::get('/user/{name}', 'SocialAuthController@createTemp');
+//    Route::get('/user/{name}', 'SocialAuthController@createTemp');
     Route::get('/missing', 'SocialAuthController@missingFB');
     Route::post('/missing', 'SocialAuthController@saveMissingFB');
 
