@@ -1,53 +1,81 @@
+
+
+
+
+
+
+
+
+
+
 @extends('layouts/auth')
 
 @section('header')
 
     <style>
+/*.panel {*/
+    /*margin-bottom: 20px;*/
+    /*background-color: #48494D;*/
+    /*border: 1px solid transparent;*/
+    /*border-radius: 4px;*/
+    /*-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);*/
+    /*box-shadow: 0 1px 1px rgba(0,0,0,.05);*/
+/*}*/
+/*.panel-default>.panel-heading {*/
+    /*color: #fff;*/
+    /*background-color: #48494D;*/
+    /*border-color: #ddd;*/
+/*}*/
+/*.divider {*/
+/*position: relative;*/
+/*border-bottom: 1px solid #f0f0f0;*/
+/*margin-bottom: 30px;*/
+/*margin-top: 30px; }*/
 
-.login-input{
-font-family: "Roboto";
-background-color: transparent !important;
-border: 0;
-border-bottom: 2px solid rgba(188, 188, 188, 0.2);
-padding: 0px;
-font-size: 16px;
-color: #ffffff !important;
+/*body {*/
+    /*background-color: #cccccc;*/
+     /*background-image: url(/img/login/bg.jpg);*/
+    /*background-size: cover;*/
+/*}*/
+/*.panel-title-hio{*/
+/*color: #ffffff;*/
+/*font-size: 20px;*/
+/*margin-bottom: 15px;*/
+/*}*/
+
+/*.registrar-op{*/
+/*color: #ffffff;*/
+/*}*/
+/*.form-control {*/
+
+    /*height: 35px;*/
+    /*}*/
+
+
+
+
+.btn-facebook{
+    color: #fff;
+    border-radius: 5px;
+    background-color: rgb(81, 102, 174);
+    border-color: rgb(81, 102, 174);
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    font-weight: 600;
+    width: 268px;
+    height: 58px;
+    line-height: 3;
+      text-align: center;
+            vertical-align: middle;
+      text-align: center;
+    font-size: 16px;
 
 }
 
-.login-input::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-    color:    #ffffff;
-}
-.login-input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-   color:    #ffffff;
-   opacity:  1;
-}
-.login-input::-moz-placeholder { /* Mozilla Firefox 19+ */
-   color:    #ffffff;
-   opacity:  1;
-}
-.login-input:-ms-input-placeholder { /* Internet Explorer 10-11 */
-   color:    #ffffff;
+.btn-facebook:hover{
+color: #fff;
 }
 
-.login-input:focus {
-    border-color: transparent;
-    outline: 0;
-    box-shadow:none;
-
-    /*-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(235,25,70,.6);*/
-    /*box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(235,25,70,.6);*/
-}
-
-
-.extra-register, .extra-register a  {
-  font-size: 16px;
-  font-family: "Roboto";
-  color: rgb(188, 188, 188);
-  line-height: 1.2;
-  text-align: center;
-    padding: 6px 12px;
-}
 
 
 
@@ -59,57 +87,13 @@ color: #ffffff !important;
 
 
 
-        <div class="row" style="margin-top: 300px;margin-bottom: 130px">
-
-            <form class="col-md-4 col-md-offset-4 col-xs-6 col-xs-offset-3 form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
-                {{ csrf_field() }}
-
-                <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-
-                    <div class="col-md-12">
-                        <input id="email" type="email" class="form-control login-input" placeholder="Email" name="email" value="{{ old('email') }}">
-
-                        @if ($errors->has('email'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('email') }}</strong>
-                            </span>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}" style="margin-bottom: 10px">
-
-                    <div class="col-md-12">
-                        <input id="password" type="password" placeholder="Password" class="form-control login-input" name="password">
-
-                        @if ($errors->has('password'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('password') }}</strong>
-                            </span>
-                        @endif
-                    </div>
-                </div>
-
-
-                <div class="form-group" style="margin-top: 50px">
-                    <div class="col-md-10 col-md-offset-1">
-                        <button type="submit" class="btn btn-normal-login">
-                            Login
-                        </button>
-
-                        <div class="extra-register " style="margin-top: 15px">
-                            <a  href="{{ url('/password/reset') }}">Forgot my Password </a>
-                                                                        |
-                            <a href="{{ url('/register') }}">Register</a>
-                        </div>
-
-                    </div>
-                </div>
-            </form>
+        <div class="row" style="margin-top: 300px; margin-bottom: 15px">
+            <a href="#" class="btn btn-facebook">Facebook Login</a>
         </div>
 
-
-
+        <div class="row" style="margin-bottom: 130px">
+            <a href="/login" class="btn btn-normal-login">Login</a>
+        </div>
 
             {{--<div class="col-md-6">--}}
 
@@ -382,4 +366,3 @@ color: #ffffff !important;
     </script>
 
 @endsection
-

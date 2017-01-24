@@ -155,4 +155,8 @@ class AuthController extends Controller
         return redirect()->intended($this->redirectPath());
     }
 
+    public function getGeneralLogin(){
+        return View('auth/loginMenu');
+    }
+
 }

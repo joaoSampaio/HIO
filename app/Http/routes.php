@@ -23,6 +23,8 @@ Route::group(['middleware' => ['web']], function () {
 //        return 'User '.$id;
 //    });
 
+    Route::get('/auth', 'Auth\AuthController@getGeneralLogin');
+
     Route::post('ola', 'HomeController@uploadFile');
 
     Route::get('/proof/{uuid}/{file_id}', 'HomeController@showSonChallenge');
