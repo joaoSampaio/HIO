@@ -73,10 +73,19 @@ class ActivationFactory
             $m->to($emails)->subject('Activation mail');
         });
 
-        $this->mailer->raw('Thank you for partnering with HIO, you will be contacted soon.', function (Message $m) use ($user) {
-            $m->from('noreply@hiolegends.com', 'hiolegends');
-            $m->to($user->email)->subject('Welcome to Hio');
+
+        $email = $user->email;
+        Mail::send('mail.emailSignUpBrand', ['name' => $user->name, 'email' => $email], function ($m) use ( $email, $link) {
+            $m->from('norelpy@hiolegends.com', 'HIO');
+
+            $m->to($email, '')->subject('HIO - Welcome to HIO');
         });
+
+
+//        $this->mailer->raw('Thank you for partnering with HIO, you will be contacted soon.', function (Message $m) use ($user) {
+//            $m->from('noreply@hiolegends.com', 'hiolegends');
+//            $m->to($user->email)->subject('Welcome to Hio');
+//        });
     }
 
     public function activateUser($token)

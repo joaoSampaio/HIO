@@ -236,6 +236,49 @@ font-weight: 600;
             color: #999999;
         }
 
+        .notification-text img {
+            width: 40px;
+        }
+
+        .notification-text .col-sm-9, .notification-text .col-md-9{
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
+        .notification-text i{
+            margin-top: 10px;
+        }
+
+
+
+
+
+        .notifications-wrapper::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        /* Track */
+        .notifications-wrapper::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            /*-webkit-border-radius: 10px;*/
+            /*border-radius: 10px;*/
+        }
+
+        /* Handle */
+        .notifications-wrapper::-webkit-scrollbar-thumb {
+            /*-webkit-border-radius: 10px;*/
+            /*border-radius: 10px;*/
+            background: rgba(255,0,0,0.8);
+            -webkit-box-shadow: inset 0 0 6px #eb1946;
+        }
+        .notifications-wrapper::-webkit-scrollbar-thumb:window-inactive {
+        	background: rgba(255,0,0,0.4);
+        }
+
+        .notifications-wrapper .divider:first-child {
+            margin-top: 0px;
+        }
+
     </style>
 
 
@@ -291,7 +334,7 @@ font-weight: 600;
 
 
                     @if(Auth::check())
-                        <li class="{{{Request::is('profile/me') ? ' active' : ''}}}" >
+                        <li >
                             <a style="padding-top: 0px;" href="{{ url('profile', 'me') }}">
 
                                 @if(Auth::user()->photo == "")
@@ -321,7 +364,7 @@ font-weight: 600;
                             <div class="notification-heading text-color1">
                                 <h4 class="menu-title col-md-offset-1">Your Notifications</h4>
                             </div>
-                            <li class="divider"></li>
+
                             <div class="notifications-wrapper">
 
                             </div>

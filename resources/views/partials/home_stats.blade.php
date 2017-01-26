@@ -4,9 +4,9 @@
             <a href="{{"/profile/".$challenge->user_id}}" class="portfolio-link container-add-prof" title="">
 
                 @if($challenge->photo == "")
-                    <img src="/uploads/users/default_user.png" alt="{{$challenge->name}}" title="{{$challenge->name}}" class="img-circle img-responsive same-height" style="height: 100px; width: 100px">
+                    <img src="/uploads/users/default_user.png" alt="{{$challenge->name}}" title="{{$challenge->name}}" class="img-circle img-responsive">
                 @else
-                    <img src="{{'/uploads/users/'. $challenge->photo }}" alt="{{$challenge->name}}" title="{{$challenge->name}}" class="img-circle img-responsive same-height" style="height: 100px; width: 100px">
+                    <img src="{{'/uploads/users/'. $challenge->photo }}" alt="{{$challenge->name}}" title="{{$challenge->name}}" class="img-circle img-responsive">
 
                 @endif
             </a>

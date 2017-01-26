@@ -173,13 +173,13 @@ color: #eb1946;
 
 
 
-    <div class="modal fade" id="challenge-views-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="challenge-views-modal" tabindex="-1" role="dialog" aria-labelledby="modalHome" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Views</h4>
+                    <h4 class="modal-title" id="modalHome">Views</h4>
                 </div>
 
                 <div class="modal-body" id="modal-views-content">
@@ -220,24 +220,21 @@ color: #eb1946;
 
     <script>
 
-        var dict = {};
+        var dictViews = {};
+        var dictParticipants = {};
 
         $.ajax({
           type: 'GET',
           url: '{{URL::action('HomeController@latestChallenges')}}',
           dataType: 'json',
           success: function(jsonData) {
-            customDataSuccess(jsonData);
+            $("#latest").html(jsonData);
+
           },
           error: function() {
             //alert('Error loading PatientID=' + id);
           }
         });
-
-    function customDataSuccess(jsonData){
-
-        $("#latest").html(jsonData);
-      }
 
       $.ajax({
         type: 'GET',
@@ -245,18 +242,11 @@ color: #eb1946;
         dataType: 'json',
         success: function(jsonData) {
           $("#mostViewed").html(jsonData);
-
-          var cw = $('.same-height').width();
-                    $('.same-height').css({
-                        'height': cw + 'px'
-                    });
             enableChallengeViews();
-
             $('[data-toggle="tooltip"]').tooltip();
 
         },
         error: function() {
-          //alert('Error loading PatientID=' + id);
         }
       });
 
@@ -266,10 +256,9 @@ color: #eb1946;
         dataType: 'json',
         success: function(jsonData) {
           $("#mostParticipants").html(jsonData);
-          var cw = $('.same-height').width();
-          $('.same-height').css({
-              'height': cw + 'px'
-          });
+          enableChallengeParticipants();
+          $('[data-toggle="tooltip"]').tooltip();
+
         },
         error: function() {
           //alert('Error loading PatientID=' + id);
@@ -277,10 +266,68 @@ color: #eb1946;
       });
 
 
+    function enableChallengeParticipants(){
+          $('.challenge-participants').click(function(e){
+            $('#modalHome').html("Participants");
+            $('#challenge-views-modal').modal('show');
+               $.ajax({
+                   url: "/participants/"+$(e.currentTarget).data("id"),
+                   type:"GET",
+                   dataType : 'json',
+                   success:function(data){
+                        var challengeViews="";
+                        for (index = 0; index < data.length; ++index) {
 
+                            challengeViews += "<div class=\"padding5 row row-eq-height margin-bottom\">";
+                             challengeViews += "                           <div class=\"col-lg-2 col-xs-2 padding5\">";
+                             challengeViews += "                               <a href=\"\/profile\/"+data[index].userId+"\" class=\"container-modal-views-link\" title=\"\">";
+                             if(data[index].photo == "")
+                                challengeViews += "                                       <img src=\"\/uploads\/users\/default_user.png\" class=\"img-circle img-responsive same-height-modal-views\">";
+                             else
+                                challengeViews += "                                       <img src=\"\/uploads\/users\/"+data[index].photo+"\" class=\"img-circle img-responsive same-height-modal-views\">";
+                             challengeViews += "                               <\/a>";
+                             challengeViews += "                           <\/div>";
+                             challengeViews += "                           <div class=\"col-lg-7 col-xs-7\">";
+                             challengeViews += "                               <a href=\"\/profile\/"+data[index].userId+"\" class=\"center-middle\" title=\"\">"+data[index].name+"<\/a>";
+                             challengeViews += "                           <\/div>";
+                             challengeViews += "                       <\/div>";
+                             challengeViews += "                    <\/div>";
+                        }
+                        $("#modal-views-content").html(challengeViews);
+                   },error:function(){
+                   }
+               }); //end of ajax
+                   return false;
+               });
+
+           $( ".challenge-participants" ).hover(function(e) {
+                var id = $(e.currentTarget).data("id");
+                if(!(id in dictParticipants)){
+                     $.ajax({
+                            url: "/participants/"+id,
+                            type:"GET",
+                            dataType : 'json',
+                            success:function(data){
+                                dictParticipants[id] = data;
+                              console.log(JSON.stringify(data));
+                              $(e.currentTarget).prop('title', getViewsNames(dictParticipants[id]));
+                              $(e.currentTarget).attr('data-original-title', getViewsNames(dictParticipants[id]));
+                              $(e.currentTarget).tooltip('show');
+                            },error:function(){
+                            }
+                        }); //end of ajax
+               }else {
+               $(e.currentTarget).prop('title', getViewsNames(dictParticipants[id]));
+               $(e.currentTarget).attr('data-original-title', getViewsNames(dictParticipants[id]));
+
+               $(e.currentTarget).tooltip('show');
+               }
+           });
+        }
 
     function enableChallengeViews(){
       $('.challenge-views').click(function(e){
+        $('#modalHome').html("Views");
         $('#challenge-views-modal').modal('show');
            $.ajax({
                url: "/views/proof/"+$(e.currentTarget).data("id"),
@@ -310,12 +357,12 @@ color: #eb1946;
                     }
                     $("#modal-views-content").html(challengeViews);
 
-                    $('#challenge-views-modal').on('shown.bs.modal', function() {
-                        var wid = $('.same-height-modal-views').width();
-                         $('.same-height-modal-views').css({
-                             'height': wid + 'px'
-                         });
-                    })
+//                    $('#challenge-views-modal').on('shown.bs.modal', function() {
+//                        var wid = $('.same-height-modal-views').width();
+//                         $('.same-height-modal-views').css({
+//                             'height': wid + 'px'
+//                         });
+//                    })
 
                },error:function(){
                    //console.log("count:" + countVotes);
@@ -326,24 +373,24 @@ color: #eb1946;
 
        $( ".challenge-views" ).hover(function(e) {
             var id = $(e.currentTarget).data("id");
-            if(!(id in dict)){
+            if(!(id in dictViews)){
                  $.ajax({
                                 url: "/views/proof/"+id,
                                 type:"GET",
                                 dataType : 'json',
                                 success:function(data){
-                                    dict[id] = data;
+                                    dictViews[id] = data;
                                   console.log(JSON.stringify(data));
-                                  $(e.currentTarget).prop('title', getViewsNames(dict[id]));
-                                  $(e.currentTarget).attr('data-original-title', getViewsNames(dict[id]));
+                                  $(e.currentTarget).prop('title', getViewsNames(dictViews[id]));
+                                  $(e.currentTarget).attr('data-original-title', getViewsNames(dictViews[id]));
                                   $(e.currentTarget).tooltip('show');
                                 },error:function(){
                                     //console.log("count:" + countVotes);
                                 }
                             }); //end of ajax
            }else {
-           $(e.currentTarget).prop('title', getViewsNames(dict[id]));
-           $(e.currentTarget).attr('data-original-title', getViewsNames(dict[id]));
+           $(e.currentTarget).prop('title', getViewsNames(dictViews[id]));
+           $(e.currentTarget).attr('data-original-title', getViewsNames(dictViews[id]));
 
            $(e.currentTarget).tooltip('show');
            }

@@ -78,13 +78,13 @@ color: #eb1946;
 
 <!-- Header -->
 
-<script>(function(d, s, id) {
-                      var js, fjs = d.getElementsByTagName(s)[0];
-                      if (d.getElementById(id)) return;
-                      js = d.createElement(s); js.id = id;
-                      js.src = "//connect.facebook.net/pt_PT/sdk.js#xfbml=1&version=v2.5&appId=948239501878979";
-                      fjs.parentNode.insertBefore(js, fjs);
-                    }(document, 'script', 'facebook-jssdk'));</script>
+{{--<script>(function(d, s, id) {--}}
+                      {{--var js, fjs = d.getElementsByTagName(s)[0];--}}
+                      {{--if (d.getElementById(id)) return;--}}
+                      {{--js = d.createElement(s); js.id = id;--}}
+                      {{--js.src = "//connect.facebook.net/pt_PT/sdk.js#xfbml=1&version=v2.5&appId=948239501878979";--}}
+                      {{--fjs.parentNode.insertBefore(js, fjs);--}}
+                    {{--}(document, 'script', 'facebook-jssdk'));</script>--}}
 
 
 
@@ -170,9 +170,55 @@ color: #eb1946;
             <div class="row">
 
 
-                <div class="col-sm-12 col-md-12 text-center">
-                    <div class="fb-comments" data-href="http://hio.mobilebysampaio.eu/proof/{{$sonChallenge->uuid}}/{{$sonChallenge->user_id}}" data-numposts="6"></div>
-                </div>
+                {{--<div class="col-sm-12 col-md-12 text-center">--}}
+                    {{--<div class="fb-comments" data-href="http://hio.mobilebysampaio.eu/proof/{{$sonChallenge->uuid}}/{{$sonChallenge->user_id}}" data-numposts="6"></div>--}}
+                {{--</div>--}}
+
+
+                <div id="disqus_thread"></div>
+                <script>
+
+                /**
+                *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+
+
+
+                @if(Auth::check())
+
+                var disqus_config = function () {
+//                this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '{{$sonChallenge->uuid . " ".$sonChallenge->id}}'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+
+                this.page.api_key = '{{$pub_key}}';
+                this.page.remote_auth_s3 = '{{$message. " " . $hmac. " " . $timestamp}}';
+                this.callbacks.onNewComment = [function(comment) {
+                		console.log(JSON.stringify(comment));
+
+                			$.post('{{URL::action('HomeController@addCommentCallback')}}', { proofId: '{{$sonChallenge->id}}', text: comment.text }, function(result){
+
+//                				alert(result);
+
+                			});
+
+                		}];
+                };
+
+
+                @endif
+
+                (function() { // DON'T EDIT BELOW THIS LINE
+                var d = document, s = d.createElement('script');
+                s.src = '//hiolegends.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+                })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
             </div>
         </div>
     </section>

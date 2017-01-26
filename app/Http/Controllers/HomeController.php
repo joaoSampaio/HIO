@@ -11,7 +11,9 @@ use App\Model\NotificationManager;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Input;
+use Intervention\Image\Facades\Image;
 use Log;
 use Auth;
 use Mail;
@@ -302,23 +304,62 @@ class HomeController extends Controller {
         return view('edit_profile');
     }
 
+    public function fixPhotos(){
+//        $files = File::allFiles('uploads/users/');
+//        foreach ($files as $fileName)
+//        {
+//            if(!str_contains($fileName, 'default_user.png'))
+//                $image = Image::make(sprintf('%s', $fileName))->fit(200)->save();
+//            echo $fileName, "\n";
+//        }
+
+        $files = File::allFiles('img/categories_thumb/');
+        foreach ($files as $fileName)
+        {
+            $image = Image::make(sprintf('%s', $fileName))->fit(200)->save();
+//            $info = pathinfo($fileName);
+//            echo $info["filename"], "<br>";
+//            echo $info["extension"], "<br>";
+//            echo json_encode($info), "<br>";
+//
+//            $image = Image::make(sprintf('%s', $fileName))->fit(200)->save($info["dirname"]."/".$info["filename"]."_thumb");
+////            echo $fileName, "\n";
+        }
+    }
+
+
     public function post_editProfile(Request $request)
     {
 
         $user = User::where('id', Auth::user()->id)->first();
         if ($request->hasFile('file')) {
-            $fileNameNoExtension = md5($request->file('file')->getClientOriginalName() . microtime());
+            $file = $request->file('file');
+            $fileNameNoExtension = md5($user->email);
             $fileName = $fileNameNoExtension . '.' .
-                $request->file('file')->getClientOriginalExtension();
+                $file->getClientOriginalExtension();
 
             $type = 0;
             $mimeType = $request->file('file')->getMimeType();
             if(substr($mimeType, 0, 5) == 'image') {
                 // this is an image
-                $request->file('file')->move(
-                    base_path() . '/public/uploads/users/', $fileName
-                );
+
+//                $request->file('file')->move(
+//                    base_path() . '/public/uploads/users/', $fileName
+//                );
+
+                $file->move('uploads/users/', $fileName);
+                $image = Image::make(sprintf('uploads/users/%s', $fileName))->fit(200)->save();
+
+//                $image = $request->file('file');
+//                $path = public_path('uploads/users/' . $fileName);
+//
+//                Image::make($image->getRealPath())->resize(200, 200)->save($path);
                 $user->photo = $fileName;
+
+
+
+
+
 
             }
         }
@@ -772,11 +813,54 @@ class HomeController extends Controller {
 //        $userViews = 3;
         $userViews = FileViews::where('file_id', $file_id)->count();
 
+        $message = "";
+        $timestamp = "";
+        $hmac = "";
+        $pub_key = "";
+        if (Auth::check()){
+            $data = array(
+                "id" => Auth::user()->id,
+                "username" => Auth::user()->name,
+                "email" => Auth::user()->email,
+                "avatar" => 'https://hiolegends.com/user/photo/'.Auth::user()->id
+            );
+
+            $pub_key = env('DISQUS_PUBLIC_KEY');
+            $message = base64_encode(json_encode($data));
+            $timestamp = time();
+            $hmac = $this->dsq_hmacsha1($message . ' ' . $timestamp, env('DISQUS_SECRET_KEY'));
+        }
+
+
 //        return json_encode($sonChallenge);
         return view('challengeDetailSon')
             ->with('sonChallenge', $sonChallenge)
             ->with('userViews',$userViews)
-            ->with('hasLiked',$hasLiked);
+            ->with('hasLiked',$hasLiked)
+            ->with('message',$message)
+            ->with('timestamp',$timestamp)
+            ->with('hmac',$hmac)
+            ->with('pub_key',$pub_key);
+    }
+
+    function dsq_hmacsha1($data, $key) {
+        $blocksize=64;
+        $hashfunc='sha1';
+        if (strlen($key)>$blocksize)
+            $key=pack('H*', $hashfunc($key));
+        $key=str_pad($key,$blocksize,chr(0x00));
+        $ipad=str_repeat(chr(0x36),$blocksize);
+        $opad=str_repeat(chr(0x5c),$blocksize);
+        $hmac = pack(
+            'H*',$hashfunc(
+                ($key^$opad).pack(
+                    'H*',$hashfunc(
+                        ($key^$ipad).$data
+                    )
+                )
+            )
+        );
+        return bin2hex($hmac);
     }
 
     public function likeFile($file_id){
@@ -1169,7 +1253,6 @@ class HomeController extends Controller {
                 $deadLine = new DateTime($challenge->deadLine);
                 $isValid = $now < $deadLine;
                 if(!$isValid){
-                    echo 'id:' .  $challenge->id .'<br>';
                     //we end challenge
                     $challenge->closed = true;
                     $challenge->save();
@@ -1196,9 +1279,7 @@ class HomeController extends Controller {
                             $user->save();
                         }
                     }
-
                 }
-
             }
         });
     }
@@ -1232,15 +1313,6 @@ class HomeController extends Controller {
         }
 
         return back()->withInput(\Illuminate\Support\Facades\Input::all());
-
-
-
-
-//        return redirect()->action(
-//            'UserController@userProfile', ['id' => $friendId]
-//        );
-//        return $this->userProfile($friendId,false);
-
     }
 
     public function getFriends()
@@ -1383,16 +1455,21 @@ class HomeController extends Controller {
 
 
     public function getChallengeSonViews($fileId){
-
-
-
         $sonChallenges = DB::table('files_views')->where('files_views.file_id', $fileId)
             ->join('users', 'files_views.user_id', '=', 'users.id')
-            ->select('users.name', 'users.photo', 'users.id as userId', 'files_views.*')
+            ->select('users.name', 'users.photo', 'users.id as userId')
+            ->get();
+        return json_encode($sonChallenges);
+    }
+
+
+    public function getChallengeParticipants($challengeId){
+        $users = DB::table('challenge_user')->where('challenge_user.challenge_id', $challengeId)
+            ->join('users', 'challenge_user.user_id', '=', 'users.id')
+            ->select('users.name', 'users.photo', 'users.id as userId')
             ->get();
 
-
-        return json_encode($sonChallenges);
+        return json_encode($users);
     }
 
 
@@ -1420,6 +1497,27 @@ class HomeController extends Controller {
 //    }
 
 
+    public function addCommentCallback(Request $request)
+    {
+//        $proofId = 30;
+//        $text = "ggg";
+        $proofId = $request->input('proofId');
+        $text = $request->input('text');
+        if (Auth::check()) {
+
+            if ($fileHio = FileHio::where('id', $proofId)->first()) {
+
+                $notificationManager = new NotificationManager();
+                //'recipient_id', 'sender_id', 'unread', 'type', 'parameters', 'reference_id',
+                $notification = new LikedChallengeNotification(['recipient_id' =>  $fileHio->user_id, 'sender_id' => Auth::user()->id, 'unread' => 1,
+                    'type' => App\Model\Notification::TYPE_COMMENT_CHALLENGE, 'parameters' => $text, 'reference_id' => $proofId]);
+                $notificationManager->add($notification);
+            }
+        }
+        return "deu";
+    }
+
+
 
     public function sendEmail($challenge, $users, $total)
     {
@@ -1430,12 +1528,12 @@ class HomeController extends Controller {
             $deadline = $createDate->format('Y-m-d');
             $nameCreator = Auth::user()->name;
             foreach ($users as $user){
-                Mail::send('mail.emailChallenge3', ['challenge' => $challenge, 'email' => $user->email,
+                Mail::send('mail.emailChallenge', ['challenge' => $challenge, 'email' => $user->email,
                     'nameCreator' => $nameCreator,
                     'total' => $total, 'nameUser' => ' '.$user->name, 'deadline' => $deadline], function ($m) use ($total, $challenge, $nameCreator, $user, $deadline) {
                     $m->from('norelpy@hiolegends.com', 'HIO - Challenge');
 
-                    $subject = "$nameCreator . ' challenged you! - ".$challenge->title;
+                    $subject = "$nameCreator challenged you! - ".$challenge->title;
                     if ($user->email === Auth::user()->email) {
 
                         if ($total > 1) {
@@ -1463,11 +1561,11 @@ class HomeController extends Controller {
             $deadline = $createDate->format('Y-m-d');
             $nameCreator = Auth::user()->name;
             foreach ($emails as $email){
-                Mail::send('mail.emailChallenge3', ['challenge' => $challenge, 'email' => $email,
+                Mail::send('mail.emailChallenge', ['challenge' => $challenge, 'email' => $email,
                     'nameCreator' => $nameCreator, 'total' => $total, 'nameUser' => '', 'deadline' => $deadline], function ($m) use ( $total, $challenge, $nameCreator, $email, $deadline) {
                     $m->from('norelpy@hiolegends.com', 'HIO - Challenge');
 
-                    $m->to($email)->subject($nameCreator.' challenged you! - '.$challenge->title);
+                    $m->to($email)->subject("$nameCreator challenged you! - ".$challenge->title);
                 });
 
             }
