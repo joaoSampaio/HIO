@@ -1499,19 +1499,18 @@ class HomeController extends Controller {
 
     public function addCommentCallback(Request $request)
     {
-//        $proofId = 30;
-//        $text = "ggg";
         $proofId = $request->input('proofId');
         $text = $request->input('text');
         if (Auth::check()) {
 
             if ($fileHio = FileHio::where('id', $proofId)->first()) {
 
-                $notificationManager = new NotificationManager();
-                //'recipient_id', 'sender_id', 'unread', 'type', 'parameters', 'reference_id',
-                $notification = new LikedChallengeNotification(['recipient_id' =>  $fileHio->user_id, 'sender_id' => Auth::user()->id, 'unread' => 1,
-                    'type' => App\Model\Notification::TYPE_COMMENT_CHALLENGE, 'parameters' => $text, 'reference_id' => $proofId]);
-                $notificationManager->add($notification);
+                if($fileHio->user_id != Auth::user()->id) {
+                    $notificationManager = new NotificationManager();
+                    $notification = new LikedChallengeNotification(['recipient_id' => $fileHio->user_id, 'sender_id' => Auth::user()->id, 'unread' => 1,
+                        'type' => App\Model\Notification::TYPE_COMMENT_CHALLENGE, 'parameters' => $text, 'reference_id' => $proofId]);
+                    $notificationManager->add($notification);
+                }
             }
         }
         return "deu";
