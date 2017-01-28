@@ -68,6 +68,10 @@ color: #eb1946;
         color: #eb1946;
     }
 
+    .community-name{
+        display: none !important;
+    }
+
 
 
 </style>
@@ -203,7 +207,13 @@ color: #eb1946;
                 			});
 
                 		}];
+
+
+                        console.log(this.callbacks);
+
                 };
+
+
 
 
                 @endif

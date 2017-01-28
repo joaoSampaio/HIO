@@ -457,6 +457,7 @@ button:focus {
 
 
     <script src="{{ asset('js/parsley2.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap-tokenfield.js') }}"></script>
 
     <script type="text/javascript">
 
@@ -470,29 +471,27 @@ $(".js-data-example-ajax").select2({
             ajax: {
                 url: "{{ action('HomeController@searchUsers') }}",
                 dataType: 'json',
-
                 delay: 250,
-                tags: true,
-                selectOnClose: true,
-                selectOnBlur: true,
-                allowClear: true,
                 data: function (params) {
-              console.log('params:'+params);
-                return {
-                  q: params.term, // search term
-                  page: params.page
-                };
+                    return {
+                      q: params.term, // search term
+                      page: params.page
+                    };
               },
               processResults: function (data, params) {
                 return {
                   results: $.map(data, function(obj) {
-//                                if(obj.name.toLowerCase().indexOf(params.term.toLowerCase()) > -1)
                               return { id: obj.id, text: obj.name, photo: obj.photo };
                           })
                 };
               },
               cache: true
             },
+            tags: true,
+            multiple: true,
+            selectOnClose: true,
+            selectOnBlur: true,
+            allowClear: true,
             placeholder: "EMAILS OR USERS",
             tokenSeparators: [',','\n', '\t'],
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
@@ -516,6 +515,16 @@ $(".js-data-example-ajax").select2({
         $(".js-data-example-ajax").val([ targetId]).trigger("change");
     @endif
 
+$('.js-data-example-ajax').on('select2:select', function (evt) {
+//    if(evt.params.data.type == 0){
+//        window.location = "/profile/"+evt.params.data.id;
+//    }else if(evt.params.data.type == 1){
+//        window.location = "/challenge/"+evt.params.data.id;
+//    } else if(evt.params.data.type == 2){
+//        window.location = "/challenges/"+evt.params.data.id;
+//    }
+    return true;
+    });
 
     function formatRepo (repo) {
           if (repo.loading) return;

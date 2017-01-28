@@ -41,7 +41,7 @@ class ActivationFactory
 
         $email = $user->email;
         Mail::send('mail.emailSignUpUser', ['name' => $user->name, 'email' => $email, 'link' => $link], function ($m) use ( $email, $link) {
-            $m->from('norelpy@hiolegends.com', 'HIO - Contact');
+            $m->from('norelpy@mail.hiolegends.com', 'HIO - Contact');
 
             $m->to($email, '')->subject('HIO - activate account');
         });
@@ -69,14 +69,14 @@ class ActivationFactory
         $emails = ['joaosampaio30@gmail.com', 'claudiolopes3@gmail.com','targfonseca@gmail.com'];
 
         $this->mailer->raw($message, function (Message $m) use ($emails) {
-            $m->from('noreply@hiolegends.com', 'hiolegends');
+            $m->from('norelpy@mail.hiolegends.com', 'hiolegends');
             $m->to($emails)->subject('Activation mail');
         });
 
 
         $email = $user->email;
         Mail::send('mail.emailSignUpBrand', ['name' => $user->name, 'email' => $email], function ($m) use ( $email, $link) {
-            $m->from('norelpy@hiolegends.com', 'HIO');
+            $m->from('norelpy@mail.hiolegends.com', 'HIO');
 
             $m->to($email, '')->subject('HIO - Welcome to HIO');
         });

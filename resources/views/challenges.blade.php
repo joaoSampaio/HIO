@@ -109,23 +109,6 @@ blockquote p {
                     <a href="{{ action('HomeController@createChallenge') }}" class="page-scroll btn btn-xl">CREATE CHALLENGE</a>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-            {{--<div class="challenges">--}}
-                {{--@include('partials.challenge')--}}
-            {{--</div>--}}
-
         </div>
     </section>
 
@@ -151,20 +134,20 @@ blockquote p {
     </div>
 
 </div>
-<section class="bg-light-gray" id="portfolio">
+<section class="bg-light-gray">
     <div class="container">
         <div class="row" id="latest">
 
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="ongoing">
 
-                    <div class="row">
+                    <div class="">
                         @foreach ($challenges as $challenge)
                             @include('partials.single_challenge')
                         @endforeach
                     </div>
 
-                    <div class="row">
+                    <div class="">
                         {!! $challenges->links() !!}
                     </div>
 
@@ -172,12 +155,12 @@ blockquote p {
                 </div>
                 <div role="tabpanel" class="tab-pane" id="ended">
 
-                    <div class="row">
+                    <div class="">
                         @foreach ($endedChallenges as $challenge)
                             @include('partials.single_challenge')
                         @endforeach
                     </div>
-                    <div class="row">
+                    <div class="">
                         {!! $endedChallenges->links() !!}
                     </div>
 
@@ -192,22 +175,11 @@ blockquote p {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 @endsection
 
 @section('footer')
 
-<script src="{{ asset('js/owl.carousel.min.js') }}"></script>
+{{--<script src="{{ asset('js/owl.carousel.min.js') }}"></script>--}}
 
 
 <script>

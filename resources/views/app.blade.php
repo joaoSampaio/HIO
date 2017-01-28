@@ -40,244 +40,45 @@
     <style>
 
 
-        .read{
-            color: #999999;
-        }
-
-        .unread{
-            color: #eb1946;
-        }
-        /*.unread a{*/
-            /*color: #ffffff !important;*/
-        /*}*/
-
-        .notifications a:hover {
-            color: #000 !important;
-        }
-
-        .notifications .col-md-8{
-            padding: 0px;
-        }
-
-        .clickable {
-            height: 100%;
-            width: 100%;
-            left: 0;
-            top: 0;
-            position: absolute;
-            z-index: 1;
-        }
-
-        .clickable-link{
-            z-index: 2;
-            position: relative;
-        }
-
-        @media (min-width: 768px) {
-            .navbar-default {
-
-                padding-bottom: 0px;
-
-            }
-        }
-
-        .img-circle {
-            object-fit: cover;
-        }
-
-
-
-.row-eq-height {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display:         flex;
-}
-
-.margin-bottom{
-    margin-bottom: 10px;
-}
-
-.center-middle{
-    position: absolute;
-    top: 50%;
-    transform: translate(0%,-50%);
-}
-
-.modal-dialog{
-    overflow-y: initial !important
-}
-#challenge-views-modal .modal-body{
-    height: 350px;
-    overflow-y: auto;
-}
-
-.pointer{
-        cursor: pointer;
+    .navbar-toggle .icon-bar {
+        display: block;
+        width: 100%;
+        height: 4px;
+        border-radius: 1px;
     }
 
-@media only screen
-and (max-device-width : 1024px) {
-    .tooltip {
-        display: none !important;
-    }
- }
-
-.same-height-modal-views{
-    /*width: 62px;*/
-    /*height: 62px;*/
-        /*max-height: 95vh;*/
-}
-
-
-        .modal-dialog {
-          display: -webkit-box;
-          display: -webkit-flex;
-          display: -moz-box;
-          display: -ms-flexbox;
-          display: flex;
-          -webkit-box-orient: vertical;
-          -webkit-box-direction: normal;
-          -webkit-flex-direction: column;
-             -moz-box-orient: vertical;
-             -moz-box-direction: normal;
-              -ms-flex-direction: column;
-                  flex-direction: column;
-          -webkit-box-pack: center;
-          -webkit-justify-content: center;
-             -moz-box-pack: center;
-              -ms-flex-pack: center;
-                  justify-content: center;
-          overflow-y: auto;
-          min-height: -webkit-calc(100vh - 60px);
-          min-height: -moz-calc(100vh - 60px);
-          min-height: calc(100vh - 60px);
-        }
-        @media (max-width: 767px) {
-          .modal-dialog {
-            min-height: -webkit-calc(100vh + 30px);
-            min-height: -moz-calc(100vh + 30px);
-            min-height: calc(100vh + 30px);
-          }
-        }
-
-        .header-link {
-            color: #ffffff !important;
-            font-size: 16pt;
-        }
-        .header-link-secondary {
-            color: #43484c !important;
-            font-size: 16pt;
-        }
-
-        .navbar .navbar-nav {
-          display: inline-block;
-          float: none;
-          vertical-align: top;
-        }
-
-        .navbar .navbar-collapse {
-          text-align: center;
-        }
-        /*font-family: "Myriad pro Semibold"*/
-
-        /*Medium*/
-        /*font-family: "Roboto";*/
-        /*font-weight: 500;*/
-
-
-.navbar-nav .active:after {
-    position: absolute;
-    bottom: 7px;
-    left: 15px;
-    right: 15px;
-    /*margin-left: -5px;*/
-    vertical-align: middle;
-    content: " ";
-    border-bottom: 3px solid;
-    color: #eb1946;
-}
-/*.modal-backdrop {*/
-        /*height: 100%;*/
-    /*}*/
-
-
-    #search-modal .select2-container--default .select2-search--inline .select2-search__field{
-        width: 100% !important;
+    .navbar-default .navbar-toggle {
+        background-color: transparent;
+        border-color: transparent;
     }
 
-    .select2-results__message {
-    display: none;
+    .navbar-default {
+        background-color: transparent;
+        border-color: transparent;
     }
-    .select2-dropdown {
-        background-color: white;
-        border: 0px solid #aaa;
-        }
-#search-modal .select2-container .select2-search--inline {
-     float: inherit;
-}
-#search-modal .select2-selection__choice{
-    display: none;
+
+
+@media (min-width: 1000px){
+    .home-header{
+    background-size: 140% !important;
+    }
 }
 
-body{
-font-weight: 600;
+
+@media (max-width:769px) and (min-width:600px){
+    .home-header{
+    background-size: 115% !important;
+    }
 }
 
-        .notification-text a{
-            text-transform: capitalize !important;
-        }
 
-        .text-color1{
-            color: #003333;
-        }
+.home-header{
+    background-image: url({{ asset('img/header-bg.png')}});
+    background-size: 200%;
+    background-repeat: no-repeat;
+    background-position: center;
+    }
 
-        .notification-time{
-            color: #999999;
-        }
-
-        .notification-text img {
-            width: 40px;
-        }
-
-        .notification-text .col-sm-9, .notification-text .col-md-9{
-            padding-left: 0px;
-            padding-right: 0px;
-        }
-
-        .notification-text i{
-            margin-top: 10px;
-        }
-
-
-
-
-
-        .notifications-wrapper::-webkit-scrollbar {
-            width: 12px;
-        }
-
-        /* Track */
-        .notifications-wrapper::-webkit-scrollbar-track {
-            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-            /*-webkit-border-radius: 10px;*/
-            /*border-radius: 10px;*/
-        }
-
-        /* Handle */
-        .notifications-wrapper::-webkit-scrollbar-thumb {
-            /*-webkit-border-radius: 10px;*/
-            /*border-radius: 10px;*/
-            background: rgba(255,0,0,0.8);
-            -webkit-box-shadow: inset 0 0 6px #eb1946;
-        }
-        .notifications-wrapper::-webkit-scrollbar-thumb:window-inactive {
-        	background: rgba(255,0,0,0.4);
-        }
-
-        .notifications-wrapper .divider:first-child {
-            margin-top: 0px;
-        }
 
     </style>
 
@@ -506,44 +307,90 @@ font-weight: 600;
 </div>
 
 
+
+
 <footer>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-4">
-                        <span class="copyright">&copy; 2016 HIO. Todos os direitos reservados</span>
-                    </div>
-                    <div class="col-md-4">
-                        <ul class="list-inline social-buttons">
-                            <li><a href="https://www.instagram.com/hioselfmadelegends/"><i class="fa fa-instagram"></i></a>
-                            </li>
-                            <li><a href="https://www.facebook.com/HIO-978238685528426/?fref=ts"><i class="fa fa-facebook"></i></a>
-                            </li>
-                            <li><a href="https://hioblog.wordpress.com"><i class="fa fa-wordpress"></i></a>
-                            </li>
-                        </ul>
-                    </div>
+<div style="text-align: center; margin-bottom: 15px;margin-top: 50px;" class="container">
+            <div style="margin-bottom: 40px" class="row">
+                <div class="col-md-12">
+                    <ul class="list-inline footer-icon">
+                        <li><a href="https://www.instagram.com/hioselfmadelegends/"><i class="fa fa-instagram"></i></a>
+                        </li>
+                        <li style="margin-left: 50px;margin-right: 50px"><a href="https://www.facebook.com/HIO-978238685528426/?fref=ts"><i class="fa fa-facebook"></i></a>
+                        </li>
+                        <li><a href="https://hioblog.wordpress.com"><i class="fa fa-wordpress"></i></a>
+                        </li>
+                    </ul>
 
-
-
-
-                    <div class="col-md-4">
-                        <ul class="list-inline quicklinks">
-                            <li><a href="{{ url('private-policy') }}">Privacy Policy</a>
-                            </li>
-                            <li style="    color: #eb1946;padding: 0px;">|</li>
-                            <li><a href="#">Terms of Use</a>
-                            </li>
-                            <li style="    color: #eb1946;padding: 0px;">|</li>
-                            <li><a  href="{{ url('terms') }}">Terms & Conditions</a></li>
-
-                            <li><a  href="{{ url('contact-us') }}">Contact us</a></li>
-                             <li style="    color: #eb1946;padding: 0px;">|</li>
-                            <li><a  href="{{ url('HIO-Mission') }}">HIO Mission</a></li>
-                        </ul>
-                    </div>
                 </div>
             </div>
-        </footer>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="list-inline footer-links">
+                        <li><a href="{{ url('private-policy') }}">Privacy Policy</a></li>
+
+                        <li style="padding: 0px;">|</li>
+
+                        <li><a  href="{{ url('terms') }}">Terms & Conditions</a></li>
+
+                        <li style="padding: 0px;">|</li>
+
+
+
+                        <li><a  href="{{ url('contact-us') }}">Contacts</a></li>
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="footer-links">&copy; 2016 HIO. All rights reserved</span>
+                </div>
+            </div>
+        </div>
+
+
+
+
+            {{--<div class="container">--}}
+                {{--<div class="row">--}}
+                    {{--<div class="col-md-4">--}}
+                        {{--<span class="copyright">&copy; 2016 HIO. Todos os direitos reservados</span>--}}
+                    {{--</div>--}}
+                    {{--<div class="col-md-4">--}}
+                        {{--<ul class="list-inline social-buttons">--}}
+                            {{--<li><a href="https://www.instagram.com/hioselfmadelegends/"><i class="fa fa-instagram"></i></a>--}}
+                            {{--</li>--}}
+                            {{--<li><a href="https://www.facebook.com/HIO-978238685528426/?fref=ts"><i class="fa fa-facebook"></i></a>--}}
+                            {{--</li>--}}
+                            {{--<li><a href="https://hioblog.wordpress.com"><i class="fa fa-wordpress"></i></a>--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
+                    {{--</div>--}}
+
+
+
+
+                    {{--<div class="col-md-4">--}}
+                        {{--<ul class="list-inline quicklinks">--}}
+                            {{--<li><a href="{{ url('private-policy') }}">Privacy Policy</a>--}}
+                            {{--</li>--}}
+                            {{--<li style="    color: #eb1946;padding: 0px;">|</li>--}}
+                            {{--<li><a href="#">Terms of Use</a>--}}
+                            {{--</li>--}}
+                            {{--<li style="    color: #eb1946;padding: 0px;">|</li>--}}
+                            {{--<li><a  href="{{ url('terms') }}">Terms & Conditions</a></li>--}}
+
+                            {{--<li><a  href="{{ url('contact-us') }}">Contact us</a></li>--}}
+                             {{--<li style="    color: #eb1946;padding: 0px;">|</li>--}}
+                            {{--<li><a  href="{{ url('HIO-Mission') }}">HIO Mission</a></li>--}}
+                        {{--</ul>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</footer>--}}
 
 </main>
     <!-- jQuery -->
@@ -589,268 +436,8 @@ font-weight: 600;
         });
 </script>
 
-<script>
-function goBack() {
-    window.history.back()
-}
+<script src="{{ asset('js/hio.js') }}"></script>
 
-
-$('.main-search').click(function(e){
-        $('#search-modal').on('shown.bs.modal', function () {
-            $('#search-input').select2('open');
-        });
-        $('#search-modal').modal('show');
-});
-
-
-@if(Auth::check())
-$.ajax({
-    type: 'GET',
-    url: '{{URL::action('HomeController@getNotifications')}}',
-    dataType: 'json',
-    success: function(jsonData) {
-        $(".notifications-wrapper").html(jsonData);
-
-        //numberUnread
-        $('.badge-notify').html($('#numberUnread').data('number-unread'));
-//        $('.badge-notify').html($('.notifications .notification-item.unread').length/2);
-        jQuery(document).ready(function() {
-          jQuery("time.timeago").timeago();
-        });
-
-        $('.notification-item a').click(function (event){
-            //event.preventDefault();
-            $.ajax({
-                url: '/notifications/' + $(this).attr('data-notification')
-                ,success: function(response) {
-                    //alert(response)
-                }
-            })
-        });
-    },
-    error: function() {
-    }
-});
-@endif
-
-
-$(".search-ajax").select2({
-            ajax: {
-                url: "{{ action('HomeController@search') }}",
-                dataType: 'json',
-                delay: 250,
-                selectOnClose: true,
-                selectOnBlur: true,
-                tags: false,
-                maximumSelectionLength: 0,
-                multiple: false,
-                data: function (params) {
-                    return {
-                      q: params.term, // search term
-                      page: params.page
-                    };
-              },
-              processResults: function (data, params) {
-                return {
-                  results: $.map(data, function(obj) {
-//                                if(obj.name.toLowerCase().indexOf(params.term.toLowerCase()) > -1)
-                              return { id: obj.id, text: obj.name, photo: obj.image, type: obj.type };
-                          })
-                };
-              },
-              cache: true
-            },
-            placeholder: "Search",
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 1,
-            templateResult: formatRepoSearch, // omitted for brevity, see the source of this page
-            templateSelection: formatRepoSelectionSearch // omitted for brevity, see the source of this page
-          });
-
-$(".search-ajax").show();
-
-
-$('.search-ajax').on('select2:select', function (evt) {
-//    if(evt.params.data.type == 0){
-//        window.location = "/profile/"+evt.params.data.id;
-//    }else if(evt.params.data.type == 1){
-//        window.location = "/challenge/"+evt.params.data.id;
-//    } else if(evt.params.data.type == 2){
-//        window.location = "/challenges/"+evt.params.data.id;
-//    }
-        return false;
-    });
-
-
-
-    function formatRepoSearch (repo) {
-          if (repo.loading) return;
-
-            if(repo.selected)
-            return;
-            if(repo.text == null)
-             return;
-
-        var url = getPhotoUrl(repo.type, repo.photo);
-          var markup = ""+
-          "<div class='select2-result-repository clearfix'>" +
-            "<div class='select2-result-repository__avatar'><img style='width: 50px; height: 50px' src='"+url +"' /></div>" +
-            "<div class='select2-result-repository__meta'>" +
-              "<div class='select2-result-repository__title'>" + repo.text + "</div>";
-
-          "</div></div>";
-
-            var type = "";
-            if(repo.type == 0){
-                type = 'User';
-            }else if(repo.type == 1){
-                type = 'Challenge';
-            }else if(repo.type == 2){
-                type = 'Category';
-            }
-
-           var markup =
-            "<img class='search-img' src='"+url +"' />"+
-
-                                                     "<span class='k-state-default'><h3>"+repo.text+"</h3><p>#"+ type +"</p></span>";
-
-          return markup;
-        }
-
-    function formatRepoSelectionSearch (repo) {
-        console.log("formatRepoSelection" + repo)
-            if(repo.type == 0){
-                window.location = "/profile/"+repo.id;
-            }else if(repo.type == 1){
-                window.location = "/challenge/"+repo.id;
-            } else if(repo.type == 2){
-                window.location = "/challenges/"+repo.id;
-            }
-
-//$('#search-input').val(null).trigger("change");
-
-//            if(repo.text == null)
-//                return repo.id;
-//            return repo.text;
-    }
-
-        function getPhotoUrl (type, image) {
-
-            if(type == 0){
-                return (image == "")? "/uploads/users/default_user.png" : "/uploads/users/"+image;
-            }else if(type == 1){
-                return categoryToUrl(image);
-            }else if(type == 2){
-                return categoryToUrl(image);
-            }
-
-        }
-
-        function categoryToUrl(name){
-              var url = "";
-              switch(name){
-                  case 'Awesome Stuff':
-                      url = 'Amazing.jpg';
-                      break;
-                  case 'Running':
-                      url = 'Running.jpg';
-                      break;
-                  case 'Trail':
-                      url = 'Trail.jpg';
-                      break;
-                  case 'Gym':
-                      url = 'Gym.jpg';
-                      break;
-                  case 'Fitness':
-                      url = 'Fitness.jpg';
-                      break;
-                  case 'Football':
-                      url = 'Soccer.jpg';
-                      break;
-                  case 'Golf':
-                      url = 'Golf.jpg';
-                      break;
-                  case 'Tennis':
-                      url = 'Tennis.jpg';
-                      break;
-                  case 'Rugby':
-                      url = 'Rugby.jpg';
-                      break;
-                  case 'Surf':
-                      url = 'Surf.jpg';
-                      break;
-                  case 'Bodyboard':
-                      url = 'Bodyboard.jpg';
-                      break;
-                  case 'Swimming':
-                      url = 'Swim.jpg';
-                      break;
-                  case 'Martial Arts':
-                      url = 'Martial-Arts.jpg';
-                      break;
-                  case 'Cycling':
-                      url = 'Cycling.jpg';
-                      break;
-                  case 'Gymnastics':
-                      url = 'Gymnastic.jpg';
-                      break;
-                  case 'Basketball':
-                      url = 'Basketball.jpg';
-                      break;
-                  case 'Volleyball':
-                      url = 'Volley.jpg';
-                      break;
-                  case 'Snow Sports':
-                      url = 'Ski.jpg';
-                      break;
-                  case 'Hockey':
-                      url = 'Hockey.jpg';
-                      break;
-
-
-
-
-                  case 'Boxe':
-                      url = 'Categories_Thumb_Boxe.jpg';
-                      break;
-                  case 'Karate':
-                      url = 'Categories_Thumb_Karate.jpg';
-                      break;
-                  case 'Judo':
-                      url = 'Categories_Thumb_Judo.jpg';
-                      break;
-                  case 'Jiu-Jitsu':
-                      url = 'Categories_Thumb_Jiu-Jitsu.jpg';
-                      break;
-                  case 'Muay Thai':
-                      url = 'Martial-Arts.jpg';
-                      break;
-                  case 'Taekwondo':
-                      url = 'Categories_Thumb_Taekwondo.jpg';
-                      break;
-                  case 'Kickboxing':
-                      url = 'Categories_Thumb_Kickboxing.jpg';
-                      break;
-                  case 'MMA':
-                      url = 'Categories_Thumb_MMA.jpg';
-                      break;
-
-              }
-              return "/img/categories/"+url;
-          }
-
-$(function () {
-    $('.menu-lateral').show();
-});
-
-$('#dLabel2').on('click', function (e) {
-    e.stopPropagation();
-    //mobile-notifications
-    $('#mobile-notifications').toggleClass('open');
-//    $(this).next('.dropdown').find('[data-toggle=dropdown]').dropdown('toggle');
-});
-
-</script>
     @yield('footer')
 
 

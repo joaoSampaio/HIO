@@ -83,6 +83,57 @@ color: #eb1946;
     }
 }
 
+.wall-fame-title{
+text-align: center;
+    font-size: 37px;
+    color: #43484c;
+    margin-bottom: 70px;
+    margin-top: 20px;
+        text-transform: inherit;
+}
+
+
+
+.bg-text, .bg-text-brand-new {
+    /*background-color: #aaa;*/
+    /*overflow: hidden;*/
+    position: relative;
+}
+.bg-text::before {
+    color: #ececed;
+    content: attr(data-bg-text);
+    display: block;
+    font-size: 208px;
+    line-height: 1;
+    position: absolute;
+    top: 1px;
+    white-space: nowrap;
+        overflow: hidden;
+        max-width: 95%;
+}
+
+.bg-text-brand-new::before {
+      color: #e0e0e0;
+      content: attr(data-bg-text);
+      display: block;
+      font-size: 208px;
+      line-height: 1;
+      position: absolute;
+      top: 1px;
+      white-space: nowrap;
+          overflow: hidden;
+          max-width: 95%;
+  }
+
+.background-text{
+position: absolute;
+   top: 0;
+   left: 0;
+color: #fff;
+   font-size: 249px;
+   z-index: 0;
+   overflow: hidden;
+}
 
 </style>
 @endsection
@@ -93,12 +144,12 @@ color: #eb1946;
     <header>
 
 
-        <div class="container" style="    background-image: url({{ asset('img/header-bg.png')}});background-size: 115%;background-repeat: no-repeat;background-position: center;">
-            <div class="intro-text">
+        <div class="container home-header">
+            <div class="intro-text" >
                 @if(Auth::check())
-                    <div class="intro-lead-in">{{getFirstName(Auth::user()->name)}}, WELCOME TO HIO</div>
+                    <div class="intro-lead-in" style="text-transform: inherit;">{{getFirstName(Auth::user()->name)}}, welcome to HIO</div>
                 @else
-                    <div class="intro-lead-in">WELCOME TO HIO</div>
+                    <div class="intro-lead-in" style="text-transform: inherit;">WELCOME TO HIO</div>
                 @endif
 
                 <div class="intro-heading">READY TO CHALLENGE?</div>
@@ -110,49 +161,38 @@ color: #eb1946;
     </header>
 
 
-    <section >
 
 
+
+    <section class="bg-text" style="background-color: #f7f7f7;" data-bg-text="Wall of fame">
         <div class="container">
 
             <div class="row">
 
-
-            <div class="col-sm-12 col-xs-12 col-lg-5 bg-light-gray" >
-                <div class="text-center" style="margin-bottom: 30px; font-size: 22pt;">Most Viewed</div>
-                <div id="mostViewed" style="height: 300px;">
-                    <span class="glyphicon glyphicon-refresh spinning"></span>
+                <div class="col-sm-12 col-xs-12 col-lg-12" >
+                    <h2 class="wall-fame-title">Wall of fame</h2>
                 </div>
-                {{--<div class="col-lg-12 col-xs-12">--}}
-                    {{--<div class="col-lg-2 col-xs-2">--}}
-                        {{--<img src="{{'https://graph.facebook.com/v2.5/'. '592135650941808'  .'/picture?width=100&height=100'}}"--}}
-                                                                                    {{--class=" img-circle img-responsive">--}}
-                    {{--</div>--}}
-                    {{--<div class="col-lg-8 col-xs-8">--}}
-                        {{--<span style="font-size: 20px;line-height: 0;">JOAO SAMPAIO</span><br>--}}
-                        {{--<a href="/challenge/" class="" title="">fazer um afundanço</a>--}}
-                    {{--</div>--}}
-                    {{--<div class="col-lg-2 col-xs-2">--}}
-                        {{--574 Views--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-
-            </div>
 
 
+                <div class="col-sm-6 col-xs-12 col-lg-6" >
+                    <h4 class="text-center proves-title">Proves</h4>
+                    <div id="mostViewed" class="proves-container col-lg-12 col-xs-12">
+                        <span class="glyphicon glyphicon-refresh spinning"></span>
+                    </div>
+                </div>
 
+                <div class="col-sm-6 col-xs-12 col-lg-6 ">
+                    <h4 class="text-center proves-title">Challenges</h4>
 
-            <div class="col-sm-12 col-xs-12 col-lg-5 col-lg-offset-2 bg-light-gray" >
-                <div class="text-center" style="margin-bottom: 30px; font-size: 22pt;">Most Popular</div>
+                    <div id="mostParticipants" class="proves-container col-lg-12 col-xs-12">
+                        <span class="glyphicon glyphicon-refresh spinning"></span>
 
-                <div id="mostParticipants" style="height: 300px;">
-                    <span class="glyphicon glyphicon-refresh spinning"></span>
-
+                    </div>
                 </div>
 
             </div>
-
         </div>
+
     </section>
 
 
@@ -160,11 +200,12 @@ color: #eb1946;
 
 
     <!-- Portfolio Grid Section -->
-    <section id="portfolio" class="bg-light-gray">
+    <section  class="bg-text-brand-new" style="background-color: #e7e7e7;padding-bottom: 150px;" data-bg-text="challenges">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12 text-center">
-                    <h2 class="section-heading" style="color: #eb1946;margin-bottom: 5px;">New Challenges</h2>
+
+                <div class="col-sm-12 col-xs-12 col-lg-12" >
+                    <h2 class="wall-fame-title">Brand new challenges</h2>
                 </div>
             </div>
             <div class="row" id="latest"></div>
@@ -265,6 +306,9 @@ color: #eb1946;
         }
       });
 
+$('#challenge-views-modal').on('shown.bs.modal', function() {
+    $('.tooltip').not(this).hide();
+})
 
     function enableChallengeParticipants(){
           $('.challenge-participants').click(function(e){
@@ -334,8 +378,6 @@ color: #eb1946;
                type:"GET",
                dataType : 'json',
                success:function(data){
-
-//                 console.log(JSON.stringify(data));
                     var challengeViews="";
                     for (index = 0; index < data.length; ++index) {
 //                        console.log(data[index]);
@@ -357,12 +399,7 @@ color: #eb1946;
                     }
                     $("#modal-views-content").html(challengeViews);
 
-//                    $('#challenge-views-modal').on('shown.bs.modal', function() {
-//                        var wid = $('.same-height-modal-views').width();
-//                         $('.same-height-modal-views').css({
-//                             'height': wid + 'px'
-//                         });
-//                    })
+
 
                },error:function(){
                    //console.log("count:" + countVotes);

@@ -23,6 +23,13 @@ function truncateString($string, $len){
     return str_limit($string, $len);
 }
 
+function getDayMonth($string){
+    $time = strtotime($string);
+
+    $newformat = date('d M',$time);
+    return $newformat;
+}
+
 
 function multiexplode ($delimiters,$string) {
     $ary = explode($delimiters[0],$string);

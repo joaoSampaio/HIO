@@ -1102,17 +1102,18 @@ class HomeController extends Controller {
             ->join('users', 'files.user_id', '=', 'users.id')
             ->select('users.name','users.id', 'files.id', 'users.photo', 'files.*', 'challenges.title', 'challenges.uuid')
             ->orderBy('views', 'desc')
-            ->take(5)->get();
+            ->take(3)->get();
         return json_encode(view('partials.home_stats')->with('challenges',$latest)->render());
     }
 
     public function mostParticipants(){
         $mostParticipants = DB::table('challenge_user')
             ->join('challenges', 'challenges.id', '=', 'challenge_id')->where('challenges.public', '=' , 1)
-            ->select('challenge_id', 'challenges.title', 'challenges.category', 'challenges.uuid', DB::raw('count(*) as total'))
+            ->join('users', 'challenge_user.user_id', '=', 'users.id')
+            ->select('challenge_id', 'challenges.title', 'challenges.category', 'challenges.uuid','challenges.id AS user_id','users.name', DB::raw('count(*) as total'))
             ->groupBy('challenge_id')
             ->orderBy('total', 'desc')
-            ->take(5)->get();
+            ->take(3)->get();
 
         return json_encode(view('partials.home_participants')->with('challenges',$mostParticipants)->render());
     }
@@ -1530,7 +1531,7 @@ class HomeController extends Controller {
                 Mail::send('mail.emailChallenge', ['challenge' => $challenge, 'email' => $user->email,
                     'nameCreator' => $nameCreator,
                     'total' => $total, 'nameUser' => ' '.$user->name, 'deadline' => $deadline], function ($m) use ($total, $challenge, $nameCreator, $user, $deadline) {
-                    $m->from('norelpy@hiolegends.com', 'HIO - Challenge');
+                    $m->from('norelpy@mail.hiolegends.com', 'HIO - Challenge');
 
                     $subject = "$nameCreator challenged you! - ".$challenge->title;
                     if ($user->email === Auth::user()->email) {
@@ -1562,7 +1563,7 @@ class HomeController extends Controller {
             foreach ($emails as $email){
                 Mail::send('mail.emailChallenge', ['challenge' => $challenge, 'email' => $email,
                     'nameCreator' => $nameCreator, 'total' => $total, 'nameUser' => '', 'deadline' => $deadline], function ($m) use ( $total, $challenge, $nameCreator, $email, $deadline) {
-                    $m->from('norelpy@hiolegends.com', 'HIO - Challenge');
+                    $m->from('norelpy@mail.hiolegends.com', 'HIO - Challenge');
 
                     $m->to($email)->subject("$nameCreator challenged you! - ".$challenge->title);
                 });
@@ -1581,7 +1582,7 @@ class HomeController extends Controller {
         $sendTo = "hiominimalblog@gmail.com";
         //try {
         Mail::send('mail.emailContact', ['name' => $name, 'email' => $email, 'messageBody' => $messageBody], function ($m) use ($name, $sendTo, $email, $messageBody) {
-            $m->from('norelpy@hiolegends.com', 'HIO - Contact');
+            $m->from('norelpy@mail.hiolegends.com', 'HIO - Contact');
 
             $m->to($sendTo, '')->subject($email . ' sent a contact request.');
         });
