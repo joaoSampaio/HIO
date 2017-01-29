@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App;
+use App\Jobs\ProcessVideo;
 use App\Model\Challenge;
 use App\Model\FileHio;
 use App\Model\LikedChallengeNotification;
@@ -30,6 +31,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 use FFMpeg\FFMpeg;
 use FFMpeg\Coordinate\TimeCode;
+use FFMpeg\Coordinate\Dimension;
 use FFMpeg\Format\Video;
 use App\Model\CustomVideo;
 use Ramsey\Uuid\Uuid;
@@ -783,6 +785,12 @@ class HomeController extends Controller {
 
     public function showSonChallenge($uuid, $file_id){
 
+//        dd(config('queue.default'));
+//        echo dd(config('queue.default'));
+//        return;
+
+
+
         if (Auth::check() && $challenge = FileViews::find( $file_id . Auth::user()->id)) {
 
         }else if(Auth::check()){
@@ -896,6 +904,9 @@ class HomeController extends Controller {
 
             if ($fileHio = FileHio::where('id', $id)->first()) {
                 if (Auth::user()->id == $fileHio->user_id) {
+
+                    //need to delete file!!!!
+                    File::delete(base_path() . '/public/uploads/challenge/'. $fileHio->filename);
                     FileHio::destroy($id);
                     $arr = array('status' => "true");
                 }
@@ -906,98 +917,80 @@ class HomeController extends Controller {
 
     public function uploadFile(Request $request){
 
+        $fileNameNoExtensionTemp = md5($request->file('file')->getClientOriginalName(). "temp" . microtime());
         $fileNameNoExtension = md5($request->file('file')->getClientOriginalName() . microtime());
-        $fileName = $fileNameNoExtension . '.' .
-            $request->file('file')->getClientOriginalExtension();
+
+        $extension = $request->file('file')->getClientOriginalExtension();
+        $fileNameTemp = $fileNameNoExtensionTemp . '.' . $extension;
+
+        $fileName = $fileNameNoExtension . '.' . $extension;
+
 
         $type = 0;
+
         $mimeType = $request->file('file')->getMimeType();
-        if(substr($mimeType, 0, 5) == 'image') {
-            // this is an image
-            $request->file('file')->move(
-                base_path() . '/public/uploads/challenge/', $fileName
-            );
 
-        }else if(substr($mimeType, 0, 5) == 'video'){
+//        try {
+            if (substr($mimeType, 0, 5) == 'image') {
+                // this is an image
+                $request->file('file')->move(
+                    base_path() . '/public/uploads/challenge/', $fileName
+                );
 
-            $type = 1;
+            } else if (substr($mimeType, 0, 5) == 'video') {
 
-            $request->file('file')->move(
-                base_path() . '/public/uploads/challenge/', $fileName
-            );
+                $type = 1;
+                $request->file('file')->move(
+                    base_path() . '/public/uploads/challenge/', $fileNameTemp
+                );
+
+                if (App::environment('local')) {
+                    $ffmpeg = FFMpeg::create([
+                        'ffmpeg.binaries' => 'D:/documents/laravel/ffmpeg/bin/ffmpeg.exe', // the path to the FFMpeg binary
+                        'ffprobe.binaries' => 'D:/documents/laravel/FFmpeg/bin/ffprobe.exe', // the path to the FFProbe binary
+                        'timeout' => 3600 // the timeout for the underlying process
+                    ]);
+                } else {
+                    $ffmpeg = FFMpeg::create([
+                        'ffmpeg.binaries' => '/usr/bin/ffmpeg', // the path to the FFMpeg binary
+                        'ffprobe.binaries' => '/usr/bin/ffprobe', // the path to the FFProbe binary
+                        'timeout' => 3600, // the timeout for the underlying process
+                    ]);
+                }
 
 
-            if (App::environment('local')) {
-                $ffmpeg = FFMpeg::create([
-                    'ffmpeg.binaries'  => 'D:/documents/laravel/ffmpeg/bin/ffmpeg.exe', // the path to the FFMpeg binary
-                    'ffprobe.binaries' => 'D:/documents/laravel/FFmpeg/bin/ffprobe.exe', // the path to the FFProbe binary
-                    'timeout'          => 3600 // the timeout for the underlying process
-                ]);
-            }else{
-                $ffmpeg = FFMpeg::create([
-                    'ffmpeg.binaries'  => '/usr/bin/ffmpeg', // the path to the FFMpeg binary
-                    'ffprobe.binaries' => '/usr/bin/ffprobe', // the path to the FFProbe binary
-                    'timeout'          => 3600, // the timeout for the underlying process
-                ]);
-            }
-
-
-            $video = $ffmpeg->open(base_path() . '/public/uploads/challenge/'. $fileName);
-            $video->frame(TimeCode::fromSeconds(1))
-                ->save(base_path() . '/public/uploads/challenge/'. $fileNameNoExtension.'.jpg');
-
-            if($mimeType != 'video/mp4'){
-//                $ffmpeg->getFFMpegDriver()->listen(new \Alchemy\BinaryDriver\Listeners\DebugListener());
-//                $ffmpeg->getFFMpegDriver()->on('debug', function ($message) {
-//                    echo '......aaaa.....'.$message."\n";
-//                });
+                $video = $ffmpeg->open(base_path() . '/public/uploads/challenge/' . $fileNameTemp);
+                $video->frame(TimeCode::fromSeconds(1))
+                    ->save(base_path() . '/public/uploads/challenge/' . $fileNameNoExtension . '.jpg');
                 $fileName = $fileNameNoExtension . '.mp4';
-                $format = new CustomVideo();
-                $video->save($format, base_path() . '/public/uploads/challenge/'. $fileNameNoExtension . '.mp4');
             }
-        }
 
 
+            $file = new FileHio(array(
+                'filename' => $fileName, 'user_id' => Auth::user()->id, 'challenge_id' => $request->get('challenge'),
+                'views' => 0, 'likes' => 0, 'type' => $type
+            ));
+
+            $file->save();
 
 
-        $file = new FileHio(array(
-            'filename' =>  $fileName, 'user_id' =>  Auth::user()->id, 'challenge_id' =>  $request->get('challenge'),
-            'views' =>  0, 'likes' =>  0, 'type' =>  $type
-        ));
+            if ($type == 0) {
+                return array('status' => "true", 'fileName' => $fileName, 'id' => $file->id);
 
-        $file->save();
-        if(substr($mimeType, 0, 5) == 'image') {
-            return array('status' => "true", 'fileName' => $fileName, 'id' => $file->id );
+            } else {
+                $this->dispatch(new ProcessVideo($file, $mimeType, $fileNameTemp, $fileNameNoExtension));
+                return array('status' => "true", 'fileName' => $fileNameNoExtension . '.jpg', 'id' => $file->id);
+            }
 
-        }else {
-            return array('status' => "true", 'fileName' => $fileNameNoExtension.'.jpg', 'id' => $file->id );
-        }
-
-
-//        $video
-//            ->filters()
-//            ->resize(new FFMpeg\Coordinate\Dimension(320, 240))
-//            ->synchronize();
-
-
-
-//        if ($sonChallenge = ChallengeUserAssociation::where('user_id', Auth::user()->id)->where('challenge_id', $request->get('challenge'))->first()) {
-//            if( $sonChallenge->file_id != 0){
-//                if ($file = FileHio::where('id', $sonChallenge->file_id)->first()) {
-//                    $fileNameDelete = $file->filename;
-//                    $file->filename = $fileName;
-//                    $file->update();
-//                    try{
-//                        unlink(base_path() . '/public/uploads/challenge/' . $fileNameDelete);
-//                    }catch (\Exception $ex){
+//        }catch (\Exception $e){
 //
-//                    }
-//                }
-//            }
+//            File::delete(base_path() . '/public/uploads/challenge/'. $fileNameTemp);
+//            echo 'Caught exception: ',  $e->getMessage(), "\n";
+//
 //        }
 
 
-
+//
     }
 
     public function closeChallenge($uuid)

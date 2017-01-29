@@ -353,7 +353,8 @@ color: white;
                         @if($countFriends == 6)
                             <li class="show-friends">
                                 <div class="ch-item ch-img-1">
-                                    <button type="button" class="btn btn-info btn-circle btn-xl friends"><i class="glyphicon glyphicon-plus"></i><span style="font-size: 40px;">{{count($userFriends) - 5}}</span></button>
+
+                                    <a href="/friends" type="button" class="btn btn-info btn-circle btn-xl friends"><i class="glyphicon glyphicon-plus"></i><span style="font-size: 40px;">{{count($userFriends) - 5}}</span></a>
                                 </div>
                             </li>
                         @endif
@@ -490,10 +491,10 @@ $("#ongoingbtn").click(function(){
     $("#ongoingdiv").addClass("bg-light-gray");
 });
 
-$(".show-friends").click(function(){
-    $(".hide-friend").removeClass("hide-friend");
-    $(".show-friends").hide();
-});
+//$(".show-friends").click(function(){
+//    $(".hide-friend").removeClass("hide-friend");
+//    $(".show-friends").hide();
+//});
 
 
 </script>

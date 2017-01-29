@@ -58,7 +58,7 @@
 <table cellpadding="0" cellspacing="0" align="center">
     <tr>
         <td class="column" width="600" colspan="2" align="center" valign="top">
-        	<img src="https://gallery.mailchimp.com/3f75b09e45b71cb962c4d4ea3/images/76949d20-694c-4c77-97b4-97d4c5c2e67e.png"/>
+        	<img src="https://hiolegends.com/img/logo.png"/>
         </td>
     </tr>
     <tr>
