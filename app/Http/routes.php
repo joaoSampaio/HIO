@@ -25,6 +25,8 @@ Route::group(['middleware' => ['web']], function () {
 
 //    Route::get('/fix', 'HomeController@fixPhotos');
 
+    Route::get('friends/{id}/{name}', 'HomeController@getFriendsUser');
+
     Route::get('/user/photo/{id}', 'HomeController@getProfileImage');
 
 
@@ -34,11 +36,14 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('/auth', 'Auth\AuthController@getGeneralLogin');
 
-    Route::post('ola', 'HomeController@uploadFile');
+    /*SonChallengeController*/
+    Route::post('upload', 'SonChallengeController@uploadFile');
+    Route::get('/proof/{uuid}/{file_id}', 'SonChallengeController@showSonChallenge');
+    Route::post('/vote/proof/{file_id}', 'SonChallengeController@likeFile');
+    Route::post('/delete/proof/{file_id}', 'SonChallengeController@deleteProof');
+    Route::get('/proof/{uuid}/{file_id}/status', 'SonChallengeController@isProofReady');
 
-    Route::get('/proof/{uuid}/{file_id}', 'HomeController@showSonChallenge');
-    Route::post('/vote/proof/{file_id}', 'HomeController@likeFile');
-    Route::post('/delete/proof/{file_id}', 'HomeController@deleteProof');
+
 
     Route::get('/views/proof/{file_id}', 'HomeController@getChallengeSonViews');
     Route::get('/participants/{challenge_id}', 'HomeController@getChallengeParticipants');
@@ -105,8 +110,9 @@ Route::group(['middleware' => ['web']], function () {
 
 
         Route::get('list', 'HomeController@listFriends');
-        Route::get('notifications', 'HomeController@getNotifications');
-        Route::get('notifications/{id}', 'HomeController@markRead');
+        Route::get('notifications', 'NotificationsController@getNotifications');
+        Route::get('notifications/read/{id}', 'NotificationsController@markRead');
+        Route::get('notifications/ignore/{id}', 'NotificationsController@updateLastSeenNotifications');
 
 
         Route::get('teste', 'HomeController@teste');

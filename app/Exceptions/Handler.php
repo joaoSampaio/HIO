@@ -67,7 +67,7 @@ class Handler extends ExceptionHandler
     {
         if (view()->exists('errors.'.$e->getStatusCode()))
         {
-            return response()->view('errors.'.$e->getStatusCode(), [], $e->getStatusCode());
+            return response()->view('errors.'.$e->getStatusCode(), ['message' => $e->getMessage()], $e->getStatusCode());
         }
         else
         {

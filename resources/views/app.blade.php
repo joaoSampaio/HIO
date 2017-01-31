@@ -8,6 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
 
     <title>HIO - Challenge Your Friends</title>
 
@@ -154,13 +156,13 @@
                         </li>
                         <li style="width: 60px;" id="full-nav">
 
-                            <a id="dLabel" class="header-link" role="button" data-toggle="dropdown" data-target="#" href="#" aria-haspopup="true" aria-expanded="false" style="padding-left: 0px;padding-top: 5px;background-color: rgba(148, 0, 211, 0);">
+                            <a id="notification-btn" class="header-link" role="button" data-toggle="dropdown" data-target="#" href="#" aria-haspopup="true" aria-expanded="false" style="padding-left: 0px;padding-top: 5px;background-color: rgba(148, 0, 211, 0);">
                                 <i class="glyphicon glyphicon-bell"></i>
                             </a>
-                            <span class="badge badge-notify">0</span>
+                            <span class="badge badge-notify" style="display: none;">0</span>
 
 
-                        <ul class="dropdown-menu notifications pull-right" role="menu" aria-labelledby="dLabel">
+                        <ul class="dropdown-menu notifications pull-right" role="menu" aria-labelledby="notification-btn">
 
                             <div class="notification-heading text-color1">
                                 <h4 class="menu-title col-md-offset-1">Your Notifications</h4>

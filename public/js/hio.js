@@ -22,15 +22,21 @@ $.ajax({
     success: function(jsonData) {
         $(".notifications-wrapper").html(jsonData);
         //numberUnread
-        $('.badge-notify').html($('#numberUnread').data('number-unread'));
-        jQuery(document).ready(function() {
-            jQuery("time.timeago").timeago();
-        });
+        var number = $('#numberUnread').data('number-unread');
+        if (number > 0) {
+            $('.badge-notify').html(number);
+            $('.badge-notify').show();
+            jQuery(document).ready(function() {
+                jQuery("time.timeago").timeago();
+            });
+        }
+
+
 
         $('.notification-item a').click(function (event){
         //event.preventDefault();
             $.ajax({
-                url: '/notifications/' + $(this).attr('data-notification')
+                url: '/notifications/read/' + $(this).attr('data-notification')
                 ,success: function(response) {
                 //alert(response)
                 }
@@ -39,6 +45,12 @@ $.ajax({
     },
     error: function() {
     }
+});
+
+$('#notification-btn').on('click', function () {
+    $('.badge-notify').hide();
+    $.get( "/notifications/ignore/"+$('#highest_id').data('highest-id'), function( data ) {
+    });
 });
 
 

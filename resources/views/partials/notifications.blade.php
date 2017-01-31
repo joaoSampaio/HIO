@@ -103,4 +103,5 @@
 
 @endforeach
 <span id="numberUnread" class="hidden" data-number-unread="{{$numberUnread}}"></span>
+<span id="highest_id" class="hidden" data-highest-id="{{$max_id}}"></span>
 

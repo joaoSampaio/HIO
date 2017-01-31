@@ -108,26 +108,36 @@ color: #eb1946;
                 </div>
                 <div class="col-lg-12 text-center">
 
+                    @if($sonChallenge->is_ready)
 
-                    @if($sonChallenge->type == 1)
+                        @if($sonChallenge->type == 1)
 
-                        <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="100%" height="480"
-                          poster="{{ asset('uploads/challenge/'. pathinfo(asset('uploads/challenge/'. $sonChallenge->filename), PATHINFO_FILENAME) . '.jpg')  }}" data-setup="{}" style="width: 100%">
-                            <source src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" type='video/mp4'>
-                            {{--<source src="MY_VIDEO.webm" type='video/webm'>--}}
-                            <p class="vjs-no-js">
-                              To view this video please enable JavaScript, and consider upgrading to a web browser that
-                              <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                            </p>
-                          </video>
+                            <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="100%" height="480"
+                              poster="{{ asset('uploads/challenge/'. pathinfo(asset('uploads/challenge/'. $sonChallenge->filename), PATHINFO_FILENAME) . '.jpg')  }}" data-setup="{}" style="width: 100%">
+                                <source src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" type='video/mp4'>
+                                {{--<source src="MY_VIDEO.webm" type='video/webm'>--}}
+                                <p class="vjs-no-js">
+                                  To view this video please enable JavaScript, and consider upgrading to a web browser that
+                                  <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                                </p>
+                              </video>
 
 
-                        {{--<video width="100%" controls>--}}
-                          {{--<source src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" type="video/mp4">--}}
-                        {{--Your browser does not support the video tag.--}}
-                        {{--</video>--}}
+                            {{--<video width="100%" controls>--}}
+                              {{--<source src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" type="video/mp4">--}}
+                            {{--Your browser does not support the video tag.--}}
+                            {{--</video>--}}
+                        @else
+                            <img src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" class="img-responsive"  style="    height: 100%;margin: 0 auto;" alt="">
+
+                        @endif
+
                     @else
-                        <img src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" class="img-responsive"  style="    height: 100%;margin: 0 auto;" alt="">
+                        <div class="alert alert-info col-sm-12 col-md-6 col-md-offset-3">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                             <p>Your video is being converted. It will be available soon.</p>
+                            <p>This page will refresh when the video is available.</p>
+                        </div>
 
                     @endif
 
@@ -199,18 +209,10 @@ color: #eb1946;
                 this.page.remote_auth_s3 = '{{$message. " " . $hmac. " " . $timestamp}}';
                 this.callbacks.onNewComment = [function(comment) {
                 		console.log(JSON.stringify(comment));
-
                 			$.post('{{URL::action('HomeController@addCommentCallback')}}', { proofId: '{{$sonChallenge->id}}', text: comment.text }, function(result){
-
-//                				alert(result);
-
                 			});
 
                 		}];
-
-
-                        console.log(this.callbacks);
-
                 };
 
 
@@ -243,7 +245,7 @@ color: #eb1946;
 @if(!$hasLiked)
     $("#vote").click(function(){
         $.ajax({
-            url: "{{ action('HomeController@likeFile', $sonChallenge->id) }}",
+            url: "{{ action('SonChallengeController@likeFile', $sonChallenge->id) }}",
             type:"POST",
             dataType : 'json',
             data: { '_token': '{{ csrf_token() }}' },
@@ -268,6 +270,42 @@ color: #eb1946;
             return false;
         });
 @endif
+
+
+@if(!$sonChallenge->is_ready)
+
+var refreshIntervalId;
+function checkStatus(){
+    $.ajax({
+       url: "{{action('SonChallengeController@isProofReady', [ 'uuid' => $sonChallenge->uuid, 'file_id'=>$sonChallenge->id])}}",
+       type:"GET",
+       dataType : 'json',
+       success:function(data){
+           var success = data.status;
+           console.log("success:" + success);
+           if(success){
+            //stop
+            clearInterval(refreshIntervalId);
+            location.reload();
+           }else{
+
+           }
+       },error:function(){
+       }
+    });
+}
+
+$(document).ready(function() {
+    refreshIntervalId = setInterval(function(){
+      checkStatus();
+    }, 5000);
+});
+
+
+@endif
+
+
+
 
 </script>
 

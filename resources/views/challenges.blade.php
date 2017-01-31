@@ -43,16 +43,36 @@ color: #eb1946;
         .full-width-tabs > ul.nav.nav-tabs > li > a {
             text-align: center;
         }
-        .take-all-space-you-can{
-            width:100%;
-        }
-        .take-all-space-you-can.active a{
-                background-color: #f7f7f7 !important;
-        }
-
         .nav-tabs {
             border-bottom: 0px solid #ddd;
         }
+
+.challenge-item-info{
+    border: 1px solid #807c7c;
+}
+
+.take-all-space-you-can{
+        width:100%;
+        background-color: #f7f7f7 !important;
+    }
+
+.take-all-space-you-can.active a{
+        background-color: #ffffff !important;
+        color: #eb1946 !important;
+}
+
+.take-all-space-you-can a{
+        color: #555 !important;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+}
+
 
 
 blockquote {
@@ -121,7 +141,7 @@ blockquote p {
             <li class="active take-all-space-you-can">
                 <a href="#ongoing" aria-controls="ongoing" data-toggle="tab">
                     <h3>{{$challenges->total()}}</h3>
-                    <h4 class="text-capitalize">On Going</h4>
+                    <h4 class="text-capitalize">Active</h4>
                 </a>
             </li>
             <li class="take-all-space-you-can">
@@ -134,7 +154,7 @@ blockquote p {
     </div>
 
 </div>
-<section class="bg-light-gray">
+<section >
     <div class="container">
         <div class="row" id="latest">
 

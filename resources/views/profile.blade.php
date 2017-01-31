@@ -218,6 +218,10 @@ color: white;
     }
 }
 
+.challenge-item-info{
+    border: 1px solid #807c7c;
+}
+
 
   </style>
 
@@ -354,7 +358,7 @@ color: white;
                             <li class="show-friends">
                                 <div class="ch-item ch-img-1">
 
-                                    <a href="/friends" type="button" class="btn btn-info btn-circle btn-xl friends"><i class="glyphicon glyphicon-plus"></i><span style="font-size: 40px;">{{count($userFriends) - 5}}</span></a>
+                                    <a href="{{action('HomeController@getFriendsUser', [ 'id' => $user->id, 'name'=>$user->name])}}" type="button" class="btn btn-info btn-circle btn-xl friends"><i class="glyphicon glyphicon-plus"></i><span style="font-size: 40px;">{{count($userFriends) - 5}}</span></a>
                                 </div>
                             </li>
                         @endif
@@ -376,7 +380,7 @@ color: white;
                         </li>
                     @endforeach
 
-
+                    @if(Auth::check() && Auth::user()->id == $user->id)
                     <li class="show-friends">
                         <div class="ch-item ch-img-1">
                             <a href="/friends" class=" btn-circle friends">
@@ -384,6 +388,7 @@ color: white;
                             </a>
                         </div>
                     </li>
+                    @endif
                     {{--@endif--}}
                 </ul>
 
@@ -421,7 +426,7 @@ color: white;
     </div>
 
 </div>
-<section  id="portfolio">
+<section >
     <div class="container">
         <div class="row" id="latest">
 

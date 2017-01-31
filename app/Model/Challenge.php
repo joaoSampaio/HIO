@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Database\Eloquent\Model;
 
 class Challenge extends Model
@@ -41,6 +42,17 @@ class Challenge extends Model
     public function scopeClosed($query)
     {
         return $query->where('closed', '=', 1)->orWhereDate('deadLine', '<', Carbon::now());;
+    }
+
+    public function isClosed(){
+
+        if($this->closed)
+            return true;
+
+        $now = new DateTime();
+        $deadLine = new DateTime($this->deadLine);
+        return ($now > $deadLine);
+
     }
 
 

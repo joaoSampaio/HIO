@@ -98,6 +98,8 @@ class ProcessVideo extends Job implements ShouldQueue
             $video->save($format, base_path() . '/public/uploads/challenge/' . $this->fileNameNoExtension . '.mp4');
         }
 
+        $this->file->is_ready = true;
+        $this->file->save();
 
         File::delete(base_path() . '/public/uploads/challenge/'. $this->fileNameTemp);
 

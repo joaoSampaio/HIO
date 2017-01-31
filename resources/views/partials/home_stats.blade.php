@@ -1,6 +1,6 @@
 @foreach ($challenges as $challenge)
      <div class="col-lg-12 col-xs-12 proves pointer">
-        <a href="{{ action('HomeController@showSonChallenge', [ 'uuid' => $challenge->uuid, 'user_id'=>$challenge->id]) }}" ><span class="clickable"></span></a>
+        <a href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $challenge->uuid, 'user_id'=>$challenge->id]) }}" ><span class="clickable"></span></a>
         <div class="col-lg-2 col-xs-2 no-padding">
             <a href="{{"/profile/".$challenge->user_id}}" class="pull-left clickable-link" style="font-size: 14px;">
                 <img src="/user/photo/{{$challenge->user_id}}" class=" img-circle img-responsive">

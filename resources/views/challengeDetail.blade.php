@@ -449,7 +449,7 @@ cursor: pointer;
                 <h4 class="modal-title">Upload your proof</h4>
               </div>
               <div class="modal-body">
-                {!! Form::open(array('action' => array('HomeController@uploadFile'), 'class' => 'dropzone','novalidate' => 'novalidate', 'id' => 'myAwesomeDropzone',
+                {!! Form::open(array('action' => array('SonChallengeController@uploadFile'), 'class' => 'dropzone','novalidate' => 'novalidate', 'id' => 'myAwesomeDropzone',
                                                                                                                   'files' => true)) !!}
 
                 {{--<form action="/upload" class="dropzone">--}}
@@ -711,20 +711,26 @@ cursor: pointer;
 
                       this.on("uploadprogress", function(file, progress, bytesSent) {
 
-                          console.log("p:"+ progress);
-                            if(progress == 100){
-
-                                if(file.type != "video/mp4" && !file.type.startsWith("image")){
-                                    $('#myModal').modal('hide');
-                                    $('#upload-video-msg').modal('show');
-
-                                }
-
-
-                                console.log(file);
-
-
-                            }
+//                            if(progress < 2){
+//                            var startTime = (new Date()).getTime();
+//                            console.log("startTime:"+ startTime);
+//                            }
+                          //console.log("p:"+ progress);
+//                            if(progress == 100){
+//                            var endTime = (new Date()).getTime();
+//                            console.log("bytesSent:"+ bytesSent);
+//                            console.log("endTime:"+ endTime);
+//                                if(file.type != "video/mp4" && !file.type.startsWith("image")){
+//                                    $('#myModal').modal('hide');
+//                                    $('#upload-video-msg').modal('show');
+//
+//                                }
+//
+//
+//                                console.log(file);
+//
+//
+//                            }
 
                       });
 

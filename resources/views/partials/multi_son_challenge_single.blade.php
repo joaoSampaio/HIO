@@ -1,6 +1,6 @@
 
         <div class="col-md-3 col-sm-6 portfolio-item proof-item">
-            <a href="{{ action('HomeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}" class="portfolio-link container-add-prof" title="">
+            <a href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}" class="portfolio-link container-add-prof" title="">
                 <div class="portfolio-hover">
                     <div class="portfolio-hover-content">
                         <i class="fa fa-search-plus fa-3x"></i>
