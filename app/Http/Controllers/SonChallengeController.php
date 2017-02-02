@@ -201,7 +201,8 @@ class SonChallengeController extends Controller {
         $fileNameNoExtension = md5($request->file('file')->getClientOriginalName() . microtime());
 
         $extension = $request->file('file')->getClientOriginalExtension();
-        $fileNameTemp = $fileNameNoExtensionTemp . '.' . $extension;
+//        $fileNameTemp = $fileNameNoExtensionTemp . '.' . $extension;
+        $fileNameTemp = $fileNameNoExtensionTemp . '.mp4';
 
         $fileName = $fileNameNoExtension . '.' . $extension;
 

@@ -4,8 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use DateTime;
-use App\User;
-use App\Challenge;
+use App\Model\User;
+use App\Model\Challenge;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Inspiring;
 

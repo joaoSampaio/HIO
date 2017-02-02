@@ -13,7 +13,10 @@ use FFMpeg\FFMpeg;
 use FFMpeg\Coordinate\TimeCode;
 use FFMpeg\Coordinate\Dimension;
 use FFMpeg\Format\Video;
+use FFMpeg\FFProbe;
 use App\Model\CustomVideo;
+use Illuminate\Support\Facades\Storage;
+use Log;
 
 class ProcessVideo extends Job implements ShouldQueue
 {
@@ -62,41 +65,88 @@ class ProcessVideo extends Job implements ShouldQueue
         }
 
 
-        $video = $ffmpeg->open(base_path() . '/public/uploads/challenge/' . $this->fileNameTemp);
 
 
-        $dimension = new \FFMpeg\Coordinate\Dimension(480, 320);
-        $mode = \FFMpeg\Filters\Video\ResizeFilter::RESIZEMODE_INSET;
-        $useStandards = true;
+        Log::info('before ffprobe');
+        $ffprobe = FFProbe::create();
+        $dimension = $ffprobe
+            ->streams(base_path() . '/public/uploads/challenge/' . $this->fileNameTemp) // extracts streams informations
+            ->videos()                      // filters video streams
+            ->first()                       // returns the first video stream
+            ->getDimensions();              // returns a FFMpeg\Coordinate\Dimension object
 
-        $format = new CustomVideo();
+        Log::info('after ffprobe' );
+        Log::info('width:'. $dimension->getWidth());
+        Log::info(' height:' . $dimension->getHeight());
+        Log::info('temp file:' . $this->fileNameTemp);
+        Log::info('real file:' . $fileName);
 
-        $video
-            ->filters()
-            ->resize($dimension, $mode, $useStandards)
-            ->synchronize();
+            if ($this->mimeType != 'video/mp4') {
 
-//                $video->filters()
-//                    ->resize(new Dimension(320, 240), \FFMpeg\Filters\Video\ResizeFilter::RESIZEMODE_INSET);
-        $video->save($format, base_path() . '/public/uploads/challenge/' . $fileName);
+                rename(base_path() . '/public/uploads/challenge/' . $this->fileNameTemp,
+                    base_path() . '/public/uploads/challenge/' . $fileName);
+            }
+            else if($dimension->getHeight() > 500 || $dimension->getWidth() > 500){
+
+            $video = $ffmpeg->open(base_path() . '/public/uploads/challenge/' . $this->fileNameTemp);
+            $dimension = new \FFMpeg\Coordinate\Dimension(480, 320);
+            $mode = \FFMpeg\Filters\Video\ResizeFilter::RESIZEMODE_INSET;
+            $useStandards = true;
+
+            $format = new CustomVideo();
+
+            Log::info('before synchronize ----------------------');
+            $video
+                ->filters()
+                ->resize($dimension, $mode, $useStandards)
+                ->synchronize();
+            Log::info('after synchronize ----------------------');
+
+            $video->save($format, base_path() . '/public/uploads/challenge/' . $fileName);
+            Log::info('after save ----------------------');
+
+            if(file_exists( base_path() . '/public/uploads/challenge/' . $fileName)) {
+                Log::info('video was created++++++++++++++++++++++++++');
+            }else{
+                Log::info('video was not created----------------------');
+            }
+
+        }else {
+
+            rename(base_path() . '/public/uploads/challenge/' . $this->fileNameTemp,
+                base_path() . '/public/uploads/challenge/' . $fileName);
+        }
 
 
+        Log::info('before reopen video');
         //open resized video
-        $video = $ffmpeg->open(base_path() . '/public/uploads/challenge/' . $this->fileNameTemp);
+        $video = $ffmpeg->open(base_path() . '/public/uploads/challenge/' . $fileName);
+
+
+        Log::info('before frame');
+        $ffprobe = FFProbe::create();
+        $dimension = $ffprobe
+            ->streams(base_path() . '/public/uploads/challenge/' . $fileName) // extracts streams informations
+            ->videos()                      // filters video streams
+            ->first()                       // returns the first video stream
+            ->getDimensions();              // returns a FFMpeg\Coordinate\Dimension object
+
+        Log::info('width:'. $dimension->getWidth());
+        Log::info(' height:' . $dimension->getHeight());
 
         $video->frame(TimeCode::fromSeconds(1))
             ->save(base_path() . '/public/uploads/challenge/' . $this->fileNameNoExtension . '.jpg');
 
-        if ($this->mimeType != 'video/mp4') {
-//                $ffmpeg->getFFMpegDriver()->listen(new \Alchemy\BinaryDriver\Listeners\DebugListener());
-//                $ffmpeg->getFFMpegDriver()->on('debug', function ($message) {
-//                    echo '......aaaa.....'.$message."\n";
-//                });
-
-            $fileName = $this->fileNameNoExtension . '.mp4';
-            $format = new CustomVideo();
-            $video->save($format, base_path() . '/public/uploads/challenge/' . $this->fileNameNoExtension . '.mp4');
-        }
+//        if ($this->mimeType != 'video/mp4') {
+////                $ffmpeg->getFFMpegDriver()->listen(new \Alchemy\BinaryDriver\Listeners\DebugListener());
+////                $ffmpeg->getFFMpegDriver()->on('debug', function ($message) {
+////                    echo '......aaaa.....'.$message."\n";
+////                });
+//
+//            $fileName = $this->fileNameNoExtension . '.mp4';
+//            $format = new CustomVideo();
+//            $video->save($format, base_path() . '/public/uploads/challenge/' . $this->fileNameNoExtension . '.mp4');
+//        }
 
         $this->file->is_ready = true;
         $this->file->save();
