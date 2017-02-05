@@ -30,6 +30,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/user/photo/{id}', 'HomeController@getProfileImage');
 
 
+
+
     Route::post('/comment/proof', 'HomeController@addCommentCallback');
 
 
@@ -37,6 +39,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/auth', 'Auth\AuthController@getGeneralLogin');
 
     /*SonChallengeController*/
+    Route::get('/video', 'SonChallengeController@testVideo');
     Route::post('upload', 'SonChallengeController@uploadFile');
     Route::get('/proof/{uuid}/{file_id}', 'SonChallengeController@showSonChallenge');
     Route::post('/vote/proof/{file_id}', 'SonChallengeController@likeFile');

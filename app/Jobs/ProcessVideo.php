@@ -60,11 +60,12 @@ class ProcessVideo extends Job implements ShouldQueue
             $ffmpeg = FFMpeg::create([
                 'ffmpeg.binaries' => '/usr/bin/ffmpeg', // the path to the FFMpeg binary
                 'ffprobe.binaries' => '/usr/bin/ffprobe', // the path to the FFProbe binary
-                'timeout' => 3600, // the timeout for the underlying process
+                'timeout' => 120, // the timeout for the underlying process
+                'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
             ]);
         }
 
-
+        set_time_limit(120);
 
 
         Log::info('before ffprobe');
@@ -85,6 +86,9 @@ class ProcessVideo extends Job implements ShouldQueue
 
                 rename(base_path() . '/public/uploads/challenge/' . $this->fileNameTemp,
                     base_path() . '/public/uploads/challenge/' . $fileName);
+//                $format = new CustomVideo();
+//                $video = $ffmpeg->open(base_path() . '/public/uploads/challenge/' . $this->fileNameTemp);
+//                $video->save($format, base_path() . '/public/uploads/challenge/' . $fileName);
             }
             else if($dimension->getHeight() > 500 || $dimension->getWidth() > 500){
 
@@ -94,14 +98,10 @@ class ProcessVideo extends Job implements ShouldQueue
             $useStandards = true;
 
             $format = new CustomVideo();
-
-            Log::info('before synchronize ----------------------');
             $video
                 ->filters()
                 ->resize($dimension, $mode, $useStandards)
                 ->synchronize();
-            Log::info('after synchronize ----------------------');
-
             $video->save($format, base_path() . '/public/uploads/challenge/' . $fileName);
             Log::info('after save ----------------------');
 
@@ -121,32 +121,9 @@ class ProcessVideo extends Job implements ShouldQueue
         Log::info('before reopen video');
         //open resized video
         $video = $ffmpeg->open(base_path() . '/public/uploads/challenge/' . $fileName);
-
-
-        Log::info('before frame');
-        $ffprobe = FFProbe::create();
-        $dimension = $ffprobe
-            ->streams(base_path() . '/public/uploads/challenge/' . $fileName) // extracts streams informations
-            ->videos()                      // filters video streams
-            ->first()                       // returns the first video stream
-            ->getDimensions();              // returns a FFMpeg\Coordinate\Dimension object
-
-        Log::info('width:'. $dimension->getWidth());
-        Log::info(' height:' . $dimension->getHeight());
-
         $video->frame(TimeCode::fromSeconds(1))
             ->save(base_path() . '/public/uploads/challenge/' . $this->fileNameNoExtension . '.jpg');
 
-//        if ($this->mimeType != 'video/mp4') {
-////                $ffmpeg->getFFMpegDriver()->listen(new \Alchemy\BinaryDriver\Listeners\DebugListener());
-////                $ffmpeg->getFFMpegDriver()->on('debug', function ($message) {
-////                    echo '......aaaa.....'.$message."\n";
-////                });
-//
-//            $fileName = $this->fileNameNoExtension . '.mp4';
-//            $format = new CustomVideo();
-//            $video->save($format, base_path() . '/public/uploads/challenge/' . $this->fileNameNoExtension . '.mp4');
-//        }
 
         $this->file->is_ready = true;
         $this->file->save();

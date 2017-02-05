@@ -46,7 +46,7 @@ class CustomVideo extends Video\DefaultVideo
      */
     public function getAvailableAudioCodecs()
     {
-        return array('aac', 'libvo_aacenc', 'libfaac', 'libmp3lame', 'libfdk_aac');
+        return array('libmp3lame');
     }
 
     /**
@@ -62,7 +62,7 @@ class CustomVideo extends Video\DefaultVideo
      */
     public function getPasses()
     {
-        return 2;
+        return 1;
     }
 
     /**

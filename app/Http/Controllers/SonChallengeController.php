@@ -3,6 +3,7 @@
 use App;
 use App\Jobs\ProcessVideo;
 use App\Model\Challenge;
+use App\Model\CustomFilterRotate;
 use App\Model\FileHio;
 use App\Model\LikedChallengeNotification;
 use App\Model\Notification;
@@ -19,13 +20,11 @@ use Log;
 use Auth;
 use Mail;
 use Storage;
-use App\Model\ChallengeUserAssociation;
 use App\Model\User;
 use App\Model\FileViews;
 use App\Model\FileLikes;
 use DateTime;
 use Facebook;
-use Facebook\FacebookRequest;
 use App\Http\Requests\FileFormRequest;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -34,11 +33,10 @@ use FFMpeg\Coordinate\TimeCode;
 use FFMpeg\Coordinate\Dimension;
 use FFMpeg\Format\Video;
 use App\Model\CustomVideo;
-use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Facades;
-use App\Model\Relationship;
 
-use App\Http\Traits\FriendTrait;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 
 class SonChallengeController extends Controller {
@@ -262,6 +260,162 @@ class SonChallengeController extends Controller {
             $this->dispatch(new ProcessVideo($file, $mimeType, $fileNameTemp, $fileNameNoExtension));
             return array('status' => "true", 'fileName' => $fileNameNoExtension . '.jpg', 'id' => $file->id);
         }
+    }
+
+    public function testVideo(){
+
+
+
+//  'ffmpeg.binaries' => 'D:/documents/laravel/ffmpeg/bin/ffmpeg.exe', // the path to the FFMpeg binary
+//        'ffprobe.binaries' => 'D:/documents/laravel/FFmpeg/bin/ffprobe.exe', // the path to the FFProbe binary
+        $ffmpeg = FFMpeg::create([
+            'ffmpeg.binaries' => '/usr/bin/ffmpeg', // the path to the FFMpeg binary
+            'ffprobe.binaries' => '/usr/bin/ffprobe', // the path to the FFProbe binary
+            'timeout' => 240, // the timeout for the underlying process
+            'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
+        ]);
+        $ffmpeg->getFFMpegDriver()->listen(new \Alchemy\BinaryDriver\Listeners\DebugListener());
+        $ffmpeg->getFFMpegDriver()->on('debug', function ($message) {
+            echo $message."<br>";
+        });
+//
+//        $video = $ffmpeg->open(base_path() . '/public/test/mov.mov');
+////        $video
+////            ->filters()
+////            ->resize(new Dimension(320, 240))
+////            ->synchronize();
+//
+//
+//
+//        $dimension = new \FFMpeg\Coordinate\Dimension(480, 320);
+//        $mode = \FFMpeg\Filters\Video\ResizeFilter::RESIZEMODE_INSET;
+//        $useStandards = true;
+//
+//
+//        Log::info('before synchronize ----------------------');
+//        $video
+//            ->filters()
+//            ->resize($dimension, $mode, $useStandards)
+//            ->synchronize();
+//
+//        $video
+//            ->frame(TimeCode::fromSeconds(10))
+//            ->save(base_path() .'/public/test/frame.jpg');
+//
+//
+//        $video
+//            ->save(new CustomVideo(), base_path() .'/public/test/export-x264.mp4');
+////            ->save(new \FFMpeg\Format\Video\WMV(), base_path() .'/public/test/export-wmv.wmv')
+////            ->save(new \FFMpeg\Format\Video\WebM(), base_path() .'/public/test/export-webm.webm');
+
+
+//        $process = new Process('D:/documents/laravel/ffmpeg/bin/ffmpeg.exe -i '.base_path() . '/public/test/mov.mov'.' '.base_path() .'/public/test/export-x264.mp4'.' -hide_banner');
+        //$process = new Process('D:/documents/laravel/ffmpeg/bin/ffmpeg.exe -i '.base_path() . '/public/test/mov.mov'.' -vf scale=480:320 -f mp4 -vcodec libx264 -preset fast -acodec aac '.base_path() .'/public/test/export-x264.mp4'.' -hide_banner');
+//        $process = new Process('D:/documents/laravel/ffmpeg/bin/ffmpeg.exe -i '.base_path() . '/public/test/mov.mov'.' -vf scale=480:320,setdar=16:9 -f mp4 -vcodec libx264 -preset fast -acodec aac '.base_path() .'/public/test/export-x264.mp4'.' -hide_banner');
+
+
+        set_time_limit(0);
+
+//        $filename = 'export-x264_mov_480_90_final.mp4';
+        $filename = 'mov.mov';
+
+        $video = $ffmpeg->open(base_path() . '/public/uploads/challenge/c7e66dda83ee39f40435efabc2aa1c1a.MOV');
+//        $video = $ffmpeg->open(base_path() . '/public/test/'.$filename);
+
+
+
+        $dimension = new \FFMpeg\Coordinate\Dimension(480,320);
+        $mode = \FFMpeg\Filters\Video\ResizeFilter::RESIZEMODE_INSET;
+        $useStandards = true;
+
+        $format = new CustomVideo();
+        $start = microtime(true);
+        Log::info('before synchronize ----------------------');
+        //->resize($dimension, $mode, $useStandards)
+
+//        $videostream = $ffmpeg->getFFProbe()
+//            ->streams(base_path() . '/public/test/'.$filename)
+//            ->videos()
+//            ->first();
+
+        $encode = true;
+//        echo '<br>-----has tags:'.$videostream->has('tags');
+//        if ($videostream->has('tags')) {
+//            $tags = $videostream->get('tags');
+//            if (isset($tags['rotate'])) {
+//                $rotate = $tags['rotate'];
+//                $rotate = 90;
+//                $video
+//                    ->filters()
+//                    ->resize($dimension, $mode, true);
+//                $video->addFilter(new CustomFilterRotate("-metadata:s:v:0",$rotate));
+//
+//
+//                $encode = false;
+//            }
+//
+//        }
+
+
+//        $video
+//            ->filters()
+//            ->resize($dimension, $mode, true);
+//            ->rotate(\FFMpeg\Filters\Video\RotateFilter::ROTATE_270);
+
+
+        $format->on('progress', function ($video, $format, $percentage) {
+            echo "$percentage % transcoded<<br>";
+        });
+        $video->save($format, base_path() . '/public/uploads/challenge/rex2.mp4');
+//        $video = $ffmpeg->open(base_path() . '/public/test/tmp1.mp4');
+//        $rotate = 90;
+//        $video->addFilter(new CustomFilterRotate("-metadata:s:v:0",$rotate));
+//        $video->save($format, base_path() . '/public/test/after_1_tmp.mp4');
+
+//        if($encode){
+//            $video
+//                ->filters()
+//                ->resize($dimension, $mode, false)
+//                ->addMetadata(["title" => "Some Title", "track" => 1]);
+//            ;
+//        }
+//-metadata:s:v:0 rotate=90
+
+
+
+
+// rotate : 90
+//        $name = 'export-x264_mov_480_9_1.mp4';
+//        $video->save($format, base_path() . '/public/test/'.$name);
+//
+//        $video = $ffmpeg->open(base_path() . '/public/test/'.$name);
+//        $video
+//            ->filters()
+////            ->rotate(\FFMpeg\Filters\Video\RotateFilter::ROTATE_270)
+//            ->resize($dimension, $mode, $useStandards)
+//
+//            ->synchronize();
+
+//        $video->save($format, base_path() . '/public/test/export-x264_mov_480_7_final.mp4');
+        $time_elapsed_secs = microtime(true) - $start;
+            echo 'took:' . $time_elapsed_secs . ' seconds ---------------------';
+
+//        $process = new Process('D:/documents/laravel/ffmpeg/bin/ffmpeg.exe -i '.base_path() . '/public/test/mov.mov'.' -vf scale="480:-1" -f mp4 -vcodec libx264 -preset fast -acodec aac '.base_path() .'/public/test/export-x264.mp4'.' -hide_banner');
+//
+//
+//        try {
+//            $start = microtime(true);
+//            $process->mustRun();
+//            $time_elapsed_secs = microtime(true) - $start;
+//            echo 'took:' . $time_elapsed_secs . ' seconds ---------------------';
+//            echo $process->getOutput();
+//        } catch (ProcessFailedException $e) {
+//            echo "falhou-----------------------";
+//            echo $e->getMessage();
+//        }
+
+
+        return "deu";
     }
 
     public function isProofReady($uuid, $file_id){
