@@ -82,6 +82,9 @@ class SonChallengeController extends Controller {
             ->select('users.name', 'files.*', 'challenges.title', 'challenges.uuid')
             ->first();
 
+        if($sonChallenge == null){
+            abort(404, 'Challenge has ended');
+        }
 
         $hasLiked = false;
         if (Auth::check() && $like = FileLikes::find( $file_id . Auth::user()->id)) {
@@ -110,6 +113,7 @@ class SonChallengeController extends Controller {
             $hmac = $this->dsq_hmacsha1($message . ' ' . $timestamp, env('DISQUS_SECRET_KEY'));
         }
 
+        //findOrFail
 
 //        return json_encode($sonChallenge);
         return view('challengeDetailSon')
@@ -251,6 +255,14 @@ class SonChallengeController extends Controller {
         ));
 
         $file->save();
+
+        if($challenge->creator_id != Auth::user()->id) {
+            $notificationManager = new NotificationManager();
+            //'recipient_id', 'sender_id', 'unread', 'type', 'parameters', 'reference_id',
+            $notification = new LikedChallengeNotification(['recipient_id' => $challenge->creator_id, 'sender_id' => Auth::user()->id, 'unread' => 1,
+                'type' => App\Model\Notification::TYPE_UPLOAD_CHALLENGE, 'parameters' => $challenge->title, 'reference_id' => $file->id]);
+            $notificationManager->add($notification);
+        }
 
 
         if ($type == 0) {

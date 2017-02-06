@@ -9,6 +9,7 @@ use App\Model\Notification;
 use Carbon\Carbon;
 use App\Model\NotificationManager;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -528,10 +529,10 @@ class HomeController extends Controller
 
 
         if (is_array($emails) || is_object($emails)) {
-            foreach ($emails as $email) {
-                if (is_numeric($email)) {
+            foreach ($emails as $userId) {
+                if (is_numeric($userId) && $userId != Auth::user()->id) {
 
-                    $notification = new Notification(['recipient_id' => $email, 'sender_id' => Auth::user()->id, 'unread' => 1,
+                    $notification = new Notification(['recipient_id' => $userId, 'sender_id' => Auth::user()->id, 'unread' => 1,
                         'type' => App\Model\Notification::TYPE_INVITE_CHALLENGE, 'parameters' => $challenge->title, 'reference_id' => $challenge->uuid]);
                     $notificationManager->add($notification);
 
@@ -872,12 +873,16 @@ class HomeController extends Controller
     public function latestChallenges()
     {
 
-        $now = Carbon::now();
-        $latest = DB::table('challenges')->where('closed', '=', 0)
-            ->where('deadLine', '>', $now)
-            ->where('public', '=', 1)
-            ->orderBy('deadLine', 'asc')
-            ->take(6)->get();
+        $latest = Cache::remember('latest-home', 15, function() {
+            $now = Carbon::now();
+            return DB::table('challenges')->where('closed', '=', 0)
+                ->where('deadLine', '>', $now)
+                ->where('public', '=', 1)
+                ->orderBy('deadLine', 'asc')
+                ->take(6)->get();
+        });
+
+
         return json_encode(view('partials.multi_challenge')->with('challenges', $latest)->render());
     }
 
@@ -885,12 +890,14 @@ class HomeController extends Controller
     public function mostViewed()
     {
 
-        $latest = DB::table('files')
-            ->join('challenges', 'challenges.id', '=', 'files.challenge_id')->where('challenges.public', '=', 1)
-            ->join('users', 'files.user_id', '=', 'users.id')
-            ->select('users.name', 'users.id', 'files.id', 'users.photo', 'files.*', 'challenges.title', 'challenges.uuid')
-            ->orderBy('views', 'desc')
-            ->take(3)->get();
+        $latest = Cache::remember('most-viewed-home', 15, function() {
+            return DB::table('files')
+                ->join('challenges', 'challenges.id', '=', 'files.challenge_id')->where('challenges.public', '=', 1)
+                ->join('users', 'files.user_id', '=', 'users.id')
+                ->select('users.name', 'users.id', 'files.id', 'users.photo', 'files.*', 'challenges.title', 'challenges.uuid')
+                ->orderBy('views', 'desc')
+                ->take(3)->get();
+        });
         return json_encode(view('partials.home_stats')->with('challenges', $latest)->render());
     }
 

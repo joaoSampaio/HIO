@@ -12,6 +12,7 @@ class Notification extends Model
     const TYPE_LIKED_CHALLENGE = 1;
     const TYPE_INVITE_CHALLENGE = 2;
     const TYPE_COMMENT_CHALLENGE = 3;
+    const TYPE_UPLOAD_CHALLENGE = 4;
 
     public static $timestamp = true;
     /**

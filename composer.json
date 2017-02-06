@@ -13,7 +13,8 @@
         "facebook/graph-sdk" : "~5.0",
         "php-ffmpeg/php-ffmpeg": "~0.5",
         "guzzlehttp/guzzle": "~5.3|~6.0",
-        "intervention/image": "^2.3"
+        "intervention/image": "^2.3",
+        "barryvdh/laravel-debugbar": "^2.3"
 
 
     },
