@@ -25,6 +25,9 @@ Route::group(['middleware' => ['web']], function () {
 
 //    Route::get('/fix', 'HomeController@fixPhotos');
 
+    Route::get('/testemail', 'HomeController@testemail');
+
+
     Route::get('friends/{id}/{name}', 'HomeController@getFriendsUser');
 
     Route::get('/user/photo/{id}', 'HomeController@getProfileImage');

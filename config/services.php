@@ -23,6 +23,10 @@ return [
         'secret' => env('MANDRILL_SECRET'),
     ],
 
+    'sparkpost' => [
+        'secret' => 'your-sparkpost-key',
+    ],
+
     'ses' => [
         'key'    => env('SES_KEY'),
         'secret' => env('SES_SECRET'),

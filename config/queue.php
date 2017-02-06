@@ -41,6 +41,26 @@ return [
             'queue'  => 'default',
             'expire' => 60,
         ],
+        'emails' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'emails',
+            'expire' => 60,
+        ],
+
+        'medium' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'medium',
+            'expire' => 60,
+        ],
+
+        'low' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'low',
+            'expire' => 600,
+        ],
 
         'beanstalkd' => [
             'driver' => 'beanstalkd',

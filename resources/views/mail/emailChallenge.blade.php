@@ -58,7 +58,7 @@
 <table cellpadding="0" cellspacing="0" align="center">
     <tr>
         <td class="column" width="600" colspan="2" align="center" valign="top">
-        	<img src="https://hiolegends.com/img/logo.png"/>
+        	<img src="https://hiolegends.com/img/logo.png" alt="HIO"/>
         </td>
     </tr>
     <tr>
@@ -79,17 +79,17 @@
   	<tr>
         <td class="column" width="600" colspan="2" align="center" valign="top" style="padding: 10px 20px 20px 20px; font-family: arial,sans-serif; font-size: 14px; line-height: 18px; color: #fff;">
 
-        @if($challenge->public === 1)
-            <a href="{{ action('HomeController@challengeDetail', $challenge->uuid) }}" class="checkChallengeButton">CHECK YOUR CHALLENGE</a>
+        @if($array['public'] === 1)
+            <a href="{{ action('HomeController@challengeDetail', $array['uuid']) }}" class="checkChallengeButton">CHECK YOUR CHALLENGE</a>
         @else
-            <a href="{{ action('HomeController@challengeDetail', [ 'uuid' => $challenge->uuid, 'secret'=>$challenge->secret]) }}" class="checkChallengeButton">CHECK YOUR CHALLENGE</a>
+            <a href="{{ action('HomeController@challengeDetail', [ 'uuid' => $array['uuid'], 'secret'=>$array['secret']]) }}" class="checkChallengeButton">CHECK YOUR CHALLENGE</a>
         @endif
         </td>
     </tr>
     <tr>
         <td class="column" width="600" colspan="2" align="center" valign="top" style="padding: 10px 20px 20px 20px; font-family: arial,sans-serif; font-size: 12px; line-height: 18px; color: #fff;">
         	<h2 style="border: 0;">REWARD</h2>            <p>
-                {{$challenge->reward}}
+                {{$array['reward']}}
             </p>
         </td>
     </tr>
@@ -97,7 +97,7 @@
         <td class="column" width="600" colspan="2" align="center" valign="top" style="padding: 10px 20px 20px 20px; font-family: arial,sans-serif; font-size: 12px; line-height: 18px; color: #fff;">
         	<h2 style="border: 0;">PENALTY</h2>
             <p>
-                {{$challenge->penalty}}
+                {{$array['penalty']}}
             </p>
         </td>
     </tr>

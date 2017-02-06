@@ -257,7 +257,7 @@ class SonChallengeController extends Controller {
             return array('status' => "true", 'fileName' => $fileName, 'id' => $file->id);
 
         } else {
-            $this->dispatch(new ProcessVideo($file, $mimeType, $fileNameTemp, $fileNameNoExtension));
+            $this->dispatch((new ProcessVideo($file, $mimeType, $fileNameTemp, $fileNameNoExtension))->onQueue('low'));
             return array('status' => "true", 'fileName' => $fileNameNoExtension . '.jpg', 'id' => $file->id);
         }
     }

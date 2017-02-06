@@ -13,11 +13,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Input;
 use Intervention\Image\Facades\Image;
 use Log;
 use Auth;
-use Mail;
+//use Mail;
 use Storage;
 use App\Model\ChallengeUserAssociation;
 use App\Model\User;
@@ -41,7 +42,8 @@ use App\Model\Relationship;
 use App\Http\Traits\FriendTrait;
 
 
-class HomeController extends Controller {
+class HomeController extends Controller
+{
 
     use FriendTrait;
 
@@ -56,7 +58,8 @@ class HomeController extends Controller {
     |
     */
 
-    private function getPageTotal(){
+    private function getPageTotal()
+    {
         return 6;
     }
 
@@ -84,8 +87,7 @@ class HomeController extends Controller {
     public function home()
     {
         //print_r(Auth::user());
-        if (Auth::user())
-        {
+        if (Auth::user()) {
             // Auth::user() returns an instance of the authenticated user...
             $authUser = Auth::user();
 
@@ -100,15 +102,16 @@ class HomeController extends Controller {
         return view('contact');
     }
 
-    public function storeContact(Request $request) {
+    public function storeContact(Request $request)
+    {
 
         $name = $request->input('name');
         $email = $request->input('email');
         $message = $request->input('message');
 
-        try{
+        try {
             $this->sendContactEmail($name, $email, $message);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
 
         }
         return view('contact')->with('message', 'Thanks for contacting us!');
@@ -181,7 +184,7 @@ class HomeController extends Controller {
 
 
         $canBeFriend = false;
-        if(Auth::check() && Auth::user()->id != $idUser){
+        if (Auth::check() && Auth::user()->id != $idUser) {
             $canBeFriend = $this->canBeFriend($idUser);
         }
 
@@ -200,8 +203,8 @@ class HomeController extends Controller {
     }
 
 
-
-    public function getUserEndedChallenges($id){
+    public function getUserEndedChallenges($id)
+    {
 
         $idUser = $id;
         $user = null;
@@ -210,9 +213,9 @@ class HomeController extends Controller {
             $idUser = Auth::user()->id;
             $showPrivate = true;
 
-        }else if ($user = User::where('id', $id)->first()) {
+        } else if ($user = User::where('id', $id)->first()) {
 
-        }else{
+        } else {
             //rever user nao existe
             return view('home')->with('authUser', "");
         }
@@ -231,11 +234,12 @@ class HomeController extends Controller {
             ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ended', $page = null);
 
 
-        return json_encode(view('partials.challenge')->with('challenges',$endedChallenges)->render());
+        return json_encode(view('partials.challenge')->with('challenges', $endedChallenges)->render());
     }
 
 
-    public function getUserCreatedChallenges($id){
+    public function getUserCreatedChallenges($id)
+    {
 
         $idUser = $id;
         $user = null;
@@ -245,9 +249,9 @@ class HomeController extends Controller {
             $idUser = Auth::user()->id;
             $showPrivate = true;
 
-        }else if ($user = User::where('id', $id)->first()) {
+        } else if ($user = User::where('id', $id)->first()) {
             $found = true;
-        }else{
+        } else {
             //rever user nao existe
             return view('home')->with('authUser', "");
         }
@@ -262,12 +266,12 @@ class HomeController extends Controller {
             ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'myChallenges', $page = null);
 
 
-        return json_encode(view('partials.challenge')->with('challenges',$myChallenges)->render());
+        return json_encode(view('partials.challenge')->with('challenges', $myChallenges)->render());
     }
 
 
-
-    public function getUserOngoingChallenges($id){
+    public function getUserOngoingChallenges($id)
+    {
 
         $idUser = $id;
         $user = null;
@@ -277,9 +281,9 @@ class HomeController extends Controller {
             $idUser = Auth::user()->id;
             $showPrivate = true;
 
-        }else if ($user = User::where('id', $id)->first()) {
+        } else if ($user = User::where('id', $id)->first()) {
             $found = true;
-        }else{
+        } else {
             //rever user nao existe
             return view('home')->with('authUser', "");
         }
@@ -291,14 +295,13 @@ class HomeController extends Controller {
                 return $query->where('challenges.public', '=', 1);
             })
             ->where('closed', '=', 0)
-            ->where('deadLine', '>' , $now)
+            ->where('deadLine', '>', $now)
             ->orderBy('deadLine', 'asc')
             ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ongoing', $page = null);
 
 
-        return json_encode(view('partials.challenge')->with('challenges',$ongoingChallenges)->render());
+        return json_encode(view('partials.challenge')->with('challenges', $ongoingChallenges)->render());
     }
-
 
 
     public function editProfile()
@@ -306,7 +309,8 @@ class HomeController extends Controller {
         return view('edit_profile');
     }
 
-    public function fixPhotos(){
+    public function fixPhotos()
+    {
 //        $files = File::allFiles('uploads/users/');
 //        foreach ($files as $fileName)
 //        {
@@ -316,8 +320,7 @@ class HomeController extends Controller {
 //        }
 
         $files = File::allFiles('img/categories_thumb/');
-        foreach ($files as $fileName)
-        {
+        foreach ($files as $fileName) {
             $image = Image::make(sprintf('%s', $fileName))->fit(200)->save();
 //            $info = pathinfo($fileName);
 //            echo $info["filename"], "<br>";
@@ -342,7 +345,7 @@ class HomeController extends Controller {
 
             $type = 0;
             $mimeType = $request->file('file')->getMimeType();
-            if(substr($mimeType, 0, 5) == 'image') {
+            if (substr($mimeType, 0, 5) == 'image') {
                 // this is an image
 
 //                $request->file('file')->move(
@@ -359,20 +362,15 @@ class HomeController extends Controller {
                 $user->photo = $fileName;
 
 
-
-
-
-
             }
         }
 
 
-
         $user->about = $request->input('about');
 
-        if(!empty($request->input('sports'))){
-            $user->sports = implode (",", $request->input('sports'));
-        }else{
+        if (!empty($request->input('sports'))) {
+            $user->sports = implode(",", $request->input('sports'));
+        } else {
             $user->sports = "";
         }
 
@@ -386,44 +384,44 @@ class HomeController extends Controller {
         return redirect()->action('HomeController@userProfile', 'me');
     }
 
-    public function createChallenge($userFB = null){
+    public function createChallenge($userFB = null)
+    {
         //$uuid = Uuid::uuid4();
 
         $category = [
-            ''=>'Choose your Sport',
-            'Awesome Stuff'=>'Awesome Stuff',
-            'Basketball'=>'Basketball',
-            'Bodyboard'=>'Bodyboard',
-            'Boxe'=>'Boxe',
-            'Cycling'=>'Cycling',
-            'Fitness'=>'Fitness',
-            'Football'=>'Football',
-            'Golf'=>'Golf',
-            'Gym'=>'Gym',
-            'Gymnastics'=>'Gymnastics',
-            'Hockey'=>'Hockey',
-            'Jiu-Jitsu'=>'Jiu-Jitsu',
-            'Judo'=>'Judo',
-            'Karate'=>'Karate',
-            'Kickboxing'=>'Kickboxing',
-            'MMA'=>'MMA',
-            'Muay Thai'=>'Muay Thai',
-            'Rugby'=>'Rugby',
-            'Running'=>'Running',
-            'Snow Sports'=>'Snow Sports',
-            'Surf'=>'Surf',
-            'Swimming'=>'Swimming',
-            'Taekwondo'=>'Taekwondo',
-            'Tennis'=>'Tennis',
-            'Trail'=>'Trail',
-            'Volleyball'=>'Volleyball',
-
+            '' => 'Choose your Sport',
+            'Awesome Stuff' => 'Awesome Stuff',
+            'Basketball' => 'Basketball',
+            'Bodyboard' => 'Bodyboard',
+            'Boxe' => 'Boxe',
+            'Cycling' => 'Cycling',
+            'Fitness' => 'Fitness',
+            'Football' => 'Football',
+            'Golf' => 'Golf',
+            'Gym' => 'Gym',
+            'Gymnastics' => 'Gymnastics',
+            'Hockey' => 'Hockey',
+            'Jiu-Jitsu' => 'Jiu-Jitsu',
+            'Judo' => 'Judo',
+            'Karate' => 'Karate',
+            'Kickboxing' => 'Kickboxing',
+            'MMA' => 'MMA',
+            'Muay Thai' => 'Muay Thai',
+            'Rugby' => 'Rugby',
+            'Running' => 'Running',
+            'Snow Sports' => 'Snow Sports',
+            'Surf' => 'Surf',
+            'Swimming' => 'Swimming',
+            'Taekwondo' => 'Taekwondo',
+            'Tennis' => 'Tennis',
+            'Trail' => 'Trail',
+            'Volleyball' => 'Volleyball',
 
 
         ];
-        if($userFB != null && $targetUser = User::where('id', $userFB)->first()){
+        if ($userFB != null && $targetUser = User::where('id', $userFB)->first()) {
             return View('createChallenge')->with('category', $category)->with('targetUser', $targetUser);
-        }else{
+        } else {
             return View('createChallenge')->with('category', $category);
         }
 
@@ -445,7 +443,7 @@ class HomeController extends Controller {
 
         $emailsToSend = array();
         $emailsToSendString = array();
-        $emails =  $request->input('emailFriend');
+        $emails = $request->input('emailFriend');
 //        print_r($emails);
         $challengeMyself = false;
         $total = 0;
@@ -474,10 +472,8 @@ class HomeController extends Controller {
 //        print_r($emailsToSend);
 
 
-
-
-        if(Auth::user()->role == "brand" && $request->input('sendall', false)){
-            foreach( $this->getAllFriends(Auth::user()->id) as $user){
+        if (Auth::user()->role == "brand" && $request->input('sendall', false)) {
+            foreach ($this->getAllFriends(Auth::user()->id) as $user) {
                 $total++;
                 array_push($emailsToSend, $user);
             }
@@ -495,25 +491,24 @@ class HomeController extends Controller {
         $deadLine = $request->input('deadLine');
         $public = $request->input('public', false);
 
-        if($public){
+        if ($public) {
             $public = 1;
-        }
-        else{
+        } else {
             $public = 0;
         }
         $uuid = Uuid::uuid4();
         $secret = 0;
         //se for privado
-        if($public === 0){
-            $secret = mt_rand(1000000,9999999);
+        if ($public === 0) {
+            $secret = mt_rand(1000000, 9999999);
         }
 
         $achievements = Auth::user()->achievements;
-        if($achievements == NULL){
+        if ($achievements == NULL) {
             $achievements = array('1create' => 1);
             Auth::user()->achievements = json_encode($achievements);
             Auth::user()->save();
-        }else{
+        } else {
             $achievements = json_decode($achievements, true);
             if (!array_key_exists('1create', $achievements)) {
                 $achievements['1create'] = 1;
@@ -524,10 +519,10 @@ class HomeController extends Controller {
 
         $challenge = new Challenge(['title' => $title, 'creator_id' => $creator_id, 'rank' => $rank,
             'description' => $description, 'category' => $category, 'reward' => $reward, 'penalty' => $penalty,
-            'deadLine' => $deadLine, 'uuid' => $uuid,'public' => $public,'secret' => $secret,]);
-        if($challengeMyself){
+            'deadLine' => $deadLine, 'uuid' => $uuid, 'public' => $public, 'secret' => $secret,]);
+        if ($challengeMyself) {
             Auth::user()->challenges()->save($challenge);
-        }else{
+        } else {
             $challenge->save();
         }
 
@@ -536,16 +531,13 @@ class HomeController extends Controller {
             foreach ($emails as $email) {
                 if (is_numeric($email)) {
 
-                    $notification = new Notification(['recipient_id' =>  $email, 'sender_id' => Auth::user()->id, 'unread' => 1,
+                    $notification = new Notification(['recipient_id' => $email, 'sender_id' => Auth::user()->id, 'unread' => 1,
                         'type' => App\Model\Notification::TYPE_INVITE_CHALLENGE, 'parameters' => $challenge->title, 'reference_id' => $challenge->uuid]);
                     $notificationManager->add($notification);
 
                 }
             }
         }
-
-
-
 
 
         //send post to facebook
@@ -555,14 +547,14 @@ class HomeController extends Controller {
             $this->sendLinkToFacebook($link, $description);
         }
 
-        if(($challengeMyself && $total > 1) || !$challengeMyself){
+        if (($challengeMyself && $total > 1) || !$challengeMyself) {
             $this->sendEmail($challenge, $emailsToSend, $total);
         }
 
 
         $this->sendEmailString($challenge, $emailsToSendString, $total);
 //        echo "...".json_encode($emailsToSend);
-        \Session::flash('challengeCreated','true');
+        \Session::flash('challengeCreated', 'true');
 
         return redirect()->action('HomeController@userProfile', 'me')->with(['challengeCreated' => 'true']);
     }
@@ -658,9 +650,10 @@ class HomeController extends Controller {
 //        return $vote;
 //    }
 
-    private function isUserInChallenge($challenge){
+    private function isUserInChallenge($challenge)
+    {
         $user = $challenge->users()->where('user_id', Auth::user()->id)->first();
-        return ($user)? true : false;
+        return ($user) ? true : false;
     }
 
 
@@ -673,16 +666,16 @@ class HomeController extends Controller {
             $isValid = !$challenge->isClosed();
 
             $isPublic = false;
-            if($challenge->public == 0){
-                if($secret != null && $challenge->secret == $secret || $challenge->creator_id == Auth::user()->id){
+            if ($challenge->public == 0) {
+                if ($secret != null && $challenge->secret == $secret || $challenge->creator_id == Auth::user()->id) {
                     $isPublic = true;
                 }
-            }else{
+            } else {
                 $isPublic = true;
             }
 
             $participating = false;
-            if(Auth::check()){
+            if (Auth::check()) {
                 $participating = $this->isUserInChallenge($challenge);
             }
 //            $countVotes = $this->getVoteCount($challenge);
@@ -693,54 +686,55 @@ class HomeController extends Controller {
 
             $sonChallenges = $this->getHelperPaginatorSon($challenge->id, $participating, $isValid);
 
-            if($isPublic == 1 || $participating) {
+            if ($isPublic == 1 || $participating) {
                 return view('challengeDetail')->with('challenge', $challenge)->with('isValid', $isValid)
                     ->with('participating', $participating)
                     ->with('creator', $creator)->with('peopleParticipating', $peopleParticipating)
                     ->with('sonChallenges', $sonChallenges);
-            }else{
+            } else {
 
                 return view('challengeDetail')->with('isPublic', $isPublic);
             }
 
-        }else{
+        } else {
             abort(404);
             return view('challengeDetail')->with('error', $uuid);
         }
     }
 
-    private function getHelperPaginatorSon($id, $participating, $isValid){
+    private function getHelperPaginatorSon($id, $participating, $isValid)
+    {
         $initialQuantity = 3;
         $loadMore = 4;
 
-        if((!$participating && $isValid) || !$isValid){
+        if ((!$participating && $isValid) || !$isValid) {
             $initialQuantity = 4;
         }
 
-        $page = (int) Paginator::resolveCurrentPage();
+        $page = (int)Paginator::resolveCurrentPage();
         $perPage = ($page == 1) ? $initialQuantity : $loadMore;
         $skip = ($page == 1) ? 0 : ($initialQuantity + ($loadMore * ($page - 2)));
         // Get a full collection to be able to calculate the full total all the time
-        $total =  DB::table('files')->where('challenge_id', $id)
+        $total = DB::table('files')->where('challenge_id', $id)
             ->join('users', 'files.user_id', '=', 'users.id')
             ->join('challenges', 'files.challenge_id', '=', 'challenges.id')
-            ->select( 'users.name', 'files.*', 'challenges.title', 'challenges.uuid')->count();
+            ->select('users.name', 'files.*', 'challenges.title', 'challenges.uuid')->count();
         // Get the correct results
 
 
-        if(Auth::check() ){
+        if (Auth::check()) {
             //ordenar pelos proprios
 
             $myModelResults = DB::table('files')->where('challenge_id', $id)->where('user_id', Auth::user()->id)
                 ->join('users', 'files.user_id', '=', 'users.id')
                 ->join('challenges', 'files.challenge_id', '=', 'challenges.id')
-                ->select( 'users.name', 'files.*', 'challenges.title', 'challenges.uuid')->get();
+                ->select('users.name', 'files.*', 'challenges.title', 'challenges.uuid')->get();
 
 //            $othersModelResults = DB::table('files')->where('challenge_id', $id)->where('user_id','!=', Auth::user()->id)->get();
-            $othersModelResults = DB::table('files')->where('challenge_id', $id)->where('user_id','!=', Auth::user()->id)
+            $othersModelResults = DB::table('files')->where('challenge_id', $id)->where('user_id', '!=', Auth::user()->id)
                 ->join('users', 'files.user_id', '=', 'users.id')
                 ->join('challenges', 'files.challenge_id', '=', 'challenges.id')
-                ->select( 'users.name', 'files.*', 'challenges.title', 'challenges.uuid')->get();
+                ->select('users.name', 'files.*', 'challenges.title', 'challenges.uuid')->get();
 
 //            echo "myModelResults->".count($myModelResults)."<br>";
 //            echo "othersModelResults->".count($othersModelResults)."<br>";
@@ -749,17 +743,16 @@ class HomeController extends Controller {
 //            echo "modelResults->".count($modelResults)."<br>";
 //            echo json_encode($othersModelResults);
 
-        }else{
+        } else {
             $modelResults = DB::table('files')->where('challenge_id', $id)
                 ->join('users', 'files.user_id', '=', 'users.id')
                 ->join('challenges', 'files.challenge_id', '=', 'challenges.id')
-                ->select( 'users.name', 'files.*', 'challenges.title', 'challenges.uuid')->skip($skip)->take($perPage)->get();
+                ->select('users.name', 'files.*', 'challenges.title', 'challenges.uuid')->skip($skip)->take($perPage)->get();
         }
 
 
-
-        $total = $total +1;
-        if($participating && $isValid && $page == 1) {
+        $total = $total + 1;
+        if ($participating && $isValid && $page == 1) {
             $copia = new \stdClass;
             $copia->id = -1;
             array_unshift($modelResults, $copia);
@@ -770,11 +763,12 @@ class HomeController extends Controller {
         return new LengthAwarePaginator($modelResults, $total, $perPage);
     }
 
-    public function getSonChallenges($id){
+    public function getSonChallenges($id)
+    {
 
         $participating = false;
 
-        if(Auth::check()){
+        if (Auth::check()) {
             if ($challenge = ChallengeUserAssociation::where('challenge_id', $id)->where('user_id', Auth::user()->id)->first()) {
                 $participating = true;
             }
@@ -810,14 +804,14 @@ class HomeController extends Controller {
                 foreach ($sonChallenges as $sonChallenge) {
                     if ($user = User::where('id', $sonChallenge->user_id)->first()) {
                         $achievements = $user->achievements;
-                        if($achievements == NULL){
+                        if ($achievements == NULL) {
                             $achievements = array('totalCompleted' => 1);
-                        }else{
+                        } else {
                             $achievements = json_decode($achievements, true);
                             if (!array_key_exists('totalCompleted', $achievements)) {
                                 $achievements['totalCompleted'] = 1;
-                            }else{
-                                $achievements['totalCompleted'] = $achievements['totalCompleted']+1;
+                            } else {
+                                $achievements['totalCompleted'] = $achievements['totalCompleted'] + 1;
                             }
                         }
                         Auth::user()->achievements = json_encode($achievements);
@@ -830,84 +824,88 @@ class HomeController extends Controller {
         return redirect()->action('HomeController@challengeDetail', $uuid);
     }
 
-    public function editChallenge($uuid){
+    public function editChallenge($uuid)
+    {
         $error = '';
         if ($challenge = Challenge::where('uuid', $uuid)->first()) {
             $now = new DateTime();
             $deadLine = new DateTime($challenge->deadLine);
             $isValid = $now < $deadLine;
 
-            if($challenge->creator_id != Auth::user()->id){
+            if ($challenge->creator_id != Auth::user()->id) {
                 $error = 'Not authorized';
-            }elseif($challenge->closed){
+            } elseif ($challenge->closed) {
                 $error = 'Challenge is closed!';
-            }elseif(!$isValid){
+            } elseif (!$isValid) {
                 $error = 'Time is over!';
-            }else{
+            } else {
                 return view('editChallenge')->with('challenge', $challenge);
             }
-        }else{
+        } else {
             $error = 'Challenge not found!';
         }
         return view('editChallenge')->with('error', $error);
     }
 
-    public function editStoreChallenge($uuid, Request $request){
+    public function editStoreChallenge($uuid, Request $request)
+    {
         $error = '';
         if ($challenge = Challenge::where('uuid', $uuid)->first()) {
 
-            if($challenge->creator_id != Auth::user()->id){
+            if ($challenge->creator_id != Auth::user()->id) {
                 $error = 'Not authorized';
-            }elseif($challenge->closed){
+            } elseif ($challenge->closed) {
                 $error = 'Challenge is closed!';
-            }else{
+            } else {
 //                $challenge->deadLine = $request->input('deadLine');
-                $challenge->description =  $request->input('description');
+                $challenge->description = $request->input('description');
                 $challenge->save();
                 return redirect()->action('HomeController@challengeDetail', $uuid);
             }
-        }else{
+        } else {
             $error = 'Challenge not found!';
         }
         return view('editChallenge')->with('error', $error);
     }
 
 
-    public function latestChallenges(){
+    public function latestChallenges()
+    {
 
         $now = Carbon::now();
         $latest = DB::table('challenges')->where('closed', '=', 0)
-            ->where('deadLine', '>' , $now)
-            ->where('public', '=' , 1)
+            ->where('deadLine', '>', $now)
+            ->where('public', '=', 1)
             ->orderBy('deadLine', 'asc')
             ->take(6)->get();
-        return json_encode(view('partials.multi_challenge')->with('challenges',$latest)->render());
+        return json_encode(view('partials.multi_challenge')->with('challenges', $latest)->render());
     }
 
 
-    public function mostViewed(){
+    public function mostViewed()
+    {
 
         $latest = DB::table('files')
-            ->join('challenges', 'challenges.id', '=', 'files.challenge_id')->where('challenges.public', '=' , 1)
+            ->join('challenges', 'challenges.id', '=', 'files.challenge_id')->where('challenges.public', '=', 1)
             ->join('users', 'files.user_id', '=', 'users.id')
-            ->select('users.name','users.id', 'files.id', 'users.photo', 'files.*', 'challenges.title', 'challenges.uuid')
+            ->select('users.name', 'users.id', 'files.id', 'users.photo', 'files.*', 'challenges.title', 'challenges.uuid')
             ->orderBy('views', 'desc')
             ->take(3)->get();
-        return json_encode(view('partials.home_stats')->with('challenges',$latest)->render());
+        return json_encode(view('partials.home_stats')->with('challenges', $latest)->render());
     }
 
-    public function mostParticipants(){
+    public function mostParticipants()
+    {
         $mostParticipants = DB::table('challenge_user')
-            ->join('challenges', 'challenges.id', '=', 'challenge_id')->where('challenges.public', '=' , 1)
+            ->join('challenges', 'challenges.id', '=', 'challenge_id')->where('challenges.public', '=', 1)
             ->join('users', 'challenge_user.user_id', '=', 'users.id')
-            ->select('challenge_id', 'challenges.title', 'challenges.category', 'challenges.uuid','challenges.id AS user_id','users.name', DB::raw('count(*) as total'))
+            ->select('challenge_id', 'challenges.title', 'challenges.category', 'challenges.uuid', 'challenges.id AS user_id', 'users.name', DB::raw('count(*) as total'))
             ->groupBy('challenge_id')
             ->orderBy('total', 'desc')
             ->take(3)->get();
 
-        return json_encode(view('partials.home_participants')->with('challenges',$mostParticipants)->render());
+        return json_encode(view('partials.home_participants')->with('challenges', $mostParticipants)->render());
     }
-
 
 
     public function showChallenges($category = null)
@@ -921,19 +919,18 @@ class HomeController extends Controller {
                     ->orWhere('deadLine', '<', $now);
             })
             ->when($category, function ($query) use ($category) {
-                return $query->where('category','like' , $category);
+                return $query->where('category', 'like', $category);
             })
-            ->where('public', '=' , 1)
+            ->where('public', '=', 1)
             ->orderBy('deadLine', 'desc')
             ->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ended', $page = null);
 
 
-
         $ongoingChallenges = DB::table('challenges')->where('closed', '=', 0)
-            ->where('deadLine', '>' , $now)
-            ->where('public', '=' , 1)
+            ->where('deadLine', '>', $now)
+            ->where('public', '=', 1)
             ->when($category, function ($query) use ($category) {
-                return $query->where('category','like' , $category);
+                return $query->where('category', 'like', $category);
             })
             ->orderBy('deadLine', 'asc')
             ->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ongoing', $page = null);
@@ -946,25 +943,27 @@ class HomeController extends Controller {
     }
 
 
-    public function getOngoingChallenges(){
+    public function getOngoingChallenges()
+    {
 
         $now = Carbon::now();
         $category = \Illuminate\Support\Facades\Input::get('category');
         $ongoingChallenges = Challenge::where('closed', '=', 0)
             ->when($category, function ($query) use ($category) {
-                return $query->where('category','like' , $category);
+                return $query->where('category', 'like', $category);
             })
-            ->where('deadLine', '>' , $now)
-            ->where('public', '=' , 1)
+            ->where('deadLine', '>', $now)
+            ->where('public', '=', 1)
             ->orderBy('deadLine', 'asc')
             ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ongoing', $page = null);
 
 
-        return json_encode(view('partials.challenge')->with('challenges',$ongoingChallenges)->render());
+        return json_encode(view('partials.challenge')->with('challenges', $ongoingChallenges)->render());
 
     }
 
-    public function getEndedChallenges(){
+    public function getEndedChallenges()
+    {
 
         $now = Carbon::now();
         $category = \Illuminate\Support\Facades\Input::get('category');
@@ -974,19 +973,20 @@ class HomeController extends Controller {
                 ->orWhere('deadLine', '<', $now);
         })
             ->when($category, function ($query) use ($category) {
-                return $query->where('category','like' , $category);
+                return $query->where('category', 'like', $category);
             })
-            ->where('public', '=' , 1)
+            ->where('public', '=', 1)
             ->orderBy('deadLine', 'desc')
             ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ended', $page = null);
 
 
-        return json_encode(view('partials.challenge')->with('challenges',$endedChallenges)->render());
+        return json_encode(view('partials.challenge')->with('challenges', $endedChallenges)->render());
 
     }
 
 
-    public function sendLinkToFacebook($link, $message){
+    public function sendLinkToFacebook($link, $message)
+    {
         $fb = new Facebook\Facebook([
             'app_id' => '948239501878979',
             'app_secret' => 'c48d7b6ef2d379c1dc9218863a394d20',
@@ -1007,10 +1007,10 @@ class HomeController extends Controller {
             $graphNode = $response->getGraphNode();
 
             echo 'Posted with id: ' . $graphNode['id'];
-        } catch(Facebook\Exceptions\FacebookResponseException $e) {
+        } catch (Facebook\Exceptions\FacebookResponseException $e) {
             echo 'Graph returned an error: ' . $e->getMessage();
 //            exit;
-        } catch(Facebook\Exceptions\FacebookSDKException $e) {
+        } catch (Facebook\Exceptions\FacebookSDKException $e) {
             echo 'Facebook SDK returned an error: ' . $e->getMessage();
 //            exit;
         }
@@ -1019,12 +1019,13 @@ class HomeController extends Controller {
     }
 
 
-    public function listFriends(){
+    public function listFriends()
+    {
 
         $user = Auth::user();
         $friends = $user->friends;
         $friends = json_decode($friends, true);
-        if(!is_array($friends)){
+        if (!is_array($friends)) {
             $friends = array();
         }
 
@@ -1033,17 +1034,16 @@ class HomeController extends Controller {
     }
 
 
-
-
-    public function teste(){
+    public function teste()
+    {
 
         $now = new DateTime();
-        Challenge::where('closed', '=', 0)->chunk(100, function($ongoingChallenges) use ($now) {
+        Challenge::where('closed', '=', 0)->chunk(100, function ($ongoingChallenges) use ($now) {
             foreach ($ongoingChallenges as $challenge) {
                 //
                 $deadLine = new DateTime($challenge->deadLine);
                 $isValid = $now < $deadLine;
-                if(!$isValid){
+                if (!$isValid) {
                     //we end challenge
                     $challenge->closed = true;
                     $challenge->save();
@@ -1056,14 +1056,14 @@ class HomeController extends Controller {
                     foreach ($sonChallenges as $sonChallenge) {
                         if ($user = User::where('id', $sonChallenge->user_id)->first()) {
                             $achievements = $user->achievements;
-                            if($achievements == NULL){
+                            if ($achievements == NULL) {
                                 $achievements = array('totalCompleted' => 1);
-                            }else{
+                            } else {
                                 $achievements = json_decode($achievements, true);
                                 if (!array_key_exists('totalCompleted', $achievements)) {
                                     $achievements['totalCompleted'] = 1;
-                                }else{
-                                    $achievements['totalCompleted'] = $achievements['totalCompleted']+1;
+                                } else {
+                                    $achievements['totalCompleted'] = $achievements['totalCompleted'] + 1;
                                 }
                             }
                             $user->achievements = json_encode($achievements);
@@ -1076,30 +1076,31 @@ class HomeController extends Controller {
     }
 
 
-    public function sendFriendAction(){
+    public function sendFriendAction()
+    {
         $friendId = \Illuminate\Support\Facades\Input::get('friendId');
         $action = \Illuminate\Support\Facades\Input::get('action');
-        if($action == 0){
+        if ($action == 0) {
 //            Auth::user()->befriend(User::find($friendId));
             $this->befriendWithId($friendId);
 
             $notificationManager = new NotificationManager();
             //'recipient_id', 'sender_id', 'unread', 'type', 'parameters', 'reference_id',
-            $notification = new LikedChallengeNotification(['recipient_id' =>  $friendId, 'sender_id' => Auth::user()->id, 'unread' => 1,
+            $notification = new LikedChallengeNotification(['recipient_id' => $friendId, 'sender_id' => Auth::user()->id, 'unread' => 1,
                 'type' => App\Model\Notification::TYPE_RELATIONSHIP_INVITE, 'parameters' => "", 'reference_id' => 0]);
             $notificationManager->add($notification);
 
-        }else if($action == 1){
+        } else if ($action == 1) {
             $this->acceptFriendRequest($friendId);
-        }else if($action == 2){
+        } else if ($action == 2) {
             $this->declineFriendRequest($friendId);
-        }else if($action == 3) {
+        } else if ($action == 3) {
             $this->block($friendId);
-        }else if($action == 4){
-                $this->unblockFriend($friendId);
-        }else if($action == 5){
+        } else if ($action == 4) {
+            $this->unblockFriend($friendId);
+        } else if ($action == 5) {
             $this->cancelFriendRequest($friendId);
-        }else if($action == 6){
+        } else if ($action == 6) {
             $this->unfriend($friendId);
         }
 
@@ -1107,7 +1108,8 @@ class HomeController extends Controller {
     }
 
 
-    public function getFriendsUser($id, $name){
+    public function getFriendsUser($id, $name)
+    {
 
         $friends = $this->getAllFriends($id, NULL, 10);
         return view('friendsUser')
@@ -1130,13 +1132,14 @@ class HomeController extends Controller {
             ->with('blockedFriends', $blockedFriends);
     }
 
-    public function searchUsers(Request $request){
+    public function searchUsers(Request $request)
+    {
         $search = $request->input('q');
 
         $search = strtolower($search);
-        if(($search == "me" || str_contains(strtolower (Auth::user()->name), $search))&& Auth::check()  ){
+        if (($search == "me" || str_contains(strtolower(Auth::user()->name), $search)) && Auth::check()) {
             $queryUsers = DB::table('users')
-                ->where('name', 'like', '%'.$search.'%')
+                ->where('name', 'like', '%' . $search . '%')
                 ->select('name', 'id', 'photo');
 
             $queryUser = DB::table('users')
@@ -1145,61 +1148,61 @@ class HomeController extends Controller {
                 ->union($queryUsers)
                 ->get();
             $users = $queryUser;
-        }else{
+        } else {
             $users = DB::table('users')
-                ->where('name', 'like', '%'.$search.'%')
+                ->where('name', 'like', '%' . $search . '%')
                 ->select('name', 'id', 'photo')
                 ->get();
         }
         return json_encode($users);
     }
 
-    public function searchFriend(Request $request){
+    public function searchFriend(Request $request)
+    {
         $q = $request->input('q');
         return json_encode($this->getAllFriends(Auth::user()->id, $q));
     }
 
-    public function search(Request $request){
+    public function search(Request $request)
+    {
         $search = $request->input('q');
 
 
         $category = [
-            'Awesome Stuff'=>'Awesome Stuff',
-            'Basketball'=>'Basketball',
-            'Bodyboard'=>'Bodyboard',
-            'Boxe'=>'Boxe',
-            'Cycling'=>'Cycling',
-            'Fitness'=>'Fitness',
-            'Football'=>'Football',
-            'Golf'=>'Golf',
-            'Gym'=>'Gym',
-            'Gymnastics'=>'Gymnastics',
-            'Hockey'=>'Hockey',
-            'Jiu-Jitsu'=>'Jiu-Jitsu',
-            'Judo'=>'Judo',
-            'Karate'=>'Karate',
-            'Kickboxing'=>'Kickboxing',
-            'MMA'=>'MMA',
-            'Muay Thai'=>'Muay Thai',
-            'Rugby'=>'Rugby',
-            'Running'=>'Running',
-            'Snow Sports'=>'Snow Sports',
-            'Surf'=>'Surf',
-            'Swimming'=>'Swimming',
-            'Taekwondo'=>'Taekwondo',
-            'Tennis'=>'Tennis',
-            'Trail'=>'Trail',
-            'Volleyball'=>'Volleyball',
+            'Awesome Stuff' => 'Awesome Stuff',
+            'Basketball' => 'Basketball',
+            'Bodyboard' => 'Bodyboard',
+            'Boxe' => 'Boxe',
+            'Cycling' => 'Cycling',
+            'Fitness' => 'Fitness',
+            'Football' => 'Football',
+            'Golf' => 'Golf',
+            'Gym' => 'Gym',
+            'Gymnastics' => 'Gymnastics',
+            'Hockey' => 'Hockey',
+            'Jiu-Jitsu' => 'Jiu-Jitsu',
+            'Judo' => 'Judo',
+            'Karate' => 'Karate',
+            'Kickboxing' => 'Kickboxing',
+            'MMA' => 'MMA',
+            'Muay Thai' => 'Muay Thai',
+            'Rugby' => 'Rugby',
+            'Running' => 'Running',
+            'Snow Sports' => 'Snow Sports',
+            'Surf' => 'Surf',
+            'Swimming' => 'Swimming',
+            'Taekwondo' => 'Taekwondo',
+            'Tennis' => 'Tennis',
+            'Trail' => 'Trail',
+            'Volleyball' => 'Volleyball',
         ];
 
 
+        $queryUsers = DB::table('users')->where('name', 'like', '%' . $search . '%')
+            ->select(['name', 'id', 'photo as image', DB::raw('0 as type')]);
 
-
-        $queryUsers = DB::table('users')->where('name', 'like', '%'.$search.'%')
-            ->select(['name','id', 'photo as image', DB::raw('0 as type')]);
-
-        $queryUsers = DB::table('challenges')->where('title', 'like', '%'.$search.'%')
-            ->select(['title as name','uuid as id', 'category as image', DB::raw('1 as type')])
+        $queryUsers = DB::table('challenges')->where('title', 'like', '%' . $search . '%')
+            ->select(['title as name', 'uuid as id', 'category as image', DB::raw('1 as type')])
             ->union($queryUsers)
             ->get();
 
@@ -1208,10 +1211,10 @@ class HomeController extends Controller {
         foreach ($category as $url) {
             if (str_contains(strtolower($url), $search)) { // Yoshi version
                 $temp = [
-                    'name'=>$url,
-                    'id'=>$url,
-                    'image'=>$url,
-                    'type'=>'2',
+                    'name' => $url,
+                    'id' => $url,
+                    'image' => $url,
+                    'type' => '2',
                 ];
                 array_push($queryUsers, $temp);
 
@@ -1220,7 +1223,8 @@ class HomeController extends Controller {
         return json_encode($queryUsers);
     }
 
-    public function getChallengeSonViews($fileId){
+    public function getChallengeSonViews($fileId)
+    {
         $sonChallenges = DB::table('files_views')->where('files_views.file_id', $fileId)
             ->join('users', 'files_views.user_id', '=', 'users.id')
             ->select('users.name', 'users.photo', 'users.id as userId')
@@ -1229,7 +1233,8 @@ class HomeController extends Controller {
     }
 
 
-    public function getChallengeParticipants($challengeId){
+    public function getChallengeParticipants($challengeId)
+    {
         $users = DB::table('challenge_user')->where('challenge_user.challenge_id', $challengeId)
             ->join('users', 'challenge_user.user_id', '=', 'users.id')
             ->select('users.name', 'users.photo', 'users.id as userId')
@@ -1239,13 +1244,14 @@ class HomeController extends Controller {
     }
 
 
-    public function getProfileImage($id){
+    public function getProfileImage($id)
+    {
 
 
-        if($user = User::where('id', $id)->first()){
-            if($user->photo != ""){
+        if ($user = User::where('id', $id)->first()) {
+            if ($user->photo != "") {
 
-                return response()->file(base_path() . '/public/uploads/users/'.$user->photo);
+                return response()->file(base_path() . '/public/uploads/users/' . $user->photo);
             }
         }
 
@@ -1271,7 +1277,7 @@ class HomeController extends Controller {
 
             if ($fileHio = FileHio::where('id', $proofId)->first()) {
 
-                if($fileHio->user_id != Auth::user()->id) {
+                if ($fileHio->user_id != Auth::user()->id) {
                     $notificationManager = new NotificationManager();
                     $notification = new LikedChallengeNotification(['recipient_id' => $fileHio->user_id, 'sender_id' => Auth::user()->id, 'unread' => 1,
                         'type' => App\Model\Notification::TYPE_COMMENT_CHALLENGE, 'parameters' => $text, 'reference_id' => $proofId]);
@@ -1283,7 +1289,6 @@ class HomeController extends Controller {
     }
 
 
-
     public function sendEmail($challenge, $users, $total)
     {
 
@@ -1292,22 +1297,24 @@ class HomeController extends Controller {
             $createDate = new DateTime($date);
             $deadline = $createDate->format('Y-m-d');
             $nameCreator = Auth::user()->name;
-            foreach ($users as $user){
-                Mail::send('mail.emailChallenge', ['challenge' => $challenge, 'email' => $user->email,
-                    'nameCreator' => $nameCreator,
-                    'total' => $total, 'nameUser' => ' '.$user->name, 'deadline' => $deadline], function ($m) use ($total, $challenge, $nameCreator, $user, $deadline) {
-                    $m->from('norelpy@mail.hiolegends.com', 'HIO - Challenge');
 
-                    $subject = "$nameCreator challenged you! - ".$challenge->title;
-                    if ($user->email === Auth::user()->email) {
+            $array = $challenge->toArray();
+            foreach ($users as $user) {
+                //Mail::queueOn('emails',
+                Mail::queueOn('emails', 'mail.emailChallenge', ['array' => $array, 'email' => $user->email,
+                    'nameCreator' => $nameCreator,
+                    'total' => $total, 'nameUser' => ' ' . $user->name, 'deadline' => $deadline], function ($m) use ($total, $array, $nameCreator, $user, $deadline) {
+                    $m->from('noreply@hiolegends.com', 'HIO - Challenge');
+
+                    $subject = "$nameCreator challenged you! - " . $array['title'];
 
                         if ($total > 1) {
 
                             $subject = "Are they better that you? Show them.";
-                        }else{
+                        } else {
                             $subject = "It's you vs you, will you win?";
                         }
-                    }
+
                     $m->to($user->email, '')->subject($subject);
                 });
 
@@ -1320,22 +1327,30 @@ class HomeController extends Controller {
     public function sendEmailString($challenge, $emails, $total)
     {
 
-        try {
+//        try {
             $date = $challenge->deadLine;
             $createDate = new DateTime($date);
             $deadline = $createDate->format('Y-m-d');
             $nameCreator = Auth::user()->name;
-            foreach ($emails as $email){
-                Mail::send('mail.emailChallenge', ['challenge' => $challenge, 'email' => $email,
-                    'nameCreator' => $nameCreator, 'total' => $total, 'nameUser' => '', 'deadline' => $deadline], function ($m) use ( $total, $challenge, $nameCreator, $email, $deadline) {
-                    $m->from('norelpy@mail.hiolegends.com', 'HIO - Challenge');
 
-                    $m->to($email)->subject("$nameCreator challenged you! - ".$challenge->title);
+//            $public = $challenge->public;
+//            $uuid = $challenge->uuid;
+//            $secret = $challenge->secret;
+//            $title = $challenge->title;
+            $array = $challenge->toArray();
+
+            foreach ($emails as $email) {
+                Mail::queueOn('emails', 'mail.emailChallenge', ['array' => $array, 'email' => $email,
+                    'nameCreator' => $nameCreator, 'total' => $total, 'nameUser' => '', 'deadline' => $deadline],
+                    function ($m) use ($total, $array, $nameCreator, $email, $deadline) {
+                    $m->from('noreply@hiolegends.com', 'HIO - Challenge');
+
+                    $m->to($email)->subject("$nameCreator challenged you! - " . $array['title']);
                 });
 
             }
-        } catch (\Exception $e) {
-        }
+//        } catch (\Exception $e) {
+//        }
 
     }
 
@@ -1347,7 +1362,7 @@ class HomeController extends Controller {
         $sendTo = "hiominimalblog@gmail.com";
         //try {
         Mail::send('mail.emailContact', ['name' => $name, 'email' => $email, 'messageBody' => $messageBody], function ($m) use ($name, $sendTo, $email, $messageBody) {
-            $m->from('norelpy@mail.hiolegends.com', 'HIO - Contact');
+            $m->from('noreply@hiolegends.com', 'HIO - Contact');
 
             $m->to($sendTo, '')->subject($email . ' sent a contact request.');
         });
@@ -1357,5 +1372,53 @@ class HomeController extends Controller {
 
     }
 
+
+    public function testemail()
+    {
+        $email = "joaosampaio30@gmail.com";
+//        $link = "#";
+//        $suc = Mail::queueOn('emails','mail.emailSignUpBrand', ['name' => "Joao", 'email' => $email], function ($m) use ($email, $link) {
+//            $m->from('noreply@hiolegends.com');
+//
+//            $m->to($email)->subject('HIO - Welcome to HIO');
+//        });
+
+
+
+
+
+
+
+
+
+        $challenge = Challenge::find(153);
+        $date = $challenge->deadLine;
+        $createDate = new DateTime($date);
+        $deadline = $createDate->format('Y-m-d');
+        $nameCreator = Auth::user()->name;
+
+
+        $array = $challenge->toArray();
+
+
+        $suc =Mail::send( 'mail.emailChallenge', ['array' => $array, 'email' => $email,
+            'nameCreator' => $nameCreator, 'nameUser' => '', 'deadline' => $deadline],
+            function ($m) use ( $array, $nameCreator, $email, $deadline) {
+                $m->from('noreply@hiolegends.com', 'HIO - Challenge');
+
+                $m->to($email)->subject("$nameCreator challenged you! - " . $array['title']);
+            });
+
+
+
+
+
+
+
+
+
+        echo $suc;
+
+    }
 
 }
