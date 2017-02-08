@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-         $schedule->command('endchallenge')
-                  ->everyThirtyMinutes();
+         $schedule->command('end_approve_challenge_dois')
+             ->everyThirtyMinutes();
     }
 }

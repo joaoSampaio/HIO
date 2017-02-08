@@ -311,7 +311,7 @@ $('#challenge-views-modal').on('shown.bs.modal', function() {
 })
 
     function enableChallengeParticipants(){
-          $('.challenge-participants').click(function(e){
+          $('.challenge-participants').unbind().click(function(e){
             $('#modalHome').html("Participants");
             $('#challenge-views-modal').modal('show');
                $.ajax({
@@ -370,7 +370,7 @@ $('#challenge-views-modal').on('shown.bs.modal', function() {
         }
 
     function enableChallengeViews(){
-      $('.challenge-views').click(function(e){
+      $('.challenge-views').unbind().click(function(e){
         $('#modalHome').html("Views");
         $('#challenge-views-modal').modal('show');
            $.ajax({

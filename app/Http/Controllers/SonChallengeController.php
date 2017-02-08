@@ -7,9 +7,11 @@ use App\Model\CustomFilterRotate;
 use App\Model\FileHio;
 use App\Model\LikedChallengeNotification;
 use App\Model\Notification;
+use App\Model\ProofApproval;
 use Carbon\Carbon;
 use App\Model\NotificationManager;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -73,13 +75,17 @@ class SonChallengeController extends Controller {
             if ($file = FileHio::find($file_id)) {
                 $file->views = $file->views + 1;
                 $file->save();
+
+                Cache::forget('views-proof-'.$file_id);
+                Cache::forever('views-proof-'.$file_id, $file->views);
+
             }
         }
 
         $sonChallenge = DB::table('files')->where('files.id', $file_id)
             ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
             ->join('users', 'files.user_id', '=', 'users.id')
-            ->select('users.name', 'files.*', 'challenges.title', 'challenges.uuid')
+            ->select('users.name', 'files.*', 'challenges.title', 'challenges.uuid', 'challenges.deadLine', 'challenges.id as id_challenge', 'challenges.judged')
             ->first();
 
         if($sonChallenge == null){
@@ -87,13 +93,45 @@ class SonChallengeController extends Controller {
         }
 
         $hasLiked = false;
-        if (Auth::check() && $like = FileLikes::find( $file_id . Auth::user()->id)) {
-            $hasLiked = true;
+        if (Auth::check()) {
+            $userId = Auth::user()->id;
+            //rever esta mal
+            $like = Cache::rememberForever('has-liked-'.$userId.'-'.$file_id, function() use ($file_id, $userId) {
+//                echo " entrou aqui---------------------------".'has-liked-'.$userId.'-'.$file_id;
+                return FileLikes::find( $file_id . Auth::user()->id);
+            });
+            if($like)
+                $hasLiked = true;
         }
 
 
-//        $userViews = 3;
-        $userViews = FileViews::where('file_id', $file_id)->count();
+        $canApprove = false;
+
+        if (Auth::check() && Auth::user()->id != $sonChallenge->user_id){
+            $hasJudged = Cache::rememberForever('has-judged-'.Auth::user()->id.'-'.$file_id, function() use ($file_id) {
+                return ProofApproval::getProofApproval(Auth::user()->id, $file_id) != null;
+            });
+            if(!$hasJudged){
+                $now = Carbon::now();
+
+                $deadLine = Carbon::parse($sonChallenge->deadLine);
+                $deadLine = $deadLine->addHours(24);
+                $isValid = $now < $deadLine;
+
+                if($isValid){
+                    $canApprove = true;
+                }else{
+                    Cache::forget('has-judged-'.Auth::user()->id.'-'.$file_id);
+                    Cache::forever('has-judged-'.Auth::user()->id.'-'.$file_id, true);
+                }
+
+            }
+        }
+
+
+        $userViews = Cache::rememberForever('views-proof-'.$file_id, function() use ($file_id) {
+            return FileViews::where('file_id', $file_id)->count();
+        });
 
         $message = "";
         $timestamp = "";
@@ -119,6 +157,7 @@ class SonChallengeController extends Controller {
         return view('challengeDetailSon')
             ->with('sonChallenge', $sonChallenge)
             ->with('userViews',$userViews)
+            ->with('canApprove',$canApprove)
             ->with('hasLiked',$hasLiked)
             ->with('message',$message)
             ->with('timestamp',$timestamp)
@@ -149,7 +188,7 @@ class SonChallengeController extends Controller {
     public function likeFile($file_id){
 
 
-        $arr = array('status' => "false");
+        $arr = array('status' => false);
         if (Auth::check() && $challenge = FileLikes::find( $file_id . Auth::user()->id)) {
 
         }else if(Auth::check()) {
@@ -157,6 +196,11 @@ class SonChallengeController extends Controller {
                 'user_id' => Auth::user()->id, 'file_id' => $file_id, 'id' => $file_id . Auth::user()->id
             ));
             $fileViews->save();
+
+
+            Cache::forget('has-liked-'.Auth::user()->id.'-'.$file_id);
+            Cache::forever('has-liked-'.Auth::user()->id.'-'.$file_id, $fileViews);
+
             if ($file = FileHio::find($file_id)) {
                 $file->likes = $file->likes + 1;
                 $file->save();
@@ -172,9 +216,40 @@ class SonChallengeController extends Controller {
         return json_encode($arr);
     }
 
+    public function judgeProof(Request $request){
+
+        $proof_id = $request->get('proof_id');
+        $value = $request->get('value');
+        if($value <= 0){
+            $value = -1;
+        }
+        if($value < 0){
+            $value = 1;
+        }
+
+        $arr = array('status' => false);
+        if (Auth::check()) {
+
+            if($judgement = ProofApproval::getProofApproval(Auth::user()->id, $proof_id)){
+
+            }else{
+                $judgement = new ProofApproval(array(
+                    'user_id' => Auth::user()->id, 'proof_id' => $proof_id, 'judgment' => $value
+                ));
+                $judgement->save();
+
+                Cache::forget('has-judged-'.Auth::user()->id.'-'.$proof_id);
+                Cache::forever('has-judged-'.Auth::user()->id.'-'.$proof_id, true);
+                $arr = array('status' => true);
+            }
+
+        }
+        return json_encode($arr);
+    }
+
     public function deleteProof($id)
     {
-        $arr = array('status' => "false");
+        $arr = array('status' => false);
         if (Auth::check()) {
 
             if ($fileHio = FileHio::where('id', $id)->first()) {
@@ -183,7 +258,7 @@ class SonChallengeController extends Controller {
                     //need to delete file!!!!
                     File::delete(base_path() . '/public/uploads/challenge/'. $fileHio->filename);
                     FileHio::destroy($id);
-                    $arr = array('status' => "true");
+                    $arr = array('status' => true);
                 }
             }
         }
@@ -273,6 +348,49 @@ class SonChallengeController extends Controller {
             return array('status' => "true", 'fileName' => $fileNameNoExtension . '.jpg', 'id' => $file->id);
         }
     }
+
+
+
+    public function isProofReady($uuid, $file_id){
+        $arr = array('status' => false);
+        if ($file = FileHio::find($file_id)) {
+            $arr = array('status' => $file->is_ready);
+        }
+        return json_encode($arr);
+
+    }
+
+
+    public function showVoteProofs(){
+
+//files_likes
+
+//        $alreadyVoted = DB::table('files_likes')->where('user_id', Auth::user()->id)->lists('file_id');
+//
+//        echo json_encode($alreadyVoted).'<br><br>';
+//        $canVote = DB::table('files')
+//            ->whereNotIn('id', $alreadyVoted)
+//            ->get();
+
+
+
+        $canVote = DB::table('files')
+            ->whereNotIn('id', function ($query)
+            {
+                $query->from('proof_approval')
+                    ->select('file_id')
+                    ->where('user_id', Auth::user()->id);
+            })
+            ->get();
+
+
+
+
+        return json_encode($canVote);
+//        return view('voteProof');
+    }
+
+
 
     public function testVideo(){
 
@@ -410,7 +528,7 @@ class SonChallengeController extends Controller {
 
 //        $video->save($format, base_path() . '/public/test/export-x264_mov_480_7_final.mp4');
         $time_elapsed_secs = microtime(true) - $start;
-            echo 'took:' . $time_elapsed_secs . ' seconds ---------------------';
+        echo 'took:' . $time_elapsed_secs . ' seconds ---------------------';
 
 //        $process = new Process('D:/documents/laravel/ffmpeg/bin/ffmpeg.exe -i '.base_path() . '/public/test/mov.mov'.' -vf scale="480:-1" -f mp4 -vcodec libx264 -preset fast -acodec aac '.base_path() .'/public/test/export-x264.mp4'.' -hide_banner');
 //
@@ -429,15 +547,5 @@ class SonChallengeController extends Controller {
 
         return "deu";
     }
-
-    public function isProofReady($uuid, $file_id){
-        $arr = array('status' => false);
-        if ($file = FileHio::find($file_id)) {
-            $arr = array('status' => $file->is_ready);
-        }
-        return json_encode($arr);
-
-    }
-
 
 }

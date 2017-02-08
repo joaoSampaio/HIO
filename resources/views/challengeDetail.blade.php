@@ -783,7 +783,7 @@ cursor: pointer;
 
             <script>
                 $('#confirm-delete').on('show.bs.modal', function(e) {
-                    $(".btn-proof-delete").click(function(){
+                    $(".btn-proof-delete").unbind().click(function(){
                         $.ajax({
                             url: "/delete/proof/"+$(e.relatedTarget).data("id"),
                             type:"POST",

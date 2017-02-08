@@ -48,7 +48,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/vote/proof/{file_id}', 'SonChallengeController@likeFile');
     Route::post('/delete/proof/{file_id}', 'SonChallengeController@deleteProof');
     Route::get('/proof/{uuid}/{file_id}/status', 'SonChallengeController@isProofReady');
-
+    Route::get('/vote/proofs', 'SonChallengeController@showVoteProofs');
 
 
     Route::get('/views/proof/{file_id}', 'HomeController@getChallengeSonViews');
@@ -120,6 +120,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('notifications/read/{id}', 'NotificationsController@markRead');
         Route::get('notifications/ignore/{id}', 'NotificationsController@updateLastSeenNotifications');
 
+
+        Route::post('/judge/proof', 'SonChallengeController@judgeProof');
 
         Route::get('teste', 'HomeController@teste');
         Route::get('amigos', 'SocialAuthController@getFriends');

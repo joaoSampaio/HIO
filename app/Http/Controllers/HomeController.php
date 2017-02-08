@@ -23,22 +23,14 @@ use Auth;
 use Storage;
 use App\Model\ChallengeUserAssociation;
 use App\Model\User;
-use App\Model\FileViews;
-use App\Model\FileLikes;
 use DateTime;
 use Facebook;
-use Facebook\FacebookRequest;
 use App\Http\Requests\FileFormRequest;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
-use FFMpeg\FFMpeg;
-use FFMpeg\Coordinate\TimeCode;
-use FFMpeg\Coordinate\Dimension;
 use FFMpeg\Format\Video;
-use App\Model\CustomVideo;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Facades;
-use App\Model\Relationship;
 
 use App\Http\Traits\FriendTrait;
 
@@ -1045,41 +1037,103 @@ class HomeController extends Controller
     {
 
         $now = new DateTime();
-        Challenge::where('closed', '=', 0)->chunk(100, function ($ongoingChallenges) use ($now) {
-            foreach ($ongoingChallenges as $challenge) {
-                //
-                $deadLine = new DateTime($challenge->deadLine);
-                $isValid = $now < $deadLine;
-                if (!$isValid) {
-                    //we end challenge
-                    $challenge->closed = true;
-                    $challenge->save();
-                    //verificar se os utilizadores adicionaram proofs e ver achievement
 
-                    $sonChallenges = DB::table('files')->where('files.challenge_id', $challenge->id)
-                        ->select('files.user_id', DB::raw('count(*) as total'))
-                        ->groupBy('files.user_id')
+        Challenge::where('judged', '=', 0)->chunk(100, function($challenges) use ($now) {
+            foreach ($challenges as $challenge) {
+
+                $idsUserCompletedChallenge = [];
+                $deadLine = Carbon::parse($challenge->deadLine);
+                $deadLine = $deadLine->addHours(24);
+                $isValid = $now < $deadLine;
+                if(!$isValid){
+                    //validar provas e judgments
+
+                    $sonChallengesIds = DB::table('files')->where('files.challenge_id', $challenge->id)
+                        ->join('proof_approval', 'proof_approval.proof_id', '=', 'files.id')
+                        ->select('files.id', DB::raw('SUM(judgment) as total_judgment'))
+                        ->groupBy('files.id')
+                        ->havingRaw('SUM(judgment) > 0')
+                        ->lists('files.id');
+
+                    FileHio::whereIn('id', $sonChallengesIds)
+                        ->update([
+                            'approved' => true
+                        ]);
+
+//                    $sonChallengesIds = DB::table('files')->whereIn('id',$sonChallengesIds)
+//                        ->select('files.user_id')
+//                        ->groupBy('files.user_id')
+//                        ->lists('files.user_id');
+
+
+                    $challenge->judged = true;
+                    $challenge->save();
+
+                    $users = DB::table('users')
+                        ->whereIn('id', function ($query) use ($sonChallengesIds)
+                        {
+                            $query->from('files')
+                                ->whereIn('id',$sonChallengesIds)
+                                ->select('files.user_id')
+                                ->groupBy('files.user_id');
+                        })
                         ->get();
-                    foreach ($sonChallenges as $sonChallenge) {
-                        if ($user = User::where('id', $sonChallenge->user_id)->first()) {
-                            $achievements = $user->achievements;
-                            if ($achievements == NULL) {
-                                $achievements = array('totalCompleted' => 1);
-                            } else {
-                                $achievements = json_decode($achievements, true);
-                                if (!array_key_exists('totalCompleted', $achievements)) {
-                                    $achievements['totalCompleted'] = 1;
-                                } else {
-                                    $achievements['totalCompleted'] = $achievements['totalCompleted'] + 1;
-                                }
+
+                    foreach ($users as $usertmp) {
+                        $user = User::find($usertmp->id);
+                        $achievements = $user->achievements;
+                        if($achievements == NULL){
+                            $achievements = array('totalCompleted' => 1);
+                        }else{
+                            $achievements = json_decode($achievements, true);
+                            if (!array_key_exists('totalCompleted', $achievements)) {
+                                $achievements['totalCompleted'] = 1;
+                            }else{
+                                $achievements['totalCompleted'] = $achievements['totalCompleted']+1;
                             }
-                            $user->achievements = json_encode($achievements);
-                            $user->save();
                         }
+                        $user->achievements = json_encode($achievements);
+                        $user->save();
                     }
                 }
             }
         });
+
+
+
+
+
+
+        Challenge::where('closed', '=', 0)->chunk(100, function($ongoingChallenges) use ($now) {
+            foreach ($ongoingChallenges as $challenge) {
+                //
+                $deadLine = new DateTime($challenge->deadLine);
+                $isValid = $now < $deadLine;
+
+                if(!$isValid){
+                    //we end challenge
+                    $challenge->closed = true;
+                    $challenge->save();
+                }
+            }
+        });
+
+
+//        $sonChallengesIds = DB::table('files')->where('files.challenge_id', 65)
+//            ->join('proof_approval', 'proof_approval.proof_id', '=', 'files.id')
+//            ->select('files.id', DB::raw('SUM(judgment) as total_judgment'))
+//            ->groupBy('files.id')
+//            ->havingRaw('SUM(judgment) > 0')
+//            ->lists('files.id');
+//
+////        $sonChallengesIds = DB::table('files')->whereIn('id',$sonChallengesIds)
+////            ->select('files.user_id')
+////            ->groupBy('files.user_id')
+////            ->lists('files.user_id');
+//
+//        echo json_encode($sonChallengesIds);
+
+        return "ok";
     }
 
 

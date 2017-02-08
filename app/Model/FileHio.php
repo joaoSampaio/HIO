@@ -23,7 +23,7 @@ class FileHio extends Model
 
     //type -> integer (0-> image, 1->video)
     protected $fillable = [
-         'views', 'likes','filename', 'is_ready', 'created_at', 'id', 'user_id', 'challenge_id', 'type', 'is_ready'
+         'views', 'likes','filename', 'is_ready', 'created_at', 'id', 'user_id', 'challenge_id', 'type', 'is_ready', 'approved'
     ];
 
 

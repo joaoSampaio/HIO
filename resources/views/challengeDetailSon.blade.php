@@ -2,6 +2,7 @@
 
 @section('header')
 <link href="{{ asset('css/video-js.css') }}" rel="stylesheet">
+{{--<link href="{{ asset('css/jTinder.css') }}" rel="stylesheet">--}}
 <style>
 
 .navbar-default {
@@ -73,6 +74,132 @@ color: #eb1946;
     }
 
 
+.btn_approve {
+    float: left;
+     display: block;
+     background-color: #f7f7f7;
+     background-image: -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#e7e7e7));
+    background-image: -webkit-linear-gradient(top, #f7f7f7, #e7e7e7);
+    background-image: -moz-linear-gradient(top, #f7f7f7, #e7e7e7);
+    background-image: -ms-linear-gradient(top, #f7f7f7, #e7e7e7);
+    background-image: -o-linear-gradient(top, #f7f7f7, #e7e7e7);
+     color: #a7a7a7;
+    margin: 15px;
+    width: 80px;
+    height: 80px;
+     position: relative;
+     text-align: center;
+     line-height: 100px;
+    border-radius: 50%;
+    outline: none;
+    box-shadow: 0px 3px 8px #aaa, inset 0px 2px 3px #fff;
+}
+
+.btn_approve:hover{
+  text-decoration: none;
+  color: #555;
+  background: #f5f5f5;
+}
+.btn_approve i {
+    display: inline-block;
+    width: 40px;
+    height: 80px;
+        font-size: 45px;
+}
+
+.like{
+color: #5cb767;
+}
+
+.dislike{
+color: #ff720e;
+float: right;
+}
+
+.parent {
+    position: relative;
+}
+
+.parent .center-wrapper {
+    position: absolute;
+    left: 50%;
+}
+
+.parent .center-wrapper .center-content {
+    position: relative;
+    left: -50%;
+}
+
+.judge-info p{
+font-size: 22px;text-align: center;
+}
+
+/*@media (min-width: 992px){*/
+    /*.like{*/
+        /*float: left;*/
+    /*}*/
+    /*.dislike{*/
+        /*float: right;*/
+    /*}*/
+/*}*/
+
+.alert-hio {
+        background-color: #eee;
+        border-color: #ddd;
+}
+
+#approved-logo.approved:after
+{
+    content:"Approved";
+    position:absolute;
+    top:70px;
+    right:10px;
+    z-index:1;
+    font-family:Arial,sans-serif;
+    -webkit-transform: rotate(45deg); /* Safari */
+    -moz-transform: rotate(45deg); /* Firefox */
+    -ms-transform: rotate(45deg); /* IE */
+    -o-transform: rotate(45deg); /* Opera */
+    transform: rotate(45deg);
+    font-size:40px;
+    color:#5cb767;
+    /*background:#fff;*/
+    border:solid 4px #5cb767;
+    padding:5px;
+    border-radius:5px;
+    zoom:1;
+    filter:alpha(opacity=20);
+    opacity:0.5;
+    -webkit-text-shadow: 0 0 2px #5cb767;
+    text-shadow: 0 0 2px #5cb767;
+    box-shadow: 0 0 2px #5cb767;
+}
+
+#approved-logo.rejected:after
+{
+    content:"Rejected";
+    position:absolute;
+    top:70px;
+    right:10px;
+    z-index:1;
+    font-family:Arial,sans-serif;
+    -webkit-transform: rotate(45deg); /* Safari */
+    -moz-transform: rotate(45deg); /* Firefox */
+    -ms-transform: rotate(45deg); /* IE */
+    -o-transform: rotate(45deg); /* Opera */
+    transform: rotate(45deg);
+    font-size:40px;
+    color:#c00;
+    border:solid 4px #c00;
+    padding:5px;
+    border-radius:5px;
+    zoom:1;
+    filter:alpha(opacity=20);
+    opacity:0.2;
+    -webkit-text-shadow: 0 0 2px #c00;
+    text-shadow: 0 0 2px #c00;
+    box-shadow: 0 0 2px #c00;
+}
 
 </style>
 
@@ -92,12 +219,12 @@ color: #eb1946;
 
 
 
-
+{{--{{$sonChallenge->id_challenge}}--}}
     <!-- Portfolio Grid Section -->
-    <section id="portfolio" style="margin-top: 80px">
+    <section  style="margin-top: 80px">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12 ">
+            <div class="row" >
+                <div class="col-lg-12 {{$sonChallenge->judged == true? $sonChallenge->approved == true? 'approved': 'rejected' : 'nnn'}}" id="approved-logo">
                     <div style=" font-size: 22pt;">
                         <a href="/challenge/{{$sonChallenge->uuid}}" class="" title="{{$sonChallenge->title}}" style="color: #333;text-decoration: none;">
                             <i class="fa fa-chevron-circle-left" style=" font-size: 44pt;vertical-align: middle;" aria-hidden="true"></i>   Back to
@@ -142,6 +269,43 @@ color: #eb1946;
                     @endif
 
                 </div>
+
+
+                @if($canApprove)
+                <div class="col-md-12 col-xs-12" id="approve">
+
+                     <div class="col-md-12 col-xs-12 judge-info alert-hio">
+                         <p>You are the judge!</p>
+                         <p style="font-size: 16px">Has {{getFirstLastName($sonChallenge->name)}} achieved the goal of the challenge or did it come short, you decide!</p>
+
+                        <div class="col-xs-6 col-md-6" style="margin-bottom: 20px;">
+                            <a href="#" class="btn_approve dislike"><i class="fa fa-meh-o " aria-hidden="true"></i></a>
+                            {{--<button type="button" onclick="goBack()" class="btn btn-default btn-xl btn-cancel-hio" id="back_control">Back</button>--}}
+                        </div>
+
+                        <div class="col-xs-6 col-md-6">
+                            {{--<button form="form1" type="submit" class="btn btn-primary btn-xl btn-create-hio" id="next_control">Save Changes</button>--}}
+                            <a href="#" class="btn_approve like"><i class="fa fa-sign-language btn-create-hio" aria-hidden="true"></i></a>
+                        </div>
+                     </div>
+
+
+
+
+                </div>
+                @endif
+                {{--<div class="col-lg-12 parent" style="    margin-bottom: 120px;">--}}
+                    {{--<div class="center-wrapper">--}}
+                        {{--<div class="center-content alert alert-info">--}}
+                                {{--<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>--}}
+                                 {{--<p>Your video is being converted. It will be available soon.</p>--}}
+                                {{--<a href="#" class="btn_approve dislike"><i class="fa fa-meh-o" aria-hidden="true"></i></a>--}}
+                                                            {{--<a href="#" class="btn_approve like"><i class="fa fa-sign-language" aria-hidden="true"></i></a>--}}
+
+                        {{--</div>--}}
+                    {{--</div>--}}
+
+                {{--</div>--}}
 
                 <div class="col-lg-12 title-proof">
                     <a href="{{"/profile/".$sonChallenge->user_id}}" class="" title="" style="color: #333;text-decoration: none;">{{$sonChallenge->name }}
@@ -242,8 +406,37 @@ color: #eb1946;
 <script src="{{ asset('js/video.js') }}"></script>
 <script>
 
+
+@if($canApprove)
+$(".like").unbind().click(function(event){
+    event.preventDefault();
+    $.post("/judge/proof",
+    {
+        proof_id: {{$sonChallenge->id}},
+        value: 1
+    },
+    function(data, status){
+        $('#approve').hide();
+//        alert("Data: " + data + "\nStatus: " + status);
+    });
+});
+
+$(".dislike").unbind().click(function(event){
+    event.preventDefault();
+    $.post("/judge/proof",
+    {
+        proof_id: {{$sonChallenge->id}},
+        value: 0
+    },
+    function(data, status){
+        $('#approve').hide();
+//        alert("Data: " + data + "\nStatus: " + status);
+    });
+});
+@endif
+
 @if(!$hasLiked)
-    $("#vote").click(function(){
+    $("#vote").unbind().click(function(){
         $.ajax({
             url: "{{ action('SonChallengeController@likeFile', $sonChallenge->id) }}",
             type:"POST",

@@ -16,7 +16,7 @@ class CreateFilesTable extends Migration
             $table->increments('id');
             $table->tinyInteger('type');
             $table->boolean('is_ready')->default(false);
-
+            $table->boolean('approved')->default(false);
             $table->integer('views');
             $table->integer('likes');
             $table->foreign('user_id')->references('id')->on('users');
@@ -24,6 +24,9 @@ class CreateFilesTable extends Migration
             $table->foreign('challenge_id')->references('id')->on('challenges');
             $table->integer('challenge_id')->unsigned()->index();
             $table->string('filename');
+
+
+
             $table->timestamps();
         });
     }

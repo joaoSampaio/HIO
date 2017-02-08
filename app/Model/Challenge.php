@@ -23,7 +23,7 @@ class Challenge extends Model
      * @var array
      */
     protected $fillable = [
-         'title','creator_id', 'rank', 'public', 'description', 'category', 'reward', 'penalty', 'deadLine', 'secret', 'uuid','closed',
+         'title','creator_id', 'rank', 'public', 'description', 'category', 'reward', 'penalty', 'deadLine', 'secret', 'uuid','closed', 'judged'
     ];
 
     /**
