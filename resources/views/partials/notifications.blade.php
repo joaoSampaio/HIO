@@ -51,6 +51,7 @@
             </div>
 
     @elseif($notification->type == 2)
+        {{--desafio--}}
 
         <div class="notification-item row notification-text">
             <a href="/challenge/{{ $notification->reference_id}}" data-notification="{{ $notification->id}}"><span class="clickable"></span></a>

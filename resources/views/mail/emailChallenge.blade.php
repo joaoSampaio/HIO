@@ -80,9 +80,9 @@
         <td class="column" width="600" colspan="2" align="center" valign="top" style="padding: 10px 20px 20px 20px; font-family: arial,sans-serif; font-size: 14px; line-height: 18px; color: #fff;">
 
         @if($array['public'] === 1)
-            <a href="{{ action('HomeController@challengeDetail', $array['uuid']) }}" class="checkChallengeButton">CHECK YOUR CHALLENGE</a>
+            <a href="https://hiolegends.com/challenge/{{$array['uuid']}}" class="checkChallengeButton">CHECK YOUR CHALLENGE</a>
         @else
-            <a href="{{ action('HomeController@challengeDetail', [ 'uuid' => $array['uuid'], 'secret'=>$array['secret']]) }}" class="checkChallengeButton">CHECK YOUR CHALLENGE</a>
+            <a href="https://hiolegends.com/challenge/{{$array['uuid']}}/{{$array['secret']}}" class="checkChallengeButton">CHECK YOUR CHALLENGE</a>
         @endif
         </td>
     </tr>

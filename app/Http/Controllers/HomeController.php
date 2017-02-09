@@ -1,7 +1,6 @@
 <?php namespace App\Http\Controllers;
 
 use App;
-use App\Jobs\ProcessVideo;
 use App\Model\Challenge;
 use App\Model\FileHio;
 use App\Model\LikedChallengeNotification;
@@ -11,13 +10,12 @@ use App\Model\NotificationManager;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Input;
 use Intervention\Image\Facades\Image;
-use Log;
 use Auth;
 //use Mail;
 use Storage;
@@ -452,10 +450,7 @@ class HomeController extends Controller
 
                     if ($email == Auth::user()->id) {
                         $challengeMyself = true;
-//                    $total++;
-//                    array_push($emailsToSend, Auth::user());
-                    }
-                    if ($hioUser = User::where('id', $email)->first()) {
+                    }else if ($hioUser = User::where('id', $email)->first()) {
                         $total++;
                         array_push($emailsToSend, $hioUser);
                     }
@@ -491,9 +486,12 @@ class HomeController extends Controller
         }
         $uuid = Uuid::uuid4();
         $secret = 0;
+
+        $reference_id = $uuid;
         //se for privado
         if ($public === 0) {
             $secret = mt_rand(1000000, 9999999);
+            $reference_id = $uuid.'/'.$secret;
         }
 
         $achievements = Auth::user()->achievements;
@@ -520,18 +518,24 @@ class HomeController extends Controller
         }
 
 
+        $remindEmail = array();
         if (is_array($emails) || is_object($emails)) {
             foreach ($emails as $userId) {
+
+                $remindEmail[] = array(
+                    'userIdOrEmail' => $userId,
+                    'challenge_id' => $challenge->id,
+                    'uuid' => $challenge->uuid
+                );
+
                 if (is_numeric($userId) && $userId != Auth::user()->id) {
 
                     $notification = new Notification(['recipient_id' => $userId, 'sender_id' => Auth::user()->id, 'unread' => 1,
-                        'type' => App\Model\Notification::TYPE_INVITE_CHALLENGE, 'parameters' => $challenge->title, 'reference_id' => $challenge->uuid]);
+                        'type' => App\Model\Notification::TYPE_INVITE_CHALLENGE, 'parameters' => $challenge->title, 'reference_id' => $reference_id]);
                     $notificationManager->add($notification);
-
                 }
             }
         }
-
 
         //send post to facebook
         $post_facebook = $request->input('post_facebook', false);
@@ -540,11 +544,9 @@ class HomeController extends Controller
             $this->sendLinkToFacebook($link, $description);
         }
 
-        if (($challengeMyself && $total > 1) || !$challengeMyself) {
-            $this->sendEmail($challenge, $emailsToSend, $total);
-        }
+        DB::table('mail_reminds')->insert($remindEmail);
 
-
+        $this->sendEmail($challenge, $emailsToSend, $total);
         $this->sendEmailString($challenge, $emailsToSendString, $total);
 //        echo "...".json_encode($emailsToSend);
         \Session::flash('challengeCreated', 'true');
@@ -785,32 +787,33 @@ class HomeController extends Controller
             $deadLine = new DateTime($challenge->deadLine);
             $isValid = $now < $deadLine;
             if ($isValid && Auth::check() && Auth::user()->id == $challenge->creator_id) {
+                $challenge->deadLine = $now;
                 $challenge->closed = true;
                 $challenge->save();
 
 
                 //
-                $sonChallenges = DB::table('files')->where('files.challenge_id', $challenge->id)
-                    ->select('files.user_id', DB::raw('count(*) as total'))
-                    ->groupBy('files.user_id')
-                    ->get();
-                foreach ($sonChallenges as $sonChallenge) {
-                    if ($user = User::where('id', $sonChallenge->user_id)->first()) {
-                        $achievements = $user->achievements;
-                        if ($achievements == NULL) {
-                            $achievements = array('totalCompleted' => 1);
-                        } else {
-                            $achievements = json_decode($achievements, true);
-                            if (!array_key_exists('totalCompleted', $achievements)) {
-                                $achievements['totalCompleted'] = 1;
-                            } else {
-                                $achievements['totalCompleted'] = $achievements['totalCompleted'] + 1;
-                            }
-                        }
-                        Auth::user()->achievements = json_encode($achievements);
-                        Auth::user()->save();
-                    }
-                }
+//                $sonChallenges = DB::table('files')->where('files.challenge_id', $challenge->id)
+//                    ->select('files.user_id', DB::raw('count(*) as total'))
+//                    ->groupBy('files.user_id')
+//                    ->get();
+//                foreach ($sonChallenges as $sonChallenge) {
+//                    if ($user = User::where('id', $sonChallenge->user_id)->first()) {
+//                        $achievements = $user->achievements;
+//                        if ($achievements == NULL) {
+//                            $achievements = array('totalCompleted' => 1);
+//                        } else {
+//                            $achievements = json_decode($achievements, true);
+//                            if (!array_key_exists('totalCompleted', $achievements)) {
+//                                $achievements['totalCompleted'] = 1;
+//                            } else {
+//                                $achievements['totalCompleted'] = $achievements['totalCompleted'] + 1;
+//                            }
+//                        }
+//                        Auth::user()->achievements = json_encode($achievements);
+//                        Auth::user()->save();
+//                    }
+//                }
 
             }
         }
@@ -1036,102 +1039,119 @@ class HomeController extends Controller
     public function teste()
     {
 
-        $now = new DateTime();
 
-        Challenge::where('judged', '=', 0)->chunk(100, function($challenges) use ($now) {
+//        return "ola";
+        $now = Carbon::now();
+
+        $remindChallenge = array();
+        Challenge::where('closed', '=', 0)->where('reminded', '=', 0)->chunk(100, function ($challenges) use ($now) {
             foreach ($challenges as $challenge) {
+                //
 
-                $idsUserCompletedChallenge = [];
-                $deadLine = Carbon::parse($challenge->deadLine);
-                $deadLine = $deadLine->addHours(24);
-                $isValid = $now < $deadLine;
-                if(!$isValid){
-                    //validar provas e judgments
+                $deadline = new DateTime($challenge->deadLine);
+                $isValid = $now < $deadline;
 
-                    $sonChallengesIds = DB::table('files')->where('files.challenge_id', $challenge->id)
-                        ->join('proof_approval', 'proof_approval.proof_id', '=', 'files.id')
-                        ->select('files.id', DB::raw('SUM(judgment) as total_judgment'))
-                        ->groupBy('files.id')
-                        ->havingRaw('SUM(judgment) > 0')
-                        ->lists('files.id');
+                if ($isValid) {
+                    //desafio valido e passar os 50% do deadline
 
-                    FileHio::whereIn('id', $sonChallengesIds)
-                        ->update([
-                            'approved' => true
-                        ]);
+                    $created = new Carbon($challenge->created_at);
+                    $deadline = new Carbon($challenge->deadLine);
 
-//                    $sonChallengesIds = DB::table('files')->whereIn('id',$sonChallengesIds)
-//                        ->select('files.user_id')
-//                        ->groupBy('files.user_id')
-//                        ->lists('files.user_id');
+                    $differenceNow = $now->diffInMinutes($now->copy()->addMinutes(60));
 
+//                    $tt = $now->copy()->addMinutes(60)
+//                    $in60 = $now->addMinutes(61);
+//                    $differenceNow = $now->diffInMinutes($in60);
 
-                    $challenge->judged = true;
-                    $challenge->save();
+//                    $differenceNow = $created->diffInMinutes($now);
+                    $hoursTotal = $created->diffInMinutes($deadline);
+                    echo "--------$now---------------<br>";
+                    echo "Challenge:".$challenge->title." now: $differenceNow total: $hoursTotal<br>";
+                    echo "created: $created deadline:$deadline<br>";
+                    if($differenceNow / $hoursTotal > 0.5){
+//                            remind
+                        $remindChallenge[] = $challenge->id;
 
-                    $users = DB::table('users')
-                        ->whereIn('id', function ($query) use ($sonChallengesIds)
-                        {
-                            $query->from('files')
-                                ->whereIn('id',$sonChallengesIds)
-                                ->select('files.user_id')
-                                ->groupBy('files.user_id');
-                        })
-                        ->get();
-
-                    foreach ($users as $usertmp) {
-                        $user = User::find($usertmp->id);
-                        $achievements = $user->achievements;
-                        if($achievements == NULL){
-                            $achievements = array('totalCompleted' => 1);
-                        }else{
-                            $achievements = json_decode($achievements, true);
-                            if (!array_key_exists('totalCompleted', $achievements)) {
-                                $achievements['totalCompleted'] = 1;
-                            }else{
-                                $achievements['totalCompleted'] = $achievements['totalCompleted']+1;
-                            }
-                        }
-                        $user->achievements = json_encode($achievements);
-                        $user->save();
                     }
                 }
             }
         });
 
 
+        echo "Challenges:".json_encode($remindChallenge)."<br>";
+
+//            Challenge::whereIn('id', $remindChallenge)
+//                ->update([
+//                    'reminded' => true
+//                ]);
+
+        $data_email = array();
+        DB::table('mail_reminds')
+            ->whereIn('challenge_id', $remindChallenge)
+            ->chunk(100, function ($remind)  {
+
+                if (str_contains($remind->userIdOrEmail, '@')) {
+                    if ($user = User::where('email', $remind->userIdOrEmail)->first()) {
+
+                        //user registou na app
+                        if (!ChallengeUserAssociation::where('challenge_id', $remind->challenge_id)->where('user_id', $user->id)->first()) {
+
+                            //user nao aceitou desafio
 
 
+                            $data_email[] = array(
+                                'email' => $remind->userIdOrEmail,
+                                'link' => 'https://hiolegends.com/challenges/$remind->challenge_id',
+                                'date' => $remind->created_at,
+                                'name' => $user->name
+
+                            );
 
 
-        Challenge::where('closed', '=', 0)->chunk(100, function($ongoingChallenges) use ($now) {
-            foreach ($ongoingChallenges as $challenge) {
-                //
-                $deadLine = new DateTime($challenge->deadLine);
-                $isValid = $now < $deadLine;
+                        } else {
 
-                if(!$isValid){
-                    //we end challenge
-                    $challenge->closed = true;
-                    $challenge->save();
+                            //user nao registou na app, logo nao aceitou desafio
+                            $data_email[] = array(
+                                'email' => $remind->userIdOrEmail,
+                                'link' => 'https://hiolegends.com/challenges/$remind->challenge_id',
+                                'date' => $remind->created_at,
+                                'name' => ''
+
+                            );
+                        }
+                    }
+                } else if (is_numeric($remind->userIdOrEmail)) {
+                    if (!ChallengeUserAssociation::where('challenge_id', $remind->challenge_id)->where('user_id', $remind->userIdOrEmail)->first()) {
+
+                        //user nao aceitou desafio
+
+                        if ($user = User::where('email', $remind->userIdOrEmail)->first()) {
+
+                            $data_email[] = array(
+                                'email' => $user->email,
+                                'link' => 'https://hiolegends.com/challenges/$remind->challenge_id',
+                                'date' => $remind->created_at,
+                                'name' => $user->name
+
+                            );
+                        }
+                    }
                 }
-            }
-        });
+            });
 
 
-//        $sonChallengesIds = DB::table('files')->where('files.challenge_id', 65)
-//            ->join('proof_approval', 'proof_approval.proof_id', '=', 'files.id')
-//            ->select('files.id', DB::raw('SUM(judgment) as total_judgment'))
-//            ->groupBy('files.id')
-//            ->havingRaw('SUM(judgment) > 0')
-//            ->lists('files.id');
-//
-////        $sonChallengesIds = DB::table('files')->whereIn('id',$sonChallengesIds)
-////            ->select('files.user_id')
-////            ->groupBy('files.user_id')
-////            ->lists('files.user_id');
-//
-//        echo json_encode($sonChallengesIds);
+
+//        echo "data:".json_encode($data_email)."<br>";
+        if(count($data_email) > 0){
+
+            Mail::queueOn('emails', 'mail.emailRemind', ['data_email' => $data_email],
+                function ($m) use ($data_email) {
+                    $m->from('noreply@hiolegends.com', 'HIO');
+
+                    $m->to('targfonseca@gmail.com', 'joaosampaio30@gmail.com')->subject("Remind users");
+                });
+
+        }
 
         return "ok";
     }
@@ -1369,13 +1389,6 @@ class HomeController extends Controller
 
                     $subject = "$nameCreator challenged you! - " . $array['title'];
 
-                        if ($total > 1) {
-
-                            $subject = "Are they better that you? Show them.";
-                        } else {
-                            $subject = "It's you vs you, will you win?";
-                        }
-
                     $m->to($user->email, '')->subject($subject);
                 });
 
@@ -1393,11 +1406,6 @@ class HomeController extends Controller
             $createDate = new DateTime($date);
             $deadline = $createDate->format('Y-m-d');
             $nameCreator = Auth::user()->name;
-
-//            $public = $challenge->public;
-//            $uuid = $challenge->uuid;
-//            $secret = $challenge->secret;
-//            $title = $challenge->title;
             $array = $challenge->toArray();
 
             foreach ($emails as $email) {

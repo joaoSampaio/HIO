@@ -22,7 +22,7 @@ class CreateNotificationsTable extends Migration
             $table->boolean('unread')->default(true);
             $table->string('type');
             $table->text('parameters');
-            $table->string('reference_id', 40);
+            $table->string('reference_id', 45);
             $table->timestamps();
         });
 

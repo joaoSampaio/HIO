@@ -25,6 +25,7 @@ class CreateChallengesTable extends Migration
             $table->timestamps();
             $table->boolean('closed')->default(false);
             $table->boolean('judged')->default(false);
+            $table->boolean('reminded')->default(false);
             $table->integer('creator_id')->unsigned();
             $table->integer('rank')->unsigned();
             $table->integer('secret')->unsigned();
