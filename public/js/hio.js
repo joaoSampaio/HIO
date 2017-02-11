@@ -47,10 +47,11 @@ $.ajax({
     }
 });
 
-$('#notification-btn').on('click', function () {
+$('.notification-btn').on('click', function () {
     $('.badge-notify').hide();
     $.get( "/notifications/ignore/"+$('#highest_id').data('highest-id'), function( data ) {
     });
+
 });
 
 

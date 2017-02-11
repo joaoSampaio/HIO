@@ -365,28 +365,45 @@ class SonChallengeController extends Controller {
 
 //files_likes
 
-//        $alreadyVoted = DB::table('files_likes')->where('user_id', Auth::user()->id)->lists('file_id');
+//        $alreadyVoted = DB::table('proof_approval')->where('user_id', Auth::user()->id)->lists('proof_id');
 //
 //        echo json_encode($alreadyVoted).'<br><br>';
 //        $canVote = DB::table('files')
 //            ->whereNotIn('id', $alreadyVoted)
 //            ->get();
 
+//        echo "lll:".json_encode($alreadyVoted);
 
-
-        $canVote = DB::table('files')
-            ->whereNotIn('id', function ($query)
+        $dateMigrate = Carbon::now()->subHours(24);
+        $proofs = DB::table('files')
+            ->where('is_ready','=', 1)
+            ->where('user_id', '!=', Auth::user()->id)
+            ->whereNotIn('files.id', function ($query)
             {
                 $query->from('proof_approval')
-                    ->select('file_id')
+                    ->select('proof_id')
                     ->where('user_id', Auth::user()->id);
             })
+            ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
+            ->where('deadLine','>=', $dateMigrate)
+            ->select('files.*')
             ->get();
 
 
 
+//            ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
+//            ->join('users', 'files.user_id', '=', 'users.id')
+//            ->select('users.name', 'files.*', 'challenges.title', 'challenges.uuid', 'challenges.deadLine', 'challenges.id as id_challenge', 'challenges.judged')
+//            ->get(10);
 
-        return json_encode($canVote);
+
+
+//        return json_encode($proofs);
+        return view('voteProof')
+            ->with('proofs', $proofs);
+
+
+//        return json_encode($canVote);
 //        return view('voteProof');
     }
 

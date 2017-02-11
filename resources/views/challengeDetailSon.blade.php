@@ -74,47 +74,7 @@ color: #eb1946;
     }
 
 
-.btn_approve {
-    float: left;
-     display: block;
-     background-color: #f7f7f7;
-     background-image: -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#e7e7e7));
-    background-image: -webkit-linear-gradient(top, #f7f7f7, #e7e7e7);
-    background-image: -moz-linear-gradient(top, #f7f7f7, #e7e7e7);
-    background-image: -ms-linear-gradient(top, #f7f7f7, #e7e7e7);
-    background-image: -o-linear-gradient(top, #f7f7f7, #e7e7e7);
-     color: #a7a7a7;
-    margin: 15px;
-    width: 80px;
-    height: 80px;
-     position: relative;
-     text-align: center;
-     line-height: 100px;
-    border-radius: 50%;
-    outline: none;
-    box-shadow: 0px 3px 8px #aaa, inset 0px 2px 3px #fff;
-}
 
-.btn_approve:hover{
-  text-decoration: none;
-  color: #555;
-  background: #f5f5f5;
-}
-.btn_approve i {
-    display: inline-block;
-    width: 40px;
-    height: 80px;
-        font-size: 45px;
-}
-
-.like{
-color: #5cb767;
-}
-
-.dislike{
-color: #ff720e;
-float: right;
-}
 
 .parent {
     position: relative;
@@ -249,11 +209,6 @@ font-size: 22px;text-align: center;
                                 </p>
                               </video>
 
-
-                            {{--<video width="100%" controls>--}}
-                              {{--<source src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" type="video/mp4">--}}
-                            {{--Your browser does not support the video tag.--}}
-                            {{--</video>--}}
                         @else
                             <img src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" class="img-responsive"  style="    height: 100%;margin: 0 auto;" alt="">
 
@@ -288,26 +243,10 @@ font-size: 22px;text-align: center;
                             <a href="#" class="btn_approve like"><i class="fa fa-sign-language btn-create-hio" aria-hidden="true"></i></a>
                         </div>
                      </div>
-
-
-
-
                 </div>
                 @endif
-                {{--<div class="col-lg-12 parent" style="    margin-bottom: 120px;">--}}
-                    {{--<div class="center-wrapper">--}}
-                        {{--<div class="center-content alert alert-info">--}}
-                                {{--<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>--}}
-                                 {{--<p>Your video is being converted. It will be available soon.</p>--}}
-                                {{--<a href="#" class="btn_approve dislike"><i class="fa fa-meh-o" aria-hidden="true"></i></a>--}}
-                                                            {{--<a href="#" class="btn_approve like"><i class="fa fa-sign-language" aria-hidden="true"></i></a>--}}
 
-                        {{--</div>--}}
-                    {{--</div>--}}
-
-                {{--</div>--}}
-
-                <div class="col-lg-12 title-proof">
+                <div class="col-lg-12 col-md-12 col-xs-12 title-proof">
                     <a href="{{"/profile/".$sonChallenge->user_id}}" class="" title="" style="color: #333;text-decoration: none;">{{$sonChallenge->name }}
                     </a>
                     <a href="/challenge/{{$sonChallenge->uuid}}" class="" title="{{$sonChallenge->title}}">{{$sonChallenge->title}}</a>

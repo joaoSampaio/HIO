@@ -1059,12 +1059,6 @@ class HomeController extends Controller
                     $created = new Carbon($challenge->created_at);
                     $deadline = new Carbon($challenge->deadLine);
 
-//                    $differenceNow = $now->diffInMinutes($now->copy()->addMinutes(60));
-
-//                    $tt = $now->copy()->addMinutes(60)
-//                    $in60 = $now->addMinutes(61);
-//                    $differenceNow = $now->diffInMinutes($in60);
-
                     $differenceNow = $created->diffInMinutes($now);
                     $hoursTotal = $created->diffInMinutes($deadline);
                     echo "-----------------------<br>";
@@ -1082,10 +1076,10 @@ class HomeController extends Controller
 
         echo "Challenges:".json_encode($remindChallenge)."<br>";
 
-//            Challenge::whereIn('id', $remindChallenge)
-//                ->update([
-//                    'reminded' => true
-//                ]);
+            Challenge::whereIn('id', $remindChallenge)
+                ->update([
+                    'reminded' => true
+                ]);
 
         $data_email = array();
         DB::table('mail_reminds')
@@ -1150,13 +1144,14 @@ class HomeController extends Controller
 //        echo "data:".json_encode($data_email)."<br>";
         if(count($data_email) > 0){
             echo "data:".json_encode($data_email)."<br>";
-//            Mail::queueOn('emails', 'mail.emailRemind', ['data_email' => $data_email],
-//                function ($m) use ($data_email) {
-//                    $m->from('noreply@hiolegends.com', 'HIO');
-//
-//                    $m->to('targfonseca@gmail.com', 'joaosampaio30@gmail.com')->subject("Remind users");
-//                });
+            Mail::queueOn('emails', 'mail.emailRemind', ['data_email' => $data_email],
+                function ($m) use ($data_email) {
+                    $m->from('noreply@hiolegends.com', 'HIO');
 
+                    $m->to( 'joaosampaio30@gmail.com')->subject("Remind users");
+                });
+
+//            'targfonseca@gmail.com',
         }
 
         return "ok";
@@ -1379,7 +1374,6 @@ class HomeController extends Controller
     public function sendEmail($challenge, $users, $total)
     {
 
-        return;
         try {
             $date = $challenge->deadLine;
             $createDate = new DateTime($date);
@@ -1401,14 +1395,15 @@ class HomeController extends Controller
 
             }
         } catch (\Exception $e) {
+            Log::info('Exception catch');
+            Log::info('Exception '. $e->getMessage());
         }
 
     }
 
     public function sendEmailString($challenge, $emails, $total)
     {
-        return;
-//        try {
+        try {
             $date = $challenge->deadLine;
             $createDate = new DateTime($date);
             $deadline = $createDate->format('Y-m-d');
@@ -1425,8 +1420,10 @@ class HomeController extends Controller
                 });
 
             }
-//        } catch (\Exception $e) {
-//        }
+        } catch (\Exception $e) {
+            Log::info('Exception catch');
+            Log::info('Exception '. $e->getMessage());
+        }
 
     }
 

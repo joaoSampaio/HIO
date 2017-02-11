@@ -107,8 +107,35 @@
                 </button>
                 <div class="navbar-brand page-scroll">
                     <a  href="{{ action('HomeController@home') }}">
-                         <img style="width: 100px;" src="{{ asset('img/logo.png')}}" alt="HIO">
+                         <img style="width: 100px;" id="logo-hio-mobile" src="{{ asset('img/logo.png')}}" alt="HIO">
                     </a>
+
+
+                    <div style="width: 45px;float: right;margin-top: 13px;" id="mobile-notifications" >
+
+                        <a id="notification-btn-mobile" class="header-link notification-btn" role="button" data-toggle="dropdown" data-target="#" href="#" aria-haspopup="true" aria-expanded="false" style="padding-left: 0px;padding-top: 5px;background-color: rgba(148, 0, 211, 0);">
+                            <i class="glyphicon glyphicon-bell"></i>
+                        </a>
+                        <span class="badge badge-notify" style="display: none;margin-left: -10px;">0</span>
+
+
+                        <ul class="dropdown-menu notifications pull-right" role="menu" aria-labelledby="notification-btn-mobile">
+
+                            <div class="notification-heading text-color1">
+                                <h4 class="menu-title col-md-offset-1">Your Notifications</h4>
+                            </div>
+
+                            <div class="notifications-wrapper">
+
+                            </div>
+                            {{--<li class="divider"></li>--}}
+                            {{--<div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>--}}
+                        </ul>
+
+
+                    </div>
+
+
                 </div>
 
             </div>
@@ -156,24 +183,24 @@
                         </li>
                         <li style="width: 60px;" id="full-nav">
 
-                            <a id="notification-btn" class="header-link" role="button" data-toggle="dropdown" data-target="#" href="#" aria-haspopup="true" aria-expanded="false" style="padding-left: 0px;padding-top: 5px;background-color: rgba(148, 0, 211, 0);">
+                            <a id="notification-btn" class="header-link notification-btn" role="button" data-toggle="dropdown" data-target="#" href="#" aria-haspopup="true" aria-expanded="false" style="padding-left: 0px;padding-top: 5px;background-color: rgba(148, 0, 211, 0);">
                                 <i class="glyphicon glyphicon-bell"></i>
                             </a>
                             <span class="badge badge-notify" style="display: none;">0</span>
 
 
-                        <ul class="dropdown-menu notifications pull-right" role="menu" aria-labelledby="notification-btn">
+                            <ul class="dropdown-menu notifications pull-right" role="menu" aria-labelledby="notification-btn">
 
-                            <div class="notification-heading text-color1">
-                                <h4 class="menu-title col-md-offset-1">Your Notifications</h4>
-                            </div>
+                                <div class="notification-heading text-color1">
+                                    <h4 class="menu-title col-md-offset-1">Your Notifications</h4>
+                                </div>
 
-                            <div class="notifications-wrapper">
+                                <div class="notifications-wrapper">
 
-                            </div>
-                            {{--<li class="divider"></li>--}}
-                            {{--<div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>--}}
-                        </ul>
+                                </div>
+                                {{--<li class="divider"></li>--}}
+                                {{--<div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>--}}
+                            </ul>
 
 
                         </li>

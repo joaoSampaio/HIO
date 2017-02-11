@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
          Commands\EndChallenge::class,
+        Commands\RemindUser::class,
     ];
 
     /**
@@ -26,5 +27,8 @@ class Kernel extends ConsoleKernel
     {
          $schedule->command('end_approve_challenge_dois')
              ->everyThirtyMinutes();
+
+        $schedule->command('remind_user_1')
+            ->twiceDaily(1, 13);
     }
 }
