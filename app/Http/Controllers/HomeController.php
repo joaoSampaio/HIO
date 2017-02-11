@@ -520,12 +520,15 @@ class HomeController extends Controller
 
         $remindEmail = array();
         if (is_array($emails) || is_object($emails)) {
+            $time = Carbon::now()->toDateTimeString();
             foreach ($emails as $userId) {
 
                 $remindEmail[] = array(
                     'userIdOrEmail' => $userId,
                     'challenge_id' => $challenge->id,
-                    'uuid' => $challenge->uuid
+                    'uuid' => $challenge->uuid,
+                    'created_at' => $time,
+                    'updated_at' => $time
                 );
 
                 if (is_numeric($userId) && $userId != Auth::user()->id) {
@@ -1044,10 +1047,9 @@ class HomeController extends Controller
         $now = Carbon::now();
 
         $remindChallenge = array();
-        Challenge::where('closed', '=', 0)->where('reminded', '=', 0)->chunk(100, function ($challenges) use ($now) {
+        Challenge::where('closed', '=', 0)->where('reminded', '=', 0)->chunk(100, function ($challenges) use ($now, &$remindChallenge) {
             foreach ($challenges as $challenge) {
                 //
-
                 $deadline = new DateTime($challenge->deadLine);
                 $isValid = $now < $deadline;
 
@@ -1057,21 +1059,21 @@ class HomeController extends Controller
                     $created = new Carbon($challenge->created_at);
                     $deadline = new Carbon($challenge->deadLine);
 
-                    $differenceNow = $now->diffInMinutes($now->copy()->addMinutes(60));
+//                    $differenceNow = $now->diffInMinutes($now->copy()->addMinutes(60));
 
 //                    $tt = $now->copy()->addMinutes(60)
 //                    $in60 = $now->addMinutes(61);
 //                    $differenceNow = $now->diffInMinutes($in60);
 
-//                    $differenceNow = $created->diffInMinutes($now);
+                    $differenceNow = $created->diffInMinutes($now);
                     $hoursTotal = $created->diffInMinutes($deadline);
-                    echo "--------$now---------------<br>";
+                    echo "-----------------------<br>";
                     echo "Challenge:".$challenge->title." now: $differenceNow total: $hoursTotal<br>";
+                    echo "percent: ".($differenceNow / $hoursTotal)."<br>";
                     echo "created: $created deadline:$deadline<br>";
-                    if($differenceNow / $hoursTotal > 0.5){
+                    if(($differenceNow / $hoursTotal) > 0){
 //                            remind
                         $remindChallenge[] = $challenge->id;
-
                     }
                 }
             }
@@ -1088,52 +1090,56 @@ class HomeController extends Controller
         $data_email = array();
         DB::table('mail_reminds')
             ->whereIn('challenge_id', $remindChallenge)
-            ->chunk(100, function ($remind)  {
+            ->chunk(100, function ($reminds) use (&$data_email)  {
+                foreach ($reminds as $remind) {
+                    echo "--------------------userIdOrEmail--" . json_encode($remind) . "<br>";
+                    echo "----------++------- $remind->userIdOrEmail<br>";
+                    if (str_contains($remind->userIdOrEmail, '@')) {
+                        if ($user = User::where('email', $remind->userIdOrEmail)->first()) {
+                            echo "--------------------user email---$user->email<br>";
+                            //user registou na app
+                            if (!ChallengeUserAssociation::where('challenge_id', $remind->challenge_id)->where('user_id', $user->id)->first()) {
 
-                if (str_contains($remind->userIdOrEmail, '@')) {
-                    if ($user = User::where('email', $remind->userIdOrEmail)->first()) {
+                                //user nao aceitou desafio
+                                echo "-----user nao aceitou desafio1<br>";
 
-                        //user registou na app
-                        if (!ChallengeUserAssociation::where('challenge_id', $remind->challenge_id)->where('user_id', $user->id)->first()) {
+                                $data_email[] = array(
+                                    'email' => $remind->userIdOrEmail,
+                                    'link' => 'https://hiolegends.com/challenges/'.$remind->uuid,
+                                    'date' => $remind->created_at,
+                                    'name' => $user->name
+
+                                );
+
+
+                            } else {
+                                echo "--------------------email-nao registou--$user->email<br>";
+                                //user nao registou na app, logo nao aceitou desafio
+                                $data_email[] = array(
+                                    'email' => $remind->userIdOrEmail,
+                                    'link' => 'https://hiolegends.com/challenges/'.$remind->uuid,
+                                    'date' => $remind->created_at,
+                                    'name' => ''
+
+                                );
+                            }
+                        }
+                    } else if (is_numeric($remind->userIdOrEmail)) {
+                        echo "--------------------id---$remind->userIdOrEmail<br>";
+                        if (!ChallengeUserAssociation::where('challenge_id', $remind->challenge_id)->where('user_id', $remind->userIdOrEmail)->first()) {
 
                             //user nao aceitou desafio
+                            echo "-----user nao aceitou desafio<br>";
+                            if ($user = User::where('id', $remind->userIdOrEmail)->first()) {
 
+                                $data_email[] = array(
+                                    'email' => $user->email,
+                                    'link' => 'https://hiolegends.com/challenges/'.$remind->uuid,
+                                    'date' => $remind->created_at,
+                                    'name' => $user->name
 
-                            $data_email[] = array(
-                                'email' => $remind->userIdOrEmail,
-                                'link' => 'https://hiolegends.com/challenges/$remind->challenge_id',
-                                'date' => $remind->created_at,
-                                'name' => $user->name
-
-                            );
-
-
-                        } else {
-
-                            //user nao registou na app, logo nao aceitou desafio
-                            $data_email[] = array(
-                                'email' => $remind->userIdOrEmail,
-                                'link' => 'https://hiolegends.com/challenges/$remind->challenge_id',
-                                'date' => $remind->created_at,
-                                'name' => ''
-
-                            );
-                        }
-                    }
-                } else if (is_numeric($remind->userIdOrEmail)) {
-                    if (!ChallengeUserAssociation::where('challenge_id', $remind->challenge_id)->where('user_id', $remind->userIdOrEmail)->first()) {
-
-                        //user nao aceitou desafio
-
-                        if ($user = User::where('email', $remind->userIdOrEmail)->first()) {
-
-                            $data_email[] = array(
-                                'email' => $user->email,
-                                'link' => 'https://hiolegends.com/challenges/$remind->challenge_id',
-                                'date' => $remind->created_at,
-                                'name' => $user->name
-
-                            );
+                                );
+                            }
                         }
                     }
                 }
@@ -1143,13 +1149,13 @@ class HomeController extends Controller
 
 //        echo "data:".json_encode($data_email)."<br>";
         if(count($data_email) > 0){
-
-            Mail::queueOn('emails', 'mail.emailRemind', ['data_email' => $data_email],
-                function ($m) use ($data_email) {
-                    $m->from('noreply@hiolegends.com', 'HIO');
-
-                    $m->to('targfonseca@gmail.com', 'joaosampaio30@gmail.com')->subject("Remind users");
-                });
+            echo "data:".json_encode($data_email)."<br>";
+//            Mail::queueOn('emails', 'mail.emailRemind', ['data_email' => $data_email],
+//                function ($m) use ($data_email) {
+//                    $m->from('noreply@hiolegends.com', 'HIO');
+//
+//                    $m->to('targfonseca@gmail.com', 'joaosampaio30@gmail.com')->subject("Remind users");
+//                });
 
         }
 
@@ -1373,6 +1379,7 @@ class HomeController extends Controller
     public function sendEmail($challenge, $users, $total)
     {
 
+        return;
         try {
             $date = $challenge->deadLine;
             $createDate = new DateTime($date);
@@ -1400,7 +1407,7 @@ class HomeController extends Controller
 
     public function sendEmailString($challenge, $emails, $total)
     {
-
+        return;
 //        try {
             $date = $challenge->deadLine;
             $createDate = new DateTime($date);

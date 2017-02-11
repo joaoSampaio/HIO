@@ -22,11 +22,11 @@ class Authenticate
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             } else {
-                $redirectUrl = str_replace("http://localhost:8000","",$request->url());
+                $redirectUrl = str_replace("https://hiolegends.com","",$request->url());
                 Session::set('_previous_url', $redirectUrl);
                 print_r($redirectUrl);
                 session()->put('url.intended', $request->url());
-                return redirect()->guest('/auth/facebook');
+                return redirect()->guest('/auth');
 //                return redirect()->action('SocialAuthController@redirectToProvider');
                 //return redirect()->guest('login');
             }

@@ -42,7 +42,7 @@ return [
     'facebook' => [
         'client_id' => '948239501878979',
         'client_secret' => 'c48d7b6ef2d379c1dc9218863a394d20',
-        'redirect' => 'http://localhost:8000/auth/facebook/callback',
+        'redirect' => 'https://hiolegends.com/auth/facebook/callback',
     ],
 
 //    'facebook' => [
