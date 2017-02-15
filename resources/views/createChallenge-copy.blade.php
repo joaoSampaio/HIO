@@ -1,45 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('app')
 
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
-
-    <title>HIO - Challenge Your Friends</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/agency.css') }}" rel="stylesheet">
-    <!-- Custom Fonts -->
-    <link href="{{ asset('font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-
-    <link href='https://fonts.googleapis.com/css?family=Roboto:700,900,400,500' rel='stylesheet' type='text/css'>
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
-
-    <link href="{{ asset('css/hio.css') }}" rel="stylesheet">
-
-
-
-
-
-
-    {{--    <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">--}}
+@section('header')
+{{--    <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">--}}
 
     <link href="{{ asset('css/bootstrap-datetimepicker.css') }}" rel="stylesheet">
     <link href="{{ asset('css/radio.css') }}" rel="stylesheet">
@@ -96,6 +58,19 @@ label.custom-select {
     width: 100%;
 }
 
+/*.custom-select:after {*/
+    /*content: "▼";*/
+    /*position: absolute;*/
+    /*top: 2px;*/
+    /*right: 2px;*/
+    /*bottom: 2px;*/
+    /*font-size: 90%;*/
+    /*line-height: 35px;*/
+    /*padding: 3px 15px;*/
+    /*background: #E1E2E4;*/
+    /*color: white;*/
+    /*pointer-events: none;*/
+/*}*/
 
 .no-pointer-events .custom-select:after {
     content: none;
@@ -128,6 +103,7 @@ label.custom-select {
 
 
 .ch-grid {
+	margin: 20px 0 0 0;
 	padding: 0;
 	list-style: none;
 	display: block;
@@ -146,8 +122,8 @@ label.custom-select {
 }
 
 .ch-grid li {
-	width: 40px;
-	height: 40px;
+	width: 80px;
+	height: 80px;
 	display: inline-block;
 	margin: 20px;
 }
@@ -165,10 +141,6 @@ label.custom-select {
 	transition: all 0.4s ease-in-out;
 }
 
-.ch-item span{
-    font-size: 20px;
-}
-
 .ch-item .btn-xl {
     color: #fff;
     background-color: #C1C5C8;
@@ -178,7 +150,7 @@ label.custom-select {
     font-weight: 700;
     border-radius: 3px;
     font-size: 18px;
-    padding: 7px 15px;
+    padding: 11px 28px;
 }
 
 .ch-item .btn-active {
@@ -190,7 +162,7 @@ label.custom-select {
     font-weight: 700;
     border-radius: 3px;
     font-size: 18px;
-    padding: 7px 15px;
+    padding: 11px 28px;
 }
 
 .form-section{
@@ -223,140 +195,17 @@ button:focus {
         color: #eb1946;
     }
 
-
-
-
-.radio-choice input[type=radio] {
-    position: absolute;
-    visibility: hidden;
-}
-
-.radio-choice label{
-    position: relative;
-    margin: .5rem;
-    line-height: 135%;
-    cursor: pointer;
-    padding-left: 30px;
-}
-
-.inside{
-    display: block;
-    position: absolute;
-    top: -3px;
-    left: 0px;
-    z-index: 5;
-    transition: border .25s linear;
-    -webkit-transition: border .25s linear;
-
-
-
-    border-width: 2px;
-    border-color: #C1C5C8;
-    border-style: solid;
-    border-radius: 50%;
-    width: 26px;
-    height: 26px;
-
-
-}
-
-.inside::before {
-    display: block;
-    position: absolute;
-    content: '';
-
-    top: 4px;
-    left: 4px;
-    margin: auto;
-    transition: background 0.25s linear;
-    -webkit-transition: background 0.25s linear;
-
-    border-radius: 50%;
-    /*background-color: rgb(188, 188, 188);*/
-
-    width: 14px;
-    height: 14px;
-
-}
-
-input[type=radio]:checked ~ .inside::before {
-    background: #eb1946;
-}
-
-.btn-normal-login{
-    margin-top: 30px;
-}
-
-
-
-.create-input{
-    font-family: "Roboto";
-    background-color: transparent !important;
-    border: 0;
-    border-bottom: 2px solid rgba(188, 188, 188, 0.2);
-    padding: 0px;
-    font-size: 16px;
-    color: #C1C5C8 !important;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0);
-
-}
-
-.create-input::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-    color:    #C1C5C8;
-}
-.create-input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    color:    #C1C5C8;
-    opacity:  1;
-}
-.create-input::-moz-placeholder { /* Mozilla Firefox 19+ */
-    color:    #C1C5C8;
-    opacity:  1;
-}
-.create-input:-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color:    #C1C5C8;
-}
-
-.create-input:focus {
-    border-color: transparent;
-    outline: 0;
-    box-shadow:none;
-
-    /*-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(235,25,70,.6);*/
-    /*box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(235,25,70,.6);*/
-}
-
-
-    form, form label {
-        color: #C1C5C8;
-        font-weight: 400;
-    }
-
-    
-    .select2-selection__choice{
-        position: relative;
-        border-radius: 50%!important;
-        width: 50px;
-        padding: 0px !important;
-    }
-
-.select2-selection__choice__remove {
-    color: red !important;
-    cursor: pointer;
-    display: inline-block;
-    font-weight: bold;
-    right: 0;
-    position: absolute;
-    margin-right: 2px;
-}
-
 </style>
-</head>
+@endsection
 
-<body style="background-color: white">
+@section('content')
 
-        <div class="container">
+    <section>
+
+        <div class="container" style="margin-top: 50px">
             <div class="row" id="latest">
+
+                <h1 style="    text-align: center;margin-bottom: 10px;margin-top: 40px;">New Challenge</h1>
 
                 <div class="col-md-offset-1 col-md-10 col-sm-12 col-xs-12 personal-info">
                     {!! Form::open(array('action' => array('HomeController@storeChallenge'), 'class' => 'form-horizontal', 'id' => 'form-challenge', 'autocomplete' => 'off')) !!}
@@ -364,22 +213,22 @@ input[type=radio]:checked ~ .inside::before {
                         <ul class="ch-grid">
                             <li class="show-friends">
                                 <div class="ch-item ch-img-1 ">
-                                    <button type="button" id="circle1" class="btn btn-info btn-circle btn-xl btn-active"><span >1</span></button>
+                                    <button type="button" id="circle1" class="btn btn-info btn-circle btn-xl btn-active"><span style="font-size: 40px;">1</span></button>
                                 </div>
                             </li>
                             <li class="show-friends">
                                 <div class="ch-item ch-img-1">
-                                    <button type="button" id="circle2" class="btn btn-info btn-circle btn-xl"><span>2</span></button>
+                                    <button type="button" id="circle2" class="btn btn-info btn-circle btn-xl"><span style="font-size: 40px;">2</span></button>
                                 </div>
                             </li>
                             <li class="show-friends">
                                 <div class="ch-item ch-img-1">
-                                    <button type="button" id="circle3" class="btn btn-info btn-circle btn-xl"><span>3</span></button>
+                                    <button type="button" id="circle3" class="btn btn-info btn-circle btn-xl"><span style="font-size: 40px;">3</span></button>
                                 </div>
                             </li>
                             <li class="show-friends">
                                 <div class="ch-item ch-img-1">
-                                    <button type="button" id="circle4" class="btn btn-info btn-circle btn-xl"><span>4</span></button>
+                                    <button type="button" id="circle4" class="btn btn-info btn-circle btn-xl"><span style="font-size: 40px;">4</span></button>
                                 </div>
                             </li>
 
@@ -388,7 +237,7 @@ input[type=radio]:checked ~ .inside::before {
                         </ul>
 
                     <div id="top-create"></div>
-                        @if (count($errors) > 0)
+@if (count($errors) > 0)
                               <div class="alert alert-danger">
                                   <ul>
                                       @foreach ($errors->all() as $error)
@@ -403,46 +252,20 @@ input[type=radio]:checked ~ .inside::before {
                         <div class="form-section" id="page1">
 
                             <div class="form-group">
+                                <div class="col-md-offset-3 col-md-6 col-sm-12 col-xs-12" style="text-align: center;margin-bottom: 30px">
+                                    <h4 >Nominate who you want to take the challenge</h4>
+                                    <h4 >(Yes, you can challenge only yourself)</h4>
+                                </div>
 
                                 <div class="col-lg-12">
-                                    {!! Form::text('title', null,array('required', 'data-validation'=>'required', 'data-parsley-required-message'=>'*information required', 'class'=>'form-control create-input', 'placeholder'=>'Challenge Title')) !!}
+                                @if(Auth::user()->role == "brand")
+                                    {!! Form::select('emailFriend[]', array(),null,array('id'=>'friends-cha', 'class'=>'form-control js-data-example-ajax', 'multiple'=>'multiple')) !!}
+                                @else
+                                    {!! Form::select('emailFriend[]', array(),null,array('id'=>'friends-cha','required', 'data-validation'=>'required','data-parsley-required-message'=>'*information required',  'class'=>'form-control js-data-example-ajax', 'multiple'=>'multiple')) !!}
+                                @endif
                                 </div>
 
                             </div>
-                            <div class="form-group" style="margin-top: 35px;margin-bottom: 30px">
-                                <div class="col-lg-12 col-md-12">
-
-
-                                    <div class="radio-choice">
-
-                                        <label for="radio-public">
-                                            <input id="radio-public" checked="checked" class="radio radio-btn-public" type="radio" name="public" value="yes">
-                                            <div class="inside"></div>
-                                            Public
-                                        </label>
-                                        <label for="radio-private">
-                                            <input id="radio-private" class="radio radio-btn-public" type="radio" name="public" value="no">
-                                            <div class="inside"></div>
-                                            Private
-                                        </label>
-                                    </div>
-
-
-                                </div>
-                            </div>
-                            <div class="form-group form-private">
-
-                                <div class="col-lg-12 col-md-12" style="margin-bottom: 15px;">
-                                    {!! Form::text('reward', null,array( 'class'=>'form-control create-input','placeholder'=>'Reward')) !!}
-                                </div>
-                            </div>
-                            <div class="form-group form-private">
-
-                                <div class="col-lg-12 col-md-12">
-                                    {!! Form::text('penalty', null,array( 'class'=>'form-control create-input', 'placeholder'=>'Penalty')) !!}
-                                </div>
-                            </div>
-
 
                             @if(Auth::user()->role == "brand")
                             <div class="form-group" >
@@ -462,16 +285,30 @@ input[type=radio]:checked ~ .inside::before {
                             </div>
                             @endif
 
+
+                            <div class="form-group" style="margin-top: 70px; text-align: center;" >
+                              <div class="col-md-12 col-xs-12">
+                                    {{--<input class="btn btn-primary btn-xl" value="Next" id="nextp1">--}}
+                                  <button type="button" class="btn btn-primary btn-xl" id="nextp1">Next</button>
+                              </div>
+                            </div>
                         </div>
 
                         <div class="form-section" id="page2">
-
+                            <div class="form-group">
+                              <div class="col-md-offset-3 col-md-6 col-sm-12 col-xs-12" style="text-align: center;margin-bottom: 30px">
+                                  <h4 >Let them know what is waiting for them</h4>
+                              </div>
+                              <div class="col-lg-12">
+                                {!! Form::text('title', null,array('required', 'data-validation'=>'required', 'data-parsley-required-message'=>'*information required', 'class'=>'form-control', 'placeholder'=>'Challenge Title')) !!}
+                              </div>
+                            </div>
 
                             <div class="form-group">
-                              <div class="col-lg-6 col-md-6 col-xs-6">
+                              <div class="col-lg-6 col-md-6">
 
                               <label class="custom-select">
-                                    {!! Form::select('category', $category,'teste',array('required', 'data-parsley-required-message'=>'*information required', 'class'=>'form-control create-input')) !!}
+                                    {!! Form::select('category', $category,'teste',array('required', 'data-parsley-required-message'=>'*information required', 'class'=>'form-control')) !!}
 
                               </label>
 
@@ -480,19 +317,9 @@ input[type=radio]:checked ~ .inside::before {
 
                             <div class="form-group">
                               <div class="col-lg-12">
-                                {{ Form::text('description', null,array('required', 'data-parsley-required-message'=>'*information required', 'class'=>'form-control create-input', 'placeholder'=>'Describe your challenge')) }}
+                                {{ Form::textarea('description', null,array('required', 'data-parsley-required-message'=>'*information required', 'rows'=> 5, 'class'=>'form-control', 'placeholder'=>'Describe your challenge')) }}
 
                               </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="col-lg-12">
-                                    @if(Auth::user()->role == "brand")
-                                        {!! Form::select('emailFriend[]', array(),null,array('id'=>'friends-cha', 'class'=>'form-control  js-data-example-ajax', 'multiple'=>'multiple')) !!}
-                                    @else
-                                        {!! Form::select('emailFriend[]', array(),null,array('id'=>'friends-cha','required', 'data-validation'=>'required','data-parsley-required-message'=>'*information required',  'class'=>'form-control js-data-example-ajax', 'multiple'=>'multiple')) !!}
-                                    @endif
-                                </div>
                             </div>
 
 
@@ -518,18 +345,78 @@ input[type=radio]:checked ~ .inside::before {
 
                         </div>
 
+                        <div class="form-section" id="page4">
+                            <div class="form-group">
+
+                                <div class="col-md-offset-2 col-md-8 col-sm-12 col-xs-12" style="text-align: center;margin-bottom: 30px">
+                                      <h4 >Dare to reward the participants. If someone fails, feel free to penalty them and/or yourself</h4>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6" style="margin-bottom: 15px;">
+                                    {!! Form::text('reward', null,array('required', 'data-parsley-required-message'=>'*information required', 'class'=>'form-control','placeholder'=>'Reward')) !!}
+                                </div>
+
+
+                                <div class="col-lg-6 col-md-6">
+                                    {!! Form::text('penalty', null,array('required', 'data-parsley-required-message'=>'*information required', 'class'=>'form-control', 'placeholder'=>'Penalty')) !!}
+                                </div>
+
+                                <h5 style="text-transform: none;" class="col-lg-12">
+                                    We are not responsible for the nature of your rewards and penalties. Don't make anything capable of hurting yourself and/or your friends.
+                                 </h5>
+                            </div>
+
+                            <div class="form-group">
+
+                              <div class="col-lg-6 col-md-6">
+
+                                 <div class='input-group' >
+
+                                    <div class="col-lg-6 col-md-6">
+                                        <label style="float: left;     margin-top: 7px;">Public Challenge</label>
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="checkbox checkbox-circle checkbox-info" style="float: left; margin-top: -7px; margin-left: 10px;">
+                                            <input type="checkbox" name="public" checked value="yes" data-on-text="Public" data-off-text="Private" data-on-color="primary" data-off-color="primary">
+                                        </div>
+                                    </div>
+                                 </div>
+                              </div>
+
+                              {{--<div class="col-lg-6 col-md-6">--}}
+                                   {{--<div class='input-group' >--}}
+                                    {{--<div class="col-lg-6 col-md-6">--}}
+                                          {{--<label style="float: left; margin-top: 7px;">Publish on Facebook</label>--}}
+                                      {{--</div>--}}
+                                      {{--<div class="col-lg-6 col-md-6">--}}
+                                        {{--<div class="checkbox checkbox-circle checkbox-info" style="float: left; margin-top: -7px; margin-left: 10px;">--}}
+                                              {{--<input type="checkbox" name="post_facebook" checked value="yes" data-on-text="Publish" data-off-text="Private" data-on-color="primary" data-off-color="primary">--}}
+                                          {{--</div>--}}
+                                      {{--</div>--}}
+                                   {{--</div>--}}
+                                {{--</div>--}}
+
+                            </div>
+
+
+                        </div>
+
+
+
+
 
 
 
                         <div class="form-group" style="margin-top: 70px; text-align: center;" id="controls" >
                               <div class="col-md-12 col-xs-12">
 
-                                <div class="col-xs-6 col-md-6" style="margin-bottom: 20px;">
+                                <div class="col-xs-12 col-md-6" style="margin-bottom: 20px;">
                                     <button type="button" class="btn btn-default btn-xl btn-cancel-hio" id="back_control">Back</button>
                                     {{--<input class="btn btn-default btn-xl btn-cancel-hio" value="Back" id="back_control" >--}}
                                 </div>
 
-                                <div class="col-xs-6 col-md-6">
+                                <div class="col-xs-12 col-md-6">
                                     <button type="button" class="btn btn-primary btn-xl btn-create-hio" id="next_control">Next</button>
                                     {{--<input class="btn btn-primary btn-xl btn-create-hio" value="Next" id="next_control">--}}
                                 </div>
@@ -548,13 +435,15 @@ input[type=radio]:checked ~ .inside::before {
 
 
 
-</body>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script src="{{ asset('js/bootstrap.min.js') }}"></script>
 
-<script src="{{ asset('js/agency.js') }}"></script>
-<script src="{{ asset('js/select2.full.min.js') }}"></script>
+    </section>
+
+
+
+@endsection
+
+@section('footer')
 
     <script src="{{ asset('js/moment-with-locales.min.js') }}"></script>
 
@@ -576,31 +465,6 @@ input[type=radio]:checked ~ .inside::before {
 $( "#submeter" ).click(function( event ) {
     $( "#formulario" ).addClass( "validar" );
 });
-
-$(document).ready(function() {
-    $('input[name="public"]').change(function () {
-        if (this.value == 'yes') {
-            $('.form-private').hide();
-        }
-        else if (this.value == 'no') {
-
-            $('.form-private').show();
-        }
-        updateParentHeight();
-    });
-
-    var isPublic = true;
-
-    if (isPublic) {
-        $('.form-private').hide();
-    } else {
-        $('.form-private').show();
-    }
-    updateParentHeight();
-});
-
-
-
 
 
 $(".js-data-example-ajax").select2({
@@ -685,19 +549,9 @@ $('.js-data-example-ajax').on('select2:select', function (evt) {
         }
 
         function formatRepoSelection (repo) {
-//            if(repo.text == null)
-//                return repo.id;
-//            return repo.text;
-
-            var url = (repo.photo == "")? "/uploads/users/default_user.png" : "/uploads/users/"+repo.photo;
-            var markup = "<img style='width: 50px; height: 50px' class='img-circle' src='"+url +"' />";
-
-
-
-            return markup;
-
-
-
+            if(repo.text == null)
+                return repo.id;
+            return repo.text;
         }
 
 
@@ -722,7 +576,7 @@ $('.js-data-example-ajax').on('select2:select', function (evt) {
     }
 
 
-//    $("[name='public']").bootstrapSwitch();
+    $("[name='public']").bootstrapSwitch();
     $("[name='post_facebook']").bootstrapSwitch();
     $("[name='sendall']").bootstrapSwitch();
 
@@ -739,12 +593,13 @@ $(function () {
       .eq(index)
         .addClass('current');
     // Show only the navigation buttons that make sense for the current section:
-    $('#back_control').toggle(index >= 0);
+    $('#back_control').toggle(index > 0);
+    $('#nextp1').toggle(index == 0);
 
 
     var atTheEnd = index >= $sections.length - 1;
 //    $('#next_control').toggle(!atTheEnd);
-    $('#next_control').toggle(index >= 0);
+    $('#next_control').toggle(index > 0);
     //$('#form-challenge [type=submit]').toggle(atTheEnd);
 
 
@@ -764,7 +619,6 @@ $(function () {
         $("#next_control").val("Next");
     }
 
-      updateParentHeight();
 
 
   }
@@ -851,37 +705,10 @@ function moveTopCreate() {
 
 }
 
-function updateParentHeight() {
-    var  $frame = window.parent.document.getElementById('create-challenge-iframe');
-    var curHeight = $('body').height();
-    curHeight  = 500;
-    if($frame != null)
-        $frame.style.height =  curHeight + 'px' ;
-
-}
-
-//jQuery(function($){
-//    var lastHeight = 0, curHeight = 0, $frame = window.parent.document.getElementById('create-challenge-iframe');
-//    setInterval(function(){
-//        curHeight = $('body').height();
-//
-//        if($frame != null)
-//        $frame.style.height =  '500px' ;
-//
-////        parent.document.getElementById("create-challenge-iframe").style.height = (lastHeight = curHeight) + 'px' ;
-//
-////        if ( curHeight != lastHeight ) {
-////            $frame.style.height = (lastHeight = curHeight) + 'px' ;
-////        }
-//    },5000);
-//});
-
-//$(function () {
-//    var $frame = window.parent.document.getElementById('create-challenge-iframe');
-//    $frame.css('height', (lastHeight = curHeight) + 'px' );
-//});
-
 </script>
 
 
+
+
+@endsection
 

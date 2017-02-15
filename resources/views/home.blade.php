@@ -153,7 +153,7 @@ text-align: center;
                 @endif
 
                 <div class="intro-heading">READY TO CHALLENGE?</div>
-                <a href="{{ action('HomeController@createChallenge') }}" class="page-scroll btn btn-xl">CREATE CHALLENGE</a>
+                <button href="#" id="openCreate" class="page-scroll btn btn-xl">CREATE CHALLENGE</button>
 
 
             </div>
@@ -242,13 +242,30 @@ text-align: center;
                        </div>
                     </div>
 
-                {{--<div class="modal-footer">--}}
-                    {{--<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>--}}
-                    {{--<a class="btn btn-danger btn-ok btn-proof-delete">Delete</a>--}}
-                {{--</div>--}}
             </div>
         </div>
     </div>
+
+
+<div class="modal fade" id="create-challenge" tabindex="-1" role="dialog" aria-labelledby="modalHome" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="modalHome">Create Challenge</h4>
+            </div>
+
+            <div class="modal-body">
+
+                <iframe id="create-challenge-iframe" src="" style="" width="99.6%" frameborder="0"></iframe>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 @endsection
 
@@ -257,6 +274,36 @@ text-align: center;
 
 {{--<script type="text/javascript" src="path-to-file/jquery.actual.js"></script>--}}
 {{--<script src="{{ asset('js/jquery.mobile.custom.min.js') }}"></script>--}}
+
+<script>
+    $('#openCreate').click(function(){
+
+        $('#create-challenge').on('shown.bs.modal', function() {
+
+            $('#create-challenge-iframe').attr("src","{{ action('HomeController@createChallenge') }}");
+
+
+//            jQuery(function($){
+//                var lastHeight = 0, curHeight = 0, $frame = $("#create-challenge-iframe");
+//                setInterval(function(){
+//                    curHeight = $frame.contents().find('body').height();
+//                    if ( curHeight != lastHeight ) {
+//                        $frame.css('height', (lastHeight = curHeight) + 'px' );
+//                    }
+//                },500);
+//            });
+
+
+
+//            $("#create-challenge-iframe").load(function() {
+//                $(this).height( $("#create-challenge-iframe").contents().find("body").height() );
+//            });
+        });
+
+        $('#create-challenge').modal({show:true})
+    });
+
+</script>
 
 
     <script>

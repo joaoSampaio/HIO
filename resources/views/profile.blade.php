@@ -344,7 +344,7 @@ border-radius: 50%;
                     <div  style="text-align: center">
                         <div  style="display: inline-block;" >
                             <div id="cropContainerEyecandy" style="position: relative;width: 140px; height: 140px">
-                                <img src="{{'/user/photo/'. $user->id }}" alt="{{$user->name}}" title="{{$user->name}}" class="img-circle profile-main-photo">
+                                <img src="{{'/user/photo/'. $user->id }}" id="user-crop" alt="{{$user->name}}" title="{{$user->name}}" class="img-circle profile-main-photo">
                             </div>
 
                         </div>
@@ -560,6 +560,7 @@ $('.btn-tab-challenge').on('click', function (e) {
         doubleZoomControls:false,
         rotateFactor:10,
         rotateControls:false,
+        customUploadButtonId:'user-crop',
         uploadUrl: '/upload-photo',
         cropUrl: '/crop-photo',
         modal:true,

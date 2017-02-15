@@ -431,15 +431,7 @@
 {{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>--}}
     <!-- Plugin JavaScript -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-        {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>--}}
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-{{--    <script src="{{ asset('js/jquery.easing.min.js') }}"></script>--}}
-
-
-
-
-{{--    <script src="{{ asset('js/jqBootstrapValidation.js') }}"></script>--}}
-{{--    <script src="{{ asset('js/contact_me.js') }}"></script>--}}
 
     <script src="{{ asset('js/agency.js') }}"></script>
     <script src="{{ asset('js/select2.full.min.js') }}"></script>
