@@ -3,7 +3,7 @@
         @include('partials.single_challenge')
     @endforeach
 </div>
-<div class="row">
+<div class="row" style="text-align: center;">
     {!! $challenges->links() !!}
 </div>
 

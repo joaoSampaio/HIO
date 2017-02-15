@@ -12,7 +12,9 @@ class VerifyCsrfToken extends BaseVerifier
      * @var array
      */
     protected $except = [
-        'api*'
+        'api*',
+        'upload',
+        'crop'
     ];
 
     public function handle($request, Closure $next)

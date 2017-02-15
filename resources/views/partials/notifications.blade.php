@@ -18,7 +18,7 @@
                     </a>
                 </div>
 
-                <div class="col-sm-9 col-xs-9 col-md-9 text-color1" >
+                <div class="col-sm-9 col-xs-8 col-md-9 text-color1" >
                     <a class="clickable-link" href="/profile/{{$notification->sender_id}}" data-notification="{{ $notification->id}}">{{ $notification->name}}</a> has sent you a
                     <a class="clickable-link" href="/friends" data-notification="{{ $notification->id}}">friend request</a>
                     <br>
@@ -42,7 +42,7 @@
                     </a>
                 </div>
 
-                <div class="col-sm-9 col-xs-9 col-md-9 text-color1" >
+                <div class="col-sm-9 col-xs-8 col-md-9 text-color1" >
                     <a class="clickable-link" href="/profile/{{$notification->sender_id}}" data-notification="{{ $notification->id}}">{{ $notification->name}}</a> liked your
                     <a class="clickable-link" href="/proof/0/{{ $notification->reference_id}}" data-notification="{{ $notification->id}}">challenge</a>
                     <br>
@@ -66,7 +66,7 @@
                 </a>
             </div>
 
-            <div class="col-sm-9 col-xs-9 col-md-9 text-color1" >
+            <div class="col-sm-9 col-xs-8 col-md-9 text-color1" >
                 <a class="clickable-link" href="/profile/{{$notification->sender_id}}" data-notification="{{ $notification->id}}">{{ $notification->name}}</a> challenged you to
                 <br>
                 <a class="clickable-link" href="/challenge/{{ $notification->reference_id}}" data-notification="{{ $notification->id}}">{{truncateString($notification->parameters, 25)}}</a>
@@ -90,7 +90,7 @@
                 </a>
             </div>
 
-            <div class="col-sm-9 col-xs-9 col-md-9 text-color1" >
+            <div class="col-sm-9 col-xs-8 col-md-9 text-color1" >
                 <a class="clickable-link" href="/profile/{{$notification->sender_id}}" data-notification="{{ $notification->id}}">{{ $notification->name}}</a> wrote a new comment:
                 <br>
                 <a class="clickable-link" href="/proof/0/{{ $notification->reference_id}}" data-notification="{{ $notification->id}}">{{truncateString($notification->parameters, 25)}}</a>
@@ -113,7 +113,7 @@
                     </a>
                 </div>
 
-                <div class="col-sm-9 col-xs-9 col-md-9 text-color1" >
+                <div class="col-sm-9 col-xs-8 col-md-9 text-color1" >
                     <a class="clickable-link" href="/profile/{{$notification->sender_id}}" data-notification="{{ $notification->id}}">{{ $notification->name}}</a> uploaded a new proof to:
                     <a class="clickable-link" href="/proof/0/{{ $notification->reference_id}}" data-notification="{{ $notification->id}}">{{truncateString($notification->parameters, 25)}}</a>
                     <br>

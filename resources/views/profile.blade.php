@@ -2,6 +2,7 @@
 
 @section('header')
 
+ <link href="{{ asset('css/croppic.css') }}" rel="stylesheet">
 
 <style>
 
@@ -17,8 +18,9 @@
 .btn-edit  {
 border-color: #C1C5C8;
 background: #C1C5C8;
-padding: 10px 50px;
+    padding: 9px 40px !important;
 color: white;
+margin-top: 25px;
 }
 
 .btn-edit:hover  {
@@ -211,17 +213,101 @@ color: white;
 
 @media (min-width: 768px){
     .edit-profile{
-        position: absolute;
-        right: 0;
-        top: 50px;
-        z-index: 2;
+        /*position: absolute;*/
+        /*right: 0;*/
+        /*top: 50px;*/
+        /*z-index: 2;*/
     }
 }
 
 .challenge-item-info{
-    border: 1px solid #807c7c;
+    /*border: 1px solid #807c7c;*/
+    /*box-shadow: 0 5px 15px rgba(0,0,0,.5);*/
+    box-shadow: 0px 0px 68px 0px rgba(0, 0, 0, 0.2);
 }
 
+
+.profile-main-photo{
+    width: 140px;
+    height: 140px;
+}
+
+.profile-main-name{
+margin-top: 30px;
+    font-size: 36px;
+    font-weight: 500;
+}
+
+
+.bg-text, .bg-text-brand-new {
+    /*background-color: #aaa;*/
+    /*overflow: hidden;*/
+    position: relative;
+}
+.bg-text::before {
+    color: #ececed;
+    content: attr(data-bg-text);
+    display: block;
+    font-size: 208px;
+    line-height: 1;
+    position: absolute;
+    top: 1px;
+    white-space: nowrap;
+        overflow: hidden;
+        max-width: 95%;
+}
+
+
+
+.btn-tab-challenge  {
+    border-color: #C1C5C8;
+    background: #C1C5C8;
+    padding: 5px 25px !important;
+    color: white;
+    margin-top: 25px;
+    font-weight: 800;
+    margin-right: 5px;
+    margin-left: 5px;
+        font-size: 12px;
+}
+
+.btn-tab-challenge.active  {
+    border-color: #eb1946;
+    background: #eb1946;
+    color: white;
+    margin-top: 25px;
+    font-weight: 800;
+}
+
+.btn-tab-challenge:hover  {
+border-color: #eb1946;
+background: #eb1946;
+padding: 10px 50px;
+color: white;
+}
+
+.my-challenges-title{
+text-transform: inherit;
+    font-size: 45px;
+    font-weight: 300;
+    margin-top: 40px;
+}
+
+.cropImgWrapper{
+border-radius: 50%;
+}
+
+.cropContainerEyecandy_imgUploadForm{
+    display: none;
+}
+
+.btn-friends {
+    border-color: #5cb85c;
+    background: #5cb85c;
+    padding: 9px 40px !important;
+    color: white;
+    margin-top: 25px;
+}
 
   </style>
 
@@ -250,69 +336,37 @@ color: white;
                     <strong>Challenge saved!</strong> Your new challenge has been added.
                 </div>
             @endif
-            @if(Auth::user()->email === $user->email)
-            <div class="row text-center" style="margin-bottom: 40px;">
-                <div class="col-sm-12 col-md-12">
-                    <a class="btn btn-edit edit-profile" href="{{ action('HomeController@editProfile') }}">Edit</a>
-                </div>
-            </div>
-             @endif
+
             <div class="row text-center">
 
-            <div class="col-sm-12 col-md-12">
+                <div class="col-sm-12 col-md-12">
 
-                @if($user->photo == "")
-                    <img src="/uploads/users/default_user.png" alt="{{$user->name}}" title="{{$user->name}}" class="img-circle" style="height: 200px; width: 200px">
-                @else
-                    <img src="{{'/uploads/users/'. $user->photo }}" alt="{{$user->name}}" title="{{$user->name}}" class="img-circle" style="height: 200px; width: 200px">
+                    <div  style="text-align: center">
+                        <div  style="display: inline-block;" >
+                            <div id="cropContainerEyecandy" style="position: relative;width: 140px; height: 140px">
+                                <img src="{{'/user/photo/'. $user->id }}" alt="{{$user->name}}" title="{{$user->name}}" class="img-circle profile-main-photo">
+                            </div>
 
-                @endif
+                        </div>
+                    </div>
 
 
-                {{--@if(Auth::user()->facebook_id != NULL)--}}
-                    {{--<img src="{{'https://graph.facebook.com/v2.5/'. $user->facebook_id  .'/picture?width=200&height=200'}}" alt="{{$user->name}}" title="{{$user->name}}" class="img-circle center-block">--}}
-                {{--@else--}}
-                    {{--<img src="/img/no-photo.jpg" alt="{{$user->name}}" title="{{$user->name}}" class="img-circle center-block" style="width: 200px;height: 200px;">--}}
 
-                {{--@endif--}}
+                        <div ><h3 class="text-capitalize profile-main-name">{{$user->name}}</h3></div>
 
-                    <div ><h3 class="text-capitalize" style="margin-top: 30px;font-size: 30pt;font-weight: bold;">{{$user->name}}</h3></div>
-
-            </div>
-            {{--<div class="col-sm-12 col-md-12">--}}
-                {{--<span class="help-block">{{$user->email}}</span>--}}
-            {{--</div>--}}
-            @if(true)
-                <div class="col-sm-12 col-md-4" style="  margin-top: 30px; margin-bottom: 30px;">
-                    <h4 class="section-heading" style="color: #eb1946;margin-bottom: 5px;">About me:</h4>
-                    {!! nl2br(e($user->about)) !!}
                 </div>
-            @endif
 
-{{--@if(!empty($user->interests))--}}
             @if(true)
-                <div class="col-sm-12 col-md-4" style="  margin-top: 30px; margin-bottom: 30px;">
-                    <h4 class="section-heading" style="color: #eb1946;margin-bottom: 5px;">My Goals:</h4>
+                <div class="col-sm-12 col-md-8 col-md-offset-2" style="  margin-top: 30px; margin-bottom: 30px;font-size: 16px;font-weight: 500;">
+                    {!! nl2br(e($user->about)) !!}
+
+                </div>
+                <div class="col-sm-12 col-md-8 col-md-offset-2" style="  margin-bottom: 30px;font-size: 16px;font-weight: 500;">
 
                     {!! nl2br(e($user->interests)) !!}
                 </div>
             @endif
 
-            @if(true)
-                <div class="col-sm-12 col-md-4" style="  margin-top: 30px; margin-bottom: 30px;">
-                    <h4 class="section-heading" style="color: #eb1946;margin-bottom: 5px;">Achievements:</h4>
-{{--                        {{$user->achievements}}--}}
-                        <div class="col-sm-12">
-                            {{--@for ($x = 0; $x < 6; $x++)--}}
-                                {{--<div class="col-sm-3">--}}
-                                     {{--<img src="{{ asset('img/achievement/ach1.png')}}" class="img-responsive" title="Achivement2" alt="Achivement1">--}}
-                                {{--</div>--}}
-                            {{--@endfor--}}
-                            {{achievementToHtml($user->achievements)}}
-                        </div>
-
-                </div>
-            @endif
 
             <div class="col-sm-12 col-md-12">
                 <?php $sports = multiexplode(array(",",".","|",":"),$user->sports) ?>
@@ -322,111 +376,99 @@ color: white;
                 @endforeach
             </div>
 
-            <div class="col-sm-12 col-md-12" style="margin-top: 30px">
-                @if(!Auth::check() || Auth::user()->id == $user->id)
-                    <a href="{{ action('HomeController@createChallenge') }}" class="btn btn-xl">CREATE CHALLENGE</a>
-                @else
-                    <a href="{{ action('HomeController@createChallenge', $user->id) }}" class="btn btn-xl">CHALLENGE {{$user->name}}</a>
-                @endif
-            </div>
+            @if(Auth::user()->email === $user->email)
+                <div class="col-sm-12 col-md-12">
+                    <a class="btn btn-edit edit-profile" href="{{ action('UserProfileController@editProfile') }}">Edit</a>
+                </div>
+                <div class="col-sm-12 col-md-12">
+                    <a class="btn  btn-friends edit-profile" href="/friends">Friends</a>
+                </div>
+            @else
+                 <div class="col-sm-12 col-md-12">
+                    <a class="btn btn-friends edit-profile" href="{{action('HomeController@getFriendsUser', [ 'id' => $user->id, 'name'=>$user->name])}}">Friends</a>
+                </div>
 
-            <div class="col-sm-12 col-md-12" style="margin-top: 30px">
-
-                @if($canBeFriend && Auth::check() && Auth::user()->id != $user->id)
-
-                <form class="form-horizontal form-brand" role="form" method="POST" style="    margin-top: 30px;" action="{{ url('/friend') }}">
-                    {{ csrf_field() }}
-                    <input type="hidden" name="friendId" value="{{$user->id}}">
-                    <input type="hidden" name="action" value="0">
-                    <button type="submit" class="btn btn-success ">
-                        <i class="fa fa-btn fa-user"></i> Send Friendship Request
-                    </button>
-                </form>
-                @endif
-            </div>
-
-            <div class="col-sm-12 col-md-12" style="margin-top: 30px">
-                <ul class="ch-grid">
-                    {{--@if(is_array(json_decode($user->friends, true)))--}}
-                    <?php $countFriends=0; ?>
-
-                    @foreach ($userFriends as $friend)
-                        <?php $countFriends++; ?>
+             @endif
 
 
-                        @if($countFriends == 6)
-                            <li class="show-friends">
-                                <div class="ch-item ch-img-1">
 
-                                    <a href="{{action('HomeController@getFriendsUser', [ 'id' => $user->id, 'name'=>$user->name])}}" type="button" class="btn btn-info btn-circle btn-xl friends"><i class="glyphicon glyphicon-plus"></i><span style="font-size: 40px;">{{count($userFriends) - 5}}</span></a>
-                                </div>
-                            </li>
-                        @endif
+             <div class="col-sm-12 col-md-12" style="margin-top: 30px">
+                 @if(!Auth::check() || Auth::user()->id == $user->id)
+                     <a href="{{ action('HomeController@createChallenge') }}" class="btn btn-xl">CREATE CHALLENGE</a>
+                 @else
+                     <a href="{{ action('HomeController@createChallenge', $user->id) }}" class="btn btn-xl">CHALLENGE {{$user->name}}</a>
+                 @endif
+             </div>
 
-                        <li class="{{$countFriends >= 6? "hide-friend" : "" }}">
-                            <div class="ch-item ch-img-1">
+             <div class="col-sm-12 col-md-12" style="margin-top: 30px">
 
-                                @if($friend->photo == "")
-                                    <img src="/uploads/users/default_user.png" alt="{{$friend->name}}" title="{{$friend->name}}" class="img-circle friends {{$countFriends >= 6? "hide-friend" : "" }}" style="height: 100px; width: 100px">
-                                @else
-                                    <img src="{{'/uploads/users/'. $friend->photo }}" alt="{{$friend->name}}" title="{{$friend->name}}" class="img-circle friends {{$countFriends >= 6? "hide-friend" : "" }}" style="height: 100px; width: 100px">
+                 @if($canBeFriend && Auth::check() && Auth::user()->id != $user->id)
 
-                                @endif
-
-                                <div class="ch-info">
-                                    <p><a href="{{"/profile/".$friend->id}}">{{$friend->name}}</a></p>
-                                </div>
-                            </div>
-                        </li>
-                    @endforeach
-
-                    @if(Auth::check() && Auth::user()->id == $user->id)
-                    <li class="show-friends">
-                        <div class="ch-item ch-img-1">
-                            <a href="/friends" class=" btn-circle friends">
-                                <img src="/img/gear.png" class=" img-circle friends ">
-                            </a>
-                        </div>
-                    </li>
-                    @endif
-                    {{--@endif--}}
-                </ul>
-
-            </div>
-
+                 <form class="form-horizontal form-brand" role="form" method="POST" style="    margin-top: 30px;" action="{{ url('/friend') }}">
+                     {{ csrf_field() }}
+                     <input type="hidden" name="friendId" value="{{$user->id}}">
+                     <input type="hidden" name="action" value="0">
+                     <button type="submit" class="btn btn-success ">
+                         <i class="fa fa-btn fa-user"></i> Send Friendship Request
+                     </button>
+                 </form>
+                 @endif
+             </div>
 
 
             </div>
         </div>
+    </section >
+
+    <section style="background-color: #e7e7e7">
+
+        <div id="wrapper" style="text-align: center">
+            <div id="yourdiv" style="display: inline-block;" >{{achievementToHtml($user->achievements)}}</div>
+        </div>
+
+
+
     </section>
 
-<div>
-    <div class="tabbable full-width-tabs">
-        <ul class="nav nav-tabs">
-            <li class="active take-all-space-you-can">
-                <a href="#ongoing" aria-controls="ongoing" data-toggle="tab">
-                    <h3>{{$challenges->total()}}</h3>
-                    <h4 class="text-capitalize">Active</h4>
-                </a>
-            </li>
-            <li class="take-all-space-you-can">
-                <a href="#ended" aria-controls="ended" data-toggle="tab">
-                    <h3>{{$endedChallenges->total()}}</h3>
-                    <h4 class="text-capitalize">Completed</h4>
-                </a>
-            </li>
+{{--<div>--}}
+    {{--<div class="tabbable full-width-tabs">--}}
+        {{--<ul class="nav nav-tabs">--}}
+            {{--<li class="active take-all-space-you-can">--}}
+                {{--<a href="#ongoing" aria-controls="ongoing" data-toggle="tab">--}}
+                    {{--<h3>{{$challenges->total()}}</h3>--}}
+                    {{--<h4 class="text-capitalize">Active</h4>--}}
+                {{--</a>--}}
+            {{--</li>--}}
+            {{--<li class="take-all-space-you-can">--}}
+                {{--<a href="#ended" aria-controls="ended" data-toggle="tab">--}}
+                    {{--<h3>{{$endedChallenges->total()}}</h3>--}}
+                    {{--<h4 class="text-capitalize">Completed</h4>--}}
+                {{--</a>--}}
+            {{--</li>--}}
 
-            <li class="take-all-space-you-can">
-                <a href="#mychallenges" aria-controls="mychallenges" data-toggle="tab">
-                    <h3>{{$myChallenges->total()}}</h3>
-                    <h4 class="text-capitalize">Created Challenges</h4>
-                </a>
-            </li>
-        </ul>
+            {{--<li class="take-all-space-you-can">--}}
+                {{--<a href="#mychallenges" aria-controls="mychallenges" data-toggle="tab">--}}
+                    {{--<h3>{{$myChallenges->total()}}</h3>--}}
+                    {{--<h4 class="text-capitalize">Created Challenges</h4>--}}
+                {{--</a>--}}
+            {{--</li>--}}
+        {{--</ul>--}}
+    {{--</div>--}}
+
+{{--</div>--}}
+<section  class="bg-text" data-bg-text="Challenges" >
+
+
+    <h3 class="col-md-12 text-center my-challenges-title">My challenges</h3>
+    <div style="text-align: center">
+        <div class="col-md-12" style="display: inline-block;margin-bottom: 100px;margin-top: 25px;">
+
+            <a class="btn btn-tab-challenge active" href="#ongoing" aria-controls="ongoing" data-toggle="tab">ON GOING</a>
+            <a class="btn btn-tab-challenge" href="#ended" aria-controls="ended" data-toggle="tab">FINISHED</a>
+            <a class="btn btn-tab-challenge" href="#mychallenges" aria-controls="mychallenges" data-toggle="tab">ALL</a>
+        </div>
     </div>
 
-</div>
-<section >
     <div class="container">
         <div class="row" id="latest">
 
@@ -439,7 +481,7 @@ color: white;
                         @endforeach
                     </div>
 
-                    <div class="row">
+                    <div class="row" style="text-align: center;">
                         {!! $challenges->links() !!}
                     </div>
 
@@ -452,7 +494,7 @@ color: white;
                             @include('partials.single_challenge')
                         @endforeach
                     </div>
-                    <div class="row">
+                    <div class="row" style="text-align: center;">
                         {!! $endedChallenges->links() !!}
                     </div>
 
@@ -464,7 +506,7 @@ color: white;
                             @include('partials.single_challenge')
                         @endforeach
                     </div>
-                    <div class="row">
+                    <div class="row" style="text-align: center;">
                         {!! $myChallenges->links() !!}
                     </div>
 
@@ -479,6 +521,9 @@ color: white;
 
 
 
+
+
+
 @endsection
 
 
@@ -486,24 +531,59 @@ color: white;
 
 <script>
 
-$("#endedbtn").click(function(){
-    $("#endeddiv").addClass("bg-light-gray");
-    $("#ongoingdiv").removeClass("bg-light-gray");
-});
-
-$("#ongoingbtn").click(function(){
-    $("#endeddiv").removeClass("bg-light-gray");
-    $("#ongoingdiv").addClass("bg-light-gray");
-});
-
-//$(".show-friends").click(function(){
-//    $(".hide-friend").removeClass("hide-friend");
-//    $(".show-friends").hide();
+//$("#endedbtn").click(function(){
+//    $("#endeddiv").addClass("bg-light-gray");
+//    $("#ongoingdiv").removeClass("bg-light-gray");
 //});
+//
+//$("#ongoingbtn").click(function(){
+//    $("#endeddiv").removeClass("bg-light-gray");
+//    $("#ongoingdiv").addClass("bg-light-gray");
+//});
+
+
+$('.btn-tab-challenge').on('click', function (e) {
+    $('.btn-tab-challenge').removeClass('active');
+    $(e.currentTarget).addClass('active');
+})
+
 
 
 </script>
 
+<script src="{{ asset('js/croppic.min.js') }}"></script>
+@if(Auth::user()->email == $user->email)
+<script>
+    var eyeCandy = $('#cropContainerEyecandy');
+    var croppedOptions = {
+        zoomFactor:10,
+        doubleZoomControls:false,
+        rotateFactor:10,
+        rotateControls:false,
+        uploadUrl: '/upload-photo',
+        cropUrl: '/crop-photo',
+        modal:true,
+        onAfterImgCrop:
+            function(){
+                var d = new Date();
+                $(".croppedImg").attr("src", "{{'/user/photo/'. $user->id }}?"+d.getTime());
+                $(".croppedImg").addClass('img-circle');
+
+
+                $(".img-circle").attr("src", "{{'/user/photo/'. $user->id }}?"+d.getTime());
+
+                console.log('onAfterImgCrop')
+
+
+            },
+        cropData:{
+            'width' : 140,
+            'height': 140
+        }
+    };
+    var cropperBox = new Croppic('cropContainerEyecandy', croppedOptions);
+</script>
+@endif
 
 <script>
 //    $(window).on('hashchange', function() {
@@ -586,10 +666,9 @@ $("#ongoingbtn").click(function(){
         }
 
 
+
+
     </script>
-
-
-
 
 
 

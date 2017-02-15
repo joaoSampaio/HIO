@@ -53,12 +53,12 @@ function achievementToHtml($achievements){
     }else{
         $achievements = json_decode($achievements, true);
         if (array_key_exists('1create', $achievements)) {
-            echo view('partials.achievement')->with('icon', 'ach1.png')->with('title', 'First created');
+            echo view('partials.achievement')->with('icon', '1_created.png')->with('title', 'First created');
         }
         if(array_key_exists('totalCompleted', $achievements)){
-            echo view('partials.achievement')->with('icon', 'ach1.png')->with('title', 'First Challenge completed');
+            echo view('partials.achievement')->with('icon', '1_completed.png')->with('title', 'First Challenge completed');
             if($achievements['totalCompleted'] >=5 )
-                echo view('partials.achievement')->with('icon', 'ach1.png')->with('title', 'Five Challenges completed');
+                echo view('partials.achievement')->with('icon', '5_completed.png')->with('title', 'Five Challenges completed');
         }
     }
 

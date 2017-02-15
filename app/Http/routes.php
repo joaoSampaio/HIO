@@ -80,9 +80,9 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('challenge/{uuid}/{secret?}', 'HomeController@challengeDetail');
 
-    Route::get('ended-challenges/{id}', 'HomeController@getUserEndedChallenges');
-    Route::get('my-challenges/{id}', 'HomeController@getUserCreatedChallenges');
-    Route::get('ongoing-challenges/{id}', 'HomeController@getUserOngoingChallenges');
+    Route::get('ended-challenges/{id}', 'UserProfileController@getUserEndedChallenges');
+    Route::get('my-challenges/{id}', 'UserProfileController@getUserCreatedChallenges');
+    Route::get('ongoing-challenges/{id}', 'UserProfileController@getUserOngoingChallenges');
     Route::get('ended-challenges', 'HomeController@getEndedChallenges');
     Route::get('ongoing-challenges', 'HomeController@getOngoingChallenges');
 
@@ -102,9 +102,17 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('new/challenge/{userFB?}', 'HomeController@createChallenge');
         Route::post('new/challenge', 'HomeController@storeChallenge');
-        Route::get('profile/{id}', 'HomeController@userProfile');
-        Route::get('profile/me/edit', 'HomeController@editProfile');
-        Route::post('profile/me/edit', 'HomeController@post_editProfile');
+
+
+
+        Route::post('upload-photo', 'UserProfileController@postUpload');
+        Route::post('crop-photo', 'UserProfileController@postCrop');
+        Route::get('profile/{id}', 'UserProfileController@userProfile');
+        Route::get('profile/me/edit', 'UserProfileController@editProfile');
+        Route::post('profile/me/edit', 'UserProfileController@post_editProfile');
+
+
+
         Route::post('challenge/{uuid}/close', 'HomeController@closeChallenge');
         Route::get('challenges/{uuid}/edit', 'HomeController@editChallenge');
         Route::post('challenges/{uuid}/edit', 'HomeController@editStoreChallenge');

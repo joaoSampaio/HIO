@@ -124,181 +124,8 @@ class HomeController extends Controller
         return view('policy');
     }
 
-    public function userProfile($id, $challengeCreated = false)
-    {
-        $idUser = $id;
-        $user = null;
-        $showPrivate = false;
-        $now = Carbon::now();
-        if (strcmp($id, 'me') == 0 || (Auth::check() && Auth::user()->id == $id)) {
-            $idUser = Auth::user()->id;
-            $user = Auth::user();
-            $showPrivate = true;
-
-        } else if ($user = User::where('id', $id)->first()) {
-
-        } else {
-            //rever user nao existe
-            return view('home')->with('authUser', "");
-        }
-
-        $endedChallenges = Challenge::join('challenge_user as po', 'po.challenge_id', '=', 'challenges.id')
-            ->where('po.user_id', $idUser)
-            ->when(!$showPrivate, function ($query) {
-                return $query->where('challenges.public', '=', 1);
-            })
-            ->where(function ($query) {
-                $now = Carbon::now();
-                $query->where('challenges.closed', '=', 1)
-                    ->orWhere('challenges.deadLine', '<', $now);
-            })
-            ->orderBy('deadLine', 'desc')
-            ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ended', $page = null);
-
-        $ongoingChallenges = Challenge::join('challenge_user as po', 'po.challenge_id', '=', 'challenges.id')
-            ->where('po.user_id', $idUser)
-            ->when(!$showPrivate, function ($query) {
-                return $query->where('challenges.public', '=', 1);
-            })
-            ->where('closed', '=', 0)
-            ->where('deadLine', '>', $now)
-            ->orderBy('deadLine', 'asc')
-            ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ongoing', $page = null);
-
-        $myChallenges = DB::table('challenges')
-            ->where('creator_id', $idUser)
-            ->when(!$showPrivate, function ($query) {
-                return $query->where('challenges.public', '=', 1);
-            })
-            ->orderBy('deadLine', 'desc')
-            ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'myChallenges', $page = null);
 
 
-        $canBeFriend = false;
-        if (Auth::check() && Auth::user()->id != $idUser) {
-            $canBeFriend = $this->canBeFriend($idUser);
-        }
-
-        $userFriends = $this->getAllFriends($idUser);
-
-
-        return view('profile')->with('challenges', $ongoingChallenges)
-            ->with('user', $user)
-            ->with('endedChallenges', $endedChallenges)
-            ->with('challengeCreated', $challengeCreated)
-            ->with('myChallenges', $myChallenges)
-            ->with('canBeFriend', $canBeFriend)
-            ->with('userFriends', $userFriends);
-
-
-    }
-
-
-    public function getUserEndedChallenges($id)
-    {
-
-        $idUser = $id;
-        $user = null;
-        $showPrivate = false;
-        if (strcmp($id, 'me') == 0 || (Auth::check() && Auth::user()->id == $id)) {
-            $idUser = Auth::user()->id;
-            $showPrivate = true;
-
-        } else if ($user = User::where('id', $id)->first()) {
-
-        } else {
-            //rever user nao existe
-            return view('home')->with('authUser', "");
-        }
-
-        $endedChallenges = Challenge::join('challenge_user as po', 'po.challenge_id', '=', 'challenges.id')
-            ->where('po.user_id', $idUser)
-            ->when(!$showPrivate, function ($query) {
-                return $query->where('challenges.public', '=', 1);
-            })
-            ->where(function ($query) {
-                $now = Carbon::now();
-                $query->where('challenges.closed', '=', 1)
-                    ->orWhere('challenges.deadLine', '<', $now);
-            })
-            ->orderBy('deadLine', 'desc')
-            ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ended', $page = null);
-
-
-        return json_encode(view('partials.challenge')->with('challenges', $endedChallenges)->render());
-    }
-
-
-    public function getUserCreatedChallenges($id)
-    {
-
-        $idUser = $id;
-        $user = null;
-        $now = Carbon::now();
-        $showPrivate = false;
-        if (strcmp($id, 'me') == 0 || (Auth::check() && Auth::user()->id == $id)) {
-            $idUser = Auth::user()->id;
-            $showPrivate = true;
-
-        } else if ($user = User::where('id', $id)->first()) {
-            $found = true;
-        } else {
-            //rever user nao existe
-            return view('home')->with('authUser', "");
-        }
-
-
-        $myChallenges = DB::table('challenges')
-            ->where('creator_id', $idUser)
-            ->when(!$showPrivate, function ($query) {
-                return $query->where('challenges.public', '=', 1);
-            })
-            ->orderBy('deadLine', 'desc')
-            ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'myChallenges', $page = null);
-
-
-        return json_encode(view('partials.challenge')->with('challenges', $myChallenges)->render());
-    }
-
-
-    public function getUserOngoingChallenges($id)
-    {
-
-        $idUser = $id;
-        $user = null;
-        $now = Carbon::now();
-        $showPrivate = false;
-        if (strcmp($id, 'me') == 0 || (Auth::check() && Auth::user()->id == $id)) {
-            $idUser = Auth::user()->id;
-            $showPrivate = true;
-
-        } else if ($user = User::where('id', $id)->first()) {
-            $found = true;
-        } else {
-            //rever user nao existe
-            return view('home')->with('authUser', "");
-        }
-
-
-        $ongoingChallenges = Challenge::join('challenge_user as po', 'po.challenge_id', '=', 'challenges.id')
-            ->where('po.user_id', $idUser)
-            ->when(!$showPrivate, function ($query) {
-                return $query->where('challenges.public', '=', 1);
-            })
-            ->where('closed', '=', 0)
-            ->where('deadLine', '>', $now)
-            ->orderBy('deadLine', 'asc')
-            ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ongoing', $page = null);
-
-
-        return json_encode(view('partials.challenge')->with('challenges', $ongoingChallenges)->render());
-    }
-
-
-    public function editProfile()
-    {
-        return view('edit_profile');
-    }
 
     public function fixPhotos()
     {
@@ -321,58 +148,6 @@ class HomeController extends Controller
 //            $image = Image::make(sprintf('%s', $fileName))->fit(200)->save($info["dirname"]."/".$info["filename"]."_thumb");
 ////            echo $fileName, "\n";
         }
-    }
-
-
-    public function post_editProfile(Request $request)
-    {
-
-        $user = User::where('id', Auth::user()->id)->first();
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $fileNameNoExtension = md5($user->email);
-            $fileName = $fileNameNoExtension . '.' .
-                $file->getClientOriginalExtension();
-
-            $type = 0;
-            $mimeType = $request->file('file')->getMimeType();
-            if (substr($mimeType, 0, 5) == 'image') {
-                // this is an image
-
-//                $request->file('file')->move(
-//                    base_path() . '/public/uploads/users/', $fileName
-//                );
-
-                $file->move('uploads/users/', $fileName);
-                $image = Image::make(sprintf('uploads/users/%s', $fileName))->fit(200)->save();
-
-//                $image = $request->file('file');
-//                $path = public_path('uploads/users/' . $fileName);
-//
-//                Image::make($image->getRealPath())->resize(200, 200)->save($path);
-                $user->photo = $fileName;
-
-
-            }
-        }
-
-
-        $user->about = $request->input('about');
-
-        if (!empty($request->input('sports'))) {
-            $user->sports = implode(",", $request->input('sports'));
-        } else {
-            $user->sports = "";
-        }
-
-
-        $user->name = $request->input('name');
-        $user->interests = $request->input('interests');
-
-
-        $user->save();
-//        echo 'se o ecrã está todo branco, correu tudo bem.';
-        return redirect()->action('HomeController@userProfile', 'me');
     }
 
     public function createChallenge($userFB = null)
@@ -554,7 +329,7 @@ class HomeController extends Controller
 //        echo "...".json_encode($emailsToSend);
         \Session::flash('challengeCreated', 'true');
 
-        return redirect()->action('HomeController@userProfile', 'me')->with(['challengeCreated' => 'true']);
+        return redirect()->action('UserProfileController@userProfile', 'me')->with(['challengeCreated' => 'true']);
     }
 
     public function joinChallenge($uuid)
@@ -1041,6 +816,11 @@ class HomeController extends Controller
 
     public function teste()
     {
+
+        2/0;
+
+        return;
+
 
 
 //        return "ola";

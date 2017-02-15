@@ -125,15 +125,15 @@ text-align: center;
           max-width: 95%;
   }
 
-.background-text{
-position: absolute;
-   top: 0;
-   left: 0;
-color: #fff;
-   font-size: 249px;
-   z-index: 0;
-   overflow: hidden;
-}
+/*.background-text{*/
+/*position: absolute;*/
+   /*top: 0;*/
+   /*left: 0;*/
+/*color: #fff;*/
+   /*font-size: 249px;*/
+   /*z-index: 0;*/
+   /*overflow: hidden;*/
+/*}*/
 
 </style>
 @endsection

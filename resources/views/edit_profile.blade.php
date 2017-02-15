@@ -64,7 +64,7 @@ width: 200px;
                     {{--This is an <strong>.alert</strong>. Use this to show important messages to the user.--}}
                   {{--</div>--}}
                   <h3 class="text-center">Personal info</h3>
-                  {!! Form::open(array('action' => array('HomeController@post_editProfile'), 'class' => 'form-horizontal','files' => true)) !!}
+                  {!! Form::open(array('action' => array('UserProfileController@post_editProfile'), 'class' => 'form-horizontal','files' => true)) !!}
 
                   <div class="form-group">
                     <label class="col-lg-12">Profile photo:</label>

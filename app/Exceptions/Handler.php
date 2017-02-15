@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -33,6 +34,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
+//        echo "-2--".$e->getMessage();
         parent::report($e);
     }
 
@@ -45,14 +47,18 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+//        echo "-1";
+        if (!$this->isHttpException($e))
+            $e = new HttpException(500);
 
+
+//        echo "-1.1";
         if ($this->isHttpException($e))
         {
             return $this->renderHttpException($e);
         }
         else
         {
-//            return view('errors.500');
             return parent::render($request, $e);
         }
     }
@@ -71,7 +77,8 @@ class Handler extends ExceptionHandler
         }
         else
         {
-            return (new SymfonyDisplayer(config('app.debug')))->createResponse($e);
+            return $this->convertExceptionToResponse($e);
+//            return (new SymfonyDisplayer(config('app.debug')))->createResponse($e);
         }
     }
 }
