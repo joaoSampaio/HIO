@@ -48,7 +48,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/vote/proof/{file_id}', 'SonChallengeController@likeFile');
     Route::post('/delete/proof/{file_id}', 'SonChallengeController@deleteProof');
     Route::get('/proof/{uuid}/{file_id}/status', 'SonChallengeController@isProofReady');
-    Route::get('/vote/proofs', 'SonChallengeController@showVoteProofs');
+    Route::get('/new', 'SonChallengeController@showVoteProofs');
 
 
     Route::get('/views/proof/{file_id}', 'HomeController@getChallengeSonViews');

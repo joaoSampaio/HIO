@@ -3,10 +3,11 @@
 
 <head>
 
+    <meta name="google-site-verification" content="LfFDtDqbM9i_YBr5Hk06cAjJrHPgVXG0T6KJCHku7b0" />
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
+    <meta name="description" content="Sport Gamification using challenges">
     <meta name="author" content="">
     <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
@@ -81,6 +82,16 @@
     background-position: center;
     }
 
+.create-challenge-title{
+    text-align: center;
+    font-weight: 400;
+    text-transform: initial;
+    font-size: 25px;
+}
+
+.modal-header-create {
+    padding: 15px;
+}
 
     </style>
 
@@ -152,6 +163,8 @@
                     <li {{{Request::is('challenges') ? 'class=active' : ''}}} >
                         <a class="header-link"  href="{{ url('challenges') }}">Challenges</a>
                     </li>
+
+                    <li {{{Request::is('HIO-Mission') ? 'class=active' : ''}}}><a  class="header-link" href="{{ url('new') }}">New</a></li>
 
 
                     {{--<li class="search-select2">{!! Form::select('search[]', array(),null,array( 'class'=>'form-control hidden search-ajax', 'multiple'=>'multiple')) !!}</li>--}}
@@ -381,45 +394,6 @@
         </div>
 
 
-
-
-            {{--<div class="container">--}}
-                {{--<div class="row">--}}
-                    {{--<div class="col-md-4">--}}
-                        {{--<span class="copyright">&copy; 2016 HIO. Todos os direitos reservados</span>--}}
-                    {{--</div>--}}
-                    {{--<div class="col-md-4">--}}
-                        {{--<ul class="list-inline social-buttons">--}}
-                            {{--<li><a href="https://www.instagram.com/hioselfmadelegends/"><i class="fa fa-instagram"></i></a>--}}
-                            {{--</li>--}}
-                            {{--<li><a href="https://www.facebook.com/HIO-978238685528426/?fref=ts"><i class="fa fa-facebook"></i></a>--}}
-                            {{--</li>--}}
-                            {{--<li><a href="https://hioblog.wordpress.com"><i class="fa fa-wordpress"></i></a>--}}
-                            {{--</li>--}}
-                        {{--</ul>--}}
-                    {{--</div>--}}
-
-
-
-
-                    {{--<div class="col-md-4">--}}
-                        {{--<ul class="list-inline quicklinks">--}}
-                            {{--<li><a href="{{ url('private-policy') }}">Privacy Policy</a>--}}
-                            {{--</li>--}}
-                            {{--<li style="    color: #eb1946;padding: 0px;">|</li>--}}
-                            {{--<li><a href="#">Terms of Use</a>--}}
-                            {{--</li>--}}
-                            {{--<li style="    color: #eb1946;padding: 0px;">|</li>--}}
-                            {{--<li><a  href="{{ url('terms') }}">Terms & Conditions</a></li>--}}
-
-                            {{--<li><a  href="{{ url('contact-us') }}">Contact us</a></li>--}}
-                             {{--<li style="    color: #eb1946;padding: 0px;">|</li>--}}
-                            {{--<li><a  href="{{ url('HIO-Mission') }}">HIO Mission</a></li>--}}
-                        {{--</ul>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-        {{--</footer>--}}
 
 </main>
     <!-- jQuery -->

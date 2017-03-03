@@ -391,12 +391,11 @@ border-radius: 50%;
              @endif
 
 
-
              <div class="col-sm-12 col-md-12" style="margin-top: 30px">
                  @if(!Auth::check() || Auth::user()->id == $user->id)
-                     <a href="{{ action('HomeController@createChallenge') }}" class="btn btn-xl">CREATE CHALLENGE</a>
+                     <a href="#" id="openCreate" class="btn btn-xl">CREATE CHALLENGE</a>
                  @else
-                     <a href="{{ action('HomeController@createChallenge', $user->id) }}" class="btn btn-xl">CHALLENGE {{$user->name}}</a>
+                     <a href="#" id="openCreate" class="btn btn-xl">CHALLENGE {{$user->name}}</a>
                  @endif
              </div>
 
@@ -519,7 +518,24 @@ border-radius: 50%;
 </section>
 
 
+<div class="modal fade" id="create-challenge" tabindex="-1" role="dialog" aria-labelledby="modalHome" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
+            <div class="modal-header-create">
+                <button type="button" class="close" style="font-size: 40px;font-weight: 300;" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="create-challenge-title" id="modalHome">Create Challenge</h4>
+            </div>
+
+            <div class="modal-body">
+                <span id="create-spin" class="glyphicon glyphicon-refresh spinning"></span>
+                <iframe id="create-challenge-iframe" src="" style="" width="99.6%" frameborder="0"></iframe>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 
 
 
@@ -530,17 +546,23 @@ border-radius: 50%;
 @section('footer')
 
 <script>
+    $('#openCreate').click(function(){
 
-//$("#endedbtn").click(function(){
-//    $("#endeddiv").addClass("bg-light-gray");
-//    $("#ongoingdiv").removeClass("bg-light-gray");
-//});
-//
-//$("#ongoingbtn").click(function(){
-//    $("#endeddiv").removeClass("bg-light-gray");
-//    $("#ongoingdiv").addClass("bg-light-gray");
-//});
+        $('#create-challenge').on('shown.bs.modal', function() {
+        @if(!Auth::check() || Auth::user()->id == $user->id)
+             $('#create-challenge-iframe').attr("src","{{ action('HomeController@createChallenge') }}");
+         @else
+            $('#create-challenge-iframe').attr("src","{{ action('HomeController@createChallenge', $user->id) }}");
+         @endif
 
+        });
+        $('#create-challenge').modal({show:true})
+    });
+
+</script>
+
+
+<script>
 
 $('.btn-tab-challenge').on('click', function (e) {
     $('.btn-tab-challenge').removeClass('active');

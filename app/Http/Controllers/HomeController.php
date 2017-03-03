@@ -201,8 +201,6 @@ class HomeController extends Controller
         $this->validate($request, [
             'description' => 'required',
             'category' => 'required',
-            'reward' => 'required',
-            'penalty' => 'required',
             'deadLine' => 'required',
             'title' => 'required',
         ]);
@@ -211,6 +209,7 @@ class HomeController extends Controller
         $emailsToSendString = array();
         $emails = $request->input('emailFriend');
 //        print_r($emails);
+//        echo json_encode($emails);
         $challengeMyself = false;
         $total = 0;
         $notificationManager = new NotificationManager();
@@ -253,6 +252,13 @@ class HomeController extends Controller
         $penalty = $request->input('penalty');
         $deadLine = $request->input('deadLine');
         $public = $request->input('public', false);
+
+//        echo "<br>description:".$description;
+//        echo "<br>cat:".$category;
+//        echo "<br>rew:".$reward;
+//        echo "<br>pen:".$penalty;
+//        echo "<br>dead:".$deadLine;
+//        echo "<br>pub:".$public;
 
         if ($public) {
             $public = 1;
@@ -301,7 +307,7 @@ class HomeController extends Controller
                 $remindEmail[] = array(
                     'userIdOrEmail' => $userId,
                     'challenge_id' => $challenge->id,
-                    'uuid' => $challenge->uuid,
+                    'uuid' => $reference_id,
                     'created_at' => $time,
                     'updated_at' => $time
                 );
@@ -324,12 +330,16 @@ class HomeController extends Controller
 
         DB::table('mail_reminds')->insert($remindEmail);
 
-        $this->sendEmail($challenge, $emailsToSend, $total);
-        $this->sendEmailString($challenge, $emailsToSendString, $total);
+        if (!App::environment('local')) {
+
+            $this->sendEmail($challenge, $emailsToSend, $total);
+            $this->sendEmailString($challenge, $emailsToSendString, $total);
+        }
 //        echo "...".json_encode($emailsToSend);
         \Session::flash('challengeCreated', 'true');
-
-        return redirect()->action('UserProfileController@userProfile', 'me')->with(['challengeCreated' => 'true']);
+//return "";
+        return View('partials.create_result');
+//        return redirect()->action('UserProfileController@userProfile', 'me')->with(['challengeCreated' => 'true']);
     }
 
     public function joinChallenge($uuid)
@@ -432,6 +442,7 @@ class HomeController extends Controller
 
     public function challengeDetail($uuid, $secret = null)
     {
+        Log::info("--------------------$uuid--" );
         if ($challenge = Challenge::where('uuid', $uuid)->first()) {
 
             $now = new DateTime();
@@ -440,7 +451,7 @@ class HomeController extends Controller
 
             $isPublic = false;
             if ($challenge->public == 0) {
-                if ($secret != null && $challenge->secret == $secret || $challenge->creator_id == Auth::user()->id) {
+                if ($secret != null && $challenge->secret == $secret || (Auth::check() && $challenge->creator_id == Auth::user()->id)) {
                     $isPublic = true;
                 }
             } else {
@@ -817,7 +828,9 @@ class HomeController extends Controller
     public function teste()
     {
 
-        2/0;
+        echo "<br>local" .App::environment('local');
+        echo "<br>MAIL_HOST" .env('MAIL_HOST');
+        echo "<br>MAIL_USERNAME" .env('MAIL_USERNAME');
 
         return;
 
@@ -926,7 +939,7 @@ class HomeController extends Controller
             echo "data:".json_encode($data_email)."<br>";
             Mail::queueOn('emails', 'mail.emailRemind', ['data_email' => $data_email],
                 function ($m) use ($data_email) {
-                    $m->from('noreply@hiolegends.com', 'HIO');
+                    $m->from('hio@hiolegends.com', 'HIO');
 
                     $m->to( 'joaosampaio30@gmail.com')->subject("Remind users");
                 });
@@ -1166,7 +1179,7 @@ class HomeController extends Controller
                 Mail::queueOn('emails', 'mail.emailChallenge', ['array' => $array, 'email' => $user->email,
                     'nameCreator' => $nameCreator,
                     'total' => $total, 'nameUser' => ' ' . $user->name, 'deadline' => $deadline], function ($m) use ($total, $array, $nameCreator, $user, $deadline) {
-                    $m->from('noreply@hiolegends.com', 'HIO - Challenge');
+                    $m->from('hio@hiolegends.com', 'HIO - Challenge');
 
                     $subject = "$nameCreator challenged you! - " . $array['title'];
 
@@ -1194,7 +1207,7 @@ class HomeController extends Controller
                 Mail::queueOn('emails', 'mail.emailChallenge', ['array' => $array, 'email' => $email,
                     'nameCreator' => $nameCreator, 'total' => $total, 'nameUser' => '', 'deadline' => $deadline],
                     function ($m) use ($total, $array, $nameCreator, $email, $deadline) {
-                    $m->from('noreply@hiolegends.com', 'HIO - Challenge');
+                    $m->from('hio@hiolegends.com', 'HIO - Challenge');
 
                     $m->to($email)->subject("$nameCreator challenged you! - " . $array['title']);
                 });
@@ -1215,7 +1228,7 @@ class HomeController extends Controller
         $sendTo = "hiominimalblog@gmail.com";
         //try {
         Mail::send('mail.emailContact', ['name' => $name, 'email' => $email, 'messageBody' => $messageBody], function ($m) use ($name, $sendTo, $email, $messageBody) {
-            $m->from('noreply@hiolegends.com', 'HIO - Contact');
+            $m->from('hio@hiolegends.com', 'HIO - Contact');
 
             $m->to($sendTo, '')->subject($email . ' sent a contact request.');
         });
@@ -1239,38 +1252,57 @@ class HomeController extends Controller
 
 
 
+//        print("<pre>");
+//        $xportlist = stream_get_transports();
+//        print_r($xportlist);
+//        return;
 
 
 
 
-
+//        $challenge = Challenge::find(64);
         $challenge = Challenge::find(153);
         $date = $challenge->deadLine;
         $createDate = new DateTime($date);
         $deadline = $createDate->format('Y-m-d');
-        $nameCreator = Auth::user()->name;
+        $nameCreator = "nao interessa";
 
 
         $array = $challenge->toArray();
 
 
-        $suc =Mail::send( 'mail.emailChallenge', ['array' => $array, 'email' => $email,
-            'nameCreator' => $nameCreator, 'nameUser' => '', 'deadline' => $deadline],
+//        $suc =Mail::send( 'mail.emailChallenge', ['array' => $array, 'email' => $email,
+//            'nameCreator' => $nameCreator, 'nameUser' => '', 'deadline' => $deadline],
+//            function ($m) use ( $array, $nameCreator, $email, $deadline) {
+//                $m->from('hio@hiolegends.com', 'HIO - Challenge');
+//
+//                $m->to($email)->subject("$nameCreator challenged you! - " . $array['title']);
+//            });
+
+        Mail::queueOn('emails',  'mail.emailChallenge', ['array' => $array, 'email' => $email,
+                'nameCreator' => $nameCreator, 'nameUser' => '', 'deadline' => $deadline],
             function ($m) use ( $array, $nameCreator, $email, $deadline) {
-                $m->from('noreply@hiolegends.com', 'HIO - Challenge');
+                $m->from('hio@hiolegends.com', 'HIO - Challenge');
 
                 $m->to($email)->subject("$nameCreator challenged you! - " . $array['title']);
             });
 
 
+//
+//        foreach ($emails as $email) {
+//            Mail::queueOn('emails', 'mail.emailChallenge', ['array' => $array, 'email' => $email,
+//                    'nameCreator' => $nameCreator, 'total' => $total, 'nameUser' => '', 'deadline' => $deadline],
+//                function ($m) use ($total, $array, $nameCreator, $email, $deadline) {
+//                    $m->from('hio@hiolegends.com', 'HIO - Challenge');
+//
+//                    $m->to($email)->subject("$nameCreator challenged you! - " . $array['title']);
+//                });
 
 
 
 
 
-
-
-        echo $suc;
+//        echo $suc;
 
     }
 

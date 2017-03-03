@@ -82,6 +82,7 @@ class RemindUser extends Command
                 ->whereIn('challenge_id', $remindChallenge)
                 ->chunk(100, function ($reminds) use (&$data_email)  {
                     foreach ($reminds as $remind) {
+                        Log::info("--------------------userIdOrEmail--" . json_encode($remind));
                         echo "--------------------userIdOrEmail--" . json_encode($remind) . "<br>";
                         echo "----------++------- $remind->userIdOrEmail<br>";
                         if (str_contains($remind->userIdOrEmail, '@')) {
@@ -92,27 +93,27 @@ class RemindUser extends Command
 
                                     //user nao aceitou desafio
                                     echo "-----user nao aceitou desafio1<br>";
-
+                                    Log::info("-----user nao aceitou desafio1");
                                     $data_email[] = array(
                                         'email' => $remind->userIdOrEmail,
-                                        'link' => 'https://hiolegends.com/challenges/'.$remind->uuid,
+                                        'link' => 'https://hiolegends.com/challenge/' . $remind->uuid,
                                         'date' => $remind->created_at,
                                         'name' => $user->name
 
                                     );
 
-
-                                } else {
-                                    echo "--------------------email-nao registou--$user->email<br>";
-                                    //user nao registou na app, logo nao aceitou desafio
-                                    $data_email[] = array(
-                                        'email' => $remind->userIdOrEmail,
-                                        'link' => 'https://hiolegends.com/challenges/'.$remind->uuid,
-                                        'date' => $remind->created_at,
-                                        'name' => ''
-
-                                    );
                                 }
+                            } else {
+                                Log::info("-----email-nao registou--$user->email");
+                                echo "--------------------email-nao registou--$user->email<br>";
+                                //user nao registou na app, logo nao aceitou desafio
+                                $data_email[] = array(
+                                    'email' => $remind->userIdOrEmail,
+                                    'link' => 'https://hiolegends.com/challenge/'.$remind->uuid,
+                                    'date' => $remind->created_at,
+                                    'name' => ''
+
+                                );
                             }
                         } else if (is_numeric($remind->userIdOrEmail)) {
                             echo "--------------------id---$remind->userIdOrEmail<br>";
@@ -124,7 +125,7 @@ class RemindUser extends Command
 
                                     $data_email[] = array(
                                         'email' => $user->email,
-                                        'link' => 'https://hiolegends.com/challenges/'.$remind->uuid,
+                                        'link' => 'https://hiolegends.com/challenge/'.$remind->uuid,
                                         'date' => $remind->created_at,
                                         'name' => $user->name
 
@@ -144,7 +145,7 @@ class RemindUser extends Command
                 Mail::queueOn('emails', 'mail.emailRemind', ['data_email' => $data_email],
                     function ($m) use ($data_email) {
                         $emails = ['joaosampaio30@gmail.com', 'targfonseca@gmail.com'];
-                        $m->from('noreply@hiolegends.com', 'HIO');
+                        $m->from('hio@hiolegends.com', 'HIO');
 
                         $m->to( $emails)->subject("Remind users");
                     });

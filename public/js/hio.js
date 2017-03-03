@@ -113,14 +113,6 @@ function formatRepoSearch (repo) {
     return;
 
     var url = getPhotoUrl(repo.type, repo.photo);
-    var markup = ""+
-    "<div class='select2-result-repository clearfix'>" +
-    "<div class='select2-result-repository__avatar'><img style='width: 50px; height: 50px' src='"+url +"' /></div>" +
-    "<div class='select2-result-repository__meta'>" +
-    "<div class='select2-result-repository__title'>" + repo.text + "</div>";
-
-    "</div></div>";
-
     var type = "";
     if(repo.type == 0){
     type = 'User';
@@ -266,3 +258,150 @@ $('#dLabel2').on('click', function (e) {
 //    $(this).next('.dropdown').find('[data-toggle=dropdown]').dropdown('toggle');
     });
 
+
+
+function enableChallengeParticipants(){
+    $('.challenge-participants').unbind().click(function(e){
+        $('#modalHome').html("Participants");
+        $('#challenge-views-modal').modal('show');
+        $.ajax({
+            url: "/participants/"+$(e.currentTarget).data("id"),
+            type:"GET",
+            dataType : 'json',
+            success:function(data){
+                var challengeViews="";
+                for (index = 0; index < data.length; ++index) {
+
+                    challengeViews += "<div class=\"padding5 row row-eq-height margin-bottom\">";
+                    challengeViews += "                           <div class=\"col-lg-2 col-xs-2 padding5\">";
+                    challengeViews += "                               <a href=\"\/profile\/"+data[index].userId+"\" class=\"container-modal-views-link\" title=\"\">";
+                    if(data[index].photo == "")
+                        challengeViews += "                                       <img src=\"\/uploads\/users\/default_user.png\" class=\"img-circle img-responsive same-height-modal-views\">";
+                    else
+                        challengeViews += "                                       <img src=\"\/uploads\/users\/"+data[index].photo+"\" class=\"img-circle img-responsive same-height-modal-views\">";
+                    challengeViews += "                               <\/a>";
+                    challengeViews += "                           <\/div>";
+                    challengeViews += "                           <div class=\"col-lg-7 col-xs-7\">";
+                    challengeViews += "                               <a href=\"\/profile\/"+data[index].userId+"\" class=\"center-middle\" title=\"\">"+data[index].name+"<\/a>";
+                    challengeViews += "                           <\/div>";
+                    challengeViews += "                       <\/div>";
+                    challengeViews += "                    <\/div>";
+                }
+                $("#modal-views-content").html(challengeViews);
+            },error:function(){
+            }
+        }); //end of ajax
+        return false;
+    });
+
+    $( ".challenge-participants" ).hover(function(e) {
+        var id = $(e.currentTarget).data("id");
+        if(!(id in dictParticipants)){
+            $.ajax({
+                url: "/participants/"+id,
+                type:"GET",
+                dataType : 'json',
+                success:function(data){
+                    dictParticipants[id] = data;
+                    console.log(JSON.stringify(data));
+                    $(e.currentTarget).prop('title', getViewsNames(dictParticipants[id]));
+                    $(e.currentTarget).attr('data-original-title', getViewsNames(dictParticipants[id]));
+                    $(e.currentTarget).tooltip('show');
+                },error:function(){
+                }
+            }); //end of ajax
+        }else {
+            $(e.currentTarget).prop('title', getViewsNames(dictParticipants[id]));
+            $(e.currentTarget).attr('data-original-title', getViewsNames(dictParticipants[id]));
+
+            $(e.currentTarget).tooltip('show');
+        }
+    });
+}
+
+function enableChallengeViews(){
+    $('.challenge-views').unbind().click(function(e){
+        $('#modalHome').html("Views");
+        $('#challenge-views-modal').modal('show');
+        $.ajax({
+            url: "/views/proof/"+$(e.currentTarget).data("id"),
+            type:"GET",
+            dataType : 'json',
+            success:function(data){
+                var challengeViews="";
+                for (index = 0; index < data.length; ++index) {
+//                        console.log(data[index]);
+
+                    challengeViews += "<div class=\"padding5 row row-eq-height margin-bottom\">";
+                    challengeViews += "                           <div class=\"col-lg-2 col-xs-2 padding5\">";
+                    challengeViews += "                               <a href=\"\/profile\/"+data[index].userId+"\" class=\"container-modal-views-link\" title=\"\">";
+                    if(data[index].photo == "")
+                        challengeViews += "                                       <img src=\"\/uploads\/users\/default_user.png\" class=\"img-circle img-responsive same-height-modal-views\">";
+                    else
+                        challengeViews += "                                       <img src=\"\/uploads\/users\/"+data[index].photo+"\" class=\"img-circle img-responsive same-height-modal-views\">";
+                    challengeViews += "                               <\/a>";
+                    challengeViews += "                           <\/div>";
+                    challengeViews += "                           <div class=\"col-lg-7 col-xs-7\">";
+                    challengeViews += "                               <a href=\"\/profile\/"+data[index].userId+"\" class=\"center-middle\" title=\"\">"+data[index].name+"<\/a>";
+                    challengeViews += "                           <\/div>";
+                    challengeViews += "                       <\/div>";
+                    challengeViews += "                    <\/div>";
+                }
+                $("#modal-views-content").html(challengeViews);
+
+
+
+            },error:function(){
+                //console.log("count:" + countVotes);
+            }
+        }); //end of ajax
+        return false;
+    });
+
+    $( ".challenge-views" ).hover(function(e) {
+        var id = $(e.currentTarget).data("id");
+        if(!(id in dictViews)){
+            $.ajax({
+                url: "/views/proof/"+id,
+                type:"GET",
+                dataType : 'json',
+                success:function(data){
+                    dictViews[id] = data;
+                    console.log(JSON.stringify(data));
+                    $(e.currentTarget).prop('title', getViewsNames(dictViews[id]));
+                    $(e.currentTarget).attr('data-original-title', getViewsNames(dictViews[id]));
+                    $(e.currentTarget).tooltip('show');
+                },error:function(){
+                    //console.log("count:" + countVotes);
+                }
+            }); //end of ajax
+        }else {
+            $(e.currentTarget).prop('title', getViewsNames(dictViews[id]));
+            $(e.currentTarget).attr('data-original-title', getViewsNames(dictViews[id]));
+
+            $(e.currentTarget).tooltip('show');
+        }
+    });
+}
+
+function getViewsNames(data){
+    var challengeViews="";
+
+    if(data.length>= 5){
+        challengeViews += data[0].name + ", " +  data[1].name + ", " +  data[2].name + " and " + (data.length - 3) + " other people";
+    }else{
+        for (index = 0; index < data.length; ++index) {
+            challengeViews += data[index].name + ", ";
+        }
+        if(data.length > 0)
+            challengeViews = challengeViews.slice(0, -2);
+    }
+
+
+    return challengeViews;
+}
+
+$('#create-challenge-iframe').on('load', function(){
+    $('#create-spin').hide();
+    console.log('load the iframe')
+});

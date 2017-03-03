@@ -231,7 +231,7 @@ font-size: 22px;text-align: center;
 
                      <div class="col-md-12 col-xs-12 judge-info alert-hio">
                          <p>You are the judge!</p>
-                         <p style="font-size: 16px">Has {{getFirstLastName($sonChallenge->name)}} achieved the goal of the challenge or did it come short, you decide!</p>
+                         <p style="font-size: 16px">Do you Aprove {{getFirstLastName($sonChallenge->name)}}´s challenge or is it a Fail?</p>
 
                         <div class="col-xs-6 col-md-6" style="margin-bottom: 20px;">
                             <a href="#" class="btn_approve dislike"><i class="fa fa-meh-o " aria-hidden="true"></i></a>

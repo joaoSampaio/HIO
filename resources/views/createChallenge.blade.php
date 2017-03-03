@@ -22,7 +22,7 @@
     <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 
-    <link href='https://fonts.googleapis.com/css?family=Roboto:700,900,400,500' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:700,900,200,300,400,500' rel='stylesheet' type='text/css'>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -31,9 +31,6 @@
     <![endif]-->
 
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
-
-    <link href="{{ asset('css/hio.css') }}" rel="stylesheet">
-
 
 
 
@@ -47,7 +44,7 @@
 
     <link href="{{ asset('css/s2-docs.css') }}" rel="stylesheet">
     <link href="{{ asset('css/bootstrap-switch.min.css') }}" rel="stylesheet">
-
+<link href="{{ asset('css/hio.css') }}" rel="stylesheet">
 <style>
 .datepicker{
     background-color: #fff;
@@ -126,6 +123,15 @@ label.custom-select {
 }
 
 
+@media (max-width: 500px){
+    .col-mobile {
+        width: 100%;
+    }
+}
+
+
+
+
 
 .ch-grid {
 	padding: 0;
@@ -149,7 +155,8 @@ label.custom-select {
 	width: 40px;
 	height: 40px;
 	display: inline-block;
-	margin: 20px;
+	margin-left: 20px;
+	margin-right: 20px;
 }
 
 .ch-item {
@@ -289,42 +296,6 @@ input[type=radio]:checked ~ .inside::before {
 
 
 
-.create-input{
-    font-family: "Roboto";
-    background-color: transparent !important;
-    border: 0;
-    border-bottom: 2px solid rgba(188, 188, 188, 0.2);
-    padding: 0px;
-    font-size: 16px;
-    color: #C1C5C8 !important;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0);
-
-}
-
-.create-input::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-    color:    #C1C5C8;
-}
-.create-input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    color:    #C1C5C8;
-    opacity:  1;
-}
-.create-input::-moz-placeholder { /* Mozilla Firefox 19+ */
-    color:    #C1C5C8;
-    opacity:  1;
-}
-.create-input:-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color:    #C1C5C8;
-}
-
-.create-input:focus {
-    border-color: transparent;
-    outline: 0;
-    box-shadow:none;
-
-    /*-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(235,25,70,.6);*/
-    /*box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(235,25,70,.6);*/
-}
 
 
     form, form label {
@@ -350,6 +321,113 @@ input[type=radio]:checked ~ .inside::before {
     margin-right: 2px;
 }
 
+.participants-dim{
+width: 50px;
+    height: 50px;
+    padding: 0px;
+}
+
+#participants li{
+    float: left;
+    position: relative;
+}
+
+.user_choice_remove {
+    color: red !important;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: bold;
+    right: 0;
+    position: absolute;
+    margin-right: 2px;
+}
+
+
+#add-user-search .select2-container--default .select2-search--inline .select2-search__field{
+    width: 100% !important;
+    margin-left: 20px;
+}
+
+
+
+
+#add-user-search:focus {
+    background: 0 0;
+}
+#add-user-search .select2-container--default .select2-selection--multiple{
+    background-color: transparent;
+    border-radius: 0px;
+
+    /*height: 67px;*/
+    border: 0px solid #aaa;
+    border-bottom: 1px solid #fff;
+    border-top: 1px solid #fff;
+}
+
+
+#add-user-search .select2-container--default .select2-selection--multiple .select2-selection__rendered{
+    /*margin-top: 20px;*/
+    padding-left: 25px;
+}
+
+#add-user-search ul > li:not(:last-child) { display: none; }
+
+
+.select2-results{
+box-shadow: 0px 38px 58px 3px rgba(0, 0, 0, 0.2);
+}
+#menu-add-user{
+box-shadow: 0px 0px 68px 0px rgba(0, 0, 0, 0.2);
+}
+
+
+
+body:after{
+display: none;
+}
+
+.show-friends:before{
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: -1000px;
+    width: 2200px;
+    height: 1px;
+    background: #C1C5C8;
+    z-index: -1;
+}
+
+.show-friends{
+width: 2em;
+  height: 2em;
+  text-align: center;
+  line-height: 40px;
+  border-radius: 50%;
+  background: #C1C5C8;
+  margin: 0 1em;
+  display: inline-block;
+  color: white;
+  position: relative;
+}
+
+.show-friends.active{
+  background: #eb1946;
+
+}
+
+.show-friends.active:after {
+    content: "";
+    position: absolute;
+    left: 15px;
+    bottom: -4px;
+    border-width: 5px 5px 0;
+    border-style: solid;
+    border-color: #eb1946 transparent;
+    display: block;
+    width: 0;
+}
+
+
 </style>
 </head>
 
@@ -362,26 +440,20 @@ input[type=radio]:checked ~ .inside::before {
                     {!! Form::open(array('action' => array('HomeController@storeChallenge'), 'class' => 'form-horizontal', 'id' => 'form-challenge', 'autocomplete' => 'off')) !!}
 
                         <ul class="ch-grid">
-                            <li class="show-friends">
-                                <div class="ch-item ch-img-1 ">
-                                    <button type="button" id="circle1" class="btn btn-info btn-circle btn-xl btn-active"><span >1</span></button>
-                                </div>
+                            <li class="show-friends pointer" id="circle1">
+                                1
+
+                                {{--<div class="ch-item ch-img-1 ">--}}
+                                    {{--<button type="button" id="circle1" class="btn btn-info btn-circle btn-xl btn-active"><span >1</span></button>--}}
+                                {{--</div>--}}
                             </li>
-                            <li class="show-friends">
-                                <div class="ch-item ch-img-1">
-                                    <button type="button" id="circle2" class="btn btn-info btn-circle btn-xl"><span>2</span></button>
-                                </div>
+                            <li class="show-friends pointer" id="circle2">
+                                2
                             </li>
-                            <li class="show-friends">
-                                <div class="ch-item ch-img-1">
-                                    <button type="button" id="circle3" class="btn btn-info btn-circle btn-xl"><span>3</span></button>
-                                </div>
+                            <li class="show-friends pointer" id="circle3">
+                                3
                             </li>
-                            <li class="show-friends">
-                                <div class="ch-item ch-img-1">
-                                    <button type="button" id="circle4" class="btn btn-info btn-circle btn-xl"><span>4</span></button>
-                                </div>
-                            </li>
+
 
 
 
@@ -487,6 +559,30 @@ input[type=radio]:checked ~ .inside::before {
 
                             <div class="form-group">
                                 <div class="col-lg-12">
+                                    <p>Participants</p>
+                                    <ul class="" id="participants" style="padding: 0px">
+                                        <li class=" dropdown" id="dropdown-add-user" style="padding: 0px">
+
+                                            <button type="button" id="add-user" class="btn img-circle participants-dim"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                            <ul class="dropdown-menu " id="menu-add-user" role="menu" aria-labelledby="add-user">
+
+
+                                            <div class="notifications-wrapper" id="add-user-search" style="    width: 350px;">
+                                        {!! Form::select('emailFriendTeste[]', array(),null,array('id'=>'friends-cha-teste', 'class'=>'form-control js-data-user-select2', 'multiple'=>'multiple')) !!}
+
+                                            </div>
+                                        </ul>
+                                        </li>
+
+
+                                    </ul>
+
+
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: none">
+                                <div class="col-lg-12">
                                     @if(Auth::user()->role == "brand")
                                         {!! Form::select('emailFriend[]', array(),null,array('id'=>'friends-cha', 'class'=>'form-control  js-data-example-ajax', 'multiple'=>'multiple')) !!}
                                     @else
@@ -501,12 +597,12 @@ input[type=radio]:checked ~ .inside::before {
                         <div class="form-section" id="page3">
                             <div class="form-group">
 
-                                <div class="col-md-offset-3 col-md-6 col-sm-12 col-xs-12" style="text-align: center;margin-bottom: 30px">
-                                      <h4 >It is a matter of time until the end,<br> how much will they have to succeed?</h4>
+                                <div class="col-md-offset-3 col-md-6 col-sm-12 col-xs-12" style="text-align: center;margin-bottom: 0px">
+                                      <h4 class="date-title" >Choose Your  <span id="change-date" class="pointer" title="Select Date"><u>Date</u></span> and <span class="pointer" id="change-time" title="Select Time"><u>Hour</u></span></h4>
                                 </div>
 
-                              <div class="col-lg-12 col-md-12">
-                                 <div class='input-group' style="background-color: #ccc; padding: 20px; border-radius: 20px;     margin: 0 auto;">
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                 <div class='input-group' style="    margin: 0 auto;">
                                      {!! Form::text('deadLine',null,  ['required', 'id'=>"deadLine" , 'class'=>'form-control hidden ','placeholder'=>'Define dead line']) !!}
                                  </div>
 
@@ -521,15 +617,15 @@ input[type=radio]:checked ~ .inside::before {
 
 
 
-                        <div class="form-group" style="margin-top: 70px; text-align: center;" id="controls" >
+                        <div class="form-group" style="margin-bottom: 0px;margin-top: 70px; text-align: center;" id="controls" >
                               <div class="col-md-12 col-xs-12">
 
-                                <div class="col-xs-6 col-md-6" style="margin-bottom: 20px;">
+                                <div class="col-xs-6 col-md-6 col-mobile" style="margin-bottom: 20px;">
                                     <button type="button" class="btn btn-default btn-xl btn-cancel-hio" id="back_control">Back</button>
                                     {{--<input class="btn btn-default btn-xl btn-cancel-hio" value="Back" id="back_control" >--}}
                                 </div>
 
-                                <div class="col-xs-6 col-md-6">
+                                <div class="col-xs-6 col-md-6 col-mobile">
                                     <button type="button" class="btn btn-primary btn-xl btn-create-hio" id="next_control">Next</button>
                                     {{--<input class="btn btn-primary btn-xl btn-create-hio" value="Next" id="next_control">--}}
                                 </div>
@@ -599,8 +695,88 @@ $(document).ready(function() {
     updateParentHeight();
 });
 
+var selectedUsers = {};
 
 
+$('.js-data-user-select2').select2({
+      ajax: {
+          url: "{{ action('HomeController@searchUsers') }}",
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+              return {
+                q: params.term, // search term
+                page: params.page
+              };
+        },
+        processResults: function (data, params) {
+          return {
+            results: $.map(data, function(obj) {
+                        return { id: obj.id, text: obj.name, photo: obj.photo };
+                    })
+          };
+        },
+        cache: true
+      },
+      tags: true,
+      multiple: true,
+      placeholder: "EMAILS OR USERS",
+      tokenSeparators: [',','\n', '\t'],
+      escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+      minimumInputLength: 1,
+      templateResult: formatRepo, // omitted for brevity, see the source of this page
+      templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+    });
+
+    $('#add-user').on('click', function (event) {
+        $("#dropdown-add-user").toggleClass('open');
+        $("#add-user-search .select2-search__field").attr("placeholder", "Search");
+        $("#menu-add-user input").focus();
+    });
+
+    $('body').on('click', function (e) {
+        if (!$("#dropdown-add-user").is(e.target)
+            && $("#dropdown-add-user").has(e.target).length === 0
+            && $('.open').has(e.target).length === 0
+        ) {
+            $("#dropdown-add-user").removeClass('open');
+        }
+    });
+
+
+    $(".js-data-user-select2").on("select2:select", function (e) {
+        $('.js-data-example-ajax').append($('<option>', {
+                        value: e.params.data.id,
+                        text : e.params.data.text
+                    })).trigger("change");
+            addUser(e);
+     });
+
+     function addUser(e){
+            selectedUsers[$(".js-data-user-select2").val()] = $(".js-data-user-select2").val();
+             var array_keys = $(".js-data-user-select2").val();
+             selectedUsers[array_keys[array_keys.length -1]] = array_keys[array_keys.length -1];
+              $(".js-data-example-ajax").val(array_keys).trigger("change");
+              var html = formatRepoSelectionUser(e.params.data);
+              $('#participants').append(html);
+             $("#dropdown-add-user").removeClass('open');
+             updateRemoveUser();
+     }
+
+     function updateRemoveUser(){
+        $('.user_choice_remove').unbind().click(function (e) {
+             var id = $(e.currentTarget).data("id");
+             delete selectedUsers[id];
+             var array_keys = new Array();
+             for (var key in selectedUsers) {
+                 array_keys.push(key);
+             }
+             $(".js-data-example-ajax").val(array_keys).trigger("change");
+             $(".js-data-user-select2").val(array_keys).trigger("change");
+             $(".user-remove-"+id).remove();
+             $("#friends-cha option[value='"+id+"']").remove();
+         });
+     }
 
 
 $(".js-data-example-ajax").select2({
@@ -640,27 +816,25 @@ $(".js-data-example-ajax").select2({
     @if(isset($targetUser))
 
         var targetId = <?php echo $targetUser->id; ?>;
-        var nameFb = "<?php echo $targetUser->name; ?>";
+        var nameUser = "<?php echo $targetUser->name; ?>";
 
 
         $('.js-data-example-ajax').append($('<option>', {
                 value: targetId,
-                text : nameFb
+                text : nameUser
             })).trigger("change");
+        $(".js-data-user-select2").append($('<option>', {
+              value: targetId,
+              text : nameUser
+          })).trigger("change");
 
         $(".js-data-example-ajax").val([ targetId]).trigger("change");
+        $(".js-data-user-select2").val([ targetId]).trigger("change");
+        var challengedUser = {text:nameUser, id:targetId};
+        var html = formatRepoSelectionUser(challengedUser);
+      $('#participants').append(html);
+     updateRemoveUser();
     @endif
-
-$('.js-data-example-ajax').on('select2:select', function (evt) {
-//    if(evt.params.data.type == 0){
-//        window.location = "/profile/"+evt.params.data.id;
-//    }else if(evt.params.data.type == 1){
-//        window.location = "/challenge/"+evt.params.data.id;
-//    } else if(evt.params.data.type == 2){
-//        window.location = "/challenges/"+evt.params.data.id;
-//    }
-    return true;
-    });
 
     function formatRepo (repo) {
           if (repo.loading) return;
@@ -672,32 +846,37 @@ $('.js-data-example-ajax').on('select2:select', function (evt) {
             if(repo.text == null)
              return;
 
-        var url = (repo.photo == "")? "/uploads/users/default_user.png" : "/uploads/users/"+repo.photo;
-          var markup = ""+
-          "<div class='select2-result-repository clearfix'>" +
-            "<div class='select2-result-repository__avatar'><img style='width: 50px; height: 50px' src='"+url +"' /></div>" +
-            "<div class='select2-result-repository__meta'>" +
-              "<div class='select2-result-repository__title'>" + repo.text + "</div>";
+        var url = "/user/photo/"+repo.id;
 
-          "</div></div>";
+        var markup =
+            "<img class='search-img' src='"+url +"' />"+
+
+            "<span class='k-state-default'><h3>"+repo.text+"</h3></span>";
+
+
+//          var markup = ""+
+//          "<div class='select2-result-repository clearfix'>" +
+//            "<div class='select2-result-repository__avatar'><img style='width: 50px; height: 50px' src='"+url +"' /></div>" +
+//            "<div class='select2-result-repository__meta'>" +
+//              "<div class='select2-result-repository__title'>" + repo.text + "</div>";
+//
+//          "</div></div>";
 
           return markup;
         }
 
         function formatRepoSelection (repo) {
-//            if(repo.text == null)
-//                return repo.id;
-//            return repo.text;
+            if(repo.text == null)
+                return repo.id;
+            return repo.text;
+            return markup;
+        }
 
-            var url = (repo.photo == "")? "/uploads/users/default_user.png" : "/uploads/users/"+repo.photo;
-            var markup = "<img style='width: 50px; height: 50px' class='img-circle' src='"+url +"' />";
-
-
+        function formatRepoSelectionUser (repo) {
+            var url = "/user/photo/"+repo.id;
+            var markup = "<li class='user-remove-"+repo.id+"'><span class='user_choice_remove' data-id='"+repo.id+"' role='presentation'>×</span><img style='width: 50px; height: 50px' title='"+repo.text+"' class='img-circle' src='"+url +"' /></li>";
 
             return markup;
-
-
-
         }
 
 
@@ -706,6 +885,7 @@ $('.js-data-example-ajax').on('select2:select', function (evt) {
         $('#deadLine').datetimepicker({
 
                 format: 'YYYY-MM-DD HH:mm',
+                dayViewHeaderFormat: 'MMMM',
                 locale : 'pt',
                  defaultDate : moment({hour: 23, minute: 59}),
                  minDate : moment(),
@@ -713,6 +893,17 @@ $('.js-data-example-ajax').on('select2:select', function (evt) {
                   inline : true
 
                });
+
+
+               $('#change-date').click(function(){
+                    $("a[data-action='togglePicker'] .glyphicon-calendar").click()
+               });
+               $('#change-time').click(function(){
+                   $("a[data-action='togglePicker'] .glyphicon-time").click()
+               });
+
+
+
     });
 
 
@@ -751,17 +942,17 @@ $(function () {
 
 
 
-    for (i = 1; i <= 4; i++) {
-        $("#circle"+i).removeClass("btn-active");
+    for (i = 1; i <= 3; i++) {
+        $("#circle"+i).removeClass("active");
 
     }
-     $("#circle"+(index+1)).addClass("btn-active");
+     $("#circle"+(index+1)).addClass("active");
 
 
     if(atTheEnd){
-        $("#next_control").val("Create Challenge");
+        $("#next_control").html("Create");
     }else{
-        $("#next_control").val("Next");
+        $("#next_control").html("Next");
     }
 
       updateParentHeight();
@@ -828,16 +1019,6 @@ $(function () {
       }
   });
 
-  $("#circle4").click(function() {
-      //campo 2 é o calendario e esta sempre ok
-      $('#form-challenge').parsley().validate({group: 'block-' + 0})
-      if ($('#form-challenge').parsley().validate({group: 'block-' + 1})){
-          moveTopCreate();
-          navigateTo(3);
-      }
-
-  });
-
   navigateTo(0); // Start at the beginning
 });
 
@@ -853,33 +1034,27 @@ function moveTopCreate() {
 
 function updateParentHeight() {
     var  $frame = window.parent.document.getElementById('create-challenge-iframe');
-    var curHeight = $('body').height();
-    curHeight  = 500;
+    var curHeight = $('body').outerHeight();
+    console.log('curHeight->' + curHeight);
+    var $sections = $('.form-section');
+    var index = $sections.index($sections.filter('.current'));
+    var isPrivate = $('.form-private').is(":visible");
+    if(index == 0 && !isPrivate)
+        curHeight  = 350;
+    if(index == 0 && isPrivate)
+        curHeight  = 500;
+    else if(index == 1)
+         curHeight  = 530;
+    else if(index == 2)
+        curHeight  = 700;
     if($frame != null)
         $frame.style.height =  curHeight + 'px' ;
 
+        $( "#form-challenge" ).trigger( "myCustomEvent" );
+        console.log('myCustomEvent->' );
 }
 
-//jQuery(function($){
-//    var lastHeight = 0, curHeight = 0, $frame = window.parent.document.getElementById('create-challenge-iframe');
-//    setInterval(function(){
-//        curHeight = $('body').height();
-//
-//        if($frame != null)
-//        $frame.style.height =  '500px' ;
-//
-////        parent.document.getElementById("create-challenge-iframe").style.height = (lastHeight = curHeight) + 'px' ;
-//
-////        if ( curHeight != lastHeight ) {
-////            $frame.style.height = (lastHeight = curHeight) + 'px' ;
-////        }
-//    },5000);
-//});
 
-//$(function () {
-//    var $frame = window.parent.document.getElementById('create-challenge-iframe');
-//    $frame.css('height', (lastHeight = curHeight) + 'px' );
-//});
 
 </script>
 

@@ -42,8 +42,13 @@ $app->singleton(
 );
 
 $app->configureMonologUsing(function(Monolog\Logger $monolog) {
-    $filename = storage_path('logs/laravel-'.php_sapi_name().'.log');
-    $handler = new Monolog\Handler\RotatingFileHandler($filename);
+//    $filename = storage_path('logs/laravel-'.get_current_user().'.log');
+//    $handler = new Monolog\Handler\RotatingFileHandler($filename);
+//    $monolog->pushHandler($handler);
+
+    $filename = storage_path('logs/laravel-' . php_sapi_name() . '.log');
+    $handler = new Monolog\Handler\RotatingFileHandler($filename, 0, \Monolog\Logger::DEBUG, true, 0664);
+    $handler->setFormatter(new \Monolog\Formatter\LineFormatter(null, null, true, true));
     $monolog->pushHandler($handler);
 });
 /*

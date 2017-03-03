@@ -6,23 +6,7 @@
 
 <style>
 
-.glyphicon.spinning {
-    animation: spin 1s infinite linear;
-    -webkit-animation: spin2 1s infinite linear;
-        margin-left: 50%;
-        font-size: 30px;
-        margin-bottom: 30px;
-}
 
-@keyframes spin {
-    from { transform: scale(1) rotate(0deg); }
-    to { transform: scale(1) rotate(360deg); }
-}
-
-@-webkit-keyframes spin2 {
-    from { -webkit-transform: rotate(0deg); }
-    to { -webkit-transform: rotate(360deg); }
-}
 
 
 .img-responsive{
@@ -251,13 +235,13 @@ text-align: center;
     <div class="modal-dialog">
         <div class="modal-content">
 
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="modalHome">Create Challenge</h4>
+            <div class="modal-header-create">
+                <button type="button" class="close" style="font-size: 40px;font-weight: 300;" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="create-challenge-title" id="modalHome">Create Challenge</h4>
             </div>
 
             <div class="modal-body">
-
+                <span id="create-spin" class="glyphicon glyphicon-refresh spinning"></span>
                 <iframe id="create-challenge-iframe" src="" style="" width="99.6%" frameborder="0"></iframe>
 
             </div>
@@ -272,34 +256,13 @@ text-align: center;
 @section('footer')
 
 
-{{--<script type="text/javascript" src="path-to-file/jquery.actual.js"></script>--}}
-{{--<script src="{{ asset('js/jquery.mobile.custom.min.js') }}"></script>--}}
 
 <script>
     $('#openCreate').click(function(){
 
         $('#create-challenge').on('shown.bs.modal', function() {
-
-            $('#create-challenge-iframe').attr("src","{{ action('HomeController@createChallenge') }}");
-
-
-//            jQuery(function($){
-//                var lastHeight = 0, curHeight = 0, $frame = $("#create-challenge-iframe");
-//                setInterval(function(){
-//                    curHeight = $frame.contents().find('body').height();
-//                    if ( curHeight != lastHeight ) {
-//                        $frame.css('height', (lastHeight = curHeight) + 'px' );
-//                    }
-//                },500);
-//            });
-
-
-
-//            $("#create-challenge-iframe").load(function() {
-//                $(this).height( $("#create-challenge-iframe").contents().find("body").height() );
-//            });
+            $('#create-challenge-iframe').attr("src","/new/challenge");
         });
-
         $('#create-challenge').modal({show:true})
     });
 
@@ -357,149 +320,13 @@ $('#challenge-views-modal').on('shown.bs.modal', function() {
     $('.tooltip').not(this).hide();
 })
 
-    function enableChallengeParticipants(){
-          $('.challenge-participants').unbind().click(function(e){
-            $('#modalHome').html("Participants");
-            $('#challenge-views-modal').modal('show');
-               $.ajax({
-                   url: "/participants/"+$(e.currentTarget).data("id"),
-                   type:"GET",
-                   dataType : 'json',
-                   success:function(data){
-                        var challengeViews="";
-                        for (index = 0; index < data.length; ++index) {
 
-                            challengeViews += "<div class=\"padding5 row row-eq-height margin-bottom\">";
-                             challengeViews += "                           <div class=\"col-lg-2 col-xs-2 padding5\">";
-                             challengeViews += "                               <a href=\"\/profile\/"+data[index].userId+"\" class=\"container-modal-views-link\" title=\"\">";
-                             if(data[index].photo == "")
-                                challengeViews += "                                       <img src=\"\/uploads\/users\/default_user.png\" class=\"img-circle img-responsive same-height-modal-views\">";
-                             else
-                                challengeViews += "                                       <img src=\"\/uploads\/users\/"+data[index].photo+"\" class=\"img-circle img-responsive same-height-modal-views\">";
-                             challengeViews += "                               <\/a>";
-                             challengeViews += "                           <\/div>";
-                             challengeViews += "                           <div class=\"col-lg-7 col-xs-7\">";
-                             challengeViews += "                               <a href=\"\/profile\/"+data[index].userId+"\" class=\"center-middle\" title=\"\">"+data[index].name+"<\/a>";
-                             challengeViews += "                           <\/div>";
-                             challengeViews += "                       <\/div>";
-                             challengeViews += "                    <\/div>";
-                        }
-                        $("#modal-views-content").html(challengeViews);
-                   },error:function(){
-                   }
-               }); //end of ajax
-                   return false;
-               });
-
-           $( ".challenge-participants" ).hover(function(e) {
-                var id = $(e.currentTarget).data("id");
-                if(!(id in dictParticipants)){
-                     $.ajax({
-                            url: "/participants/"+id,
-                            type:"GET",
-                            dataType : 'json',
-                            success:function(data){
-                                dictParticipants[id] = data;
-                              console.log(JSON.stringify(data));
-                              $(e.currentTarget).prop('title', getViewsNames(dictParticipants[id]));
-                              $(e.currentTarget).attr('data-original-title', getViewsNames(dictParticipants[id]));
-                              $(e.currentTarget).tooltip('show');
-                            },error:function(){
-                            }
-                        }); //end of ajax
-               }else {
-               $(e.currentTarget).prop('title', getViewsNames(dictParticipants[id]));
-               $(e.currentTarget).attr('data-original-title', getViewsNames(dictParticipants[id]));
-
-               $(e.currentTarget).tooltip('show');
-               }
-           });
-        }
-
-    function enableChallengeViews(){
-      $('.challenge-views').unbind().click(function(e){
-        $('#modalHome').html("Views");
-        $('#challenge-views-modal').modal('show');
-           $.ajax({
-               url: "/views/proof/"+$(e.currentTarget).data("id"),
-               type:"GET",
-               dataType : 'json',
-               success:function(data){
-                    var challengeViews="";
-                    for (index = 0; index < data.length; ++index) {
-//                        console.log(data[index]);
-
-                        challengeViews += "<div class=\"padding5 row row-eq-height margin-bottom\">";
-                         challengeViews += "                           <div class=\"col-lg-2 col-xs-2 padding5\">";
-                         challengeViews += "                               <a href=\"\/profile\/"+data[index].userId+"\" class=\"container-modal-views-link\" title=\"\">";
-                         if(data[index].photo == "")
-                            challengeViews += "                                       <img src=\"\/uploads\/users\/default_user.png\" class=\"img-circle img-responsive same-height-modal-views\">";
-                         else
-                            challengeViews += "                                       <img src=\"\/uploads\/users\/"+data[index].photo+"\" class=\"img-circle img-responsive same-height-modal-views\">";
-                         challengeViews += "                               <\/a>";
-                         challengeViews += "                           <\/div>";
-                         challengeViews += "                           <div class=\"col-lg-7 col-xs-7\">";
-                         challengeViews += "                               <a href=\"\/profile\/"+data[index].userId+"\" class=\"center-middle\" title=\"\">"+data[index].name+"<\/a>";
-                         challengeViews += "                           <\/div>";
-                         challengeViews += "                       <\/div>";
-                         challengeViews += "                    <\/div>";
-                    }
-                    $("#modal-views-content").html(challengeViews);
-
-
-
-               },error:function(){
-                   //console.log("count:" + countVotes);
-               }
-           }); //end of ajax
-               return false;
-           });
-
-       $( ".challenge-views" ).hover(function(e) {
-            var id = $(e.currentTarget).data("id");
-            if(!(id in dictViews)){
-                 $.ajax({
-                                url: "/views/proof/"+id,
-                                type:"GET",
-                                dataType : 'json',
-                                success:function(data){
-                                    dictViews[id] = data;
-                                  console.log(JSON.stringify(data));
-                                  $(e.currentTarget).prop('title', getViewsNames(dictViews[id]));
-                                  $(e.currentTarget).attr('data-original-title', getViewsNames(dictViews[id]));
-                                  $(e.currentTarget).tooltip('show');
-                                },error:function(){
-                                    //console.log("count:" + countVotes);
-                                }
-                            }); //end of ajax
-           }else {
-           $(e.currentTarget).prop('title', getViewsNames(dictViews[id]));
-           $(e.currentTarget).attr('data-original-title', getViewsNames(dictViews[id]));
-
-           $(e.currentTarget).tooltip('show');
-           }
-       });
-    }
-
-    function getViewsNames(data){
-        var challengeViews="";
-
-        if(data.length>= 5){
-            challengeViews += data[0].name + ", " +  data[1].name + ", " +  data[2].name + " and " + (data.length - 3) + " other people";
-        }else{
-            for (index = 0; index < data.length; ++index) {
-                challengeViews += data[index].name + ", ";
-            }
-            if(data.length > 0)
-                challengeViews = challengeViews.slice(0, -2);
-        }
-
-
-        return challengeViews;
-    }
 
 
     </script>
+
+
+
 
 
 @endsection

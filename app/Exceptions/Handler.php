@@ -48,8 +48,8 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
 //        echo "-1";
-        if (!$this->isHttpException($e))
-            $e = new HttpException(500);
+//        if (!$this->isHttpException($e))
+//            $e = new HttpException(500);
 
 
 //        echo "-1.1";

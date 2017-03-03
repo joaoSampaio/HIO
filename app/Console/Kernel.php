@@ -30,5 +30,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('remind_user_1')
             ->twiceDaily(1, 13);
+        $schedule->command('remind_user_1')
+            ->twiceDaily(8, 20);
     }
 }

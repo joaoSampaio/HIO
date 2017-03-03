@@ -374,21 +374,49 @@ class SonChallengeController extends Controller {
 
 //        echo "lll:".json_encode($alreadyVoted);
 
-        $dateMigrate = Carbon::now()->subHours(24);
-        $proofs = DB::table('files')
-            ->where('is_ready','=', 1)
-            ->where('user_id', '!=', Auth::user()->id)
-            ->whereNotIn('files.id', function ($query)
-            {
-                $query->from('proof_approval')
-                    ->select('proof_id')
-                    ->where('user_id', Auth::user()->id);
-            })
-            ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
-            ->where('deadLine','>=', $dateMigrate)
-            ->select('files.*')
-            ->get();
+//        $dateMigrate = Carbon::now()->subHours(24);
+//        $proofs = DB::table('files')
+//            ->where('is_ready','=', 1)
+//            ->where('user_id', '!=', Auth::user()->id)
+//            ->whereNotIn('files.id', function ($query)
+//            {
+//                $query->from('proof_approval')
+//                    ->select('proof_id')
+//                    ->where('user_id', Auth::user()->id);
+//            })
+//            ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
+//            ->where('deadLine','>=', $dateMigrate)
+//            ->select('files.*')
+//            ->get();
 
+
+
+        if(Auth::check()){
+            $proofs = DB::table('files')
+                ->where('is_ready','=', 1)
+//                ->leftJoin('proof_approval', 'proof_approval.proof_id', '=', 'files.id')->where('proof_approval.user_id','=', Auth::user()->id)
+                ->leftJoin('proof_approval', function($join)
+                {
+                    $join->on('proof_approval.user_id', '=',  DB::raw("'".Auth::user()->id."'"));
+                    $join->on('proof_approval.proof_id','=', 'files.id');
+                })
+//                ->select('files.*', 'proof_approval.judgment')
+                ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
+                ->select('files.*','challenges.title', 'proof_approval.judgment')
+                ->get(10);
+
+//            , DB::raw('count(proof_approval.proof_id) as votes'))
+//                ->orderBy('votes', 'asc')
+
+
+        }else{
+            $proofs = DB::table('files')
+                ->where('is_ready','=', 1)
+                ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
+                ->select('files.*','challenges.title', DB::raw('0 as judgment'), DB::raw('count(proof_approval.proof_id) as votes'))
+                ->orderBy('votes', 'asc')
+                ->get(10);
+        }
 
 
 //            ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
