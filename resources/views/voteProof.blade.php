@@ -84,6 +84,214 @@ position: inherit;
     transform: rotate(0deg);
 }
 
+
+
+#list-proofs article {
+    margin-bottom: 30px;
+    border-top: 1px solid #eee;
+    padding: 20px 0 0;
+}
+
+
+#list-proofs .header-list-proofs {
+    margin-bottom: 10px;
+    position: relative;
+
+}
+
+#list-proofs h2 {
+
+    text-transform: inherit;
+    font-weight: bold;
+}
+
+#list-proofs h2 a {
+    font-size: 20px;
+    color: #000;
+
+}
+
+#list-proofs .post-container {
+    width: 500px;
+    position: relative;
+}
+
+#list-proofs .post-container a img {
+    display: block;
+    width: 500px;
+    border: 0;
+}
+
+#list-proofs p.post-meta {
+    color: #999;
+    margin: 10px 0;
+}
+
+#list-proofs p.post-meta a {
+    color: #999;
+    font-weight: 400;
+}
+
+#list-proofs .post-afterbar-a.in-list-view {
+    width: 500px;
+}
+
+#list-proofs .post-afterbar-a {
+    margin: 10px 0;
+    padding-bottom: 0;
+}
+#list-proofs .badge-toolbar-pre, .post-afterbar-a {
+    position: relative;
+}
+
+.left {
+    float: left!important;
+}
+
+#list-proofs .btn-vote {
+    overflow: hidden;
+    padding: 0;
+}
+
+#list-proofs .btn-vote li {
+    margin: 0 10px 0 0;
+    float: left;
+    list-style: none;
+}
+
+#list-proofs .btn-vote a {
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    width: 44px;
+    height: 34px;
+    display: block;
+    text-indent: -999px;
+    position: relative;
+}
+
+
+
+#list-proofs .btn-vote .down:after, #list-proofs .btn-vote .up:after {
+    position: absolute;
+    content: " ";
+    width: 30px;
+    height: 30px;
+    left: 50%;
+    top: 50%;
+    margin-top: -15px;
+    margin-left: -15px;
+}
+#list-proofs .btn-vote .up:after {
+    background: url(../img/sprite.png) -120px 0 no-repeat;
+    background-size: 240px 60px;
+}
+
+#list-proofs .btn-vote .down:after {
+    background: url(../img/sprite.png) -150px 0 no-repeat;
+    background-size: 240px 60px;
+}
+
+#list-proofs .btn-vote .comment:after, .btn-vote .up.active:after {
+    position: absolute;
+    content: " ";
+    width: 30px;
+    height: 30px;
+    left: 50%;
+    top: 50%;
+    margin-top: -15px;
+    margin-left: -15px;
+}
+
+#list-proofs .btn-vote .comment:after {
+    background: url(../img/sprite.png) -180px 0 no-repeat;
+    background-size: 240px 60px;
+}
+
+.right {
+    float: right!important;
+}
+
+
+#list-proofs .post-afterbar-a .share ul {
+    overflow: hidden;
+    list-style-type: none;
+}
+
+#list-proofs .post-afterbar-a .share.right li {
+    margin: 0 0 0 10px;
+}
+#list-proofs .post-afterbar-a .share li {
+    float: left;
+    margin-right: 10px;
+}
+
+#list-proofs .post-afterbar-a .btn-share.facebook {
+    background-color: #3b5998;
+}
+#list-proofs .post-afterbar-a .btn-share {
+    display: block;
+    color: #fff;
+    font-weight: 700;
+    height: 34px;
+    /*background-color: #f4f4f4;*/
+    line-height: 34px;
+    padding: 0 15px 0 34px;
+    border-radius: 2px;
+    text-align: center;
+    position: relative;
+}
+
+#list-proofs .post-afterbar-a .btn-share.facebook:after {
+    content: " ";
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    top: 50%;
+    margin-top: -16px;
+    left: 2px;
+    background: url(../img/sprite.png) -90px 0 no-repeat;
+    background-size: 240px 60px;
+}
+
+.post-afterbar-a .btn-share.twitter {
+    background-color: #00aced;
+}
+
+#list-proofs .post-afterbar-a .btn-share.twitter:after {
+    content: " ";
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    top: 50%;
+    margin-top: -15px;
+    left: 2px;
+    background: url(../img/sprite.png) -90px -30px no-repeat;
+    background-size: 240px 60px;
+}
+
+.clearfix {
+    clear: both;
+}
+
+#list-proofs .btn-vote .up.active:after {
+    background: url(../img/sprite.png) -120px -30px no-repeat;
+    background-size: 240px 60px;
+}
+
+#list-proofs .btn-vote .down.active:after {
+    position: absolute;
+    content: " ";
+    width: 30px;
+    height: 30px;
+    background: url(../img/sprite.png) -150px -30px no-repeat;
+    background-size: 240px 60px;
+    left: 50%;
+    top: 50%;
+    margin-top: -15px;
+    margin-left: -15px;
+}
+
 </style>
 
 
@@ -99,59 +307,84 @@ position: inherit;
 
 
     <!-- Portfolio Grid Section -->
-    <section id="portfolio" style="margin-top: 80px">
+    <section id="list-proofs" style="margin-top: 80px">
         <div class="container">
 
             @foreach($proofs as $sonChallenge)
             <div class="row">
 
-                <div class="col-md-8 col-md-offset-2 text-center">
+                <article data-entry-id="aebrrNQ" data-entry-url="http://9gag.com/gag/aebrrNQ" data-entry-votes="1" data-entry-comments="0" id="jsid-entry-entity-aebrrNQ" class="badge-entry-container badge-entry-entity badge-in-view badge-in-view-focus" style="min-height: 393px;">
+                    <div class="header-list-proofs">
 
-                    @if($sonChallenge->is_ready)
+                        <h2 class="badge-item-title">
+                            <a class="badge-evt badge-track" data-evt="PostList,TapPost,Fresh,,PostTitle" data-track="post,v,,,d,aebrrNQ,l" data-entry-id="aebrrNQ" data-position="9" href="/gag/aebrrNQ" target="_blank">
+                                {{$sonChallenge->title}}            </a>
+                        </h2>
+                    </div>
 
-                        @if($sonChallenge->type == 1)
 
-                            <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="100%" height="480"
-                                   poster="{{ asset('uploads/challenge/'. pathinfo(asset('uploads/challenge/'. $sonChallenge->filename), PATHINFO_FILENAME) . '.jpg')  }}" data-setup="{}" style="width: 100%">
-                                <source src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" type='video/mp4'>
-                                {{--<source src="MY_VIDEO.webm" type='video/webm'>--}}
-                                <p class="vjs-no-js">
-                                    To view this video please enable JavaScript, and consider upgrading to a web browser that
-                                    <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                                </p>
-                            </video>
 
-                        @else
-                            <img src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" class="img-responsive"  style="    height: 100%;margin: 0 auto;" alt="">
+                    <div class="badge-post-container post-container ">
+                        <a href="/gag/aebrrNQ" class="badge-evt badge-track badge-track-no-follow" data-evt="PostList,TapPost,Fresh,,PostImage" data-entry-id="aebrrNQ" data-position="9" style="min-height:289.13043478261px;" target="_blank">
+                            {{--<img class="badge-item-img" src="https://img-9gag-fun.9cache.com/photo/aebrrNQ_460s.jpg" alt="How I feel after watching HIMYM or any other good show">--}}
 
-                        @endif
+                            @if($sonChallenge->type == 1)
 
+                                <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="100%" height="480"
+                                       poster="{{ asset('uploads/challenge/'. pathinfo(asset('uploads/challenge/'. $sonChallenge->filename), PATHINFO_FILENAME) . '.jpg')  }}" data-setup="{}" style="width: 100%">
+                                    <source src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" type='video/mp4'>
+                                    <source src="MY_VIDEO.webm" type='video/webm'>
+                                    <p class="vjs-no-js">
+                                        To view this video please enable JavaScript, and consider upgrading to a web browser that
+                                        <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                                    </p>
+                                </video>
+
+                            @else
+                                <img src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" class="badge-item-img"  alt="{{$sonChallenge->title}} ">
+
+                            @endif
+
+                        </a>
+
+                    </div>
+
+
+                    <div class="post-text-container badge-item-description">
+                    </div>
+                    @if($sonChallenge->judgment != NULL)
+                        <p class="post-meta" data-voted-{{$sonChallenge->id}}="{{($sonChallenge->judgment != NULL && $sonChallenge->judgment == 1)? "1" : "-1"}}">
                     @else
-                        <div class="alert alert-info col-sm-12 col-md-6 col-md-offset-3">
-                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                            <p>Your video is being converted. It will be available soon.</p>
-                            <p>This page will refresh when the video is available.</p>
-                        </div>
+                        <p class="post-meta" data-voted-{{$sonChallenge->id}}="0">
 
                     @endif
+                        <a class="badge-evt point" id="love-count-aebrrNQ" href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}" target="_blank" data-evt="PostList,TapPost,Fresh,,Point" data-entry-id="aebrrNQ" data-position="9">
+                            <span id="like-count-{{$sonChallenge->id}}" class="badge-item-like-count">{{$sonChallenge->positive}}</span> Up</a> ·
+                        <a class="badge-evt point" id="love-count-aebrrNQ" href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}" target="_blank" data-evt="PostList,TapPost,Fresh,,Point" data-entry-id="aebrrNQ" data-position="9">
+                            <span id="dislike-count-{{$sonChallenge->id}}" class="badge-item-dislike-count">{{$sonChallenge->negative}}</span> Down</a> ·
+                        <a class="comment badge-evt" href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}#comment" target="_blank" data-evt="PostList,TapPost,Fresh,,CommentCountText" data-entry-id="aebrrNQ" data-position="9">0 comments</a>
+                    </p>
 
-                </div>
-
-                <div class="col-md-8 col-md-offset-2 col-xs-12" id="approve-{{$sonChallenge->id}}">
-
-                    <div class="col-md-12 col-xs-12 judge-info alert-hio">
-
-                        <div class="col-xs-6 col-md-6" style="margin-bottom: 20px;">
-                            <a href="#" class="btn_approve dislike" data-id="{{$sonChallenge->id}}"><i class="fa fa-meh-o " aria-hidden="true"></i></a>
-                            {{--<button type="button" onclick="goBack()" class="btn btn-default btn-xl btn-cancel-hio" id="back_control">Back</button>--}}
+                    <div class="badge-item-vote-container post-afterbar-a in-list-view  ">
+                        <div class="vote">
+                            <ul class="btn-vote left">
+                                <li><a class="badge-item-vote-up up like {{($sonChallenge->judgment != NULL && $sonChallenge->judgment == 1)? "active" : ""}}" data-proof-id="{{$sonChallenge->id}}" href="javascript:void(0);" rel="nofollow">Upvote</a></li>
+                                <li><a class="badge-item-vote-down down dislike {{($sonChallenge->judgment != NULL && $sonChallenge->judgment == -1)? "active" : ""}}" data-proof-id="{{$sonChallenge->id}}" href="javascript:void(0);" rel="nofollow">Downvote</a></li>
+                                <li><a class="comment badge-evt badge-item-comment" target="_blank" href="/gag/aebrrNQ#comment" data-evt="PostList,TapPost,Fresh,,Comment" data-entry-id="aebrrNQ" data-position="9" rel="nofollow">Comment</a></li>
+                            </ul>
                         </div>
+                        <div class="share right">
+                            <ul>
+                                <li><a href="javascript:void(0);" class="badge-facebook-share badge-evt badge-track btn-share facebook" data-track="social,fb.s,,,d,aebrrNQ,l" data-evt="PostList,ShareSocial,Fresh,,FacebookButton" data-entry-id="aebrrNQ" data-position="9" data-share="http://9gag.com/gag/aebrrNQ?ref=fb.s" rel="nofollow">Facebook</a></li>
 
-                        <div class="col-xs-6 col-md-6">
-                            {{--<button form="form1" type="submit" class="btn btn-primary btn-xl btn-create-hio" id="next_control">Save Changes</button>--}}
-                            <a href="#" class="btn_approve like" data-id="{{$sonChallenge->id}}"><i class="fa fa-sign-language btn-create-hio" aria-hidden="true"></i></a>
+                                <li><a href="javascript:void(0);" class="badge-twitter-share badge-evt badge-track btn-share twitter" data-track="social,t.s,,,d,aebrrNQ,l" data-evt="PostList,ShareSocial,Fresh,,TwitterButton" data-title="How%20I%20feel%20after%20watching%20HIMYM%20or%20any%20other%20good%20show" data-entry-id="aebrrNQ" data-position="9" data-share="http://9gag.com/gag/aebrrNQ?ref=t" rel="nofollow">Twitter</a>
+                                </li>
+                            </ul>
                         </div>
+                        <div class="clearfix"></div>
                     </div>
-                </div>
+
+                </article>
 
 
             </div>
@@ -177,11 +410,29 @@ position: inherit;
         e.preventDefault();
         $.post("/judge/proof",
             {
-                proof_id: $(e.currentTarget).data("id"),
+                proof_id: $(e.currentTarget).data("proof-id"),
                 value: 1
             },
             function(data, status){
-                $('#approve-'+$(e.currentTarget).data("id")).hide();
+
+            var id = $(e.currentTarget).data("proof-id");
+                $('[data-proof-id=' + id + ']').removeClass("active");
+                $(e.currentTarget).addClass("active");
+
+
+
+                if($('[data-voted-'+id+'= 0]').length > 0){
+                    $('#like-count-'+id).html(parseInt($('#like-count-'+id).html())+1);
+                    $('[data-voted-'+id+'= 0]').data( "voted-"+id, 1 );
+                } else if($('[data-voted-'+id+'= -1]').length > 0){
+                    $('#like-count-'+id).html(parseInt($('#like-count-'+id).html())+1);
+                    $('#dislike-count-'+id).html(parseInt($('#dislike-count-'+id).html())-1);
+                    $('[data-voted-'+id+'= -1]').data( "voted-"+id, 1 );
+                }
+
+
+
+
 //        alert("Data: " + data + "\nStatus: " + status);
             });
     });
@@ -190,12 +441,25 @@ position: inherit;
         e.preventDefault();
         $.post("/judge/proof",
             {
-                proof_id: $(e.currentTarget).data("id"),
+                proof_id: $(e.currentTarget).data("proof-id"),
                 value: 0
             },
             function(data, status){
-                $('#approve-'+$(e.currentTarget).data("id")).hide();
-//        alert("Data: " + data + "\nStatus: " + status);
+                var id = $(e.currentTarget).data("proof-id");
+                $('[data-proof-id=' + id + ']').removeClass("active");
+                $(e.currentTarget).addClass("active");
+
+
+
+                if($('[data-voted-'+id+'= 0]').length > 0){
+                    $('#dislike-count-'+id).html(parseInt($('#dislike-count-'+id).html())+1);
+                    $('[data-voted-'+id+'= 0]').data( "voted-"+id, -1 );
+                } else if($('[data-voted-'+id+'= 1]').length > 0){
+                    $('#like-count-'+id).html(parseInt($('#like-count-'+id).html())-1);
+                    $('#dislike-count-'+id).html(parseInt($('#dislike-count-'+id).html())+1);
+                    $('[data-voted-'+id+'= 1]').data( "voted-"+id, -1 );
+                }
+
             });
     });
 

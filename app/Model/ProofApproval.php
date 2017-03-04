@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use DateTime;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+//use App\ProofApproval;
 
 class ProofApproval extends Model
 {
@@ -29,6 +30,9 @@ class ProofApproval extends Model
 
 
     public static function getProofApproval($userId, $proofId){
+
+
+
         return DB::table('proof_approval')->where('user_id', $userId)->where('proof_id', $proofId)->first();
     }
 

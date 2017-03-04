@@ -223,7 +223,7 @@ class SonChallengeController extends Controller {
         if($value <= 0){
             $value = -1;
         }
-        if($value < 0){
+        if($value > 0){
             $value = 1;
         }
 
@@ -231,6 +231,14 @@ class SonChallengeController extends Controller {
         if (Auth::check()) {
 
             if($judgement = ProofApproval::getProofApproval(Auth::user()->id, $proof_id)){
+
+
+                DB::table('proof_approval')
+                    ->where('proof_id', $proof_id)
+                    ->where('user_id', Auth::user()->id)
+                    ->update(['judgment' => $value]);
+//            ->update(['delayed' => 1]);
+
 
             }else{
                 $judgement = new ProofApproval(array(
@@ -400,11 +408,25 @@ class SonChallengeController extends Controller {
                     $join->on('proof_approval.user_id', '=',  DB::raw("'".Auth::user()->id."'"));
                     $join->on('proof_approval.proof_id','=', 'files.id');
                 })
+                ->leftJoin('proof_approval as proofs_total', 'proofs_total.proof_id','=', 'files.id')
 //                ->select('files.*', 'proof_approval.judgment')
                 ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
-                ->select('files.*','challenges.title', 'proof_approval.judgment')
+
+
+                    ->select('files.*',
+                    'challenges.title',
+                    'challenges.uuid',
+                    'proof_approval.judgment',
+                    DB::raw('SUM(CASE WHEN proofs_total.judgment >= 0 THEN 1 ELSE 0 END) AS positive'),
+                    DB::raw('SUM(CASE WHEN proofs_total.judgment < 0 THEN 1 ELSE 0 END) AS negative'))
+                ->groupBy('files.id')
+                ->orderBy('files.created_at', 'asc')
                 ->get(10);
 
+
+//            select sum (case when acolumn >= 0 then 1 else 0 end) as positive,
+//       sum (case when acolumn < 0 then 1 else 0 end) as negative
+//from table
 //            , DB::raw('count(proof_approval.proof_id) as votes'))
 //                ->orderBy('votes', 'asc')
 
@@ -413,8 +435,12 @@ class SonChallengeController extends Controller {
             $proofs = DB::table('files')
                 ->where('is_ready','=', 1)
                 ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
-                ->select('files.*','challenges.title', DB::raw('0 as judgment'), DB::raw('count(proof_approval.proof_id) as votes'))
-                ->orderBy('votes', 'asc')
+                ->leftJoin('proof_approval as proofs_total', 'proofs_total.proof_id','=', 'files.id')
+                ->select('files.*','challenges.uuid','challenges.title', DB::raw('0 as judgment'),
+                    DB::raw('SUM(CASE WHEN proofs_total.judgment >= 0 THEN 1 ELSE 0 END) AS positive'),
+                    DB::raw('SUM(CASE WHEN proofs_total.judgment < 0 THEN 1 ELSE 0 END) AS negative'))
+                ->groupBy('files.id')
+                ->orderBy('files.created_at', 'asc')
                 ->get(10);
         }
 
