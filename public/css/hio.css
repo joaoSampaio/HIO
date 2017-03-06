@@ -1119,3 +1119,222 @@ body{
 }
 
 
+
+
+#list-proofs article {
+    margin-bottom: 30px;
+    border-top: 1px solid #eee;
+    padding: 20px 0 0;
+}
+
+
+#list-proofs .header-list-proofs {
+    margin-bottom: 10px;
+    position: relative;
+
+}
+
+#list-proofs h2 {
+
+    text-transform: inherit;
+    font-weight: bold;
+}
+
+#list-proofs h2 a {
+    font-size: 20px;
+    color: #000;
+
+}
+
+#list-proofs .post-container {
+    width: 500px;
+    position: relative;
+}
+
+#list-proofs .post-container a img {
+    display: block;
+    width: 500px;
+    border: 0;
+}
+
+#list-proofs p.post-meta {
+    color: #999;
+    margin: 10px 0;
+}
+
+#list-proofs p.post-meta a {
+    color: #999;
+    font-weight: 400;
+}
+
+#list-proofs .post-afterbar-a.in-list-view {
+    width: 500px;
+}
+
+#list-proofs .post-afterbar-a {
+    margin: 10px 0;
+    padding-bottom: 0;
+}
+#list-proofs .badge-toolbar-pre, .post-afterbar-a {
+    position: relative;
+}
+
+.left {
+    float: left!important;
+}
+
+#list-proofs .btn-vote {
+    overflow: hidden;
+    padding: 0;
+}
+
+#list-proofs .btn-vote li {
+    margin: 0 10px 0 0;
+    float: left;
+    list-style: none;
+}
+
+#list-proofs .btn-vote a {
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    width: 44px;
+    height: 34px;
+    display: block;
+    text-indent: -999px;
+    position: relative;
+}
+
+
+
+#list-proofs .btn-vote .down:after, #list-proofs .btn-vote .up:after {
+    position: absolute;
+    content: " ";
+    width: 30px;
+    height: 30px;
+    left: 50%;
+    top: 50%;
+    margin-top: -15px;
+    margin-left: -15px;
+}
+#list-proofs .btn-vote .up:after {
+    background: url(../img/sprite.png) -120px 0 no-repeat;
+    background-size: 240px 60px;
+}
+
+#list-proofs .btn-vote .down:after {
+    background: url(../img/sprite.png) -150px 0 no-repeat;
+    background-size: 240px 60px;
+}
+
+#list-proofs .btn-vote .comment:after, .btn-vote .up.active:after {
+    position: absolute;
+    content: " ";
+    width: 30px;
+    height: 30px;
+    left: 50%;
+    top: 50%;
+    margin-top: -15px;
+    margin-left: -15px;
+}
+
+#list-proofs .btn-vote .comment:after {
+    background: url(../img/sprite.png) -180px 0 no-repeat;
+    background-size: 240px 60px;
+}
+
+.right {
+    float: right!important;
+}
+
+
+#list-proofs .post-afterbar-a .share ul {
+    overflow: hidden;
+    list-style-type: none;
+}
+
+#list-proofs .post-afterbar-a .share.right li {
+    margin: 0 0 0 10px;
+}
+#list-proofs .post-afterbar-a .share li {
+    float: left;
+    margin-right: 10px;
+}
+
+#list-proofs .post-afterbar-a .btn-share.facebook {
+    background-color: #3b5998;
+}
+#list-proofs .post-afterbar-a .btn-share {
+    display: block;
+    color: #fff;
+    font-weight: 700;
+    height: 34px;
+    /*background-color: #f4f4f4;*/
+    line-height: 34px;
+    padding: 0 15px 0 34px;
+    border-radius: 2px;
+    text-align: center;
+    position: relative;
+}
+
+#list-proofs .post-afterbar-a .btn-share.facebook:after {
+    content: " ";
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    top: 50%;
+    margin-top: -16px;
+    left: 2px;
+    background: url(../img/sprite.png) -90px 0 no-repeat;
+    background-size: 240px 60px;
+}
+
+.post-afterbar-a .btn-share.twitter {
+    background-color: #00aced;
+}
+
+#list-proofs .post-afterbar-a .btn-share.twitter:after {
+    content: " ";
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    top: 50%;
+    margin-top: -15px;
+    left: 2px;
+    background: url(../img/sprite.png) -90px -30px no-repeat;
+    background-size: 240px 60px;
+}
+
+.clearfix {
+    clear: both;
+}
+
+#list-proofs .btn-vote .up.active:after {
+    background: url(../img/sprite.png) -120px -30px no-repeat;
+    background-size: 240px 60px;
+}
+
+#list-proofs .btn-vote .down.active:after {
+    position: absolute;
+    content: " ";
+    width: 30px;
+    height: 30px;
+    background: url(../img/sprite.png) -150px -30px no-repeat;
+    background-size: 240px 60px;
+    left: 50%;
+    top: 50%;
+    margin-top: -15px;
+    margin-left: -15px;
+}
+
+.your-proof{
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    width: inherit !important;
+    height: 34px;
+    padding: 0 10px;
+    display: block;
+    text-indent: inherit !important;
+    position: relative;
+}

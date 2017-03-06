@@ -82,51 +82,66 @@ class SonChallengeController extends Controller {
             }
         }
 
-        $sonChallenge = DB::table('files')->where('files.id', $file_id)
-            ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
-            ->join('users', 'files.user_id', '=', 'users.id')
-            ->select('users.name', 'files.*', 'challenges.title', 'challenges.uuid', 'challenges.deadLine', 'challenges.id as id_challenge', 'challenges.judged')
-            ->first();
+        if(Auth::check()){
+            $sonChallenge = DB::table('files')->where('files.id', $file_id)
+                ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
+                ->join('users', 'files.user_id', '=', 'users.id')
+                ->leftJoin('proof_approval', function($join)
+                {
+                    $join->on('proof_approval.user_id', '=',  DB::raw("'".Auth::user()->id."'"));
+                    $join->on('proof_approval.proof_id','=', 'files.id');
+                })
+                ->leftJoin('proof_approval as proofs_total', 'proofs_total.proof_id','=', 'files.id')
+                ->select('users.name', 'files.*','proof_approval.judgment',
+                    'challenges.title', 'challenges.uuid', 'challenges.deadLine',
+                    'challenges.id as id_challenge', 'challenges.judged',
+                    DB::raw('SUM(CASE WHEN proofs_total.judgment >= 0 THEN 1 ELSE 0 END) AS positive'),
+                    DB::raw('SUM(CASE WHEN proofs_total.judgment < 0 THEN 1 ELSE 0 END) AS negative'))
+                ->groupBy('files.id')
+                ->first();
+        }else{
+            $sonChallenge = DB::table('files')->where('files.id', $file_id)
+                ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
+                ->join('users', 'files.user_id', '=', 'users.id')
+                ->leftJoin('proof_approval as proofs_total', 'proofs_total.proof_id','=', 'files.id')
+                ->select('users.name', 'files.*',DB::raw('0 as judgment'),
+                    'challenges.title', 'challenges.uuid', 'challenges.deadLine',
+                    'challenges.id as id_challenge', 'challenges.judged',
+                    DB::raw('SUM(CASE WHEN proofs_total.judgment >= 0 THEN 1 ELSE 0 END) AS positive'),
+                    DB::raw('SUM(CASE WHEN proofs_total.judgment < 0 THEN 1 ELSE 0 END) AS negative'))
+                ->groupBy('files.id')
+                ->first();
+        }
+
+
 
         if($sonChallenge == null){
             abort(404, 'Challenge has ended');
         }
 
-        $hasLiked = false;
-        if (Auth::check()) {
-            $userId = Auth::user()->id;
-            //rever esta mal
-            $like = Cache::rememberForever('has-liked-'.$userId.'-'.$file_id, function() use ($file_id, $userId) {
-//                echo " entrou aqui---------------------------".'has-liked-'.$userId.'-'.$file_id;
-                return FileLikes::find( $file_id . Auth::user()->id);
-            });
-            if($like)
-                $hasLiked = true;
-        }
 
 
-        $canApprove = false;
 
-        if (Auth::check() && Auth::user()->id != $sonChallenge->user_id){
-            $hasJudged = Cache::rememberForever('has-judged-'.Auth::user()->id.'-'.$file_id, function() use ($file_id) {
-                return ProofApproval::getProofApproval(Auth::user()->id, $file_id) != null;
-            });
-            if(!$hasJudged){
-                $now = Carbon::now();
-
-                $deadLine = Carbon::parse($sonChallenge->deadLine);
-                $deadLine = $deadLine->addHours(24);
-                $isValid = $now < $deadLine;
-
-                if($isValid){
-                    $canApprove = true;
-                }else{
-                    Cache::forget('has-judged-'.Auth::user()->id.'-'.$file_id);
-                    Cache::forever('has-judged-'.Auth::user()->id.'-'.$file_id, true);
-                }
-
-            }
-        }
+//        if (Auth::check() && Auth::user()->id != $sonChallenge->user_id){
+//            $hasJudged = Cache::rememberForever('has-judged-'.Auth::user()->id.'-'.$file_id, function() use ($file_id) {
+//                return ProofApproval::getProofApproval(Auth::user()->id, $file_id) != null;
+//            });
+//            if(!$hasJudged){
+//                $now = Carbon::now();
+//
+//                $deadLine = Carbon::parse($sonChallenge->deadLine);
+//                $deadLine = $deadLine->addHours(24);
+//                $isValid = $now < $deadLine;
+//
+//                if($isValid){
+//                    $canApprove = true;
+//                }else{
+//                    Cache::forget('has-judged-'.Auth::user()->id.'-'.$file_id);
+//                    Cache::forever('has-judged-'.Auth::user()->id.'-'.$file_id, true);
+//                }
+//
+//            }
+//        }
 
 
         $userViews = Cache::rememberForever('views-proof-'.$file_id, function() use ($file_id) {
@@ -157,8 +172,6 @@ class SonChallengeController extends Controller {
         return view('challengeDetailSon')
             ->with('sonChallenge', $sonChallenge)
             ->with('userViews',$userViews)
-            ->with('canApprove',$canApprove)
-            ->with('hasLiked',$hasLiked)
             ->with('message',$message)
             ->with('timestamp',$timestamp)
             ->with('hmac',$hmac)
@@ -369,35 +382,7 @@ class SonChallengeController extends Controller {
     }
 
 
-    public function showVoteProofs(){
-
-//files_likes
-
-//        $alreadyVoted = DB::table('proof_approval')->where('user_id', Auth::user()->id)->lists('proof_id');
-//
-//        echo json_encode($alreadyVoted).'<br><br>';
-//        $canVote = DB::table('files')
-//            ->whereNotIn('id', $alreadyVoted)
-//            ->get();
-
-//        echo "lll:".json_encode($alreadyVoted);
-
-//        $dateMigrate = Carbon::now()->subHours(24);
-//        $proofs = DB::table('files')
-//            ->where('is_ready','=', 1)
-//            ->where('user_id', '!=', Auth::user()->id)
-//            ->whereNotIn('files.id', function ($query)
-//            {
-//                $query->from('proof_approval')
-//                    ->select('proof_id')
-//                    ->where('user_id', Auth::user()->id);
-//            })
-//            ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
-//            ->where('deadLine','>=', $dateMigrate)
-//            ->select('files.*')
-//            ->get();
-
-
+    public function showVoteProofs(Request $request){
 
         if(Auth::check()){
             $proofs = DB::table('files')
@@ -416,28 +401,21 @@ class SonChallengeController extends Controller {
                     ->select('files.*',
                     'challenges.title',
                     'challenges.uuid',
-                    'challenges.description',
+                    'challenges.description','challenges.judged',
                     'proof_approval.judgment',
                     DB::raw('SUM(CASE WHEN proofs_total.judgment >= 0 THEN 1 ELSE 0 END) AS positive'),
                     DB::raw('SUM(CASE WHEN proofs_total.judgment < 0 THEN 1 ELSE 0 END) AS negative'))
                 ->groupBy('files.id')
                 ->orderBy('files.created_at', 'desc')
-                ->get(10);
-
-
-//            select sum (case when acolumn >= 0 then 1 else 0 end) as positive,
-//       sum (case when acolumn < 0 then 1 else 0 end) as negative
-//from table
-//            , DB::raw('count(proof_approval.proof_id) as votes'))
-//                ->orderBy('votes', 'asc')
-
+                ->paginate(5);
+//                ->get(10);
 
         }else{
             $proofs = DB::table('files')
                 ->where('is_ready','=', 1)
                 ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
                 ->leftJoin('proof_approval as proofs_total', 'proofs_total.proof_id','=', 'files.id')
-                ->select('files.*','challenges.uuid','challenges.title','challenges.description', DB::raw('0 as judgment'),
+                ->select('files.*','challenges.uuid','challenges.title','challenges.judged', 'challenges.description', DB::raw('0 as judgment'),
                     DB::raw('SUM(CASE WHEN proofs_total.judgment >= 0 THEN 1 ELSE 0 END) AS positive'),
                     DB::raw('SUM(CASE WHEN proofs_total.judgment < 0 THEN 1 ELSE 0 END) AS negative'))
                 ->groupBy('files.id')
@@ -446,10 +424,11 @@ class SonChallengeController extends Controller {
         }
 
 
-//            ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
-//            ->join('users', 'files.user_id', '=', 'users.id')
-//            ->select('users.name', 'files.*', 'challenges.title', 'challenges.uuid', 'challenges.deadLine', 'challenges.id as id_challenge', 'challenges.judged')
-//            ->get(10);
+
+        if ($request->ajax()) {
+            $view = view('partials.vote_paginate',compact('proofs'))->render();
+            return response()->json(['html'=>$view]);
+        }
 
 
 

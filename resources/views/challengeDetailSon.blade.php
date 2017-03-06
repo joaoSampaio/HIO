@@ -182,8 +182,8 @@ font-size: 22px;text-align: center;
 {{--{{$sonChallenge->id_challenge}}--}}
     <!-- Portfolio Grid Section -->
     <section  style="margin-top: 80px">
-        <div class="container">
-            <div class="row" >
+        <div class="container" id="list-proofs">
+            <div class="row col-md-8 col-md-offset-2" >
                 <div class="col-lg-12 {{$sonChallenge->judged == true? $sonChallenge->approved == true? 'approved': 'rejected' : 'nnn'}}" id="approved-logo">
                     <div style=" font-size: 22pt;">
                         <a href="/challenge/{{$sonChallenge->uuid}}" class="" title="{{$sonChallenge->title}}" style="color: #333;text-decoration: none;">
@@ -199,7 +199,7 @@ font-size: 22px;text-align: center;
 
                         @if($sonChallenge->type == 1)
 
-                            <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="100%" height="480"
+                            <video id="my-video" class="video-js vjs-fluid vjs-big-play-centered" controls preload="auto" width="100%" height="480"
                               poster="{{ asset('uploads/challenge/'. pathinfo(asset('uploads/challenge/'. $sonChallenge->filename), PATHINFO_FILENAME) . '.jpg')  }}" data-setup="{}" style="width: 100%">
                                 <source src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" type='video/mp4'>
                                 {{--<source src="MY_VIDEO.webm" type='video/webm'>--}}
@@ -225,38 +225,82 @@ font-size: 22px;text-align: center;
 
                 </div>
 
+                <div class="col-xs-12 col-md-12" style="margin-bottom: 20px;padding: 0px;">
 
-                @if($canApprove)
-                <div class="col-md-12 col-xs-12" id="approve">
 
-                     <div class="col-md-12 col-xs-12 judge-info alert-hio">
-                         <p>You are the judge!</p>
-                         <p style="font-size: 16px">Do you Aprove {{getFirstLastName($sonChallenge->name)}}´s challenge or is it a Fail?</p>
+                    @if($sonChallenge->judgment != NULL)
+                        <p class="post-meta" data-voted-{{$sonChallenge->id}}="{{($sonChallenge->judgment != NULL && $sonChallenge->judgment == 1)? "1" : "-1"}}">
+                    @else
+                        <p class="post-meta" data-voted-{{$sonChallenge->id}}="0">
 
-                        <div class="col-xs-6 col-md-6" style="margin-bottom: 20px;">
-                            <a href="#" class="btn_approve dislike"><i class="fa fa-meh-o " aria-hidden="true"></i></a>
-                            {{--<button type="button" onclick="goBack()" class="btn btn-default btn-xl btn-cancel-hio" id="back_control">Back</button>--}}
-                        </div>
+                            @endif
+                            <a class="badge-evt point">
+                                <span id="like-count-{{$sonChallenge->id}}" class="badge-item-like-count">{{$sonChallenge->positive}}</span> Up</a> ·
+                            <a class="badge-evt point">
+                                <span id="dislike-count-{{$sonChallenge->id}}" class="badge-item-dislike-count">{{$sonChallenge->negative}}</span> Down</a> ·
 
-                        <div class="col-xs-6 col-md-6">
-                            {{--<button form="form1" type="submit" class="btn btn-primary btn-xl btn-create-hio" id="next_control">Save Changes</button>--}}
-                            <a href="#" class="btn_approve like"><i class="fa fa-sign-language btn-create-hio" aria-hidden="true"></i></a>
-                        </div>
-                     </div>
+                            <a class="badge-evt point">
+                                <span id="dislike-count-{{$sonChallenge->id}}" class="badge-item-dislike-count">{{$userViews}}</span> Views</a> ·
+
+                            <a class="comment badge-evt" href="#comment">0 comments</a>
+                        </p>
                 </div>
-                @endif
 
-                <div class="col-lg-12 col-md-12 col-xs-12 title-proof">
-                    <a href="{{"/profile/".$sonChallenge->user_id}}" class="" title="" style="color: #333;text-decoration: none;">{{$sonChallenge->name }}
-                    </a>
-                    <a href="/challenge/{{$sonChallenge->uuid}}" class="" title="{{$sonChallenge->title}}">{{$sonChallenge->title}}</a>
+                <div class="col-md-12 col-xs-12" style="margin-bottom: 20px;padding: 0px;">
+
+                    @if(Auth::check() && $sonChallenge->user_id != Auth::user()->id)
+
+                    <p>You are the judge!</p>
+                    <p style="font-size: 16px">Do you Approve
+                        <a href="{{"/profile/".$sonChallenge->user_id}}" class="" title="" style="color: #333;text-decoration: underline;">{{getFirstLastName($sonChallenge->name)}}</a>
+                        ´s challenge or is it a Fail?
+                    </p>
+                    @endif
 
 
+                    <div class="badge-item-vote-container post-afterbar-a in-list-view  " style="width: 100%">
+                        <div class="vote">
+                            <ul class="btn-vote left">
+                                {{--@if(false)--}}
+                                @if(Auth::check() && $sonChallenge->user_id == Auth::user()->id)
+                                    <li><a href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}" class="your-proof">Your proof</a></li>
+                                @else
+                                    <li><a href="javascript:void(0);" class="badge-item-vote-up up like {{($sonChallenge->judgment != NULL && $sonChallenge->judgment == 1)? "active" : ""}}" data-proof-id="{{$sonChallenge->id}}">Upvote</a></li>
+                                    <li><a href="javascript:void(0);" class="badge-item-vote-down down dislike {{($sonChallenge->judgment != NULL && $sonChallenge->judgment == -1)? "active" : ""}}" data-proof-id="{{$sonChallenge->id}}">Downvote</a></li>
+                                @endif
+                                <li><a class="comment badge-evt badge-item-comment" href="#comment">Comment</a></li>
 
-                    <i id="vote" class="fa {{$hasLiked? 'fa-heart' : 'fa-heart-o pointer'}} primary" style="margin-left: 50px;margin-right: 15px;"></i><span id="likes_num">{{$sonChallenge->likes}}</span>
+                            </ul>
+                        </div>
+                        <div class="share right">
+                            <ul>
+                                <li><a href="javascript:void(0);" class="badge-facebook-share badge-evt badge-track btn-share facebook" data-track="social,fb.s,,,d,aebrrNQ,l" data-evt="PostList,ShareSocial,Fresh,,FacebookButton" data-entry-id="aebrrNQ" data-position="9" data-share="http://9gag.com/gag/aebrrNQ?ref=fb.s" rel="nofollow">Facebook</a></li>
 
-                    <i class="fa fa-eye primary" style="margin-left: 35px;margin-right: 15px;"></i> <span style="text-transform: none;">{{$userViews}} Views</span>
+                                <li><a href="javascript:void(0);" class="badge-twitter-share badge-evt badge-track btn-share twitter" data-track="social,t.s,,,d,aebrrNQ,l" data-evt="PostList,ShareSocial,Fresh,,TwitterButton" data-title="How%20I%20feel%20after%20watching%20HIMYM%20or%20any%20other%20good%20show" data-entry-id="aebrrNQ" data-position="9" data-share="http://9gag.com/gag/aebrrNQ?ref=t" rel="nofollow">Twitter</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                     {{--<div class="col-md-12 col-xs-12 judge-info alert-hio" id="list-proofs">--}}
+
+
+                        {{----}}
+                     {{--</div>--}}
                 </div>
+
+                {{--<div class="col-lg-12 col-md-12 col-xs-12 title-proof">--}}
+                    {{--<a href="{{"/profile/".$sonChallenge->user_id}}" class="" title="" style="color: #333;text-decoration: none;">{{$sonChallenge->name }}--}}
+                    {{--</a>--}}
+                    {{--<a href="/challenge/{{$sonChallenge->uuid}}" class="" title="{{$sonChallenge->title}}">{{$sonChallenge->title}}</a>--}}
+
+
+
+                    {{--<i id="vote" class="fa {{$hasLiked? 'fa-heart' : 'fa-heart-o pointer'}} primary" style="margin-left: 50px;margin-right: 15px;"></i><span id="likes_num">{{$sonChallenge->likes}}</span>--}}
+
+                    {{--<i class="fa fa-eye primary" style="margin-left: 35px;margin-right: 15px;"></i> <span style="text-transform: none;">{{$userViews}} Views</span>--}}
+                {{--</div>--}}
 
             </div>
 
@@ -283,8 +327,8 @@ font-size: 22px;text-align: center;
 
 
     <section class="bg-light-gray" id="portfolio">
-        <div class="container">
-            <div class="row">
+        <div class="container" id="comment">
+            <div class="row" >
 
 
                 {{--<div class="col-sm-12 col-md-12 text-center">--}}
@@ -346,62 +390,58 @@ font-size: 22px;text-align: center;
 <script>
 
 
-@if($canApprove)
-$(".like").unbind().click(function(event){
-    event.preventDefault();
-    $.post("/judge/proof",
-    {
-        proof_id: {{$sonChallenge->id}},
-        value: 1
-    },
-    function(data, status){
-        $('#approve').hide();
-//        alert("Data: " + data + "\nStatus: " + status);
-    });
-});
 
-$(".dislike").unbind().click(function(event){
-    event.preventDefault();
-    $.post("/judge/proof",
-    {
-        proof_id: {{$sonChallenge->id}},
-        value: 0
-    },
-    function(data, status){
-        $('#approve').hide();
-//        alert("Data: " + data + "\nStatus: " + status);
-    });
-});
-@endif
+    function like(e){
+        var id = $(e.currentTarget).data("proof-id");
+        if($('[data-voted-'+id+'= 0]').length > 0 || $('[data-voted-'+id+'= -1]').length > 0){
+            $.post("/judge/proof",
+                {
+                    proof_id: $(e.currentTarget).data("proof-id"),
+                    value: 1
+                },
+                function(data, status){
 
-@if(!$hasLiked)
-    $("#vote").unbind().click(function(){
-        $.ajax({
-            url: "{{ action('SonChallengeController@likeFile', $sonChallenge->id) }}",
-            type:"POST",
-            dataType : 'json',
-            data: { '_token': '{{ csrf_token() }}' },
-            success:function(data){
-               var success = data.status;
-               if(success){
-                    var countVotes = data.count;
-                    console.log("count:" + countVotes);
-                    if(countVotes != null) {
-                        $("#likes_num").text(countVotes + "");
-                        $("#vote").removeClass('fa-heart-o');
-                        $("#vote").removeClass('pointer');
-                        $("#vote").addClass('fa-heart');
+                    $('[data-proof-id=' + id + ']').removeClass("active");
+                    $(e.currentTarget).addClass("active");
 
+                    if($('[data-voted-'+id+'= 0]').length > 0){
+                        $('#like-count-'+id).html(parseInt($('#like-count-'+id).html())+1);
+                        $('[data-voted-'+id+'= 0]').attr( "data-voted-"+id, 1 );
+                    } else if($('[data-voted-'+id+'= -1]').length > 0){
+                        $('#like-count-'+id).html(parseInt($('#like-count-'+id).html())+1);
+                        $('#dislike-count-'+id).html(parseInt($('#dislike-count-'+id).html())-1);
+                        $('[data-voted-'+id+'= -1]').attr( "data-voted-"+id, 1 );
                     }
+                });
+        }
+    }
 
-               }
-            },error:function(){
-                //console.log("count:" + countVotes);
-            }
-        }); //end of ajax
-            return false;
-        });
-@endif
+    function dislike(e){
+        var id = $(e.currentTarget).data("proof-id");
+        if($('[data-voted-'+id+'= 0]').length > 0 || $('[data-voted-'+id+'= 1]').length > 0){
+            $.post("/judge/proof",
+                {
+                    proof_id: $(e.currentTarget).data("proof-id"),
+                    value: 0
+                },
+                function(data, status){
+                    $('[data-proof-id=' + id + ']').removeClass("active");
+                    $(e.currentTarget).addClass("active");
+
+                    if($('[data-voted-'+id+'= 0]').length > 0){
+                        $('#dislike-count-'+id).html(parseInt($('#dislike-count-'+id).html())+1);
+                        $('[data-voted-'+id+'= 0]').attr( "data-voted-"+id, -1 );
+                    } else if($('[data-voted-'+id+'= 1]').length > 0){
+                        $('#like-count-'+id).html(parseInt($('#like-count-'+id).html())-1);
+                        $('#dislike-count-'+id).html(parseInt($('#dislike-count-'+id).html())+1);
+                        $('[data-voted-'+id+'= 1]').attr( "data-voted-"+id, -1 );
+                    }
+                });
+        }
+    }
+
+    $(".like").delay( 800 ).click(like);
+    $(".dislike").delay( 800 ).click(dislike);
 
 
 @if(!$sonChallenge->is_ready)
