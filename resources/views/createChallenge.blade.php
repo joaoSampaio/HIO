@@ -201,7 +201,7 @@ label.custom-select {
 }
 
 .form-section{
-    margin-top: 35px;
+    margin-top: 20px;
     display: none;
 }
 .form-section.current {
@@ -374,7 +374,7 @@ width: 50px;
 
 
 .select2-results{
-box-shadow: 0px 38px 58px 3px rgba(0, 0, 0, 0.2);
+box-shadow: 0px -12px 58px 3px rgba(0, 0, 0, 0.2);
 }
 #menu-add-user{
 box-shadow: 0px 0px 68px 0px rgba(0, 0, 0, 0.2);
@@ -488,12 +488,12 @@ width: 2em;
                                     <div class="radio-choice">
 
                                         <label for="radio-public">
-                                            <input id="radio-public" checked="checked" class="radio radio-btn-public" type="radio" name="public" value="yes">
+                                            <input id="radio-public" checked="checked" class="radio radio-btn-public" type="radio" name="public" value="true">
                                             <div class="inside"></div>
                                             Public
                                         </label>
                                         <label for="radio-private">
-                                            <input id="radio-private" class="radio radio-btn-public" type="radio" name="public" value="no">
+                                            <input id="radio-private" class="radio radio-btn-public" type="radio" name="public" value="false">
                                             <div class="inside"></div>
                                             Private
                                         </label>
@@ -617,7 +617,7 @@ width: 2em;
 
 
 
-                        <div class="form-group" style="margin-bottom: 0px;margin-top: 70px; text-align: center;" id="controls" >
+                        <div class="form-group" style="margin-bottom: 0px;margin-top: 30px; text-align: center;" id="controls" >
                               <div class="col-md-12 col-xs-12">
 
                                 <div class="col-xs-6 col-md-6 col-mobile" style="margin-bottom: 20px;">
@@ -675,10 +675,10 @@ $( "#submeter" ).click(function( event ) {
 
 $(document).ready(function() {
     $('input[name="public"]').change(function () {
-        if (this.value == 'yes') {
+        if (this.value == 'true') {
             $('.form-private').hide();
         }
-        else if (this.value == 'no') {
+        else if (this.value == 'false') {
 
             $('.form-private').show();
         }
@@ -1040,13 +1040,13 @@ function updateParentHeight() {
     var index = $sections.index($sections.filter('.current'));
     var isPrivate = $('.form-private').is(":visible");
     if(index == 0 && !isPrivate)
-        curHeight  = 350;
+        curHeight  = 300;
     if(index == 0 && isPrivate)
-        curHeight  = 500;
+        curHeight  = 450;
     else if(index == 1)
-         curHeight  = 530;
+         curHeight  = 400;
     else if(index == 2)
-        curHeight  = 700;
+        curHeight  = 600;
     if($frame != null)
         $frame.style.height =  curHeight + 'px' ;
 

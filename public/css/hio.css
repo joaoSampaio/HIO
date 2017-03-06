@@ -1062,7 +1062,7 @@ body{
 }
 
 .bootstrap-datetimepicker-widget table td.day {
-    height: 40px;
+    height: 38px;
     line-height: 20px;
     width: 60px;
 }
@@ -1115,7 +1115,7 @@ body{
 
 #create-challenge .modal-body {
     position: relative;
-    padding: 15px;
+    padding: 0px 15px;
 }
 
 

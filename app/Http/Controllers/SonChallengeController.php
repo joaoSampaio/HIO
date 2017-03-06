@@ -410,17 +410,18 @@ class SonChallengeController extends Controller {
                 })
                 ->leftJoin('proof_approval as proofs_total', 'proofs_total.proof_id','=', 'files.id')
 //                ->select('files.*', 'proof_approval.judgment')
-                ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
+                ->join('challenges', 'challenges.id', '=', 'files.challenge_id')->where('challenges.public', '=', 1)
 
 
                     ->select('files.*',
                     'challenges.title',
                     'challenges.uuid',
+                    'challenges.description',
                     'proof_approval.judgment',
                     DB::raw('SUM(CASE WHEN proofs_total.judgment >= 0 THEN 1 ELSE 0 END) AS positive'),
                     DB::raw('SUM(CASE WHEN proofs_total.judgment < 0 THEN 1 ELSE 0 END) AS negative'))
                 ->groupBy('files.id')
-                ->orderBy('files.created_at', 'asc')
+                ->orderBy('files.created_at', 'desc')
                 ->get(10);
 
 
@@ -436,11 +437,11 @@ class SonChallengeController extends Controller {
                 ->where('is_ready','=', 1)
                 ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
                 ->leftJoin('proof_approval as proofs_total', 'proofs_total.proof_id','=', 'files.id')
-                ->select('files.*','challenges.uuid','challenges.title', DB::raw('0 as judgment'),
+                ->select('files.*','challenges.uuid','challenges.title','challenges.description', DB::raw('0 as judgment'),
                     DB::raw('SUM(CASE WHEN proofs_total.judgment >= 0 THEN 1 ELSE 0 END) AS positive'),
                     DB::raw('SUM(CASE WHEN proofs_total.judgment < 0 THEN 1 ELSE 0 END) AS negative'))
                 ->groupBy('files.id')
-                ->orderBy('files.created_at', 'asc')
+                ->orderBy('files.created_at', 'desc')
                 ->get(10);
         }
 

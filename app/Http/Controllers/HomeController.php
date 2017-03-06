@@ -253,6 +253,8 @@ class HomeController extends Controller
         $deadLine = $request->input('deadLine');
         $public = $request->input('public', false);
 
+//        echo "pub->".$public;
+//        return "";
 //        echo "<br>description:".$description;
 //        echo "<br>cat:".$category;
 //        echo "<br>rew:".$reward;
@@ -260,7 +262,7 @@ class HomeController extends Controller
 //        echo "<br>dead:".$deadLine;
 //        echo "<br>pub:".$public;
 
-        if ($public) {
+        if ($public == "true") {
             $public = 1;
         } else {
             $public = 0;

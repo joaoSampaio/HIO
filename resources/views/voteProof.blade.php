@@ -292,6 +292,18 @@ position: inherit;
     margin-left: -15px;
 }
 
+.your-proof{
+box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    width: inherit !important;
+    height: 34px;
+    padding: 0 10px;
+    display: block;
+    text-indent: inherit !important;
+    position: relative;
+}
+
 </style>
 
 
@@ -317,71 +329,82 @@ position: inherit;
                     <div class="header-list-proofs">
 
                         <h2 class="badge-item-title">
-                            <a class="badge-evt badge-track" data-evt="PostList,TapPost,Fresh,,PostTitle" data-track="post,v,,,d,aebrrNQ,l" data-entry-id="aebrrNQ" data-position="9" href="/gag/aebrrNQ" target="_blank">
+                            <a class="badge-evt badge-track" href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}" target="_blank">
                                 {{$sonChallenge->title}}            </a>
                         </h2>
                     </div>
 
 
-
-                    <div class="badge-post-container post-container ">
-                        <a href="/gag/aebrrNQ" class="badge-evt badge-track badge-track-no-follow" data-evt="PostList,TapPost,Fresh,,PostImage" data-entry-id="aebrrNQ" data-position="9" style="min-height:289.13043478261px;" target="_blank">
-                            {{--<img class="badge-item-img" src="https://img-9gag-fun.9cache.com/photo/aebrrNQ_460s.jpg" alt="How I feel after watching HIMYM or any other good show">--}}
-
-                            @if($sonChallenge->type == 1)
-
-                                <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="100%" height="480"
-                                       poster="{{ asset('uploads/challenge/'. pathinfo(asset('uploads/challenge/'. $sonChallenge->filename), PATHINFO_FILENAME) . '.jpg')  }}" data-setup="{}" style="width: 100%">
-                                    <source src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" type='video/mp4'>
-                                    <source src="MY_VIDEO.webm" type='video/webm'>
-                                    <p class="vjs-no-js">
-                                        To view this video please enable JavaScript, and consider upgrading to a web browser that
-                                        <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                                    </p>
-                                </video>
-
-                            @else
-                                <img src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" class="badge-item-img"  alt="{{$sonChallenge->title}} ">
-
-                            @endif
-
-                        </a>
-
+                    <div class="col-xs-12 col-md-6" style="margin-bottom: 20px;padding: 0px;">
+                        <div class="badge-post-container post-container ">
+                                {{--<img class="badge-item-img" src="https://img-9gag-fun.9cache.com/photo/aebrrNQ_460s.jpg" alt="How I feel after watching HIMYM or any other good show">--}}
+                                @if($sonChallenge->type == 1)
+                                    <video id="my-video" class="video-js vjs-big-play-centered" controls preload="none" width="100%" height="480"
+                                           poster="{{ asset('uploads/challenge/'. pathinfo(asset('uploads/challenge/'. $sonChallenge->filename), PATHINFO_FILENAME) . '.jpg')  }}" data-setup="{}" style="width: 100%">
+                                        <source src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" type='video/mp4'>
+                                        <p class="vjs-no-js">
+                                            To view this video please enable JavaScript, and consider upgrading to a web browser that
+                                            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                                        </p>
+                                    </video>
+                                @else
+                                    <a href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}" class="badge-evt badge-track badge-track-no-follow" data-evt="PostList,TapPost,Fresh,,PostImage" data-entry-id="aebrrNQ" data-position="9" style="min-height:289.13043478261px;" target="_blank">
+                                        <img src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" class="badge-item-img"  alt="{{$sonChallenge->title}} ">
+                                    </a>
+                                @endif
+                        </div>
                     </div>
 
 
-                    <div class="post-text-container badge-item-description">
+
+                    <div class="col-xs-12 col-md-6" style="margin-bottom: 20px;">
+                        <div class="post-text-container badge-item-description">
+                        <h3 style="margin: 0px">Objectives:</h3>
+                            {{$sonChallenge->description}}
+                        </div>
                     </div>
-                    @if($sonChallenge->judgment != NULL)
-                        <p class="post-meta" data-voted-{{$sonChallenge->id}}="{{($sonChallenge->judgment != NULL && $sonChallenge->judgment == 1)? "1" : "-1"}}">
-                    @else
-                        <p class="post-meta" data-voted-{{$sonChallenge->id}}="0">
 
-                    @endif
-                        <a class="badge-evt point" id="love-count-aebrrNQ" href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}" target="_blank" data-evt="PostList,TapPost,Fresh,,Point" data-entry-id="aebrrNQ" data-position="9">
-                            <span id="like-count-{{$sonChallenge->id}}" class="badge-item-like-count">{{$sonChallenge->positive}}</span> Up</a> ·
-                        <a class="badge-evt point" id="love-count-aebrrNQ" href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}" target="_blank" data-evt="PostList,TapPost,Fresh,,Point" data-entry-id="aebrrNQ" data-position="9">
-                            <span id="dislike-count-{{$sonChallenge->id}}" class="badge-item-dislike-count">{{$sonChallenge->negative}}</span> Down</a> ·
-                        <a class="comment badge-evt" href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}#comment" target="_blank" data-evt="PostList,TapPost,Fresh,,CommentCountText" data-entry-id="aebrrNQ" data-position="9">0 comments</a>
-                    </p>
+                    <div class="col-xs-12 col-md-12" style="margin-bottom: 20px;padding: 0px;">
 
-                    <div class="badge-item-vote-container post-afterbar-a in-list-view  ">
-                        <div class="vote">
-                            <ul class="btn-vote left">
-                                <li><a class="badge-item-vote-up up like {{($sonChallenge->judgment != NULL && $sonChallenge->judgment == 1)? "active" : ""}}" data-proof-id="{{$sonChallenge->id}}" href="javascript:void(0);" rel="nofollow">Upvote</a></li>
-                                <li><a class="badge-item-vote-down down dislike {{($sonChallenge->judgment != NULL && $sonChallenge->judgment == -1)? "active" : ""}}" data-proof-id="{{$sonChallenge->id}}" href="javascript:void(0);" rel="nofollow">Downvote</a></li>
-                                <li><a class="comment badge-evt badge-item-comment" target="_blank" href="/gag/aebrrNQ#comment" data-evt="PostList,TapPost,Fresh,,Comment" data-entry-id="aebrrNQ" data-position="9" rel="nofollow">Comment</a></li>
-                            </ul>
+
+                        @if($sonChallenge->judgment != NULL)
+                            <p class="post-meta" data-voted-{{$sonChallenge->id}}="{{($sonChallenge->judgment != NULL && $sonChallenge->judgment == 1)? "1" : "-1"}}">
+                        @else
+                            <p class="post-meta" data-voted-{{$sonChallenge->id}}="0">
+
+                        @endif
+                            <a class="badge-evt point" id="love-count-aebrrNQ" href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}" target="_blank" data-evt="PostList,TapPost,Fresh,,Point" data-entry-id="aebrrNQ" data-position="9">
+                                <span id="like-count-{{$sonChallenge->id}}" class="badge-item-like-count">{{$sonChallenge->positive}}</span> Up</a> ·
+                            <a class="badge-evt point" id="love-count-aebrrNQ" href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}" target="_blank" data-evt="PostList,TapPost,Fresh,,Point" data-entry-id="aebrrNQ" data-position="9">
+                                <span id="dislike-count-{{$sonChallenge->id}}" class="badge-item-dislike-count">{{$sonChallenge->negative}}</span> Down</a> ·
+                            <a class="comment badge-evt" href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}#comment" target="_blank" data-evt="PostList,TapPost,Fresh,,CommentCountText" data-entry-id="aebrrNQ" data-position="9">0 comments</a>
+                        </p>
+                    </div>
+
+                    <div class="col-xs-12 col-md-6" style="margin-bottom: 20px;padding: 0px;">
+                        <div class="badge-item-vote-container post-afterbar-a in-list-view  ">
+                            <div class="vote">
+                                <ul class="btn-vote left">
+                                    @if(Auth::check() && $sonChallenge->user_id == Auth::user()->id)
+                                        <li><a href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}" class="your-proof">Your proof</a></li>
+                                    @else
+                                        <li><a href="javascript:void(0);" class="badge-item-vote-up up like {{($sonChallenge->judgment != NULL && $sonChallenge->judgment == 1)? "active" : ""}}" data-proof-id="{{$sonChallenge->id}}">Upvote</a></li>
+                                        <li><a href="javascript:void(0);" class="badge-item-vote-down down dislike {{($sonChallenge->judgment != NULL && $sonChallenge->judgment == -1)? "active" : ""}}" data-proof-id="{{$sonChallenge->id}}">Downvote</a></li>
+                                    @endif
+                                    <li><a class="comment badge-evt badge-item-comment" target="_blank" href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}#comment">Comment</a></li>
+
+                                </ul>
+                            </div>
+                            <div class="share right">
+                                <ul>
+                                    <li><a href="javascript:void(0);" class="badge-facebook-share badge-evt badge-track btn-share facebook" data-track="social,fb.s,,,d,aebrrNQ,l" data-evt="PostList,ShareSocial,Fresh,,FacebookButton" data-entry-id="aebrrNQ" data-position="9" data-share="http://9gag.com/gag/aebrrNQ?ref=fb.s" rel="nofollow">Facebook</a></li>
+
+                                    <li><a href="javascript:void(0);" class="badge-twitter-share badge-evt badge-track btn-share twitter" data-track="social,t.s,,,d,aebrrNQ,l" data-evt="PostList,ShareSocial,Fresh,,TwitterButton" data-title="How%20I%20feel%20after%20watching%20HIMYM%20or%20any%20other%20good%20show" data-entry-id="aebrrNQ" data-position="9" data-share="http://9gag.com/gag/aebrrNQ?ref=t" rel="nofollow">Twitter</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="clearfix"></div>
                         </div>
-                        <div class="share right">
-                            <ul>
-                                <li><a href="javascript:void(0);" class="badge-facebook-share badge-evt badge-track btn-share facebook" data-track="social,fb.s,,,d,aebrrNQ,l" data-evt="PostList,ShareSocial,Fresh,,FacebookButton" data-entry-id="aebrrNQ" data-position="9" data-share="http://9gag.com/gag/aebrrNQ?ref=fb.s" rel="nofollow">Facebook</a></li>
-
-                                <li><a href="javascript:void(0);" class="badge-twitter-share badge-evt badge-track btn-share twitter" data-track="social,t.s,,,d,aebrrNQ,l" data-evt="PostList,ShareSocial,Fresh,,TwitterButton" data-title="How%20I%20feel%20after%20watching%20HIMYM%20or%20any%20other%20good%20show" data-entry-id="aebrrNQ" data-position="9" data-share="http://9gag.com/gag/aebrrNQ?ref=t" rel="nofollow">Twitter</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="clearfix"></div>
                     </div>
 
                 </article>
@@ -406,8 +429,11 @@ position: inherit;
 
 <script>
 
-    $(".like").click(function(e){
-        e.preventDefault();
+
+
+function like(e){
+var id = $(e.currentTarget).data("proof-id");
+if($('[data-voted-'+id+'= 0]').length > 0 || $('[data-voted-'+id+'= -1]').length > 0){
         $.post("/judge/proof",
             {
                 proof_id: $(e.currentTarget).data("proof-id"),
@@ -415,54 +441,53 @@ position: inherit;
             },
             function(data, status){
 
-            var id = $(e.currentTarget).data("proof-id");
                 $('[data-proof-id=' + id + ']').removeClass("active");
                 $(e.currentTarget).addClass("active");
 
-
-
                 if($('[data-voted-'+id+'= 0]').length > 0){
                     $('#like-count-'+id).html(parseInt($('#like-count-'+id).html())+1);
-                    $('[data-voted-'+id+'= 0]').data( "voted-"+id, 1 );
+                    $('[data-voted-'+id+'= 0]').attr( "data-voted-"+id, 1 );
                 } else if($('[data-voted-'+id+'= -1]').length > 0){
                     $('#like-count-'+id).html(parseInt($('#like-count-'+id).html())+1);
                     $('#dislike-count-'+id).html(parseInt($('#dislike-count-'+id).html())-1);
-                    $('[data-voted-'+id+'= -1]').data( "voted-"+id, 1 );
+                    $('[data-voted-'+id+'= -1]').attr( "data-voted-"+id, 1 );
                 }
+//                $(".like").unbind();
+//                 $(".dislike").unbind();
+//                 $(".dislike").click(dislike);
+             });
+             }
+         }
 
-
-
-
-//        alert("Data: " + data + "\nStatus: " + status);
-            });
-    });
-
-    $(".dislike").click(function(e){
-        e.preventDefault();
+function dislike(e){
+var id = $(e.currentTarget).data("proof-id");
+if($('[data-voted-'+id+'= 0]').length > 0 || $('[data-voted-'+id+'= 1]').length > 0){
         $.post("/judge/proof",
             {
                 proof_id: $(e.currentTarget).data("proof-id"),
                 value: 0
             },
             function(data, status){
-                var id = $(e.currentTarget).data("proof-id");
                 $('[data-proof-id=' + id + ']').removeClass("active");
                 $(e.currentTarget).addClass("active");
 
-
-
                 if($('[data-voted-'+id+'= 0]').length > 0){
                     $('#dislike-count-'+id).html(parseInt($('#dislike-count-'+id).html())+1);
-                    $('[data-voted-'+id+'= 0]').data( "voted-"+id, -1 );
+                    $('[data-voted-'+id+'= 0]').attr( "data-voted-"+id, -1 );
                 } else if($('[data-voted-'+id+'= 1]').length > 0){
                     $('#like-count-'+id).html(parseInt($('#like-count-'+id).html())-1);
                     $('#dislike-count-'+id).html(parseInt($('#dislike-count-'+id).html())+1);
-                    $('[data-voted-'+id+'= 1]').data( "voted-"+id, -1 );
+                    $('[data-voted-'+id+'= 1]').attr( "data-voted-"+id, -1 );
                 }
-
+//                $(".dislike").unbind();
+//                 $(".like").unbind();
+//                 $(".like").click(like);
             });
-    });
+            }
+    }
 
+        $(".like").delay( 800 ).click(like);
+        $(".dislike").delay( 800 ).click(dislike);
 
 </script>
 
