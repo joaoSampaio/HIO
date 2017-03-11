@@ -8,7 +8,7 @@
 /*<link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">*/
 
 header {
-    background-image: url(/img/challenge_bg.jpg);
+    background-image: url(/img/bg_challenge.png);
 
     }
 
@@ -79,22 +79,30 @@ position: absolute;
   #clockdiv > div{
       padding: 10px;
       border-radius: 3px;
-      /*background: #00BF96;*/
+      background: #191c20;
       display: inline-block;
+      width: 100px;
+      height: 146px;
+      font-size: 60px;
+      margin: 15px 5px;
   }
+
+
 
   #clockdiv div > span{
       /*padding: 15px;*/
       border-radius: 3px;
       /*background: #00816A;*/
-      font-size: 70pt;
+      /*font-size: 70pt;*/
       display: inline-block;
   }
 
+
+
+
   .smalltext{
-      padding-top: 5px;
-      font-size: 16px;
-      color: #C1C5C8;
+      font-size: 18px;
+      color: #404d57;
   }
 
 .challenge-end span{
@@ -109,17 +117,7 @@ cursor: pointer;
     display: none !important;
 }
 
-.btn-xl2 {
-    color: #fff;
-    background-color: #eb1946;
-    border-color: #eb1946;
-    font-family: 'Roboto', sans-serif;
-    text-transform: uppercase;
-    font-weight: 700;
-    border-radius: 3px;
-    font-size: 18px;
-    padding: 7px 15px !important;
-}
+
 
 
 
@@ -147,10 +145,10 @@ cursor: pointer;
 }
 
 .ch-grid li {
-	width: 70px;
-	height: 70px;
+	width: 50px;
+	height: 50px;
 	display: inline-block;
-	margin: 20px;
+	margin: 10px;
 }
 
 .ch-item {
@@ -160,10 +158,10 @@ cursor: pointer;
 	overflow: hidden;
 	position: relative;
 	cursor: default;
-	box-shadow:
-		inset 0 0 0 16px rgba(255,255,255,0.6),
-		0 1px 2px rgba(0,0,0,0.1);
-	transition: all 0.4s ease-in-out;
+	/*box-shadow:*/
+		/*inset 0 0 0 16px rgba(255,255,255,0.6),*/
+		/*0 1px 2px rgba(0,0,0,0.1);*/
+	/*transition: all 0.4s ease-in-out;*/
 }
 
 .ch-info {
@@ -242,6 +240,121 @@ cursor: pointer;
     height: 100%;
     }
 
+.challenge-title{
+    color: white;
+    font-size: 36px;
+    font-weight: 400;
+    text-transform: inherit;
+}
+
+.challenge-subtitle{
+    color: #3e4a54;
+    font-size: 18px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+
+
+.edit-btn {
+    font-size: 23px;
+    font-family: "Roboto";
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    text-transform: uppercase;
+    line-height: 1.7;
+    text-align: center;
+    -moz-transform: matrix( 0.69874892240154,0,0,0.69874892240154,0,0);
+    -webkit-transform: matrix( 0.69874892240154,0,0,0.69874892240154,0,0);
+    -ms-transform: matrix( 0.69874892240154,0,0,0.69874892240154,0,0);
+    border-radius: 8px;
+    background-color: rgb(178, 178, 178);
+    width: 150px;
+    height: 56px;
+    margin-top: 20px;
+}
+
+.profile-participant{
+width: 49px;
+  height: 50px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 50%;
+}
+
+
+
+.btn-show-all-participants {
+    color: #fff;
+    background-color: rgb(197, 197, 197);
+    border-color: rgb(197, 197, 197);
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
+    border-radius: 3px;
+    font-size: 18px;
+    padding: 0px;
+}
+
+
+
+
+.show-friends div{
+background-color: #c5c5c5;
+}
+.plus-sign {
+    background: white;
+    width: 2px;
+    height: 20px;
+    display: block;
+    position: relative;
+    margin-left: 2px;
+    margin-top: 15px;
+}
+.plus-sign:before {
+background: white;
+    content: "";
+    width: 21px;
+    height: 2px;
+    position: absolute;
+    top: 9px;
+    left: -10px;
+}
+
+.people-participating{
+font-size: 20px;
+color: #acaeb0;
+font-weight: 400;
+
+}
+.people-participating a{
+    color: #404d57;
+    font-weight: bold;
+}
+#showmore{
+color: #404d57;
+}
+
+.bg-text, .bg-text-brand-new {
+    /*background-color: #aaa;*/
+    /*overflow: hidden;*/
+    position: relative;
+}
+.bg-text::before {
+    color: #ececed;
+    content: attr(data-bg-text);
+    display: block;
+    font-size: 208px;
+    line-height: 1;
+    position: absolute;
+    top: 1px;
+    white-space: nowrap;
+        overflow: hidden;
+        max-width: 95%;
+}
+
+.challenge-item-info{
+    box-shadow: 0px 0px 68px 0px rgba(0, 0, 0, 0.2);
+}
 
   </style>
 
@@ -285,11 +398,16 @@ cursor: pointer;
 
             <div class="container">
                 <div style="padding-top: 200px;padding-bottom: 200px;">
-                    <h1>{{ $challenge->title }}</h1>
+                    <h1 class="challenge-title">{{ $challenge->title }}</h1>
 
-                    <div class="intro-lead-in"  style="    margin-top: 25px;">
+
+
+                    <div class="intro-lead-in"  style="    margin-top: 55px;">
 
                         @if(!$challenge->closed && $isValid)
+
+                        <h3 class="challenge-subtitle">You still have</h3>
+
                         <div class="col-sm-12 col-md-12">
                             <div id="clockdiv">
                               <div>
@@ -339,13 +457,7 @@ cursor: pointer;
                         </div>
 
                     </div>
-
-
-
-
                 </div>
-
-
             </div>
         </header>
 
@@ -353,87 +465,74 @@ cursor: pointer;
             <div class="container">
                 <div class="row text-center">
 
-                <div class="col-sm-12 col-md-12" style="margin-top: 30px">
 
-                    <p>Created by: <a href="{{"/profile/".$challenge->creator_id}}">{{$creator}}</a></p>
+                    <div class="col-sm-12 col-md-10 col-md-offset-1" style="margin-top: 50px">
 
-                    <p style="color: #333; margin-bottom: 30px"> {{count($peopleParticipating)}} participants</p>
-                        <ul class="ch-grid" id="participants-list">
-                            <?php $countFriends=0; ?>
-                            @foreach ($peopleParticipating as $friend)
-                                <?php $countFriends++; ?>
-
-                                @if($countFriends == 6)
-                                    <li class="show-friends">
-                                        <div class="ch-item ch-img-1">
-                                            <button type="button" class="btn btn-info btn-circle btn-xl2 friends"><i class="glyphicon glyphicon-plus"></i><span style="font-size: 40px;">{{count($peopleParticipating) - 5}}</span></button>
-                                        </div>
-                                    </li>
-                                @endif
-                                @if($friend->user_id > 0)
-
-                                    <li class="{{$countFriends >= 6? "hide-friend" : "" }}">
-                                        <div class="ch-item ch-img-1">
-                                            @if($friend->photo == "")
-                                                <img src="/uploads/users/default_user.png" alt="{{$friend->name}}" title="{{$friend->name}}" class="img-circle friends {{$countFriends >= 6? "hide-friend" : "" }}" style="height: 70px; width: 70px">
-                                            @else
-                                                <img src="{{'/uploads/users/'. $friend->photo }}" alt="{{$friend->name}}" title="{{$friend->name}}" class="img-circle friends {{$countFriends >= 6? "hide-friend" : "" }}" style="height: 70px; width: 70px">
-
-                                            @endif
-                                            <div class="ch-info">
-                                                <p><a href="{{"/profile/".$friend->user_id}}">{{$friend->name}}</a></p>
-                                            </div>
-
-
-                                        </div>
-                                    </li>
-                                @else
-
-                                    <li class="{{$countFriends >= 6? "hide-friend" : "" }}">
-                                        <div class="ch-item ch-img-1">
-                                            <img src="{{'https://graph.facebook.com/v2.5/'. $friend->facebook_id  .'/picture?width=100&height=100'}}"
-                                            class=" img-circle friends ">
-                                            <div class="ch-info">
-                                                <p>Profile not available</p>
-                                            </div>
-                                        </div>
-                                    </li>
-                                @endif
-                            @endforeach
-                        </ul>
-                </div>
-
-
-                    <div class="col-sm-12 col-md-10 col-md-offset-1">
-                    {{--{{"!challenge->closed:".!$challenge->closed}}--}}
-                    {{--{{"isValid:".$isValid}}--}}
-                    {{--{{"Auth::check():".Auth::check()}}--}}
-                    {{--{{"Auth::user()->id :". Auth::user()->id}}--}}
-                    {{--{{"challenge->creator_id :". $challenge->creator_id}}--}}
-                        @if(!$challenge->closed && $isValid && Auth::check() && Auth::user()->id == $challenge->creator_id)
-                            <div style="position: absolute;right: 0px;">
-                                <a class="navbar-brand page-scroll" href="{{ action('HomeController@editChallenge', $challenge->uuid) }}">Edit</a>
-                            </div>
-                        @endif
-
-                        <h2 class="text-capitalize" style="color: #333; margin-bottom: 30px">About the Challenge</h2>
-                        <p style="font-size: 25px;">{!! nl2br(e($challenge->description)) !!}</p>
+                        <h2 class="text-capitalize" style="color: #333; margin-bottom: 30px;font-size: 36px;font-weight: 400;">About the Challenge</h2>
+                        <p style="font-size: 16px;font-weight: 400;">{!! nl2br(e($challenge->description)) !!}</p>
 
                         <a href="{{action('HomeController@showChallenges', $challenge->category)}}">#{{$challenge->category}}</a>
+
+                        @if(!$challenge->closed && $isValid && Auth::check() && Auth::user()->id == $challenge->creator_id)
+                            <p><a class="btn edit-btn" href="{{ action('HomeController@editChallenge', $challenge->uuid) }}">Edit</a></p>
+                        @endif
                     </div>
-
-                    <div class="col-sm-12 col-md-10 col-md-offset-1" style="margin-top: 30px">
-
-                        <p>Raise to the occasion, prove you can do it!</p>
-                    </div>
-
                 </div>
             </div>
         </section>
 
+        <section style="background-color: #e7eaed">
+            <ul class="ch-grid" id="participants-list">
+                <?php $countFriends=0; ?>
+                @foreach ($peopleParticipating as $friend)
+                    <?php $countFriends++; ?>
 
-        <section class="bg-light-gray" id="portfolio">
+                    @if($countFriends == 6)
+                        <li class="show-friends">
+                            <div class="ch-item ch-img-1">
+                                <button type="button" class="btn btn-circle btn-show-all-participants friends"><span class="plus-sign"></span></button>
+                                {{--<a href="#" class="plus-sign"></a>--}}
+                            </div>
+
+                        </li>
+                    @endif
+
+                    <li class="{{$countFriends >= 6? "hide-friend" : "" }}">
+                        <div class="ch-item ch-img-1">
+                            <a href="{{"/profile/".$friend->user_id}}">
+                                <img src="{{'/user/photo/'. $friend->user_id }}" alt="{{$friend->name}}" title="{{$friend->name}}" class="img-circle profile-participant friends {{$countFriends >= 6? "hide-friend" : "" }}">
+                            </a>
+                            {{--<div class="ch-info">--}}
+                                {{--<p><a href="{{"/profile/".$friend->user_id}}">{{$friend->name}}</a></p>--}}
+                            {{--</div>--}}
+
+
+                        </div>
+                    </li>
+
+                @endforeach
+            </ul>
+            <p class="text-center people-participating" >{!!$people!!}</p>
+
+        </section>
+
+
+
+
+
+
+
+
+
+
+
+        <section class="bg-light-gray bg-text" data-bg-text="Proofs">
             <div class="container" id="proofs">
+
+                <div class="col-sm-12 col-xs-12 col-lg-12" >
+                    <h2 class="wall-fame-title">Uploaded Proofs</h2>
+                </div>
+
                     @include('partials.multi_son_challenge')
             </div>
         </section>
@@ -526,7 +625,8 @@ cursor: pointer;
 <script src="{{ asset('js/dropzone.min.js') }}"></script>
 
     @if(!isset($isPublic))
-        <script>
+        @if($isValid)
+            <script>
             function getTimeRemaining(endtime){
               var t = endtime - Date.parse(new Date());
               var seconds = Math.floor( (t/1000) % 60 );
@@ -541,7 +641,6 @@ cursor: pointer;
                 'seconds': seconds
               };
             }
-
             function initializeClock(id, endtime) {
               var clock = document.getElementById(id);
               var daysSpan = clock.querySelector('.days');
@@ -561,7 +660,6 @@ cursor: pointer;
                   clearInterval(timeinterval);
                 }
               }
-
               updateClock();
               var timeinterval = setInterval(updateClock, 1000);
             }
@@ -604,14 +702,7 @@ cursor: pointer;
                                 });
                            $('#join_resposta').text('You are now taking this challenge');
                            $( "#join" ).remove();
-
-
-
                            addUserToParticipants();
-
-
-
-
                       }else{
                       $('#join_resposta').text('Already joined');
                       }
@@ -624,21 +715,18 @@ cursor: pointer;
         });
 
         function addUserToParticipants() {
-                    @if(Auth::check())
-
-            var userprofile="";
-            userprofile += "<li> <div class=\"ch-item ch-img-1\">";
-            @if(Auth::user()->photo == "")
-                userprofile += "<img src=\"\/uploads\/users\/default_user.png\"  class=\"img-circle friends \" style=\"height: 70px; width: 70px\">";
-            @else
-                userprofile += "<img src=\"{{'/uploads/users/'. Auth::user()->photo }}\"  class=\"img-circle friends \" style=\"height: 70px; width: 70px\">";
-            @endif
-            userprofile += "<div class=\"ch-info\">";
-            userprofile += "<p><a href=\"{{'/profile/'.Auth::user()->id}}\">{{Auth::user()->name}}<\/a><\/p>";
-            userprofile += "<\/div> <\/div><\/li>";
-
-            $("#participants-list").append(userprofile);
-
+            @if(Auth::check())
+                var userprofile="";
+                userprofile += "<li> <div class=\"ch-item ch-img-1\">";
+                @if(Auth::user()->photo == "")
+                    userprofile += "<img src=\"\/uploads\/users\/default_user.png\"  class=\"img-circle friends \" style=\"height: 70px; width: 70px\">";
+                @else
+                    userprofile += "<img src=\"{{'/uploads/users/'. Auth::user()->photo }}\"  class=\"img-circle friends \" style=\"height: 70px; width: 70px\">";
+                @endif
+                userprofile += "<div class=\"ch-info\">";
+                userprofile += "<p><a href=\"{{'/profile/'.Auth::user()->id}}\">{{Auth::user()->name}}<\/a><\/p>";
+                userprofile += "<\/div> <\/div><\/li>";
+                $("#participants-list").append(userprofile);
             @endif
         }
 
@@ -655,12 +743,11 @@ cursor: pointer;
 
         var arr = '{{$challenge->deadLine}}'.split(/[- :]/);
         var deadline = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
-        {{--var deadline = new Date('{{$challenge->deadLine}}');--}}
         initializeClock('clockdiv', deadline);
         console.log(deadline);
 
         </script>
-
+        @endif
 
         <script>
             var currentPage = 1;

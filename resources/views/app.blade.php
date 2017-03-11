@@ -31,6 +31,8 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <script src="/js/modernizr.js"></script>
+
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 
     <link href="{{ asset('css/hio.css') }}" rel="stylesheet">
@@ -56,8 +58,8 @@
     }
 
     .navbar-default {
-        background-color: transparent;
-        border-color: transparent;
+
+        background-color: #222;
     }
 
 
@@ -93,6 +95,10 @@
     padding: 15px;
 }
 
+
+
+
+
     </style>
 
 
@@ -105,12 +111,69 @@
 
 <body data-spy="scroll" data-target=".navbar" id="page-top" class="index">
 
+
+<div id="outer-wrap">
+<div id="inner-wrap">
+
+    {{--<header id="top" role="banner">--}}
+        {{--<div class="block">--}}
+            {{--<h1 class="block-title">Book Title</h1>--}}
+            {{--<a class="nav-btn" id="nav-open-btn" href="#nav">Book Navigation</a>--}}
+        {{--</div>--}}
+    {{--</header>--}}
+
+    <nav id="nav" role="navigation">
+        <div class="block">
+            <h2 class="block-title">Chapters</h2>
+            <ul>
+                @if(Auth::check())
+                    <li>
+                        <a style="padding-top: 0px;text-align: center;" href="{{ url('profile', 'me') }}">
+                            <img src="{{'/user/photo/'. Auth::user()->id }}" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle" style="height: 50px; width: 50px">
+                        </a>
+                    </li>
+                @endif
+
+                 <li class="{{{Request::is('HIO-Mission') ? 'active is-active' : ''}}}"><a  class="header-link" href="{{ url('HIO-Mission') }}">HIO Mission</a></li>
+
+                 <li class="{{{Request::is('challenges') ? 'active is-active' : ''}}}" >
+                     <a class="header-link"  href="{{ url('challenges') }}">Challenges</a>
+                 </li>
+
+                 <li class="{{{Request::is('new') ? 'active is-active' : ''}}}"><a  class="header-link" href="{{ url('new') }}">New</a></li>
+
+                 @if(Auth::check())
+
+                 <li>
+                    <a href="{{ action('SocialAuthController@logout') }}">Logout</a>
+                 </li>
+
+                 @else
+                     <li >
+                        <a class="header-link" id="login_btn"  href="{{ url('/auth') }}">Login</a>
+                    </li>
+                    <li >
+                        <a class="header-link-secondary"  href="{{ url('/auth') }}">Register</a>
+                    </li>
+                 @endif
+            </ul>
+            <a class="close-btn" id="nav-close-btn" href="#top">Return to Content</a>
+        </div>
+    </nav>
+
+
+
+
+
+
+
+
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header page-scroll">
-                <button type="button" class="navbar-toggle js-slideout-toggle" >
+                <button type="button" id="nav-open-btn" class="navbar-toggle js-slideout-toggle" >
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -139,8 +202,6 @@
                             <div class="notifications-wrapper">
 
                             </div>
-                            {{--<li class="divider"></li>--}}
-                            {{--<div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>--}}
                         </ul>
 
 
@@ -154,9 +215,6 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav nav-hio">
-                    {{--<li class="hidden">--}}
-                        {{--<a href="#page-top"></a>--}}
-                    {{--</li>--}}
 
                     <li {{{Request::is('HIO-Mission') ? 'class=active' : ''}}}><a  class="header-link" href="{{ url('HIO-Mission') }}">HIO Mission</a></li>
 
@@ -164,10 +222,8 @@
                         <a class="header-link"  href="{{ url('challenges') }}">Challenges</a>
                     </li>
 
-                    <li {{{Request::is('HIO-Mission') ? 'class=active' : ''}}}><a  class="header-link" href="{{ url('new') }}">New</a></li>
+                    <li {{{Request::is('new') ? 'class=active' : ''}}}><a  class="header-link" href="{{ url('new') }}">New</a></li>
 
-
-                    {{--<li class="search-select2">{!! Form::select('search[]', array(),null,array( 'class'=>'form-control hidden search-ajax', 'multiple'=>'multiple')) !!}</li>--}}
                     <li><i class="fa fa-search header-link main-search pointer" style="font-size: 14pt;padding-top: 15px" aria-hidden="true"></i></li>
 
 
@@ -179,17 +235,10 @@
                     @if(Auth::check())
                         <li >
                             <a style="padding-top: 0px;" href="{{ url('profile', 'me') }}">
-
-                                @if(Auth::user()->photo == "")
-                                    <img src="/uploads/users/default_user.png" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle" style="height: 50px; width: 50px">
-                                @else
-                                    <img src="{{'/uploads/users/'. Auth::user()->photo }}" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle" style="height: 50px; width: 50px">
-
-                                @endif
+                                <img src="{{'/user/photo/'. Auth::user()->id }}" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle" style="height: 50px; width: 50px">
                             </a>
                         </li>
                         <li>
-                            {{--<p class="header-link" style=" margin-bottom: 5px;text-align: left;">{{getFirstLastName(Auth::user()->name)}}</p>--}}
                             <a class="header-link" href="{{ url('profile', 'me') }}" style=" margin-bottom: 5px;text-align: left; padding-left: 0px;text-transform: capitalize;padding: 5px 0px 0px 0px;">{{getFirstLastName(Auth::user()->name)}}</a>
 
                             <a class="nav-logout header-link-secondary" style="padding-top: 0px;text-align: left;" href="{{ action('SocialAuthController@logout') }}">Logout</a>
@@ -211,8 +260,6 @@
                                 <div class="notifications-wrapper">
 
                                 </div>
-                                {{--<li class="divider"></li>--}}
-                                {{--<div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>--}}
                             </ul>
 
 
@@ -237,165 +284,168 @@
         <!-- /.container-fluid -->
     </nav>
 
-    <nav id="sidebar-wrapper" style="margin-top: 67px;">
-      {{--<header>--}}
-        {{--<h2>Menu</h2>--}}
-      {{--</header>--}}
-      <ul class="menu-lateral" style="padding-left: 0" >
+    {{--<nav id="sidebar-wrapper" style="margin-top: 67px;">--}}
+  {{----}}
+      {{--<ul class="menu-lateral" style="padding-left: 0" >--}}
 
 
-        @if(Auth::check())
+        {{--@if(Auth::check())--}}
 
-            <li>
-                <div class="profile-wrapper">
-                      <a href="{{ url('profile', 'me') }}">
-                            @if(Auth::user()->photo == "")
-                                <img src="/uploads/users/default_user.png" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle profile-side-img" style="height: 90px; width: 90px">
-                            @else
-                                <img src="{{'/uploads/users/'. Auth::user()->photo }}" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle profile-side-img" style="height: 90px; width: 90px">
+            {{--<li>--}}
+                {{--<div class="profile-wrapper">--}}
+                      {{--<a href="{{ url('profile', 'me') }}">--}}
+                            {{--@if(Auth::user()->photo == "")--}}
+                                {{--<img src="/uploads/users/default_user.png" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle profile-side-img" style="height: 90px; width: 90px">--}}
+                            {{--@else--}}
+                                {{--<img src="{{'/uploads/users/'. Auth::user()->photo }}" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle profile-side-img" style="height: 90px; width: 90px">--}}
 
-                            @endif
-                        </a>
-                        {{--<div class="rgba-stylish-strong" style="color: #ffffff">--}}
-                            {{--<p class="user white-text">{{Auth::user()->name}}<br><a href="#" style="color: #ffffff">Messages<i class="fa fa-angle-down rotate-icon"></i> <span class="badge">42</span></a>--}}
-                            {{--</p>--}}
-                        {{--</div>--}}
-                  </div>
-              </li>
+                            {{--@endif--}}
+                        {{--</a>--}}
+                        {{----}}
+                  {{--</div>--}}
+              {{--</li>--}}
 
 
-              <li class="nav-list-item" id="mobile-notifications">
+              {{--<li class="nav-list-item" id="mobile-notifications">--}}
 
-                  <a id="dLabel2" role="button" data-toggle="dropdown" data-target="#" href="#" aria-haspopup="true" aria-expanded="false" style="background-color: rgba(148, 0, 211, 0);">
-                      <i class="glyphicon glyphicon-bell"></i>Notifications <span class="badge badge-notify">3</span>
-                  </a>
+                  {{--<a id="dLabel2" role="button" data-toggle="dropdown" data-target="#" href="#" aria-haspopup="true" aria-expanded="false" style="background-color: rgba(148, 0, 211, 0);">--}}
+                      {{--<i class="glyphicon glyphicon-bell"></i>Notifications <span class="badge badge-notify">3</span>--}}
+                  {{--</a>--}}
 
 
 
-                  <ul class="dropdown-menu notifications pull-right" role="menu" aria-labelledby="dLabel2" style="position: inherit;">
+                  {{--<ul class="dropdown-menu notifications pull-right" role="menu" aria-labelledby="dLabel2" style="position: inherit;">--}}
 
-                      <div class="notification-heading"><h4 class="menu-title">Notifications</h4><h4 class="menu-title pull-right">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4>
-                      </div>
-                      <li class="divider"></li>
-                      <div class="notifications-wrapper">
+                      {{--<div class="notification-heading"><h4 class="menu-title">Notifications</h4><h4 class="menu-title pull-right">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4>--}}
+                      {{--</div>--}}
+                      {{--<li class="divider"></li>--}}
+                      {{--<div class="notifications-wrapper">--}}
 
-                      </div>
-                      <li class="divider"></li>
-                      <div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
-                  </ul>
-
-
-              </li>
+                      {{--</div>--}}
+                      {{--<li class="divider"></li>--}}
+                      {{--<div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>--}}
+                  {{--</ul>--}}
 
 
-          @endif
+              {{--</li>--}}
 
 
-          <li>
-              <form class="search-form" role="search" _lpchecked="1">
-                  <div class="form-group form-control-search search-select2">
+          {{--@endif--}}
+
+
+          {{--<li>--}}
+              {{--<form class="search-form" role="search" _lpchecked="1">--}}
+                  {{--<div class="form-group form-control-search search-select2">--}}
                       {{--<input type="text" class="form-control nav-side-search" placeholder="Search">--}}
-                      {!! Form::select('search[]', array(),null,array( 'class'=>'form-control hidden nav-side-search search-ajax', 'multiple'=>'multiple')) !!}
-                  </div>
-              </form>
-          </li>
+                      {{--{!! Form::select('search[]', array(),null,array( 'class'=>'form-control hidden nav-side-search search-ajax', 'multiple'=>'multiple')) !!}--}}
+                  {{--</div>--}}
+              {{--</form>--}}
+          {{--</li>--}}
 
 
-          <li class="nav-list-item {{{Request::is('profile/me') ? ' active' : ''}}}">
-            <a class="arrow-r" href="{{ url('challenges') }}">
-                <i class="fa fa-user"></i> Challenges<i class="fa fa-angle-down rotate-icon"></i>
-            </a>
-          </li>
+          {{--<li class="nav-list-item {{{Request::is('profile/me') ? ' active' : ''}}}">--}}
+            {{--<a class="arrow-r" href="{{ url('challenges') }}">--}}
+                {{--<i class="fa fa-user"></i> Challenges<i class="fa fa-angle-down rotate-icon"></i>--}}
+            {{--</a>--}}
+          {{--</li>--}}
 
 
 
 
-          @if(Auth::check())
-              <li class="nav-list-item" >
-                  <a class="nav-logout" href="{{ action('SocialAuthController@logout') }}">
-                    <i class="fa fa-sign-out"></i>Logout
-                    </a>
-              </li>
-          @else
-              <li class="nav-profile nav-list-item">
-                  <a id="login_btn"  href="{{ url('/login') }}"><i class="fa fa-sign-in"></i>Login</a>
-              </li>
-          @endif
-      </ul>
-    </nav>
+          {{--@if(Auth::check())--}}
+              {{--<li class="nav-list-item" >--}}
+                  {{--<a class="nav-logout" href="{{ action('SocialAuthController@logout') }}">--}}
+                    {{--<i class="fa fa-sign-out"></i>Logout--}}
+                    {{--</a>--}}
+              {{--</li>--}}
+          {{--@else--}}
+              {{--<li class="nav-profile nav-list-item">--}}
+                  {{--<a id="login_btn"  href="{{ url('/login') }}"><i class="fa fa-sign-in"></i>Login</a>--}}
+              {{--</li>--}}
+          {{--@endif--}}
+      {{--</ul>--}}
+    {{--</nav>--}}
 
-<main id="panel">
 
-    @yield('content')
+    <div >
+        @yield('content')
+    </div>
+
 
 
 
 <div class="modal fade" id="search-modal" tabindex="-1" role="dialog" aria-labelledby="searchLabel" aria-hidden="true">
         <div class="modal-dialog" style="min-height: calc(40vh - 30px);">
             <div class="modal-content">
-
-
                 <div class="modal-body" style="padding: 0px;    font-size: 27pt;    font-weight: 400;" >
 
                    <div class=" row search-select2" >
                         {!! Form::select('search[]', array(),null,array( 'id'=>'search-input', 'class'=>'form-control hidden search-ajax', 'multiple'=>'multiple')) !!}
-
                     </div>
-
-
             </div>
         </div>
     </div>
 </div>
 
 
-
-
 <footer>
-<div style="text-align: center; margin-bottom: 15px;margin-top: 50px;" class="container">
-            <div style="margin-bottom: 40px" class="row">
-                <div class="col-md-12">
-                    <ul class="list-inline footer-icon">
-                        <li><a href="https://www.instagram.com/hioselfmadelegends/"><i class="fa fa-instagram"></i></a>
-                        </li>
-                        <li style="margin-left: 50px;margin-right: 50px"><a href="https://www.facebook.com/HIO-978238685528426/?fref=ts"><i class="fa fa-facebook"></i></a>
-                        </li>
-                        <li><a href="https://hioblog.wordpress.com"><i class="fa fa-wordpress"></i></a>
-                        </li>
-                    </ul>
+    <div style="text-align: center; margin-bottom: 15px;margin-top: 50px;" class="container">
+        <div style="margin-bottom: 40px" class="row">
+            <div class="col-md-12">
+                <ul class="list-inline footer-icon">
+                    <li><a href="https://www.instagram.com/hioselfmadelegends/"><i class="fa fa-instagram"></i></a>
+                    </li>
+                    <li style="margin-left: 50px;margin-right: 50px"><a href="https://www.facebook.com/HIO-978238685528426/?fref=ts"><i class="fa fa-facebook"></i></a>
+                    </li>
+                    <li><a href="https://hioblog.wordpress.com"><i class="fa fa-wordpress"></i></a>
+                    </li>
+                </ul>
 
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <ul class="list-inline footer-links">
-                        <li><a href="{{ url('private-policy') }}">Privacy Policy</a></li>
-
-                        <li style="padding: 0px;">|</li>
-
-                        <li><a  href="{{ url('terms') }}">Terms & Conditions</a></li>
-
-                        <li style="padding: 0px;">|</li>
-
-
-
-                        <li><a  href="{{ url('contact-us') }}">Contacts</a></li>
-
-                    </ul>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <span class="footer-links">&copy; 2016 HIO. All rights reserved</span>
-                </div>
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-inline footer-links">
+                    <li><a href="{{ url('private-policy') }}">Privacy Policy</a></li>
+
+                    <li style="padding: 0px;">|</li>
+
+                    <li><a  href="{{ url('terms') }}">Terms & Conditions</a></li>
+
+                    <li style="padding: 0px;">|</li>
 
 
-</main>
+
+                    <li><a  href="{{ url('contact-us') }}">Contacts</a></li>
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <span class="footer-links">&copy; 2016 HIO. All rights reserved</span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    {{--<footer role="contentinfo">--}}
+        {{--<div class="block prose">--}}
+            {{--<p class="small"><a href="http://ota.ahds.ac.uk/desc/5730">Text distributed by the University of Oxford under a Creative Commons Attribution-ShareAlike 3.0 Unported License</a></p>--}}
+            {{--<p class="small">Copyright © <a href="http://dbushell.com/">David Bushell</a></p>--}}
+        {{--</div>--}}
+    {{--</footer>--}}
+
+</div>
+<!--/#inner-wrap-->
+</div>
+<!--/#outer-wrap-->
+
+
+
+
     <!-- jQuery -->
 {{--    <script src="{{ asset('js/jquery.js') }}"></script>--}}
     {{--<script src="js/jquery.js"></script>--}}
@@ -412,24 +462,7 @@
     <script src="{{ asset('js/jquery.timeago.js') }}"></script>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/slideout/1.0.1/slideout.min.js"></script>
-<script>
-  var slideout = new Slideout({
-    'panel': document.getElementById('panel'),
-    'menu': document.getElementById('sidebar-wrapper'),
-    'padding': 256,
-    'tolerance': 70
-  });
 
-
-  document.querySelector('.js-slideout-toggle').addEventListener('click', function() {
-          slideout.toggle();
-        });
-
-        document.querySelector('#sidebar-wrapper').addEventListener('click', function(eve) {
-          if (eve.target.nodeName === 'A') { slideout.close(); }
-        });
-</script>
 
 <script src="{{ asset('js/hio.js') }}"></script>
 

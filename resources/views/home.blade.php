@@ -67,14 +67,7 @@ color: #eb1946;
     }
 }
 
-.wall-fame-title{
-text-align: center;
-    font-size: 37px;
-    color: #43484c;
-    margin-bottom: 70px;
-    margin-top: 20px;
-        text-transform: inherit;
-}
+
 
 
 
@@ -108,6 +101,11 @@ text-align: center;
           overflow: hidden;
           max-width: 95%;
   }
+
+.navbar-default {
+        background-color: transparent;
+        border-color: transparent;
+    }
 
 /*.background-text{*/
 /*position: absolute;*/

@@ -464,11 +464,48 @@ class HomeController extends Controller
             if (Auth::check()) {
                 $participating = $this->isUserInChallenge($challenge);
             }
-//            $countVotes = $this->getVoteCount($challenge);
-            //->with('countVotes', $countVotes)
+
             $creatorUser = User::where('id', $challenge->creator_id)->first();
             $creator = $creatorUser->name;
-            $peopleParticipating = $challenge->users()->select('name', 'user_id', 'facebook_id', 'photo')->get();
+            $peopleParticipating = $challenge->users()->select('name', 'user_id')->get();
+
+//            $peopleParticipating = User::all();
+
+
+            $creator = '<a class="participating-link-text" href="/profile/'.$challenge->creator_id.'">'.$creator . '</a>';
+
+            $end = $creator . '<span> is challenging </span>';
+            $count = 0;
+            $otherPeople = "";
+            foreach( $peopleParticipating as $people){
+                if (  $people->id == $challenge->creator_id ){
+                    continue;
+                }
+                $count++;
+
+                if($count > 2){
+                    $otherPeople = $otherPeople .' <a href="/profile/'.$people->user_id.'"> '.$people->name . '</a>,';
+                }else{
+                    $end=  $end  .'<a href="/profile/'.$people->user_id.'"> '.$people->name . '</a>,';
+                }
+
+            }
+            $end = rtrim($end, ",");
+
+            if(count($peopleParticipating) > 3) {
+                $otherPeople = rtrim($otherPeople, ",");
+                $end = $end . '  <span>and</span> <span id="showmore" class=""> ' . (count($peopleParticipating) - 3) .
+                    ' other people.</span> <span id="otherpeople" style="display: none;">' . $otherPeople . '</span>';
+
+            }
+            if(count($peopleParticipating) <= 1){
+                $end = ' Waiting for someone to join';
+            }
+
+
+
+
+
 
             $sonChallenges = $this->getHelperPaginatorSon($challenge->id, $participating, $isValid);
 
@@ -476,7 +513,7 @@ class HomeController extends Controller
                 return view('challengeDetail')->with('challenge', $challenge)->with('isValid', $isValid)
                     ->with('participating', $participating)
                     ->with('creator', $creator)->with('peopleParticipating', $peopleParticipating)
-                    ->with('sonChallenges', $sonChallenges);
+                    ->with('sonChallenges', $sonChallenges)->with('people', $end);
             } else {
 
                 return view('challengeDetail')->with('isPublic', $isPublic);
@@ -490,11 +527,11 @@ class HomeController extends Controller
 
     private function getHelperPaginatorSon($id, $participating, $isValid)
     {
-        $initialQuantity = 3;
-        $loadMore = 4;
+        $initialQuantity = 5;
+        $loadMore = 6;
 
         if ((!$participating && $isValid) || !$isValid) {
-            $initialQuantity = 4;
+            $initialQuantity = 6;
         }
 
         $page = (int)Paginator::resolveCurrentPage();
@@ -516,18 +553,13 @@ class HomeController extends Controller
                 ->join('challenges', 'files.challenge_id', '=', 'challenges.id')
                 ->select('users.name', 'files.*', 'challenges.title', 'challenges.uuid')->get();
 
-//            $othersModelResults = DB::table('files')->where('challenge_id', $id)->where('user_id','!=', Auth::user()->id)->get();
             $othersModelResults = DB::table('files')->where('challenge_id', $id)->where('user_id', '!=', Auth::user()->id)
                 ->join('users', 'files.user_id', '=', 'users.id')
                 ->join('challenges', 'files.challenge_id', '=', 'challenges.id')
                 ->select('users.name', 'files.*', 'challenges.title', 'challenges.uuid')->get();
 
-//            echo "myModelResults->".count($myModelResults)."<br>";
-//            echo "othersModelResults->".count($othersModelResults)."<br>";
             $modelResults = array_merge($myModelResults, $othersModelResults);
             $modelResults = array_slice($modelResults, $skip, $perPage);
-//            echo "modelResults->".count($modelResults)."<br>";
-//            echo json_encode($othersModelResults);
 
         } else {
             $modelResults = DB::table('files')->where('challenge_id', $id)
@@ -541,9 +573,9 @@ class HomeController extends Controller
         if ($participating && $isValid && $page == 1) {
             $copia = new \stdClass;
             $copia->id = -1;
-            array_unshift($modelResults, $copia);
+            array_push($modelResults, $copia);
         }
-        $perPage = 4;
+        $perPage = 6;
 //        echo json_encode($modelResults);
 
         return new LengthAwarePaginator($modelResults, $total, $perPage);

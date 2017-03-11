@@ -1,4 +1,4 @@
-@extends('app')
+@extends('app-copy')
 
 @section('header')
 
@@ -113,7 +113,7 @@ blockquote p {
 
 
     <!-- Portfolio Grid Section -->
-    <section id="portfolio" style="margin-top: 80px">
+    <section id="portfolio" style="    padding-top: 170px;">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -126,7 +126,8 @@ blockquote p {
 
                 </div>
                 <div class="col-lg-12 text-center">
-                    <a href="{{ action('HomeController@createChallenge') }}" class="page-scroll btn btn-xl">CREATE CHALLENGE</a>
+                    {{--<a href="{{ action('HomeController@createChallenge') }}" class="page-scroll btn btn-xl">CREATE CHALLENGE</a>--}}
+                    <button href="#" id="openCreate" class="page-scroll btn btn-xl">CREATE CHALLENGE</button>
                 </div>
             </div>
         </div>
@@ -193,43 +194,42 @@ blockquote p {
 </section>
 
 
+<div class="modal fade" id="create-challenge" tabindex="-1" role="dialog" aria-labelledby="modalHome" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header-create">
+                <button type="button" class="close" style="font-size: 40px;font-weight: 300;" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="create-challenge-title" id="modalHome">Create Challenge</h4>
+            </div>
+
+            <div class="modal-body">
+                <span id="create-spin" class="glyphicon glyphicon-refresh spinning"></span>
+                <iframe id="create-challenge-iframe" src="" style="" width="99.6%" frameborder="0"></iframe>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 
 
 @endsection
 
 @section('footer')
 
-{{--<script src="{{ asset('js/owl.carousel.min.js') }}"></script>--}}
+<script>
+    $('#openCreate').click(function(){
 
+        $('#create-challenge').on('shown.bs.modal', function() {
+            $('#create-challenge-iframe').attr("src","/new/challenge");
+        });
+        $('#create-challenge').modal({show:true})
+    });
+
+</script>
 
 <script>
-//    $(window).on('hashchange', function() {
-//        if (window.location.hash) {
-//            var page = window.location.hash.replace('#', '');
-//            if (page == Number.NaN || page <= 0) {
-//                return false;
-//            } else {
-//                getPosts(page);
-//            }
-//        }
-//    });
-//    $(document).ready(function() {
-//        $(document).on('click', '.pagination a', function (e) {
-//            getPosts($(this).attr('href').split('page=')[1]);
-//            e.preventDefault();
-//        });
-//    });
-//    function getPosts(page) {
-//        $.ajax({
-//            url : '?page=' + page,
-//            dataType: 'json'
-//        }).done(function (data) {
-//            $('.challenges').html(data);
-//            location.hash = page;
-//        }).fail(function () {
-//            alert('Posts could not be loaded.');
-//        });
-//    }
 
 
     $(document).ready(function() {
