@@ -43,17 +43,42 @@ class EndChallenge extends Command
 
                     $idsUserCompletedChallenge = [];
                     $deadLine = Carbon::parse($challenge->deadLine);
-                    $deadLine = $deadLine->addHours(24);
+                    $deadLine = $deadLine->addHours(36);
                     $isValid = $now < $deadLine;
                     if (!$isValid) {
                         //validar provas e judgments
 
+//                        $sonChallengesIds = DB::table('files')->where('files.challenge_id', $challenge->id)
+//                            ->join('proof_approval', 'proof_approval.proof_id', '=', 'files.id')
+//                            ->where('proof_approval.judgment', '=', '1')
+//                            ->select('files.id', DB::raw('SUM(judgment) as total_judgment'))
+//                            ->groupBy('files.id')
+//                            ->havingRaw('SUM(judgment) > 0')
+//                            ->lists('files.id');
+
+
                         $sonChallengesIds = DB::table('files')->where('files.challenge_id', $challenge->id)
                             ->join('proof_approval', 'proof_approval.proof_id', '=', 'files.id')
-                            ->select('files.id', DB::raw('SUM(judgment) as total_judgment'))
+                            ->where('proof_approval.judgment', '=', '1')
                             ->groupBy('files.id')
-                            ->havingRaw('SUM(judgment) > 0')
+                            ->leftJoin(
+                                DB::raw("
+                                (select
+                                    `proof_approval`.`proof_id`,
+                                    COUNT(*) as total_judgment
+                                from `proof_approval`
+                                group by `proof_approval`.`proof_id`) `p`
+                            "), 'files.id', '=', 'p.proof_id')
+                            ->select('files.id', 'total_judgment',
+                                DB::raw('COUNT(proof_approval.judgment) as positive_judgment'),
+                                DB::raw('COUNT(proof_approval.judgment)/total_judgment as percent')
+                            )
+                            ->havingRaw('percent >= 0.7')
                             ->lists('files.id');
+
+
+
+
 
                         FileHio::whereIn('id', $sonChallengesIds)
                             ->update([

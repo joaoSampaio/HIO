@@ -74,14 +74,14 @@
 
                         </ul>
                     </div>
-                    <div class="share right">
-                        <ul>
-                            <li><a href="javascript:void(0);" class="badge-facebook-share badge-evt badge-track btn-share facebook" data-track="social,fb.s,,,d,aebrrNQ,l" data-evt="PostList,ShareSocial,Fresh,,FacebookButton" data-entry-id="aebrrNQ" data-position="9" data-share="http://9gag.com/gag/aebrrNQ?ref=fb.s" rel="nofollow">Facebook</a></li>
+                    {{--<div class="share right">--}}
+                        {{--<ul>--}}
+                            {{--<li><a href="javascript:void(0);" class="badge-facebook-share badge-evt badge-track btn-share facebook" data-track="social,fb.s,,,d,aebrrNQ,l" data-evt="PostList,ShareSocial,Fresh,,FacebookButton" data-entry-id="aebrrNQ" data-position="9" data-share="http://9gag.com/gag/aebrrNQ?ref=fb.s" rel="nofollow">Facebook</a></li>--}}
 
-                            <li><a href="javascript:void(0);" class="badge-twitter-share badge-evt badge-track btn-share twitter" data-track="social,t.s,,,d,aebrrNQ,l" data-evt="PostList,ShareSocial,Fresh,,TwitterButton" data-title="How%20I%20feel%20after%20watching%20HIMYM%20or%20any%20other%20good%20show" data-entry-id="aebrrNQ" data-position="9" data-share="http://9gag.com/gag/aebrrNQ?ref=t" rel="nofollow">Twitter</a>
-                            </li>
-                        </ul>
-                    </div>
+                            {{--<li><a href="javascript:void(0);" class="badge-twitter-share badge-evt badge-track btn-share twitter" data-track="social,t.s,,,d,aebrrNQ,l" data-evt="PostList,ShareSocial,Fresh,,TwitterButton" data-title="How%20I%20feel%20after%20watching%20HIMYM%20or%20any%20other%20good%20show" data-entry-id="aebrrNQ" data-position="9" data-share="http://9gag.com/gag/aebrrNQ?ref=t" rel="nofollow">Twitter</a>--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
+                    {{--</div>--}}
                     <div class="clearfix"></div>
                 </div>
             </div>

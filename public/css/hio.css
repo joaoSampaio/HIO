@@ -1695,3 +1695,7 @@ footer[role="contentinfo"] {
     text-indent: inherit !important;
     position: relative;
 }
+
+.bootstrap-datetimepicker-widget .glyphicon-time{
+    display: none;
+}

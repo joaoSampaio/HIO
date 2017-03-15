@@ -88,6 +88,7 @@
     text-align: center;
     font-weight: 400;
     text-transform: initial;
+    margin-bottom: 0px;
     font-size: 25px;
 }
 
@@ -575,6 +576,8 @@ background-color: #e91e63;
 <!--/#outer-wrap-->
 
 
+
+@yield('modal')
 
 
     <!-- jQuery -->

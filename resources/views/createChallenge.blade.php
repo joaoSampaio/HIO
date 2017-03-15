@@ -332,15 +332,30 @@ width: 50px;
     position: relative;
 }
 
+
+
 .user_choice_remove {
     color: red !important;
     cursor: pointer;
     display: inline-block;
     font-weight: bold;
+    top: -8px;
+    font-size: 22px;
     right: 0;
     position: absolute;
     margin-right: 2px;
 }
+
+.user_choice_remove {
+    display:none;
+}
+.user-remove:hover .user_choice_remove {
+    display: block;
+}
+
+
+
+
 
 
 #add-user-search .select2-container--default .select2-search--inline .select2-search__field{
@@ -874,7 +889,8 @@ $(".js-data-example-ajax").select2({
 
         function formatRepoSelectionUser (repo) {
             var url = "/user/photo/"+repo.id;
-            var markup = "<li class='user-remove-"+repo.id+"'><span class='user_choice_remove' data-id='"+repo.id+"' role='presentation'>×</span><img style='width: 50px; height: 50px' title='"+repo.text+"' class='img-circle' src='"+url +"' /></li>";
+            var markup = "<li class='user-remove user-remove-"+repo.id+"'><img style='width: 50px; height: 50px' title='"+repo.text+"' class='img-circle' src='"+url +"' />" +
+                "<span class='user_choice_remove' data-id='"+repo.id+"' role='presentation'>×</span></li>";
 
             return markup;
         }
@@ -1046,7 +1062,7 @@ function updateParentHeight() {
     else if(index == 1)
          curHeight  = 400;
     else if(index == 2)
-        curHeight  = 600;
+        curHeight  = 545;
     if($frame != null)
         $frame.style.height =  curHeight + 'px' ;
 

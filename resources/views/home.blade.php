@@ -196,6 +196,36 @@ color: #eb1946;
 
 
 
+
+
+
+
+
+
+@endsection
+
+
+@section('modal')
+    <div class="modal fade" id="create-challenge" tabindex="-1" role="dialog" aria-labelledby="modalHome" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header-create">
+                    <button type="button" class="close" style="font-size: 40px;font-weight: 300;" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="create-challenge-title" id="modalHome">Create Challenge</h4>
+                </div>
+
+                <div class="modal-body">
+                    <span id="create-spin" class="glyphicon glyphicon-refresh spinning"></span>
+                    <iframe id="create-challenge-iframe" src="" style="" width="99.6%" frameborder="0"></iframe>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
     <div class="modal fade" id="challenge-views-modal" tabindex="-1" role="dialog" aria-labelledby="modalHome" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -208,48 +238,28 @@ color: #eb1946;
                 <div class="modal-body" id="modal-views-content">
 
 
-                   <div class="padding5 row row-eq-height margin-bottom">
-                           <div class="col-lg-2 col-xs-2 padding5">
-                               <a href="/profile/" class="portfolio-link container-add-prof" title="">
-                                   @if(true)
-                                       <img src="/uploads/users/default_user.png" class="img-circle img-responsive">
-                                   @else
-                                       <img src="{{'/uploads/users/'. $challenge->photo }}" alt="{{$challenge->name}}" title="{{$challenge->name}}" class="img-circle img-responsive same-height">
-                                   @endif
-                               </a>
-                           </div>
-                           <div class="col-lg-7 col-xs-7">
-                               <a href="link" class="center-middle" title="">nome pessoa</a>
-                           </div>
-                       </div>
+                    <div class="padding5 row row-eq-height margin-bottom">
+                        <div class="col-lg-2 col-xs-2 padding5">
+                            <a href="/profile/" class="portfolio-link container-add-prof" title="">
+                                @if(true)
+                                    <img src="/uploads/users/default_user.png" class="img-circle img-responsive">
+                                @else
+                                    <img src="{{'/uploads/users/'. $challenge->photo }}" alt="{{$challenge->name}}" title="{{$challenge->name}}" class="img-circle img-responsive same-height">
+                                @endif
+                            </a>
+                        </div>
+                        <div class="col-lg-7 col-xs-7">
+                            <a href="link" class="center-middle" title="">nome pessoa</a>
+                        </div>
                     </div>
-
+                </div>
             </div>
         </div>
     </div>
-
-
-<div class="modal fade" id="create-challenge" tabindex="-1" role="dialog" aria-labelledby="modalHome" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header-create">
-                <button type="button" class="close" style="font-size: 40px;font-weight: 300;" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="create-challenge-title" id="modalHome">Create Challenge</h4>
-            </div>
-
-            <div class="modal-body">
-                <span id="create-spin" class="glyphicon glyphicon-refresh spinning"></span>
-                <iframe id="create-challenge-iframe" src="" style="" width="99.6%" frameborder="0"></iframe>
-
-            </div>
-
-        </div>
-    </div>
-</div>
-
 
 @endsection
+
+
 
 @section('footer')
 
