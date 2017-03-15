@@ -156,7 +156,7 @@ position: inherit;
 
 
     <!-- Portfolio Grid Section -->
-    <section id="list-proofs" style="margin-top: 80px">
+    <section id="list-proofs" style="margin-top: 0px">
         <div class="container" id="proofs-data">
 
             @include('partials.vote_paginate')
@@ -164,7 +164,7 @@ position: inherit;
         </div>
 
         <div class="ajax-load text-center" style="display:none">
-            <p><img src="http://demo.itsolutionstuff.com/plugin/loader.gif">Loading More post</p>
+            <p><img src="/img/loader.gif">Loading More post</p>
         </div>
     </section>
 

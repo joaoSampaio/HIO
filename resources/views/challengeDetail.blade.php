@@ -502,11 +502,6 @@ color: #404d57;
                             <a href="{{"/profile/".$friend->user_id}}">
                                 <img src="{{'/user/photo/'. $friend->user_id }}" alt="{{$friend->name}}" title="{{$friend->name}}" class="img-circle profile-participant friends {{$countFriends >= 6? "hide-friend" : "" }}">
                             </a>
-                            {{--<div class="ch-info">--}}
-                                {{--<p><a href="{{"/profile/".$friend->user_id}}">{{$friend->name}}</a></p>--}}
-                            {{--</div>--}}
-
-
                         </div>
                     </li>
 
@@ -527,13 +522,14 @@ color: #404d57;
 
 
         <section class="bg-light-gray bg-text" data-bg-text="Proofs">
-            <div class="container" id="proofs">
+            <div class="container" >
 
                 <div class="col-sm-12 col-xs-12 col-lg-12" >
                     <h2 class="wall-fame-title">Uploaded Proofs</h2>
                 </div>
-
+                <div class="col-sm-12 col-xs-12 col-lg-12" id="proofs">
                     @include('partials.multi_son_challenge')
+                </div>
             </div>
         </section>
 
@@ -718,28 +714,18 @@ color: #404d57;
             @if(Auth::check())
                 var userprofile="";
                 userprofile += "<li> <div class=\"ch-item ch-img-1\">";
-                @if(Auth::user()->photo == "")
-                    userprofile += "<img src=\"\/uploads\/users\/default_user.png\"  class=\"img-circle friends \" style=\"height: 70px; width: 70px\">";
-                @else
-                    userprofile += "<img src=\"{{'/uploads/users/'. Auth::user()->photo }}\"  class=\"img-circle friends \" style=\"height: 70px; width: 70px\">";
-                @endif
+                userprofile += "<a href=\"{{'/profile/'.Auth::user()->id}}\">";
+                userprofile += "<img src=\"{{'/user/photo/'. Auth::user()->id }}\"  class=\"img-circle profile-participant friends \">";
                 userprofile += "<div class=\"ch-info\">";
-                userprofile += "<p><a href=\"{{'/profile/'.Auth::user()->id}}\">{{Auth::user()->name}}<\/a><\/p>";
-                userprofile += "<\/div> <\/div><\/li>";
+                userprofile += "<\/a><\/div><\/li>";
                 $("#participants-list").append(userprofile);
             @endif
+
+
+
         }
 
-        $(".show-friends").click(function(){
-            $(".hide-friend").removeClass("hide-friend");
-            $(".show-friends").hide();
-        });
 
-
-        $('#showmore').click(function () {
-            $('#showmore').hide();
-            $('#otherpeople').show();
-        });
 
         var arr = '{{$challenge->deadLine}}'.split(/[- :]/);
         var deadline = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
@@ -750,6 +736,14 @@ color: #404d57;
         @endif
 
         <script>
+            $(".show-friends").click(function(){
+                $(".hide-friend").removeClass("hide-friend");
+                $(".show-friends").hide();
+            });
+            $('#showmore').click(function () {
+                $('#showmore').hide();
+                $('#otherpeople').show();
+            });
             var currentPage = 1;
             $(document).ready(function() {
                     $(document).on('click', '.hio-paginate .pagination a', function (e) {
@@ -798,27 +792,6 @@ color: #404d57;
 
                       this.on("uploadprogress", function(file, progress, bytesSent) {
 
-//                            if(progress < 2){
-//                            var startTime = (new Date()).getTime();
-//                            console.log("startTime:"+ startTime);
-//                            }
-                          //console.log("p:"+ progress);
-//                            if(progress == 100){
-//                            var endTime = (new Date()).getTime();
-//                            console.log("bytesSent:"+ bytesSent);
-//                            console.log("endTime:"+ endTime);
-//                                if(file.type != "video/mp4" && !file.type.startsWith("image")){
-//                                    $('#myModal').modal('hide');
-//                                    $('#upload-video-msg').modal('show');
-//
-//                                }
-//
-//
-//                                console.log(file);
-//
-//
-//                            }
-
                       });
 
                       this.on("success", function(file, response) {
@@ -830,35 +803,13 @@ color: #404d57;
                         //$( "#proofs> .proof-item:nth-child(3)" )
                         var tamanho = $("#proofs > .proof-item").length;
 
-                        if(tamanho >= 4){
-                            $("#proofs> .proof-item:nth-child(4)" ).hide();
+                        if(tamanho >= 6){
+                            $("#proofs> .proof-item:nth-child(5)" ).hide();
                         }
 
-                        var challenge="";
-                        challenge += "<div class=\"col-md-3 col-sm-6 portfolio-item proof-item\">";
-                        challenge += "    <a href=\"/proof/{{$challenge->uuid}}/"+response.id+"\" class=\"portfolio-link container-add-prof\" title=\"\">";
-                        challenge += "        <div class=\"portfolio-hover\">";
-                        challenge += "            <div class=\"portfolio-hover-content\">";
-                        challenge += "                <i class=\"fa fa-search-plus fa-3x\"><\/i>";
-                        challenge += "            <\/div>";
-                        challenge += "        <\/div>";
-                        challenge += "        <img src=\"\/uploads\/challenge\/"+response.fileName+"\" class=\"img-responsive\"  style=\"    height: 100%;margin: 0 auto;object-fit: cover;\" alt=\"\">";
-                        challenge += "    <\/a>";
-                        challenge += "    <div class=\"portfolio-caption\">";
-                        challenge += "        <p>By {{Auth::user()->name}}<\/p>";
-                        challenge += "         <a href=\"#\" class=\"\" title=\"{{$challenge->title}}\">{{$challenge->title}}<\/a>";
-                        challenge += "        <p>0 views<\/p>";
-                        challenge += "            <div class=\"trash-proof\" data-id=\""+response.id+"\" data-target=\"#confirm-delete\" data-toggle=\"modal\">";
-                        challenge += "                <i class=\"fa fa-trash\" aria-hidden=\"true\"><\/i>";
-                        challenge += "            <\/div>";
-                        challenge += "    <\/div>";
-                        challenge += "<\/div>";
-
-
-
-
-                        $( "#proofs> .proof-item:nth-child(1)" ).after(challenge)
-                        $("#user_challenge").html(challenge);
+                        $( "#proofs").prepend(response.html);
+//                        $( "#proofs> .proof-item:nth-child(1)" ).after(response.html)
+//                        $("#user_challenge").html(response.html);
 
                         });
                     }

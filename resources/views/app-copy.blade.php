@@ -188,18 +188,22 @@
 		padding: 0px;
 		border-width: 0px;
 		height: 54px;
+		display: table;
+        width: 100%;
 	}
 	.navbar-minimal > .navbar-menu > li > a {
 		position: relative;
 		display: inline-block;
 		color: rgb(255, 255, 255);
-		padding: 20px 23px;
-		text-align: left;
+		/*padding: 20px 23px;*/
+		text-align: center;
 		cursor: pointer;
 		border-bottom: 1px solid rgb(81, 81, 81);
 		width: 100%;
 		text-decoration: none;
 		margin: 0px;
+		vertical-align: middle;
+        display: table-cell;
 	}
 
 	.navbar-minimal > .navbar-menu > li > a:last-child {
@@ -208,9 +212,7 @@
 	.navbar-minimal > .navbar-menu > li > a:hover {
 		background-color: #eb1946;
 	}
-	.navbar-minimal > .navbar-menu > li > a > .glyphicon {
-		float: right;
-	}
+
 
 	.navbar-minimal.open {
 		/*width: 320px;*/
@@ -248,9 +250,9 @@
 			display: inline-block;
 			top: 50%;
 			left: 130px;
-			margin-top: -20px;
+			/*margin-top: -20px;*/
 			margin-left: 20px;
-			text-align: left;
+			text-align: center;
 			white-space: nowrap;
 			padding: 10px 13px;
 			border-width: 0px !important;
@@ -312,7 +314,7 @@
                     <ul class="navbar-menu animate">
 
                         @if(Auth::check())
-                            <li style="height: 68px;">
+                            <li style="height: 80px;background-color: #0288D1">
                                <a href="{{ url('profile', 'me') }}" class="animate" style="padding-left: 10px;padding-right: 10px;">
                                    {{--<span class="desc animate"> Who We Are </span>--}}
                                    {{--<span class="glyphicon glyphicon-user"></span>--}}
@@ -324,16 +326,21 @@
                         @endif
 
 
-                        <li>
+                        <li style="background-color: #8BC34A">
                             <a style="padding-left: 5px;padding-right: 5px;text-align: center;" href="{{ url('challenges') }}" class="animate">
                                 {{--<span class="desc animate"> What We Say </span>--}}
                                 <span style="font-size: 11px;"  class="">Challenge</span>
                             </a>
                         </li>
-                        <li>
+                        <li style="background-color: #FF9800">
                             <a href="{{ url('new') }}" class="animate">
                                 {{--<span class="desc animate"> How To Reach Us </span>--}}
                                 <i class="fa fa-fire" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                        <li style="background-color: #00BCD4">
+                            <a href="#" class="animate">
+                                <i class="fa fa-search header-link main-search pointer" style="font-size: 18px;" aria-hidden="true"></i>
                             </a>
                         </li>
 

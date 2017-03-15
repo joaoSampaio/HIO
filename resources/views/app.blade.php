@@ -96,9 +96,100 @@
 }
 
 
+.sidebar-brand .caret {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+}
+
+.sidebar-header {
+background-color: #e91e63;
+    position: relative;
+    height: 157.5px;
+    margin-bottom: 8px;
+    -webkit-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+.sidebar-brand {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: block;
+    height: 48px;
+    line-height: 48px;
+    padding: 0;
+    padding-left: 16px;
+    padding-right: 56px;
+    text-decoration: none;
+    clear: both;
+    font-weight: 500;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    -webkit-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+
+.sidebar-image img {
+    width: 54px;
+    height: 54px;
+    margin: 16px;
+    border-radius: 50%;
+    -webkit-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+
+#nav .dropdown-menu {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
 
 
+#nav .dropdown{
+    padding: 0px;
+    margin-left: 0px;
+}
+.sidebar-nav li a {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    display: block;
+    height: 48px;
+    line-height: 48px;
+    padding: 0;
+    padding-left: 16px;
+    padding-right: 56px;
+    text-decoration: none;
+    clear: both;
+    font-weight: 500;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    -webkit-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
 
+ .sidebar-brand {
+    color: #e0e0e0 !important;
+    background-color: transparent;
+}
+.top-bar {
+    height: 25px;
+    background: rgba(0, 0, 0, 0.1);
+}
     </style>
 
 
@@ -122,16 +213,56 @@
         {{--</div>--}}
     {{--</header>--}}
 
-    <nav id="nav" role="navigation">
+    <nav id="nav"  role="navigation">
+
         <div class="block">
             <h2 class="block-title">Chapters</h2>
+            @if(Auth::check())
+                <div class="sidebar-header">
+                    <!-- Top bar -->
+                    <div class="top-bar"></div>
+                    <!-- Sidebar toggle button -->
+                    <button type="button" class="sidebar-toggle" style="display: none;">
+                        <i class="icon-material-sidebar-arrow"></i>
+                    </button>
+                    <!-- Sidebar brand image -->
+                    <a class="sidebar-image" href="{{ url('profile', 'me') }}">
+                        <img src="{{'/user/photo/'. Auth::user()->id }}" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle" >
+                    </a>
+                    <!-- Sidebar brand name -->
+                    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+                        {{Auth::user()->name}}
+                        <b class="caret"></b>
+                    </a>
+                </div>
+            @endif
             <ul>
                 @if(Auth::check())
-                    <li>
-                        <a style="padding-top: 0px;text-align: center;" href="{{ url('profile', 'me') }}">
-                            <img src="{{'/user/photo/'. Auth::user()->id }}" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle" style="height: 50px; width: 50px">
-                        </a>
+                    <li class="dropdown">
+                        <ul id="settings-dropdown" class="dropdown-menu" style="display: none;">
+                            <li>
+                                <a href="#" tabindex="-1">
+                                    Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" tabindex="-1">
+                                    Settings
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" tabindex="-1">
+                                    Help
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" tabindex="-1">
+                                    Exit
+                                </a>
+                            </li>
+                        </ul>
                     </li>
+
                 @endif
 
                  <li class="{{{Request::is('HIO-Mission') ? 'active is-active' : ''}}}"><a  class="header-link" href="{{ url('HIO-Mission') }}">HIO Mission</a></li>

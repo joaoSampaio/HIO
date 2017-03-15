@@ -469,8 +469,6 @@ class HomeController extends Controller
             $creator = $creatorUser->name;
             $peopleParticipating = $challenge->users()->select('name', 'user_id')->get();
 
-//            $peopleParticipating = User::all();
-
 
             $creator = '<a class="participating-link-text" href="/profile/'.$challenge->creator_id.'">'.$creator . '</a>';
 
@@ -498,14 +496,12 @@ class HomeController extends Controller
                     ' other people.</span> <span id="otherpeople" style="display: none;">' . $otherPeople . '</span>';
 
             }
-            if(count($peopleParticipating) <= 1){
-                $end = ' Waiting for someone to join';
+            if(count($peopleParticipating) == 1){
+                $end = $creator.' is publically challenging everyone, accept his challenge and prove you are ahead';
             }
-
-
-
-
-
+            if(count($peopleParticipating) <= 0){
+                $end = 'Be the first to accept this challenge and prove you are ahead.';
+            }
 
             $sonChallenges = $this->getHelperPaginatorSon($challenge->id, $participating, $isValid);
 

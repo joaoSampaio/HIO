@@ -360,9 +360,16 @@ class SonChallengeController extends Controller {
             $notificationManager->add($notification);
         }
 
+        $sonChallenge = DB::table('files')->where('files.id', $file->id)
+            ->join('users', 'files.user_id', '=', 'users.id')
+            ->join('challenges', 'files.challenge_id', '=', 'challenges.id')
+            ->select('users.name', 'files.*', 'challenges.title', 'challenges.uuid')->first();
+        $view = view('partials.multi_son_challenge_single',compact('sonChallenge'))->render();
+
 
         if ($type == 0) {
-            return array('status' => "true", 'fileName' => $fileName, 'id' => $file->id);
+            return response()->json(['status' => "true", 'html'=>$view]);
+//            return array('status' => "true", 'fileName' => $fileName, 'id' => $file->id);
 
         } else {
             $this->dispatch((new ProcessVideo($file, $mimeType, $fileNameTemp, $fileNameNoExtension))->onQueue('low'));
