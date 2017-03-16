@@ -1699,3 +1699,33 @@ footer[role="contentinfo"] {
 .bootstrap-datetimepicker-widget .glyphicon-time{
     display: none;
 }
+
+.header-link{
+    margin: 0px;
+    padding: 0px;
+}
+
+
+ .header-link a, .header-link button {
+    color: #ffffff !important;
+     text-transform: inherit !important;
+    font-size: 16pt;
+}
+
+.header-link button{
+    /*margin-bottom: 5px;*/
+    text-align: left;
+    padding-left: 0px;
+    text-transform: capitalize;
+    /*padding: 5px 0px 0px 0px;*/
+    background: transparent;
+    border: 0px;
+    font-weight: 400;
+    /*letter-spacing: 1px;*/
+}
+
+
+
+
+
+

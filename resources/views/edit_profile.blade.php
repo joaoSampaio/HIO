@@ -42,6 +42,8 @@ width: 200px;
         <section  style="padding-top: 120px">
             <div class="container">
 
+                <button href="#" class="btn btn-xl">Create Normal User Profile</button>
+
                 <div class="row  col-md-offset-2 col-md-8 col-sm-12 col-xs-12">
 
                     <div class="col-sm-12 col-md-12">

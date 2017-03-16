@@ -37,11 +37,6 @@
 
     <link href="{{ asset('css/hio.css') }}" rel="stylesheet">
 
-
-              {{--<script src="{{ asset('js/jquery.js') }}"></script>--}}
-
-
-
     <style>
 
 
@@ -191,6 +186,14 @@ background-color: #e91e63;
     height: 25px;
     background: rgba(0, 0, 0, 0.1);
 }
+
+
+
+
+
+
+
+
     </style>
 
 
@@ -371,7 +374,16 @@ background-color: #e91e63;
                             </a>
                         </li>
                         <li>
-                            <a class="header-link" href="{{ url('profile', 'me') }}" style=" margin-bottom: 5px;text-align: left; padding-left: 0px;text-transform: capitalize;padding: 5px 0px 0px 0px;">{{getFirstLastName(Auth::user()->name)}}</a>
+                            <div class="dropdown header-link">
+                                <button class="dropdown-toggle" type="button" data-toggle="dropdown">{{getFirstLastName(Auth::user()->name)}}
+                                    <span class="caret"></span></button>
+                                <ul class="dropdown-menu" style="background-color: #555;">
+                                    <li><a href="{{ url('profile', 'me') }}">Profile</a></li>
+                                    <li><a href="{{ action('UserProfileController@editProfile') }}">Settings</a></li>
+                                    <li><a href="#">Logout</a></li>
+                                </ul>
+                            </div>
+                            {{--<a class="header-link" href="{{ url('profile', 'me') }}" style=" margin-bottom: 5px;text-align: left; padding-left: 0px;text-transform: capitalize;padding: 5px 0px 0px 0px;">{{getFirstLastName(Auth::user()->name)}}</a>--}}
 
                             <a class="nav-logout header-link-secondary" style="padding-top: 0px;text-align: left;" href="{{ action('SocialAuthController@logout') }}">Logout</a>
                         </li>

@@ -390,6 +390,17 @@ border-radius: 50%;
 
              @endif
 
+                @if(Auth::user()->role === "admin")
+                    <form class="form-horizontal form-brand" role="form" method="POST" style="    margin-top: 30px;" action="{{ url('/upgrade-trainer') }}">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="user_id" value="{{$user->id}}">
+                        <button type="submit" class="btn btn-success ">
+                            <i class="fa fa-btn fa-user"></i> Upgrade to trainer
+                        </button>
+                    </form>
+
+                @endif
+
 
              <div class="col-sm-12 col-md-12" style="margin-top: 30px">
                  @if(!Auth::check() || Auth::user()->id == $user->id)

@@ -332,7 +332,7 @@ class UserProfileController extends Controller
 
         $user->save();
 //        echo 'se o ecrã está todo branco, correu tudo bem.';
-        return redirect()->action('HomeController@userProfile', 'me');
+        return redirect()->action('UserProfileController@userProfile', 'me');
     }
 
     public function getProfileImage($id)
@@ -345,6 +345,8 @@ class UserProfileController extends Controller
         }
         return response()->file(base_path() . '/public/uploads/users/default_user.png');
     }
+
+
 
 
 
@@ -461,6 +463,36 @@ class UserProfileController extends Controller
         return Response::json([
             'status' => 'success',
             'url' => '/uploads/users/' . $allowed_filename. '.jpg'
+        ], 200);
+
+    }
+
+    public function upgradeToTrainer(Request $request)
+    {
+
+        if(Auth::user()->role == "admin"){
+
+            $userId = $request->input('user_id');
+            $user = User::find($userId);
+            //create profile e add link entre perfis
+
+            $userCopy = User::create([
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => "trainer",
+                'other_profile' => $user->id,
+                'activated' => true,
+                'password' => bcrypt(md5("ola". microtime())),
+            ]);
+
+            $user->other_profile = $userCopy->id;
+            $user->save();
+
+            //ALTER TABLE users DROP INDEX users_email_unique
+        }
+
+        return Response::json([
+            'status' => 'success',
         ], 200);
 
     }
