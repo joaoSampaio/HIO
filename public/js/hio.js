@@ -75,7 +75,7 @@ $(".search-ajax").select2({
     processResults: function (data, params) {
     return {
     results: $.map(data, function(obj) {
-    return { id: obj.id, text: obj.name, photo: obj.image, type: obj.type };
+    return { id: obj.id, text: obj.name, role: obj.role, photo: obj.image, type: obj.type };
     })
     };
     },
@@ -92,13 +92,6 @@ $(".search-ajax").show();
 
 
 $('.search-ajax').on('select2:select', function (evt) {
-//    if(evt.params.data.type == 0){
-//        window.location = "/profile/"+evt.params.data.id;
-//    }else if(evt.params.data.type == 1){
-//        window.location = "/challenge/"+evt.params.data.id;
-//    } else if(evt.params.data.type == 2){
-//        window.location = "/challenges/"+evt.params.data.id;
-//    }
     return false;
     });
 
@@ -116,6 +109,10 @@ function formatRepoSearch (repo) {
     var type = "";
     if(repo.type == 0){
     type = 'User';
+        if(repo.role != "" && repo.role != "admin"){
+            type = repo.role;
+
+        }
     }else if(repo.type == 1){
     type = 'Challenge';
     }else if(repo.type == 2){

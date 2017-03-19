@@ -104,6 +104,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('new/challenge', 'HomeController@storeChallenge');
 
 
+        Route::post('create-normal-profile', 'UserProfileController@createNormalUserByTrainer');
+        Route::post('switch-profile', 'UserProfileController@changeUserProfile');
         Route::post('upgrade-trainer', 'UserProfileController@upgradeToTrainer');
         Route::post('upload-photo', 'UserProfileController@postUpload');
         Route::post('crop-photo', 'UserProfileController@postCrop');

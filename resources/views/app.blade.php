@@ -377,9 +377,24 @@ background-color: #e91e63;
                             <div class="dropdown header-link">
                                 <button class="dropdown-toggle" type="button" data-toggle="dropdown">{{getFirstLastName(Auth::user()->name)}}
                                     <span class="caret"></span></button>
-                                <ul class="dropdown-menu" style="background-color: #555;">
-                                    <li><a href="{{ url('profile', 'me') }}">Profile</a></li>
+                                <ul class="dropdown-menu" style="background-color: #555;    margin-top: 36px;">
+                                    <li><a href="{{ url('profile', 'me') }}">My Profile</a></li>
                                     <li><a href="{{ action('UserProfileController@editProfile') }}">Settings</a></li>
+
+                                    @if(Auth::user()->other_profile != NULL)
+
+                                         @if(Auth::user()->role == "trainer")
+                                            <li><a href="javascript:{}" onclick="document.getElementById('switch-profile').submit(); return false;">Change to Normal User</a></li>
+                                         @else
+                                            <li><a href="javascript:{}" onclick="document.getElementById('switch-profile').submit(); return false;">Change to Trainer account</a></li>
+                                        @endif
+
+                                         <form class="hidden" role="form" id="switch-profile" method="POST"  action="{{ url('/switch-profile') }}">
+                                             {{ csrf_field() }}
+                                             <button type="submit" class=""></button>
+                                        </form>
+
+                                    @endif
                                     <li><a href="#">Logout</a></li>
                                 </ul>
                             </div>

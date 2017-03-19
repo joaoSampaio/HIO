@@ -293,13 +293,7 @@ text-transform: inherit;
     margin-top: 40px;
 }
 
-.cropImgWrapper{
-border-radius: 50%;
-}
 
-.cropContainerEyecandy_imgUploadForm{
-    display: none;
-}
 
 .btn-friends {
     border-color: #5cb85c;
@@ -326,11 +320,7 @@ border-radius: 50%;
                 </div>
             @endif
 
-
-
              @if(Session::has('challengeCreated'))
-{{--             @if($challengeCreated)--}}
-
                 <div class="alert alert-success col-sm-12 col-md-6 col-md-offset-3">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                     <strong>Challenge saved!</strong> Your new challenge has been added.
@@ -342,6 +332,10 @@ border-radius: 50%;
                 <div class="col-sm-12 col-md-12">
 
                     <div  style="text-align: center">
+                        @if($user->role === "trainer")
+                            <h3 class="text-capitalize profile-main-name">Treinador !!!</h3>
+                        @endif
+
                         <div  style="display: inline-block;" >
                             <div id="cropContainerEyecandy" style="position: relative;width: 140px; height: 140px">
                                 <img src="{{'/user/photo/'. $user->id }}" id="user-crop" alt="{{$user->name}}" title="{{$user->name}}" class="img-circle profile-main-photo">
@@ -349,10 +343,7 @@ border-radius: 50%;
 
                         </div>
                     </div>
-
-
-
-                        <div ><h3 class="text-capitalize profile-main-name">{{$user->name}}</h3></div>
+                    <div ><h3 class="text-capitalize profile-main-name">{{$user->name}}</h3></div>
 
                 </div>
 
@@ -390,7 +381,7 @@ border-radius: 50%;
 
              @endif
 
-                @if(Auth::user()->role === "admin")
+                @if(Auth::user()->role === "admin" && $user->other_profile == NULL)
                     <form class="form-horizontal form-brand" role="form" method="POST" style="    margin-top: 30px;" action="{{ url('/upgrade-trainer') }}">
                         {{ csrf_field() }}
                         <input type="hidden" name="user_id" value="{{$user->id}}">
@@ -405,21 +396,22 @@ border-radius: 50%;
              <div class="col-sm-12 col-md-12" style="margin-top: 30px">
                  @if(!Auth::check() || Auth::user()->id == $user->id)
                      <a href="#" id="openCreate" class="btn btn-xl">CREATE CHALLENGE</a>
-                 @else
+                 @elseif($user->role != "trainer")
                      <a href="#" id="openCreate" class="btn btn-xl">CHALLENGE {{$user->name}}</a>
                  @endif
              </div>
 
              <div class="col-sm-12 col-md-12" style="margin-top: 30px">
+                 @if($canBeFriend && Auth::check() && Auth::user()->id != $user->id && Auth::user()->role != "trainer")
 
-                 @if($canBeFriend && Auth::check() && Auth::user()->id != $user->id)
-
-                 <form class="form-horizontal form-brand" role="form" method="POST" style="    margin-top: 30px;" action="{{ url('/friend') }}">
+                 <form class="form-horizontal form-brand" role="form" method="POST"  action="{{ url('/friend') }}">
                      {{ csrf_field() }}
                      <input type="hidden" name="friendId" value="{{$user->id}}">
                      <input type="hidden" name="action" value="0">
                      <button type="submit" class="btn btn-success ">
-                         <i class="fa fa-btn fa-user"></i> Send Friendship Request
+                         <i class="fa fa-btn fa-user"></i>
+                            {{$user->role === "trainer"? "Follow" : "Send Friendship Request"}}
+
                      </button>
                  </form>
                  @endif
@@ -430,123 +422,96 @@ border-radius: 50%;
         </div>
     </section >
 
-    <section style="background-color: #e7e7e7">
+    @if($user->role != "trainer")
+        <section style="background-color: #e7e7e7">
+            <div id="wrapper" style="text-align: center">
+                <div id="yourdiv" style="display: inline-block;" >{{achievementToHtml($user->achievements)}}</div>
+            </div>
+        </section>
+    @endif
 
-        <div id="wrapper" style="text-align: center">
-            <div id="yourdiv" style="display: inline-block;" >{{achievementToHtml($user->achievements)}}</div>
+
+    <section  class="bg-text" data-bg-text="Challenges" >
+
+
+        <h3 class="col-md-12 text-center my-challenges-title">My challenges</h3>
+        <div style="text-align: center">
+            <div class="col-md-12" style="display: inline-block;margin-bottom: 100px;margin-top: 25px;">
+
+                <a class="btn btn-tab-challenge active" href="#ongoing" aria-controls="ongoing" data-toggle="tab">ON GOING</a>
+                <a class="btn btn-tab-challenge" href="#ended" aria-controls="ended" data-toggle="tab">FINISHED</a>
+                <a class="btn btn-tab-challenge" href="#mychallenges" aria-controls="mychallenges" data-toggle="tab">ALL</a>
+            </div>
         </div>
 
+        <div class="container">
+            <div class="row" id="latest">
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="ongoing">
+
+                        <div class="row">
+                            @foreach ($challenges as $challenge)
+                                @include('partials.single_challenge')
+                            @endforeach
+                        </div>
+
+                        <div class="row" style="text-align: center;">
+                            {!! $challenges->links() !!}
+                        </div>
 
 
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="ended">
+
+                        <div class="row">
+                            @foreach ($endedChallenges as $challenge)
+                                @include('partials.single_challenge')
+                            @endforeach
+                        </div>
+                        <div class="row" style="text-align: center;">
+                            {!! $endedChallenges->links() !!}
+                        </div>
+
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="mychallenges">
+                        <div class="row">
+                            @foreach ($myChallenges as $challenge)
+                                @include('partials.single_challenge')
+                            @endforeach
+                        </div>
+                        <div class="row" style="text-align: center;">
+                            {!! $myChallenges->links() !!}
+                        </div>
+
+                    </div>
+                  </div>
+
+
+            </div>
+        </div>
     </section>
 
-{{--<div>--}}
-    {{--<div class="tabbable full-width-tabs">--}}
-        {{--<ul class="nav nav-tabs">--}}
-            {{--<li class="active take-all-space-you-can">--}}
-                {{--<a href="#ongoing" aria-controls="ongoing" data-toggle="tab">--}}
-                    {{--<h3>{{$challenges->total()}}</h3>--}}
-                    {{--<h4 class="text-capitalize">Active</h4>--}}
-                {{--</a>--}}
-            {{--</li>--}}
-            {{--<li class="take-all-space-you-can">--}}
-                {{--<a href="#ended" aria-controls="ended" data-toggle="tab">--}}
-                    {{--<h3>{{$endedChallenges->total()}}</h3>--}}
-                    {{--<h4 class="text-capitalize">Completed</h4>--}}
-                {{--</a>--}}
-            {{--</li>--}}
 
-            {{--<li class="take-all-space-you-can">--}}
-                {{--<a href="#mychallenges" aria-controls="mychallenges" data-toggle="tab">--}}
-                    {{--<h3>{{$myChallenges->total()}}</h3>--}}
-                    {{--<h4 class="text-capitalize">Created Challenges</h4>--}}
-                {{--</a>--}}
-            {{--</li>--}}
-        {{--</ul>--}}
-    {{--</div>--}}
+    <div class="modal fade" id="create-challenge" tabindex="-1" role="dialog" aria-labelledby="modalHome" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
 
-{{--</div>--}}
-<section  class="bg-text" data-bg-text="Challenges" >
-
-
-    <h3 class="col-md-12 text-center my-challenges-title">My challenges</h3>
-    <div style="text-align: center">
-        <div class="col-md-12" style="display: inline-block;margin-bottom: 100px;margin-top: 25px;">
-
-            <a class="btn btn-tab-challenge active" href="#ongoing" aria-controls="ongoing" data-toggle="tab">ON GOING</a>
-            <a class="btn btn-tab-challenge" href="#ended" aria-controls="ended" data-toggle="tab">FINISHED</a>
-            <a class="btn btn-tab-challenge" href="#mychallenges" aria-controls="mychallenges" data-toggle="tab">ALL</a>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="row" id="latest">
-
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="ongoing">
-
-                    <div class="row">
-                        @foreach ($challenges as $challenge)
-                            @include('partials.single_challenge')
-                        @endforeach
-                    </div>
-
-                    <div class="row" style="text-align: center;">
-                        {!! $challenges->links() !!}
-                    </div>
-
-
-                </div>
-                <div role="tabpanel" class="tab-pane" id="ended">
-
-                    <div class="row">
-                        @foreach ($endedChallenges as $challenge)
-                            @include('partials.single_challenge')
-                        @endforeach
-                    </div>
-                    <div class="row" style="text-align: center;">
-                        {!! $endedChallenges->links() !!}
-                    </div>
-
+                <div class="modal-header-create">
+                    <button type="button" class="close" style="font-size: 40px;font-weight: 300;" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="create-challenge-title" id="modalHome">Create Challenge</h4>
                 </div>
 
-                <div role="tabpanel" class="tab-pane" id="mychallenges">
-                    <div class="row">
-                        @foreach ($myChallenges as $challenge)
-                            @include('partials.single_challenge')
-                        @endforeach
-                    </div>
-                    <div class="row" style="text-align: center;">
-                        {!! $myChallenges->links() !!}
-                    </div>
+                <div class="modal-body">
+                    <span id="create-spin" class="glyphicon glyphicon-refresh spinning"></span>
+                    <iframe id="create-challenge-iframe" src="" style="" width="99.6%" frameborder="0"></iframe>
 
                 </div>
-              </div>
-
-
-        </div>
-    </div>
-</section>
-
-
-<div class="modal fade" id="create-challenge" tabindex="-1" role="dialog" aria-labelledby="modalHome" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header-create">
-                <button type="button" class="close" style="font-size: 40px;font-weight: 300;" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="create-challenge-title" id="modalHome">Create Challenge</h4>
-            </div>
-
-            <div class="modal-body">
-                <span id="create-spin" class="glyphicon glyphicon-refresh spinning"></span>
-                <iframe id="create-challenge-iframe" src="" style="" width="99.6%" frameborder="0"></iframe>
 
             </div>
-
         </div>
     </div>
-</div>
 
 
 

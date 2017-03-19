@@ -2,7 +2,7 @@
 
 @section('header')
 
-
+<link href="{{ asset('css/croppic.css') }}" rel="stylesheet">
 <style>
 header .intro-text {
     padding-top: 150px;
@@ -39,10 +39,30 @@ width: 200px;
     </header>
 
 
-        <section  style="padding-top: 120px">
+        <section  style="margin-top: 20px;">
             <div class="container">
 
-                <button href="#" class="btn btn-xl">Create Normal User Profile</button>
+                @if (session('createdNormal'))
+                    <div class="alert-register col-md-offset-2 col-md-8 text-center">
+                        <div class="alert alert-success alert-register-label">
+                            <span class="">Your new profile is ready<br>Fell free to edit this new profile.</span>
+                        </div>
+                    </div>
+                @endif
+
+
+
+                @if(Auth::user()->role === "trainer" && Auth::user()->other_profile == NULL)
+                    <div class="alert alert-info alert-dismissable">
+                        <a class="panel-close close" data-dismiss="alert">×</a>
+                        <span>You are a <strong>trainer</strong>. Use this button to create a normal user profile. You can be both a trainer and a normal user.</span>
+                        <form class="" role="form" id="normal-profile" method="POST"  style="display: inline;padding-left: 20px;" action="{{ url('/create-normal-profile') }}">
+                             {{ csrf_field() }}
+                             <button type="submit" class="btn btn-info">Create Normal User Profile</button>
+                        </form>
+                      </div>
+
+                @endif
 
                 <div class="row  col-md-offset-2 col-md-8 col-sm-12 col-xs-12">
 
@@ -55,7 +75,6 @@ width: 200px;
 
                             @endif
 
-    {{--                        <div ><h3 class="text-capitalize">{{$user->name}}</h3></div>--}}
 
                     </div>
 
@@ -71,7 +90,8 @@ width: 200px;
                   <div class="form-group">
                     <label class="col-lg-12">Profile photo:</label>
                     <div class="col-lg-12">
-                      <input name="file" class="form-control" type="file" id="pictureupload">
+                        <span class="btn" style="background-color: #e7e7e7;" id="cropContainerHeaderButton">Upload Photo</span>
+                      {{--<input name="file" class="form-control" type="file" id="pictureupload">--}}
                     </div>
                   </div>
 
@@ -235,6 +255,7 @@ width: 200px;
                       </div>
                     </div>
                   </form>
+                   <div id="cropContainerEyecandy" style="position: relative;width: 140px; height: 140px"></div>
                 </div>
 
                 </div>
@@ -243,15 +264,46 @@ width: 200px;
 
 
 
+@endsection
 
 
+@section('footer')
+
+<script src="{{ asset('js/croppic.min.js') }}"></script>
+<script>
+//    var eyeCandy = $('#cropContainerEyecandy');
+    var croppedOptions = {
+        zoomFactor:10,
+        doubleZoomControls:false,
+        customUploadButtonId:'cropContainerHeaderButton',
+        rotateFactor:10,
+        rotateControls:false,
+        uploadUrl: '/upload-photo',
+        cropUrl: '/crop-photo',
+        modal:true,
+        onAfterImgCrop:
+            function(){
+                var d = new Date();
+                $(".croppedImg").attr("src", "{{'/user/photo/'. Auth::user()->id }}?"+d.getTime());
+                $(".croppedImg").addClass('img-circle');
 
 
+                $(".img-circle").attr("src", "{{'/user/photo/'. Auth::user()->id }}?"+d.getTime());
+
+                console.log('onAfterImgCrop')
+
+
+            },
+        cropData:{
+            'width' : 140,
+            'height': 140
+        }
+    };
+    var cropperBox = new Croppic('cropContainerEyecandy', croppedOptions);
+</script>
 
 
 
 
 @endsection
-
-
 

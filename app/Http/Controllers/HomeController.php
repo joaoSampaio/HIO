@@ -242,11 +242,11 @@ class HomeController extends Controller
         }
 
 
-        $title = $request->input('title');
+        $title = strip_tags($request->input('title'));
         $creator_id = Auth::user()->id;
         $rank = 0;
 
-        $description = $request->input('description');
+        $description = strip_tags($request->input('description'));
         $category = $request->input('category');
         $reward = $request->input('reward');
         $penalty = $request->input('penalty');
@@ -954,6 +954,7 @@ class HomeController extends Controller
         if (($search == "me" || str_contains(strtolower(Auth::user()->name), $search)) && Auth::check()) {
             $queryUsers = DB::table('users')
                 ->where('name', 'like', '%' . $search . '%')
+                ->where('role', '!=', 'trainer')
                 ->select('name', 'id', 'photo');
 
             $queryUser = DB::table('users')
@@ -1013,10 +1014,10 @@ class HomeController extends Controller
 
 
         $queryUsers = DB::table('users')->where('name', 'like', '%' . $search . '%')
-            ->select(['name', 'id', 'photo as image', DB::raw('0 as type')]);
+            ->select(['name','role', 'id', 'photo as image', DB::raw('0 as type')]);
 
         $queryUsers = DB::table('challenges')->where('title', 'like', '%' . $search . '%')
-            ->select(['title as name', 'uuid as id', 'category as image', DB::raw('1 as type')])
+            ->select(['title as name', DB::raw('0 as role'), 'uuid as id', 'category as image', DB::raw('1 as type')])
             ->union($queryUsers)
             ->get();
 

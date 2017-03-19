@@ -142,7 +142,7 @@ class UserProfileController extends Controller
 
 
         $canBeFriend = false;
-        if (Auth::check() && Auth::user()->id != $idUser) {
+        if (Auth::check() && Auth::user()->id != $idUser && Auth::user()->other_profile != $idUser) {
             $canBeFriend = $this->canBeFriend($idUser);
         }
 
@@ -301,21 +301,21 @@ class UserProfileController extends Controller
     {
 
         $user = User::where('id', Auth::user()->id)->first();
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $fileNameNoExtension = md5($user->email);
-            $fileName = $fileNameNoExtension . '.' .
-                $file->getClientOriginalExtension();
-
-            $type = 0;
-            $mimeType = $request->file('file')->getMimeType();
-            if (substr($mimeType, 0, 5) == 'image') {
-                $file->move('uploads/users/', $fileName);
-                $image = Image::make(sprintf('uploads/users/%s', $fileName))->fit(200)->save();
-
-                $user->photo = $fileName;
-            }
-        }
+//        if ($request->hasFile('file')) {
+//            $file = $request->file('file');
+//            $fileNameNoExtension = md5($user->email);
+//            $fileName = $fileNameNoExtension . '.' .
+//                $file->getClientOriginalExtension();
+//
+//            $type = 0;
+//            $mimeType = $request->file('file')->getMimeType();
+//            if (substr($mimeType, 0, 5) == 'image') {
+//                $file->move('uploads/users/', $fileName);
+//                $image = Image::make(sprintf('uploads/users/%s', $fileName))->fit(200)->save();
+//
+//                $user->photo = $fileName;
+//            }
+//        }
 
         $user->about = $request->input('about');
 
@@ -331,7 +331,6 @@ class UserProfileController extends Controller
 
 
         $user->save();
-//        echo 'se o ecrã está todo branco, correu tudo bem.';
         return redirect()->action('UserProfileController@userProfile', 'me');
     }
 
@@ -340,10 +339,15 @@ class UserProfileController extends Controller
         if ($user = User::where('id', $id)->first()) {
             if ($user->photo != "") {
 
-                return response()->file(base_path() . '/public/uploads/users/' . $user->photo);
+//                $storagePath = storage_path('/uploads/users/' . $user->photo);
+//
+//                return Image::make($storagePath)->response();
+                //Cache-Control: max-age=0, must-revalidate
+//                return response()->file(base_path() . '/public/uploads/users/' . $user->photo)->header('Cache-Control', 'max-age=0, must-revalidate');
+                return Redirect::to('/uploads/users/'.$user->photo);
             }
         }
-        return response()->file(base_path() . '/public/uploads/users/default_user.png');
+        return response()->file(base_path() . '/public/uploads/users/default_user.png')->header('Cache-Control', 'max-age=0, must-revalidate');
     }
 
 
@@ -351,21 +355,6 @@ class UserProfileController extends Controller
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //**//
 
     public function postUpload()
     {
@@ -393,7 +382,7 @@ class UserProfileController extends Controller
         $photo = $form_data['img'];
 
 //        $user = User::where('id', Auth::user()->id)->first();
-        $allowed_filename = md5(Auth::user()->email);
+        $allowed_filename = md5(Auth::user()->id);
         $filename_ext = 'cropped-' . $allowed_filename .'.jpg';
 
         $manager = new ImageManager();
@@ -439,7 +428,8 @@ class UserProfileController extends Controller
         $filename_array = explode('/', $image_url);
         $filename = $filename_array[sizeof($filename_array)-1];
 
-        $allowed_filename = md5(Auth::user()->email);
+        $allowed_filename = md5(Auth::user()->id);
+        $allowed_filenameNew = md5(Auth::user()->id . microtime());
         $image_url = 'uploads/users/cropped-'. $allowed_filename .'.jpg';
 
 
@@ -448,7 +438,7 @@ class UserProfileController extends Controller
         $image->resize($imgW, $imgH)
             ->rotate(-$angle)
             ->crop($cropW, $cropH, $imgX1, $imgY1)
-            ->save('uploads/users/' . $allowed_filename . '.jpg');
+            ->save('uploads/users/' . $allowed_filenameNew . '.jpg');
 
         if( !$image) {
 
@@ -458,11 +448,12 @@ class UserProfileController extends Controller
             ], 200);
 
         }
-        Auth::user()->photo = $allowed_filename . '.jpg';
+        Auth::user()->photo = $allowed_filenameNew . '.jpg';
         Auth::user()->save();
+        File::delete(base_path() . '/public/uploads/users/cropped-'. $allowed_filename .'.jpg');
         return Response::json([
             'status' => 'success',
-            'url' => '/uploads/users/' . $allowed_filename. '.jpg'
+            'url' => '/uploads/users/' . $allowed_filenameNew. '.jpg'
         ], 200);
 
     }
@@ -477,10 +468,11 @@ class UserProfileController extends Controller
             //create profile e add link entre perfis
 
             $userCopy = User::create([
+                'number_profile' => 1,
+                'other_profile' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
                 'role' => "trainer",
-                'other_profile' => $user->id,
                 'activated' => true,
                 'password' => bcrypt(md5("ola". microtime())),
             ]);
@@ -489,12 +481,53 @@ class UserProfileController extends Controller
             $user->save();
 
             //ALTER TABLE users DROP INDEX users_email_unique
+            //ALTER TABLE users ADD UNIQUE users_email_profile_unique (email, number_profile);
         }
 
         return Response::json([
             'status' => 'success',
         ], 200);
+    }
 
+    public function createNormalUserByTrainer(){
+        if(Auth::user()->role == "trainer" && Auth::user()->other_profile == NULL){
+
+            $user = Auth::user();
+            //create profile e add link entre perfis
+
+            $userCopy = User::create([
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => "",
+                'number_profile' => 1,
+                'other_profile' => $user->id,
+                'activated' => true,
+                'password' => bcrypt(md5("ola". microtime())),
+            ]);
+
+            $user->other_profile = $userCopy->id;
+            $user->save();
+            \Session::flash('createdNormal', 'true');
+            $this->changeUserProfile();
+
+            //ALTER TABLE users DROP INDEX users_email_unique
+            //ALTER TABLE users ADD UNIQUE users_email_profile_unique (email, number_profile);
+        }
+        return redirect()->action('UserProfileController@editProfile');
+//        return Response::json([
+//            'status' => 'success',
+//        ], 200);
+    }
+
+
+
+    public function changeUserProfile(){
+
+        $userId = Auth::user()->other_profile;
+        if($userId != null){
+            Auth::loginUsingId($userId);
+        }
+        return redirect()->back();
     }
 
 

@@ -30,6 +30,8 @@ class CreateUsersTable extends Migration
             $table->date('birthday');
             $table->string('password', 60);
             $table->string('photo', 40);
+            $table->integer('other_profile');
+            $table->integer('number_profile');
             $table->integer('id_last_notification');
             $table->boolean('public')->default(true);
             $table->boolean('activated')->default(false);
