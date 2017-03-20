@@ -966,6 +966,7 @@ class HomeController extends Controller
         } else {
             $users = DB::table('users')
                 ->where('name', 'like', '%' . $search . '%')
+                ->where('role', '!=', 'trainer')
                 ->select('name', 'id', 'photo')
                 ->get();
         }

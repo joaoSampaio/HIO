@@ -104,6 +104,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('new/challenge', 'HomeController@storeChallenge');
 
 
+        Route::get('user/credentials', 'UserProfileController@changePassword');
+        Route::post('user/credentials', 'UserProfileController@postCredentials');
+
         Route::post('create-normal-profile', 'UserProfileController@createNormalUserByTrainer');
         Route::post('switch-profile', 'UserProfileController@changeUserProfile');
         Route::post('upgrade-trainer', 'UserProfileController@upgradeToTrainer');

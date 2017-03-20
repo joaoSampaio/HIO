@@ -7,6 +7,7 @@ use Carbon\Carbon;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Intervention\Image\Facades\Image;
 use Auth;
 //use Mail;
@@ -514,12 +515,7 @@ class UserProfileController extends Controller
             //ALTER TABLE users ADD UNIQUE users_email_profile_unique (email, number_profile);
         }
         return redirect()->action('UserProfileController@editProfile');
-//        return Response::json([
-//            'status' => 'success',
-//        ], 200);
     }
-
-
 
     public function changeUserProfile(){
 
@@ -529,6 +525,79 @@ class UserProfileController extends Controller
         }
         return redirect()->back();
     }
+
+    public function admin_credential_rules(array $data)
+    {
+        $messages = [
+            'current-password.required' => 'Please enter current password',
+            'password.required' => 'Please enter password',
+        ];
+
+        $validator = Validator::make($data, [
+            'current-password' => 'required',
+            'password' => 'required|same:password',
+            'password_confirmation' => 'required|same:password',
+        ], $messages);
+
+        return $validator;
+    }
+
+    public function changePassword()
+    {
+
+        return view('auth.passwords.change');
+
+
+
+    }
+
+    public function postCredentials(Request $request)
+    {
+        if(Auth::Check())
+        {
+//            Auth::User()->password = bcrypt('zeze');
+//            Auth::User()->save();
+
+            $request_data = $request->All();
+            $validator = $this->admin_credential_rules($request_data);
+            if($validator->fails())
+            {
+                return redirect()->back()->withErrors($validator)->withInput();
+//                return response()->json(array('error' => $validator->getMessageBag()->toArray()), 400);
+            }
+            else
+            {
+                $current_password = Auth::User()->password;
+
+//                echo "<br>".$request_data['current-password'];
+//                echo "<br>".$current_password;
+//                echo "<br>".bcrypt($request_data['current-password']);;
+//                echo "<br>".Hash::check($request_data['current-password'], $current_password);
+
+                if(Hash::check($request_data['current-password'], $current_password))
+                {
+                    $user_id = Auth::User()->id;
+                    $obj_user = User::find($user_id);
+                    $obj_user->password = Hash::make($request_data['password']);;
+                    $obj_user->save();
+                    return "ok";
+                }
+                else
+                {
+                    $validator->errors()->add('current-password', 'Please enter correct current password');
+//                    $error = array('current-password' => 'Please enter correct current password');
+                    return redirect()->back()->withErrors($validator)->withInput();
+//                    return response()->json(array('error' => $error), 400);
+                }
+            }
+        }
+        else
+        {
+            return redirect()->to('/');
+        }
+    }
+
+
 
 
 

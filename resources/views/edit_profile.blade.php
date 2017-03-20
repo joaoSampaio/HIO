@@ -95,6 +95,13 @@ width: 200px;
                     </div>
                   </div>
 
+                    <div class="form-group">
+                        <label class="col-lg-12">Password:</label>
+                        <div class="col-lg-12">
+                            <span class="btn" style="background-color: #e7e7e7;" id="openChange">Change Password</span>
+                            {{--<input name="file" class="form-control" type="file" id="pictureupload">--}}
+                        </div>
+                    </div>
 
 
                   {{--<form class="form-horizontal" role="form">--}}
@@ -266,8 +273,40 @@ width: 200px;
 
 @endsection
 
+@section('modal')
+    <div class="modal fade" id="change-password" tabindex="-1" role="dialog" aria-labelledby="modalHome" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header-create">
+                    <button type="button" class="close" style="font-size: 40px;font-weight: 300;" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="create-challenge-title" id="modalHome">Change Password</h4>
+                </div>
+
+                <div class="modal-body">
+                    <iframe id="change-password-iframe" src="/user/credentials" style="height: 255px;" width="99.6%" frameborder="0"></iframe>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+@endsection
+
 
 @section('footer')
+
+    <script>
+        $('#openChange').click(function(){
+
+            $('#cchange-password').on('shown.bs.modal', function() {
+                $('#change-password-iframe').attr("src","/user/credentials");
+            });
+            $('#change-password').modal({show:true})
+        });
+
+    </script>
+
 
 <script src="{{ asset('js/croppic.min.js') }}"></script>
 <script>

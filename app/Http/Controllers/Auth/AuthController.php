@@ -159,24 +159,12 @@ class AuthController extends Controller
         return View('auth/loginMenu');
     }
 
-////
     public function getCredentials(Request $request)
     {
         return array_merge($request->only($this->loginUsername(), 'password'), [
             'number_profile' => 0, // or however you determine the current site ID
         ]);
     }
-
-//    public function login(Request $request)
-//    {
-//        $this->validateLogin($request);
-//        $credentials = $this->getCredentials($request);
-//
-//        if (Auth::guard($this->getGuard())->attempt($credentials, $request->has('remember'))) {
-//            return redirect()->intended($this->redirectPath());
-//        }
-//
-//    }
 
 
 
