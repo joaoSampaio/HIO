@@ -1,6 +1,18 @@
 @extends('app')
 
 @section('header')
+
+    @if($sonChallenge->type == 1)
+        <meta property="og:image" content="{{ asset('uploads/challenge/'. pathinfo(asset('uploads/challenge/'. $sonChallenge->filename), PATHINFO_FILENAME) . '.jpg')  }}" />
+    @else
+        <meta property="og:image" content="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" />
+    @endif
+    <meta property="og:description" content="{{$sonChallenge->description}}" />
+
+    {{--<meta property="og:url"content="http://www.coachesneedsocial.com/coacheswisdomtelesummit/" />--}}
+
+    <meta property="og:title" content="{{$sonChallenge->title}}" />
+
 <link href="{{ asset('css/video-js.css') }}" rel="stylesheet">
 {{--<link href="{{ asset('css/jTinder.css') }}" rel="stylesheet">--}}
 <style>
@@ -242,7 +254,10 @@ font-size: 22px;text-align: center;
                             <a class="badge-evt point">
                                 <span id="dislike-count-{{$sonChallenge->id}}" class="badge-item-dislike-count">{{$userViews}}</span> Views</a> ·
 
-                            <a class="comment badge-evt" href="#comment">0 comments</a>
+                            <a class="comment badge-evt" href="#comment">0 comments</a> ·
+
+                            <a class="badge-evt point">
+                                <span class="">Created on {{$sonChallenge->created_at}}</span></a>
                         </p>
                 </div>
 

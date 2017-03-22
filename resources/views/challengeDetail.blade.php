@@ -2,6 +2,11 @@
 
 @section('header')
 
+    <meta property="og:image" content="{{ asset('img/categories/'.nameToUrl($challenge->category))}}" />
+
+    <meta property="og:description" content="{{$challenge->description}}" />
+    <meta property="og:title" content="{{$challenge->title}}" />
+
 <link href="{{ asset('css/dropzone.min.css') }}" rel="stylesheet">
 <style>
 

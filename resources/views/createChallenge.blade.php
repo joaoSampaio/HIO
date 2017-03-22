@@ -107,10 +107,10 @@ label.custom-select {
     background: #eb1946 !important;
 }
 .btn-create-hio{
-    width: 245px;
+    width: 100%;
 }
 .btn-cancel-hio{
-    width: 245px;
+    width: 100%;
 }
 
 @media (min-width: 992px){
@@ -155,8 +155,25 @@ label.custom-select {
 	width: 40px;
 	height: 40px;
 	display: inline-block;
-	margin-left: 20px;
-	margin-right: 20px;
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
+@media (max-width: 500px){
+    .ch-grid li {
+
+    	margin-left: 0px;
+    	margin-right: 10px;
+    }
+    .dropdown-menu {
+        position: absolute;
+        top: -100%;
+        max-width: 250px;
+        }
+
+        #participants .select2-container {
+                          width: 244px !important;
+                      }
 }
 
 .ch-item {
@@ -325,6 +342,7 @@ input[type=radio]:checked ~ .inside::before {
 width: 50px;
     height: 50px;
     padding: 0px;
+        background: #e7e7e7;
 }
 
 #participants li{
@@ -401,12 +419,12 @@ body:after{
 display: none;
 }
 
-.show-friends:before{
+.friends-grid:before{
     content: '';
     position: absolute;
     top: 20px;
-    left: -1000px;
-    width: 2200px;
+    left: 0;
+        width: 100%;
     height: 1px;
     background: #C1C5C8;
     z-index: -1;
@@ -454,7 +472,7 @@ width: 2em;
                 <div class="col-md-offset-1 col-md-10 col-sm-12 col-xs-12 personal-info">
                     {!! Form::open(array('action' => array('HomeController@storeChallenge'), 'class' => 'form-horizontal', 'id' => 'form-challenge', 'autocomplete' => 'off')) !!}
 
-                        <ul class="ch-grid">
+                        <ul class="ch-grid friends-grid">
                             <li class="show-friends pointer" id="circle1">
                                 1
 
@@ -555,7 +573,7 @@ width: 2em;
 
 
                             <div class="form-group">
-                              <div class="col-lg-6 col-md-6 col-xs-6">
+                              <div class="col-lg-6 col-md-6 col-xs-12">
 
                               <label class="custom-select">
                                     {!! Form::select('category', $category,'teste',array('required', 'data-parsley-required-message'=>'*information required', 'class'=>'form-control create-input')) !!}
@@ -578,15 +596,13 @@ width: 2em;
                                     <ul class="" id="participants" style="padding: 0px">
                                         <li class=" dropdown" id="dropdown-add-user" style="padding: 0px">
 
-                                            <button type="button" id="add-user" class="btn img-circle participants-dim"><i class="fa fa-plus" aria-hidden="true"></i></button>
                                             <ul class="dropdown-menu " id="menu-add-user" role="menu" aria-labelledby="add-user">
+                                                <div class="notifications-wrapper" id="add-user-search" style="    width: 350px;">
+                                                    {!! Form::select('emailFriendTeste[]', array(),null,array('id'=>'friends-cha-teste', 'class'=>'form-control js-data-user-select2', 'multiple'=>'multiple')) !!}
+                                                </div>
+                                            </ul>
+                                            <button type="button" id="add-user" class="btn img-circle participants-dim"><i class="fa fa-plus" aria-hidden="true"></i></button>
 
-
-                                            <div class="notifications-wrapper" id="add-user-search" style="    width: 350px;">
-                                        {!! Form::select('emailFriendTeste[]', array(),null,array('id'=>'friends-cha-teste', 'class'=>'form-control js-data-user-select2', 'multiple'=>'multiple')) !!}
-
-                                            </div>
-                                        </ul>
                                         </li>
 
 
@@ -946,7 +962,7 @@ $(function () {
       .eq(index)
         .addClass('current');
     // Show only the navigation buttons that make sense for the current section:
-    $('#back_control').toggle(index >= 0);
+    $('#back_control').toggle(index > 0);
 
 
     var atTheEnd = index >= $sections.length - 1;

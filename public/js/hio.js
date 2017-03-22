@@ -26,11 +26,10 @@ $.ajax({
         if (number > 0) {
             $('.badge-notify').html(number);
             $('.badge-notify').show();
-            jQuery(document).ready(function() {
-                jQuery("time.timeago").timeago();
-            });
         }
-
+        jQuery(document).ready(function() {
+            jQuery("time.timeago").timeago();
+        });
 
 
         $('.notification-item a').click(function (event){

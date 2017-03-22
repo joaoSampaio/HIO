@@ -93,7 +93,7 @@ class SonChallengeController extends Controller {
                 })
                 ->leftJoin('proof_approval as proofs_total', 'proofs_total.proof_id','=', 'files.id')
                 ->select('users.name', 'files.*','proof_approval.judgment',
-                    'challenges.title', 'challenges.uuid', 'challenges.deadLine',
+                    'challenges.title', 'challenges.description', 'challenges.uuid', 'challenges.deadLine',
                     'challenges.id as id_challenge', 'challenges.judged',
                     DB::raw('SUM(CASE WHEN proofs_total.judgment >= 0 THEN 1 ELSE 0 END) AS positive'),
                     DB::raw('SUM(CASE WHEN proofs_total.judgment < 0 THEN 1 ELSE 0 END) AS negative'))
@@ -105,7 +105,7 @@ class SonChallengeController extends Controller {
                 ->join('users', 'files.user_id', '=', 'users.id')
                 ->leftJoin('proof_approval as proofs_total', 'proofs_total.proof_id','=', 'files.id')
                 ->select('users.name', 'files.*',DB::raw('0 as judgment'),
-                    'challenges.title', 'challenges.uuid', 'challenges.deadLine',
+                    'challenges.title', 'challenges.description', 'challenges.uuid', 'challenges.deadLine',
                     'challenges.id as id_challenge', 'challenges.judged',
                     DB::raw('SUM(CASE WHEN proofs_total.judgment >= 0 THEN 1 ELSE 0 END) AS positive'),
                     DB::raw('SUM(CASE WHEN proofs_total.judgment < 0 THEN 1 ELSE 0 END) AS negative'))
