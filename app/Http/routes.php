@@ -83,6 +83,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('ended-challenges/{id}', 'UserProfileController@getUserEndedChallenges');
     Route::get('my-challenges/{id}', 'UserProfileController@getUserCreatedChallenges');
     Route::get('ongoing-challenges/{id}', 'UserProfileController@getUserOngoingChallenges');
+
+
+    Route::get('all-challenges', 'HomeController@getAllChallenges');
     Route::get('ended-challenges', 'HomeController@getEndedChallenges');
     Route::get('ongoing-challenges', 'HomeController@getOngoingChallenges');
 

@@ -114,35 +114,9 @@ class SonChallengeController extends Controller {
         }
 
 
-
         if($sonChallenge == null){
             abort(404, 'Challenge has ended');
         }
-
-
-
-
-//        if (Auth::check() && Auth::user()->id != $sonChallenge->user_id){
-//            $hasJudged = Cache::rememberForever('has-judged-'.Auth::user()->id.'-'.$file_id, function() use ($file_id) {
-//                return ProofApproval::getProofApproval(Auth::user()->id, $file_id) != null;
-//            });
-//            if(!$hasJudged){
-//                $now = Carbon::now();
-//
-//                $deadLine = Carbon::parse($sonChallenge->deadLine);
-//                $deadLine = $deadLine->addHours(24);
-//                $isValid = $now < $deadLine;
-//
-//                if($isValid){
-//                    $canApprove = true;
-//                }else{
-//                    Cache::forget('has-judged-'.Auth::user()->id.'-'.$file_id);
-//                    Cache::forever('has-judged-'.Auth::user()->id.'-'.$file_id, true);
-//                }
-//
-//            }
-//        }
-
 
         $userViews = Cache::rememberForever('views-proof-'.$file_id, function() use ($file_id) {
             return FileViews::where('file_id', $file_id)->count();

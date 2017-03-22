@@ -51,7 +51,7 @@ class HomeController extends Controller
 
     private function getPageTotal()
     {
-        return 6;
+        return 5;
     }
 
 
@@ -732,43 +732,21 @@ class HomeController extends Controller
     public function showChallenges($category = null)
     {
 
-        $now = Carbon::now();
-        $endedChallenges = DB::table('challenges')
-            ->where(function ($query) {
-                $now = Carbon::now();
-                $query->where('closed', '=', 1)
-                    ->orWhere('deadLine', '<', $now);
-            })
-            ->when($category, function ($query) use ($category) {
-                return $query->where('category', 'like', $category);
-            })
-            ->where('public', '=', 1)
-            ->orderBy('deadLine', 'desc')
-            ->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ended', $page = null);
+        $endedChallenges = $this->getEndedChallengesHelper($category);
+        $ongoingChallenges = $this->getOngoingChallengesHelper($category);
+        $allChallenges = $this->getAllChallengesHelper($category);
 
-
-        $ongoingChallenges = DB::table('challenges')->where('closed', '=', 0)
-            ->where('deadLine', '>', $now)
-            ->where('public', '=', 1)
-            ->when($category, function ($query) use ($category) {
-                return $query->where('category', 'like', $category);
-            })
-            ->orderBy('deadLine', 'asc')
-            ->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ongoing', $page = null);
-
-//
         return view('challenges')->with('challenges', $ongoingChallenges)
-            ->with('endedChallenges', $endedChallenges);
-
-
+            ->with('endedChallenges', $endedChallenges)
+            ->with('allChallenges', $allChallenges);
     }
 
-
-    public function getOngoingChallenges()
-    {
-
+    protected function getOngoingChallengesHelper($cat = null){
+        if($cat != null)
+            $category = $cat;
+        else
+            $category = \Illuminate\Support\Facades\Input::get('category');
         $now = Carbon::now();
-        $category = \Illuminate\Support\Facades\Input::get('category');
         $ongoingChallenges = Challenge::where('closed', '=', 0)
             ->when($category, function ($query) use ($category) {
                 return $query->where('category', 'like', $category);
@@ -777,19 +755,17 @@ class HomeController extends Controller
             ->where('public', '=', 1)
             ->orderBy('deadLine', 'asc')
             ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ongoing', $page = null);
-
-
-        return json_encode(view('partials.challenge')->with('challenges', $ongoingChallenges)->render());
-
+        return $ongoingChallenges;
     }
 
-    public function getEndedChallenges()
+    protected function getEndedChallengesHelper($cat = null)
     {
-
+        if($cat != null)
+            $category = $cat;
+        else
+            $category = \Illuminate\Support\Facades\Input::get('category');
         $now = Carbon::now();
-        $category = \Illuminate\Support\Facades\Input::get('category');
-        $endedChallenges = Challenge::where(function ($query) {
-            $now = Carbon::now();
+        $endedChallenges = Challenge::where(function ($query) use ($now) {
             $query->where('closed', '=', 1)
                 ->orWhere('deadLine', '<', $now);
         })
@@ -800,9 +776,57 @@ class HomeController extends Controller
             ->orderBy('deadLine', 'desc')
             ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ended', $page = null);
 
+        return $endedChallenges;
 
+    }
+
+    protected function getAllChallengesHelper($cat = null)
+    {
+        if($cat != null)
+            $category = $cat;
+        else
+            $category = \Illuminate\Support\Facades\Input::get('category');
+        $allChallenges = Challenge::where('public', '=', 1)
+            ->when($category, function ($query) use ($category) {
+                return $query->where('category', 'like', $category);
+            })
+            ->orderBy('deadLine', 'desc')
+            ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'all', $page = null);
+        return $allChallenges;
+    }
+
+    public function getOngoingChallenges()
+    {
+        $ongoingChallenges = $this->getOngoingChallengesHelper();
+        return json_encode(view('partials.challenge')->with('challenges', $ongoingChallenges)->render());
+
+    }
+
+    public function getEndedChallenges()
+    {
+        $endedChallenges = $this->getEndedChallengesHelper();
         return json_encode(view('partials.challenge')->with('challenges', $endedChallenges)->render());
+    }
 
+    public function getAllChallenges()
+    {
+        $allChallenges = $this->getAllChallengesHelper();
+        return json_encode(view('partials.challenge')->with('challenges', $allChallenges)->render());
+
+    }
+
+
+    protected function getAllProofsHelper(){
+        $proofs = DB::table('files')
+            ->where('is_ready','=', 1)
+            ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
+            ->leftJoin('proof_approval as proofs_total', 'proofs_total.proof_id','=', 'files.id')
+            ->select('files.*','challenges.uuid','challenges.title',
+                'challenges.judged', 'challenges.description')
+
+            ->orderBy('files.created_at', 'desc')
+            ->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'all-proofs', $page = null);
+        return $proofs;
     }
 
 

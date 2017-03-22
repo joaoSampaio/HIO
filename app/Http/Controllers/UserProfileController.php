@@ -569,11 +569,6 @@ class UserProfileController extends Controller
             {
                 $current_password = Auth::User()->password;
 
-//                echo "<br>".$request_data['current-password'];
-//                echo "<br>".$current_password;
-//                echo "<br>".bcrypt($request_data['current-password']);;
-//                echo "<br>".Hash::check($request_data['current-password'], $current_password);
-
                 if(Hash::check($request_data['current-password'], $current_password))
                 {
                     $user_id = Auth::User()->id;
@@ -585,9 +580,7 @@ class UserProfileController extends Controller
                 else
                 {
                     $validator->errors()->add('current-password', 'Please enter correct current password');
-//                    $error = array('current-password' => 'Please enter correct current password');
                     return redirect()->back()->withErrors($validator)->withInput();
-//                    return response()->json(array('error' => $error), 400);
                 }
             }
         }

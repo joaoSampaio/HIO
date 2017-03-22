@@ -159,7 +159,8 @@ class SocialAuthController extends Controller
             'gender' => $request->input('gender'),
             'facebook_token' => $request->input('facebook_token'),
             'birthday' => $request->input('birthday'),
-            'location' => $request->input('location')
+            'location' => $request->input('location'),
+            'activated' => true,
         ]);
 
         Auth::login($authUser, true);
@@ -202,7 +203,8 @@ class SocialAuthController extends Controller
                 'facebook_token' => $fbUser->token,
                 'birthday' => $birthday,
                 'activated' => true,
-                'location' => $location
+                'location' => $location,
+                'activated' => true
             ]);
         }else{
             return User::create([
@@ -211,7 +213,8 @@ class SocialAuthController extends Controller
                 'facebook_id' => $fbUser->id,
                 'activated' => true,
                 'gender' => $fbUser->user['gender'],
-                'facebook_token' => $fbUser->token]);
+                'facebook_token' => $fbUser->token,
+                'activated' => true]);
         }
     }
 

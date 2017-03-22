@@ -1731,7 +1731,32 @@ footer[role="contentinfo"] {
     display: none;
 }
 
+.btn-tab-challenge  {
+    border-color: #C1C5C8;
+    background: #C1C5C8;
+    padding: 5px 25px !important;
+    color: white;
+    margin-top: 25px;
+    font-weight: 800;
+    margin-right: 5px;
+    margin-left: 5px;
+    font-size: 12px;
+}
 
+.btn-tab-challenge.active  {
+    border-color: #eb1946;
+    background: #eb1946;
+    color: white;
+    margin-top: 25px;
+    font-weight: 800;
+}
+
+.btn-tab-challenge:hover  {
+    border-color: #eb1946;
+    background: #eb1946;
+    padding: 10px 50px;
+    color: white;
+}
 
 
 

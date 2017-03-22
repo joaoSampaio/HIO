@@ -31,46 +31,48 @@ color: #eb1946;
     text-transform: uppercase;
 }
 
-.full-width-tabs > ul.nav.nav-tabs {
-            display: table;
-            width: 100%;
-            table-layout: fixed;
-        }
-        .full-width-tabs > ul.nav.nav-tabs > li {
-            float: none;
-            display: table-cell;
-        }
-        .full-width-tabs > ul.nav.nav-tabs > li > a {
-            text-align: center;
-        }
-        .nav-tabs {
-            border-bottom: 0px solid #ddd;
-        }
-
-.challenge-item-info{
-    border: 1px solid #807c7c;
+.nav-tabs > li, .nav-pills > li {
+    float:none;
+    display:inline-block;
+    *display:inline; /* ie7 fix */
+    zoom:1; /* hasLayout ie7 trigger */
 }
 
-.take-all-space-you-can{
-        width:100%;
-        background-color: #f7f7f7 !important;
-    }
-
-.take-all-space-you-can.active a{
-        background-color: #ffffff !important;
-        color: #eb1946 !important;
-}
-
-.take-all-space-you-can a{
-        color: #555 !important;
+.nav-tabs, .nav-pills {
+    text-align:center;
 }
 
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
-    color: #555;
+    color: #eb1946;;
     cursor: default;
     background-color: #fff;
-    border: 1px solid #ddd;
+    border: 0px solid #ddd;
     border-bottom-color: transparent;
+}
+
+
+.challenge-selector{
+    background-color: #f7f7f7;
+    border-bottom: 0px solid #ddd;
+}
+
+
+
+.challenge-selector a{
+    color: #43484c;;
+    cursor: default;
+    border: 0px solid #ddd;
+    border-bottom-color: transparent;
+    font-weight: 400;
+}
+
+.challenge-selector .active a{
+    color: #eb1946;;
+    cursor: default;
+    background-color: #fff;
+    border: 0px solid #ddd;
+    border-bottom-color: transparent;
+    font-weight: 400;
 }
 
 
@@ -99,6 +101,12 @@ blockquote p {
   display: inline;
 }
 
+.challenge-item-info{
+    /*border: 1px solid #807c7c;*/
+    /*box-shadow: 0 5px 15px rgba(0,0,0,.5);*/
+    box-shadow: 0px 0px 68px 0px rgba(0, 0, 0, 0.2);
+}
+
 
 </style>
 @endsection
@@ -113,7 +121,7 @@ blockquote p {
 
 
     <!-- Portfolio Grid Section -->
-    <section id="portfolio" style="    padding-top: 170px;">
+    <section id="portfolio" style="background-color: #f7f7f7;    padding-top: 170px;">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -136,62 +144,59 @@ blockquote p {
 
 
 
-<div>
-    <div class="tabbable full-width-tabs">
-        <ul class="nav nav-tabs">
-            <li class="active take-all-space-you-can">
-                <a href="#ongoing" aria-controls="ongoing" data-toggle="tab">
-                    <h3>{{$challenges->total()}}</h3>
-                    <h4 class="text-capitalize">Active</h4>
-                </a>
-            </li>
-            <li class="take-all-space-you-can">
-                <a href="#ended" aria-controls="ended" data-toggle="tab">
-                    <h3>{{$endedChallenges->total()}}</h3>
-                    <h4 class="text-capitalize">Completed</h4>
-                </a>
-            </li>
-        </ul>
-    </div>
+<ul class="nav nav-tabs challenge-selector" >
+    <li class="active"><a data-toggle="tab" href="#menu-challenges">CHALLENGES</a></li>
+    <li><a data-toggle="tab" href="#menu-proofs">PROOFS</a></li>
+</ul>
 
-</div>
-<section >
+
+
+
+
+<div class="tab-content">
+    <section id="menu-challenges"  style="padding-top: 0px;" class="tab-pane fade in active" >
     <div class="container">
         <div class="row" id="latest">
+
+            <div style="text-align: center">
+                <div class="col-md-12" style="display: inline-block;margin-bottom: 100px;margin-top: 25px;">
+                    <a class="btn btn-tab-challenge active" href="#ongoing" aria-controls="ongoing" data-toggle="tab">ON GOING</a>
+                    <a class="btn btn-tab-challenge" href="#ended" aria-controls="ended" data-toggle="tab">FINISHED</a>
+                    <a class="btn btn-tab-challenge" href="#all-challenges" aria-controls="mychallenges" data-toggle="tab">ALL</a>
+                </div>
+            </div>
 
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="ongoing">
 
-                    <div class="">
-                        @foreach ($challenges as $challenge)
-                            @include('partials.single_challenge')
-                        @endforeach
-                    </div>
+                    @include('partials.challenge', array('challenges' => $challenges))
 
-                    <div class="">
-                        {!! $challenges->links() !!}
-                    </div>
 
 
                 </div>
                 <div role="tabpanel" class="tab-pane" id="ended">
 
-                    <div class="">
-                        @foreach ($endedChallenges as $challenge)
-                            @include('partials.single_challenge')
-                        @endforeach
-                    </div>
-                    <div class="">
-                        {!! $endedChallenges->links() !!}
-                    </div>
+                    @include('partials.challenge', array('challenges' => $endedChallenges))
+
 
                 </div>
-              </div>
+
+                <div role="tabpanel" class="tab-pane" id="all-challenges">
+
+                    @include('partials.challenge', array('challenges' => $allChallenges))
+
+
+                </div>
+            </div>
 
 
         </div>
     </div>
+
+
 </section>
+    <section id="menu-proofs" style="padding-top: 0px;" class="tab-pane fade" ></section>
+</div>
 
 
 <div class="modal fade" id="create-challenge" tabindex="-1" role="dialog" aria-labelledby="modalHome" aria-hidden="true">
@@ -212,14 +217,38 @@ blockquote p {
         </div>
     </div>
 </div>
+@endsection
 
+
+@section('modal')
+    <div class="modal fade" id="create-challenge" tabindex="-1" role="dialog" aria-labelledby="modalHome" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header-create">
+                    <button type="button" class="close" style="font-size: 40px;font-weight: 300;" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="create-challenge-title" id="modalHome">Create Challenge</h4>
+                </div>
+
+                <div class="modal-body">
+                    <span id="create-spin" class="glyphicon glyphicon-refresh spinning"></span>
+                    <iframe id="create-challenge-iframe" src="" style="" width="99.6%" frameborder="0"></iframe>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 @endsection
+
+
+
 
 @section('footer')
 
 <script>
-    $('#openCreate').click(function(){
+    $('.openCreate').click(function(){
 
         $('#create-challenge').on('shown.bs.modal', function() {
             $('#create-challenge-iframe').attr("src","/new/challenge");
@@ -263,16 +292,39 @@ blockquote p {
             e.preventDefault();
         });
 
+        $(document).on('click', '#all-challenges .pagination a', function (e) {
+
+            var url = '/all-challenges?all='+$(this).attr('href').split('all=')[1];
+
+            var s = window.location.href.split('/');
+            var category = s[s.length-1];
+            category = category.split('?')[0];
+            if(category != "challenges")
+                url+= "&&category="+category
+
+
+            getAllChallenges(url);
+            e.preventDefault();
+        });
+
     });
+
+    function getAllChallenges( url) {
+        $.ajax({
+            url : url,
+            dataType: 'json'
+        }).done(function (data) {
+            $('#all-challenges').html(data);
+        }).fail(function () {
+        });
+    }
     function getEndedChallenges( url) {
         $.ajax({
             url : url,
             dataType: 'json'
         }).done(function (data) {
             $('#ended').html(data);
-//            location.hash = page;
         }).fail(function () {
-            alert('Posts could not be loaded.');
         });
     }
 
@@ -329,6 +381,16 @@ blockquote p {
     var num = Math.floor(Math.random() * quotes.length)
     $('.quotes').text(quotes[num]);
     </script>
+<script>
+
+    $('.btn-tab-challenge').on('click', function (e) {
+        $('.btn-tab-challenge').removeClass('active');
+        $(e.currentTarget).addClass('active');
+    })
+
+
+
+</script>
 
 
 @endsection
