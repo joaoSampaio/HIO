@@ -85,6 +85,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('ongoing-challenges/{id}', 'UserProfileController@getUserOngoingChallenges');
 
 
+    Route::get('all-proofs', 'HomeController@getAllProofs');
+    Route::get('ongoing-proofs', 'HomeController@getOngoingProofs');
+    Route::get('ended-proofs', 'HomeController@getEndedProofs');
     Route::get('all-challenges', 'HomeController@getAllChallenges');
     Route::get('ended-challenges', 'HomeController@getEndedChallenges');
     Route::get('ongoing-challenges', 'HomeController@getOngoingChallenges');

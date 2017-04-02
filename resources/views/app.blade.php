@@ -187,8 +187,12 @@ background-color: #e91e63;
     background: rgba(0, 0, 0, 0.1);
 }
 
-
-
+@media (max-width: 768px){
+    .openCreate{
+        margin-left: 8.33333333%;
+        width: 83.33333333%;
+    }
+}
 
 
 

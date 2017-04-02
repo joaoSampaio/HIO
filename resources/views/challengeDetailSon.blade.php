@@ -1,6 +1,46 @@
-@extends('app')
+<!DOCTYPE html>
+<html lang="en">
 
-@section('header')
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+
+    <title>HIO - Challenge Your Friends</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/agency.css') }}" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="{{ asset('font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto:700,900,200,300,400,500' rel='stylesheet' type='text/css'>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+
+    <![endif]-->
+
+
+
+
+
+
+    {{--    <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">--}}
+
+
+    <link href="{{ asset('css/s2-docs.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/hio.css') }}" rel="stylesheet">
 
     @if($sonChallenge->type == 1)
         <meta property="og:image" content="{{ asset('uploads/challenge/'. pathinfo(asset('uploads/challenge/'. $sonChallenge->filename), PATHINFO_FILENAME) . '.jpg')  }}" />
@@ -8,8 +48,6 @@
         <meta property="og:image" content="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" />
     @endif
     <meta property="og:description" content="{{$sonChallenge->description}}" />
-
-    {{--<meta property="og:url"content="http://www.coachesneedsocial.com/coacheswisdomtelesummit/" />--}}
 
     <meta property="og:title" content="{{$sonChallenge->title}}" />
 
@@ -173,39 +211,93 @@ font-size: 22px;text-align: center;
     box-shadow: 0 0 2px #c00;
 }
 
+.name-user-proof{
+    font-size: 20px;
+    color: rgb(64, 77, 87);
+    font-weight: bold;
+      line-height: 1.2;
+      text-align: left;
+      margin-bottom: 4px;
+}
+.date-proof{
+    font-size: 16px;
+    color: #acaeb0;
+    font-weight: normal;
+      line-height: 1.2;
+      text-align: left;
+      margin-bottom: 10px;
+}
+
+.proof-views {
+  font-size: 16px;
+  font-family: "Roboto";
+  color: #b2b2b2;
+  line-height: 1.945;
+  text-align: left;
+  font-weight: 400;
+
+}
+
+
+.vote-btn{
+  text-transform: uppercase;
+  line-height: 2.393;
+  text-align: left;
+  font-family: "Roboto";
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  background-color: #eb1946;
+  padding: 5px 20px;
+}
+
+.aprove-btn{
+  text-transform: uppercase;
+  line-height: 2.393;
+  text-align: left;
+  font-family: "Roboto";
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  padding: 5px 20px;
+}
+
+.aprove-btn{
+    background-color: #eb1946;
+}
+.dislike-btn{
+    background-color: #b2b2b2;
+}
+
+.num-approve{
+font-weight: 400;
+font-size: 22px;
+color: rgb(178, 178, 178);
+text-align: center;
+line-height: 1.296;
+margin-top: 10px;
+
+}
+
+section{
+    margin-top: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+body:after {
+    display: none;
+}
+
 </style>
 
-@endsection
+</head>
 
-@section('content')
+<body style="background-color: white">
 
-<!-- Header -->
-
-{{--<script>(function(d, s, id) {--}}
-                      {{--var js, fjs = d.getElementsByTagName(s)[0];--}}
-                      {{--if (d.getElementById(id)) return;--}}
-                      {{--js = d.createElement(s); js.id = id;--}}
-                      {{--js.src = "//connect.facebook.net/pt_PT/sdk.js#xfbml=1&version=v2.5&appId=948239501878979";--}}
-                      {{--fjs.parentNode.insertBefore(js, fjs);--}}
-                    {{--}(document, 'script', 'facebook-jssdk'));</script>--}}
-
-
-
-{{--{{$sonChallenge->id_challenge}}--}}
     <!-- Portfolio Grid Section -->
-    <section  style="margin-top: 80px">
+    <section >
         <div class="container" id="list-proofs">
-            <div class="row col-md-8 col-md-offset-2" >
-                <div class="col-lg-12 {{$sonChallenge->judged == true? $sonChallenge->approved == true? 'approved': 'rejected' : 'nnn'}}" id="approved-logo">
-                    <div style=" font-size: 22pt;">
-                        <a href="/challenge/{{$sonChallenge->uuid}}" class="" title="{{$sonChallenge->title}}" style="color: #333;text-decoration: none;">
-                            <i class="fa fa-chevron-circle-left" style=" font-size: 44pt;vertical-align: middle;" aria-hidden="true"></i>   Back to
-                            <a href="/challenge/{{$sonChallenge->uuid}}" class="" title="{{$sonChallenge->title}}">{{$sonChallenge->title}}</a>
-                        </a>
-                    </div>
+            <div class="row col-md-8 col-md-offset-2" style="    padding: 40px;" >
 
-                </div>
-                <div class="col-lg-12 text-center">
+                <div class="col-lg-12 text-center {{$sonChallenge->judged == true? $sonChallenge->approved == true? 'approved': 'rejected' : 'nnn'}}" id="approved-logo"">
 
                     @if($sonChallenge->is_ready)
 
@@ -214,7 +306,6 @@ font-size: 22px;text-align: center;
                             <video id="my-video" class="video-js vjs-fluid vjs-big-play-centered" controls preload="auto" width="100%" height="480"
                               poster="{{ asset('uploads/challenge/'. pathinfo(asset('uploads/challenge/'. $sonChallenge->filename), PATHINFO_FILENAME) . '.jpg')  }}" data-setup="{}" style="width: 100%">
                                 <source src="{{ asset('uploads/challenge/'. $sonChallenge->filename)}}" type='video/mp4'>
-                                {{--<source src="MY_VIDEO.webm" type='video/webm'>--}}
                                 <p class="vjs-no-js">
                                   To view this video please enable JavaScript, and consider upgrading to a web browser that
                                   <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
@@ -237,113 +328,129 @@ font-size: 22px;text-align: center;
 
                 </div>
 
-                <div class="col-xs-12 col-md-12" style="margin-bottom: 20px;padding: 0px;">
+            <div class="col-xs-12 col-md-12" style="margin-bottom: 20px;margin-top: 40px;">
 
+                <div>
+                    <a style="padding-top: 0px; float: left;margin-right: 25px;" href="{{"/profile/".$sonChallenge->user_id}}">
+                        <img src="{{'/user/photo/'. $sonChallenge->user_id }}" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle" style="height: 50px; width: 50px">
+                    </a>
 
-                    @if($sonChallenge->judgment != NULL)
-                        <p class="post-meta" data-voted-{{$sonChallenge->id}}="{{($sonChallenge->judgment != NULL && $sonChallenge->judgment == 1)? "1" : "-1"}}">
-                    @else
-                        <p class="post-meta" data-voted-{{$sonChallenge->id}}="0">
+                    <div style="float: left">
+                        <p class="name-user-proof">{{getFirstLastName($sonChallenge->name)}}</p>
+                        <p class="date-proof"><span class="">{{$sonChallenge->created_at}}</span></p>
+                        <p class="proof-views">
+                            <span>{{$userViews}}<i class="fa fa-eye pointer " style="margin-left: 5px" ></i></span>
 
-                            @endif
-                            <a class="badge-evt point">
-                                <span id="like-count-{{$sonChallenge->id}}" class="badge-item-like-count">{{$sonChallenge->positive}}</span> Up</a> ·
-                            <a class="badge-evt point">
-                                <span id="dislike-count-{{$sonChallenge->id}}" class="badge-item-dislike-count">{{$sonChallenge->negative}}</span> Down</a> ·
-
-                            <a class="badge-evt point">
-                                <span id="dislike-count-{{$sonChallenge->id}}" class="badge-item-dislike-count">{{$userViews}}</span> Views</a> ·
-
-                            <a class="comment badge-evt" href="#comment">0 comments</a> ·
-
-                            <a class="badge-evt point">
-                                <span class="">Created on {{$sonChallenge->created_at}}</span></a>
+                            <span style="float: right">
+                                <span class="disqus-comment-count" data-disqus-identifier="{{$sonChallenge->uuid . " ".$sonChallenge->id}}"></span><i class="fa fa-comments pointer " style="margin-left: 5px" ></i>
+                            </span>
                         </p>
-                </div>
-
-                <div class="col-md-12 col-xs-12" style="margin-bottom: 20px;padding: 0px;">
-
-                    @if(Auth::check() && $sonChallenge->user_id != Auth::user()->id)
-
-                    <p>You are the judge!</p>
-                    <p style="font-size: 16px">Do you Approve
-                        <a href="{{"/profile/".$sonChallenge->user_id}}" class="" title="" style="color: #333;text-decoration: underline;">{{getFirstLastName($sonChallenge->name)}}</a>
-                        ´s challenge or is it a Fail?
-                    </p>
-                    @endif
-
-
-                    <div class="badge-item-vote-container post-afterbar-a in-list-view  " style="width: 100%">
-                        <div class="vote">
-                            <ul class="btn-vote left">
-                                {{--@if(false)--}}
-                                @if(Auth::check() && $sonChallenge->user_id == Auth::user()->id)
-                                    <li><a href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}" class="your-proof">Your proof</a></li>
-                                @else
-                                    <li><a href="javascript:void(0);" class="badge-item-vote-up up like {{($sonChallenge->judgment != NULL && $sonChallenge->judgment == 1)? "active" : ""}}" data-proof-id="{{$sonChallenge->id}}">Upvote</a></li>
-                                    <li><a href="javascript:void(0);" class="badge-item-vote-down down dislike {{($sonChallenge->judgment != NULL && $sonChallenge->judgment == -1)? "active" : ""}}" data-proof-id="{{$sonChallenge->id}}">Downvote</a></li>
-                                @endif
-                                <li><a class="comment badge-evt badge-item-comment" href="#comment">Comment</a></li>
-
-                            </ul>
-                        </div>
-                        <div class="share right">
-                            <ul>
-                                <li><a href="javascript:void(0);" class="badge-facebook-share badge-evt badge-track btn-share facebook" data-track="social,fb.s,,,d,aebrrNQ,l" data-evt="PostList,ShareSocial,Fresh,,FacebookButton" data-entry-id="aebrrNQ" data-position="9" data-share="http://9gag.com/gag/aebrrNQ?ref=fb.s" rel="nofollow">Facebook</a></li>
-
-                                <li><a href="javascript:void(0);" class="badge-twitter-share badge-evt badge-track btn-share twitter" data-track="social,t.s,,,d,aebrrNQ,l" data-evt="PostList,ShareSocial,Fresh,,TwitterButton" data-title="How%20I%20feel%20after%20watching%20HIMYM%20or%20any%20other%20good%20show" data-entry-id="aebrrNQ" data-position="9" data-share="http://9gag.com/gag/aebrrNQ?ref=t" rel="nofollow">Twitter</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="clearfix"></div>
                     </div>
 
-                     {{--<div class="col-md-12 col-xs-12 judge-info alert-hio" id="list-proofs">--}}
-
-
-                        {{----}}
-                     {{--</div>--}}
+                    @if($sonChallenge->judgment != NULL)
+                        <div style="float: right" data-voted-{{$sonChallenge->id}}="{{($sonChallenge->judgment != NULL && $sonChallenge->judgment == 1)? "1" : "-1"}}">
+                    @else
+                        <div style="float: right" data-voted-{{$sonChallenge->id}}="0">
+                    @endif
+                         @if(Auth::check() && $sonChallenge->user_id == Auth::user()->id)
+                            <div style="float: left;margin-right: 20px;">
+                                <p class="num-approve">Your proof</p>
+                            </div>
+                         @else
+                            <div style="float: left;margin-right: 20px;">
+                                <button class="btn vote-btn aprove-btn like" data-proof-id="{{$sonChallenge->id}}"><i class="fa fa-trophy" style="margin-right: 5px" aria-hidden="true"></i> Aproved</button>
+                                <p class="num-approve"><span id="like-count-{{$sonChallenge->id}}" >{{$sonChallenge->positive}}</span></p>
+                            </div>
+                            <div style="float: right">
+                                <button class="btn vote-btn dislike-btn dislike" style="float: initial;" data-proof-id="{{$sonChallenge->id}}"><i class="fa fa-thumbs-down" style="margin-right: 5px" aria-hidden="true"></i> Not Yet</button>
+                                <p class="num-approve"><span id="dislike-count-{{$sonChallenge->id}}">{{$sonChallenge->negative}}</span></p>
+                            </div>
+                        @endif
+                    </div>
                 </div>
-
-                {{--<div class="col-lg-12 col-md-12 col-xs-12 title-proof">--}}
-                    {{--<a href="{{"/profile/".$sonChallenge->user_id}}" class="" title="" style="color: #333;text-decoration: none;">{{$sonChallenge->name }}--}}
-                    {{--</a>--}}
-                    {{--<a href="/challenge/{{$sonChallenge->uuid}}" class="" title="{{$sonChallenge->title}}">{{$sonChallenge->title}}</a>--}}
-
-
-
-                    {{--<i id="vote" class="fa {{$hasLiked? 'fa-heart' : 'fa-heart-o pointer'}} primary" style="margin-left: 50px;margin-right: 15px;"></i><span id="likes_num">{{$sonChallenge->likes}}</span>--}}
-
-                    {{--<i class="fa fa-eye primary" style="margin-left: 35px;margin-right: 15px;"></i> <span style="text-transform: none;">{{$userViews}} Views</span>--}}
-                {{--</div>--}}
 
             </div>
 
 
+            {{--<div class="col-xs-12 col-md-12" style="margin-bottom: 20px;">--}}
 
 
+                {{--@if($sonChallenge->judgment != NULL)--}}
+                    {{--<p class="post-meta" data-voted-{{$sonChallenge->id}}="{{($sonChallenge->judgment != NULL && $sonChallenge->judgment == 1)? "1" : "-1"}}">--}}
+                {{--@else--}}
+                    {{--<p class="post-meta" data-voted-{{$sonChallenge->id}}="0">--}}
 
+                {{--@endif--}}
+                        {{--<a class="badge-evt point">--}}
+                            {{--<span id="like-count-{{$sonChallenge->id}}" class="badge-item-like-count">{{$sonChallenge->positive}}</span> Up</a> ·--}}
+                        {{--<a class="badge-evt point">--}}
+                            {{--<span id="dislike-count-{{$sonChallenge->id}}" class="badge-item-dislike-count">{{$sonChallenge->negative}}</span> Down</a> ·--}}
 
+                        {{--<a class="badge-evt point">--}}
+                            {{--<span id="views-count-{{$sonChallenge->id}}" class="badge-item-dislike-count">{{$userViews}}</span> Views</a> ·--}}
 
+                        {{--<a class="comment badge-evt" href="#comment">0 comments</a> ·--}}
 
-
-
-
-
-
-            {{--<div class="challenges">--}}
-                {{--@include('partials.challenge')--}}
+                        {{--<a class="badge-evt point">--}}
+                            {{--<span class="">Created on {{$sonChallenge->created_at}}</span></a>--}}
+                    {{--</p>--}}
             {{--</div>--}}
 
+            {{--<div class="col-md-12 col-xs-12" style="margin-bottom: 20px;padding: 0px;">--}}
+
+                {{--@if(Auth::check() && $sonChallenge->user_id != Auth::user()->id)--}}
+
+                {{--<p>You are the judge!</p>--}}
+                {{--<p style="font-size: 16px">Do you Approve--}}
+                    {{--<a href="{{"/profile/".$sonChallenge->user_id}}" class="" title="" style="color: #333;text-decoration: underline;">{{getFirstLastName($sonChallenge->name)}}</a>--}}
+                    {{--´s challenge or is it a Fail?--}}
+                {{--</p>--}}
+                {{--@endif--}}
+
+
+                {{--<div class="badge-item-vote-container post-afterbar-a in-list-view  " style="width: 100%">--}}
+                    {{--<div class="vote">--}}
+                        {{--<ul class="btn-vote left">--}}
+                            {{--@if(false)--}}
+                            {{--@if(Auth::check() && $sonChallenge->user_id == Auth::user()->id)--}}
+                                {{--<li><a href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}" class="your-proof">Your proof</a></li>--}}
+                            {{--@else--}}
+                                {{--<li><a href="javascript:void(0);" class="badge-item-vote-up up like {{($sonChallenge->judgment != NULL && $sonChallenge->judgment == 1)? "active" : ""}}" data-proof-id="{{$sonChallenge->id}}">Upvote</a></li>--}}
+                                {{--<li><a href="javascript:void(0);" class="badge-item-vote-down down dislike {{($sonChallenge->judgment != NULL && $sonChallenge->judgment == -1)? "active" : ""}}" data-proof-id="{{$sonChallenge->id}}">Downvote</a></li>--}}
+                            {{--@endif--}}
+                            {{--<li><a class="comment badge-evt badge-item-comment" href="#comment">Comment</a></li>--}}
+
+                        {{--</ul>--}}
+                    {{--</div>--}}
+                    {{--<div class="share right">--}}
+                        {{--<ul>--}}
+                            {{--<li><a href="javascript:void(0);" class="badge-facebook-share badge-evt badge-track btn-share facebook" data-track="social,fb.s,,,d,aebrrNQ,l" data-evt="PostList,ShareSocial,Fresh,,FacebookButton" data-entry-id="aebrrNQ" data-position="9" data-share="http://9gag.com/gag/aebrrNQ?ref=fb.s" rel="nofollow">Facebook</a></li>--}}
+
+                            {{--<li><a href="javascript:void(0);" class="badge-twitter-share badge-evt badge-track btn-share twitter" data-track="social,t.s,,,d,aebrrNQ,l" data-evt="PostList,ShareSocial,Fresh,,TwitterButton" data-title="How%20I%20feel%20after%20watching%20HIMYM%20or%20any%20other%20good%20show" data-entry-id="aebrrNQ" data-position="9" data-share="http://9gag.com/gag/aebrrNQ?ref=t" rel="nofollow">Twitter</a>--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
+                    {{--</div>--}}
+                    {{--<div class="clearfix"></div>--}}
+                {{--</div>--}}
+
+                 {{--<div class="col-md-12 col-xs-12 judge-info alert-hio" id="list-proofs">--}}
+
+
+                    {{----}}
+                 {{--</div>--}}
+            {{--</div>--}}
+
+
+        </div>
         </div>
     </section>
 
 
 
 
-    <section class="bg-light-gray" id="portfolio">
+    <section style="margin-top: 0px;" class="bg-light-gray" id="portfolio">
         <div class="container" id="comment">
-            <div class="row" >
+            <div class="" >
 
 
                 {{--<div class="col-sm-12 col-md-12 text-center">--}}
@@ -352,6 +459,8 @@ font-size: 22px;text-align: center;
 
 
                 <div id="disqus_thread"></div>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+                <script id="dsq-count-scr" src="//hiolegends.disqus.com/count.js" async></script>
                 <script>
 
                 /**
@@ -398,9 +507,8 @@ font-size: 22px;text-align: center;
     </section>
 
 
-@endsection
+</body>
 
-@section('footer')
 <script src="{{ asset('js/video.js') }}"></script>
 <script>
 
@@ -497,4 +605,3 @@ $(document).ready(function() {
 </script>
 
 
-@endsection

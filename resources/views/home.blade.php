@@ -2,8 +2,7 @@
 
 @section('header')
 
-
-
+<link href="{{ asset('css/magnific-popup.css') }}" rel="stylesheet">
 <style>
 
 
@@ -257,11 +256,51 @@ color: #eb1946;
         </div>
     </div>
 
+    <div class="modal fade" id="show-proof" tabindex="-1" role="dialog" aria-labelledby="modalHome" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                 <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <span id="spin-proof" class="glyphicon glyphicon-refresh spinning"></span>
+                    <iframe id="proof-iframe" src="" style="height: 800px" width="99.6%" frameborder="0"></iframe>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
 @endsection
 
 
 
 @section('footer')
+
+<script src="/js/jquery.magnific-popup.min.js"></script>
+<script type="text/javascript">
+  function enableProofSlider(){
+    $('.open-iframe').magnificPopup({
+      disableOn: 700,
+      type: 'iframe',
+      mainClass: 'mfp-fade',
+      removalDelay: 160,
+      preloader: false,
+      gallery: {
+        enabled: true,
+        navigateByImgClick: true,
+        preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+      },
+      fixedContentPos: false
+    });
+  }
+</script>
 
 
 
@@ -273,6 +312,10 @@ color: #eb1946;
         });
         $('#create-challenge').modal({show:true})
     });
+
+
+
+
 
 </script>
 
@@ -302,6 +345,8 @@ color: #eb1946;
         success: function(jsonData) {
           $("#mostViewed").html(jsonData);
             enableChallengeViews();
+//            enableProofModal();
+enableProofSlider();
             $('[data-toggle="tooltip"]').tooltip();
 
         },

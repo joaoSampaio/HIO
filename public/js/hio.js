@@ -315,6 +315,22 @@ function enableChallengeParticipants(){
     });
 }
 
+function enableProofModal(){
+    $('.open-iframe').unbind().click( function (e) {
+        e.stopPropagation();
+        $('#show-proof').on('shown.bs.modal', function() {
+            $('#proof-iframe').attr("src",$(e.currentTarget).attr('href'));
+        });
+        $('#show-proof').modal({show:true})
+        return false;
+    });
+}
+
+$('#proof-iframe').on('load', function(){
+    $('#spin-proof').hide();
+    console.log('load the iframe')
+});
+
 function enableChallengeViews(){
     $('.challenge-views').unbind().click(function(e){
         $('#modalHome').html("Views");

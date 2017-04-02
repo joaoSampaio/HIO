@@ -376,7 +376,6 @@ class HomeController extends Controller
                         continue;
                     }
                     $count++;
-
                     if ($count > 2) {
                         $otherPeople = $otherPeople . ' <a href="/profile/' . $people->user_id . '"> ' . $people->name . '</a>,';
                     } else {
@@ -476,7 +475,7 @@ class HomeController extends Controller
             $count = 0;
             $otherPeople = "";
             foreach( $peopleParticipating as $people){
-                if (  $people->id == $challenge->creator_id ){
+                if (  $people->user_id == $challenge->creator_id ){
                     continue;
                 }
                 $count++;
@@ -509,7 +508,7 @@ class HomeController extends Controller
                 return view('challengeDetail')->with('challenge', $challenge)->with('isValid', $isValid)
                     ->with('participating', $participating)
                     ->with('creator', $creator)->with('peopleParticipating', $peopleParticipating)
-                    ->with('sonChallenges', $sonChallenges)->with('people', $end);
+                    ->with('sonChallenges', $sonChallenges)->with('people', $end)->with('showDelete', true);
             } else {
 
                 return view('challengeDetail')->with('isPublic', $isPublic);
@@ -594,6 +593,7 @@ class HomeController extends Controller
         return json_encode(view('partials.multi_son_challenge')
             ->with('participating', $participating)
             ->with('isValid', $isValid)
+            ->with('showDelete', true)
             ->with('sonChallenges', $this->getHelperPaginatorSon($id, $participating, $isValid))->render());
 
     }
@@ -735,10 +735,17 @@ class HomeController extends Controller
         $endedChallenges = $this->getEndedChallengesHelper($category);
         $ongoingChallenges = $this->getOngoingChallengesHelper($category);
         $allChallenges = $this->getAllChallengesHelper($category);
+        $allProofs = $this->getAllProofsHelper();
+        $ongoingProofs = $this->getOngoingProofsHelper();
+        $endedProofs = $this->getEndedProofsHelper();
 
-        return view('challenges')->with('challenges', $ongoingChallenges)
+        return view('challenges')
+            ->with('challenges', $ongoingChallenges)
             ->with('endedChallenges', $endedChallenges)
-            ->with('allChallenges', $allChallenges);
+            ->with('allChallenges', $allChallenges)
+            ->with('allProofs', $allProofs)
+            ->with('ongoingProofs', $ongoingProofs)
+            ->with('endedProofs', $endedProofs);
     }
 
     protected function getOngoingChallengesHelper($cat = null){
@@ -819,14 +826,66 @@ class HomeController extends Controller
     protected function getAllProofsHelper(){
         $proofs = DB::table('files')
             ->where('is_ready','=', 1)
+            ->where('challenges.public', '=', 1)
             ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
-            ->leftJoin('proof_approval as proofs_total', 'proofs_total.proof_id','=', 'files.id')
-            ->select('files.*','challenges.uuid','challenges.title',
+            ->join('users', 'files.user_id', '=', 'users.id')
+//            ->leftJoin('proof_approval as proofs_total', 'proofs_total.proof_id','=', 'files.id')
+            ->select('files.*','users.name','challenges.uuid','challenges.title',
                 'challenges.judged', 'challenges.description')
 
             ->orderBy('files.created_at', 'desc')
-            ->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'all-proofs', $page = null);
+            ->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'all', $page = null);
         return $proofs;
+    }
+
+    public function getAllProofs()
+    {
+        $allProofs = $this->getAllProofsHelper();
+        return json_encode(view('partials.proofs')->with('proofs', $allProofs)->render());
+    }
+
+    protected function getOngoingProofsHelper(){
+        $proofs = DB::table('files')
+            ->where('is_ready','=', 1)
+            ->where('challenges.public', '=', 1)
+            ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
+            ->join('users', 'files.user_id', '=', 'users.id')
+            ->where('challenges.judged','=', 0)
+//            ->leftJoin('proof_approval as proofs_total', 'proofs_total.proof_id','=', 'files.id')
+            ->select('files.*','users.name','challenges.uuid','challenges.title',
+                'challenges.judged', 'challenges.description')
+
+            ->orderBy('files.created_at', 'desc')
+            ->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ongoing', $page = null);
+        return $proofs;
+    }
+
+    public function getOngoingProofs()
+    {
+        $ongoingProofs = $this->getOngoingProofsHelper();
+        return json_encode(view('partials.proofs')->with('proofs', $ongoingProofs)->render());
+    }
+
+    protected function getEndedProofsHelper(){
+        $proofs = DB::table('files')
+            ->where('is_ready','=', 1)
+            ->where('challenges.public', '=', 1)
+            ->join('challenges', 'challenges.id', '=', 'files.challenge_id')
+            ->join('users', 'files.user_id', '=', 'users.id')
+            ->where('challenges.judged','=', 1)
+//            ->leftJoin('proof_approval as proofs_total', 'proofs_total.proof_id','=', 'files.id')
+            ->select('files.*','users.name','challenges.uuid','challenges.title',
+                'challenges.judged', 'challenges.description')
+
+            ->orderBy('files.created_at', 'desc')
+            ->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ended', $page = null);
+        return $proofs;
+    }
+
+    public function getEndedProofs()
+    {
+        $endedProofs = $this->getEndedProofsHelper();
+        return json_encode(view('partials.proofs')->with('proofs', $endedProofs)->render());
     }
 
 

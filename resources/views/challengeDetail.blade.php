@@ -8,6 +8,7 @@
     <meta property="og:title" content="{{$challenge->title}}" />
 
 <link href="{{ asset('css/dropzone.min.css') }}" rel="stylesheet">
+<link href="{{ asset('css/magnific-popup.css') }}" rel="stylesheet">
 <style>
 
 /*<link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">*/
@@ -620,7 +621,27 @@ color: #404d57;
 
 @section('footer')
 
-
+<script src="/js/jquery.magnific-popup.min.js"></script>
+<script type="text/javascript">
+  function enableProofSlider(){
+    $('.open-iframe').magnificPopup({
+      disableOn: 700,
+      type: 'iframe',
+      mainClass: 'mfp-fade',
+      removalDelay: 160,
+      preloader: false,
+      gallery: {
+        enabled: true,
+        navigateByImgClick: true,
+        preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+      },
+      fixedContentPos: false
+    });
+  }
+  $(document).ready(function() {
+      enableProofSlider();
+    });
+</script>
 
     {{--<script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.min.js"></script>--}}
 <script src="{{ asset('js/dropzone.min.js') }}"></script>
@@ -687,11 +708,7 @@ color: #404d57;
                     success:function(data){
                        var success = data.status;
                        var messageText = data.message;
-                       console.log("message:"+data.message);
-                       console.log("messageText:"+messageText);
-                       console.log("data:"+data);
                        if(success){
-
                             var uuid = "{{$challenge->id}}";
                             var url = '/challenge-proofs/'+uuid+'/?page='+currentPage;
                             getEndedChallenges(url);
@@ -725,12 +742,7 @@ color: #404d57;
                 userprofile += "<\/a><\/div><\/li>";
                 $("#participants-list").append(userprofile);
             @endif
-
-
-
         }
-
-
 
         var arr = '{{$challenge->deadLine}}'.split(/[- :]/);
         var deadline = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
@@ -751,13 +763,13 @@ color: #404d57;
             });
             var currentPage = 1;
             $(document).ready(function() {
-                    $(document).on('click', '.hio-paginate .pagination a', function (e) {
-                        var uuid = "{{$challenge->id}}";
-                        var url = '/challenge-proofs/'+uuid+'/?page='+$(this).attr('href').split('page=')[1];
-                        currentPage = $(this).attr('href').split('page=')[1];
-                        getEndedChallenges(url);
-                        e.preventDefault();
-                    });
+                $(document).on('click', '.hio-paginate .pagination a', function (e) {
+                    var uuid = "{{$challenge->id}}";
+                    var url = '/challenge-proofs/'+uuid+'/?page='+$(this).attr('href').split('page=')[1];
+                    currentPage = $(this).attr('href').split('page=')[1];
+                    getEndedChallenges(url);
+                    e.preventDefault();
+                });
 
 
 

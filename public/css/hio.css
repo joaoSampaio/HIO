@@ -881,7 +881,7 @@ body{
     .challenge-item {
         /*margin-left: 30px;*/
         /*margin-right: 45px;*/
-        margin-bottom: 90px;
+        margin-bottom: 40px;
     }
     .challenge-item-info {
 
@@ -1758,5 +1758,14 @@ footer[role="contentinfo"] {
     color: white;
 }
 
-
-
+.mfp-iframe-holder .mfp-content {
+    line-height: 0;
+    width: 100%;
+    max-width: 750px !important;
+}
+.mfp-iframe-scaler {
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    padding-top: 100.25% !important;;
+}
