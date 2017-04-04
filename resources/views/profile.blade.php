@@ -467,8 +467,8 @@ text-transform: inherit;
             </div>
         </div>
     </section>
-
-
+@endsection
+@section('modal')
     <div class="modal fade" id="create-challenge" tabindex="-1" role="dialog" aria-labelledby="modalHome" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -498,16 +498,20 @@ text-transform: inherit;
 
 <script>
     $('#openCreate').click(function(){
+        @if(Auth::check())
+            $('#create-challenge').on('shown.bs.modal', function() {
+                @if(!Auth::check() || Auth::user()->id == $user->id)
+                     $('#create-challenge-iframe').attr("src","{{ action('HomeController@createChallenge') }}");
+                 @else
+                    $('#create-challenge-iframe').attr("src","{{ action('HomeController@createChallenge', $user->id) }}");
+                 @endif
+             });
+            $('#create-challenge').modal({show:true})
+        @else
+            window.location.replace("/auth");
+        @endif
 
-        $('#create-challenge').on('shown.bs.modal', function() {
-        @if(!Auth::check() || Auth::user()->id == $user->id)
-             $('#create-challenge-iframe').attr("src","{{ action('HomeController@createChallenge') }}");
-         @else
-            $('#create-challenge-iframe').attr("src","{{ action('HomeController@createChallenge', $user->id) }}");
-         @endif
 
-        });
-        $('#create-challenge').modal({show:true})
     });
 
 </script>

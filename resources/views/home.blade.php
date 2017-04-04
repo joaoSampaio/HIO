@@ -181,7 +181,7 @@ color: #eb1946;
 
 
     <!-- Portfolio Grid Section -->
-    <section  class="bg-text-brand-new" style="background-color: #e7e7e7;padding-bottom: 150px;" data-bg-text="challenges">
+    <section  class="bg-text-brand-new" style="background-color: #e7e7e7;padding-bottom: 150px;margin-top: 0px" data-bg-text="challenges">
         <div class="container">
             <div class="row">
 
@@ -231,7 +231,7 @@ color: #eb1946;
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="modalHome">Views</h4>
+                    <h4 class="modal-title" id="modalViews">Views</h4>
                 </div>
 
                 <div class="modal-body" id="modal-views-content">
@@ -287,7 +287,7 @@ color: #eb1946;
 <script type="text/javascript">
   function enableProofSlider(){
     $('.open-iframe').magnificPopup({
-      disableOn: 700,
+      disableOn: 0,
       type: 'iframe',
       mainClass: 'mfp-fade',
       removalDelay: 160,
@@ -306,11 +306,14 @@ color: #eb1946;
 
 <script>
     $('#openCreate').click(function(){
-
+        @if(Auth::check())
         $('#create-challenge').on('shown.bs.modal', function() {
             $('#create-challenge-iframe').attr("src","/new/challenge");
         });
         $('#create-challenge').modal({show:true})
+        @else
+        window.location.replace("/auth");
+        @endif
     });
 
 

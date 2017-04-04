@@ -361,7 +361,7 @@ background-color: #e91e63;
                         <a class="header-link"  href="{{ url('challenges') }}">Challenges</a>
                     </li>
 
-                    <li {{{Request::is('new') ? 'class=active' : ''}}}><a  class="header-link" href="{{ url('new') }}">New</a></li>
+                    {{--<li {{{Request::is('new') ? 'class=active' : ''}}}><a  class="header-link" href="{{ url('new') }}">New</a></li>--}}
 
                     <li><i class="fa fa-search header-link main-search pointer" style="font-size: 14pt;padding-top: 15px" aria-hidden="true"></i></li>
 

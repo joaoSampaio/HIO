@@ -258,7 +258,7 @@ $('#dLabel2').on('click', function (e) {
 
 function enableChallengeParticipants(){
     $('.challenge-participants').unbind().click(function(e){
-        $('#modalHome').html("Participants");
+        $('#modalViews').html("Participants");
         $('#challenge-views-modal').modal('show');
         $.ajax({
             url: "/participants/"+$(e.currentTarget).data("id"),
@@ -333,8 +333,8 @@ $('#proof-iframe').on('load', function(){
 
 function enableChallengeViews(){
     $('.challenge-views').unbind().click(function(e){
-        $('#modalHome').html("Views");
         $('#challenge-views-modal').modal('show');
+        $('#modalViews').html("Views");
         $.ajax({
             url: "/views/proof/"+$(e.currentTarget).data("id"),
             type:"GET",

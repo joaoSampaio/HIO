@@ -199,25 +199,6 @@ color: #eb1946;
     </section>
 </div>
 
-
-<div class="modal fade" id="create-challenge" tabindex="-1" role="dialog" aria-labelledby="modalHome" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header-create">
-                <button type="button" class="close" style="font-size: 40px;font-weight: 300;" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="create-challenge-title" id="modalHome">Create Challenge</h4>
-            </div>
-
-            <div class="modal-body">
-                <span id="create-spin" class="glyphicon glyphicon-refresh spinning"></span>
-                <iframe id="create-challenge-iframe" src="" style="" width="99.6%" frameborder="0"></iframe>
-
-            </div>
-
-        </div>
-    </div>
-</div>
 @endsection
 
 
@@ -290,10 +271,14 @@ color: #eb1946;
 <script>
     $('.openCreate').click(function(){
 
-        $('#create-challenge').on('shown.bs.modal', function() {
-            $('#create-challenge-iframe').attr("src","/new/challenge");
-        });
-        $('#create-challenge').modal({show:true})
+        @if(Auth::check())
+            $('#create-challenge').on('shown.bs.modal', function() {
+                $('#create-challenge-iframe').attr("src","/new/challenge");
+            });
+            $('#create-challenge').modal({show:true})
+        @else
+            window.location.replace("/auth");
+        @endif
     });
 
 </script>

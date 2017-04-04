@@ -540,7 +540,15 @@ color: #404d57;
         </section>
 
 
-        <div id="myModal" class="modal fade" role="dialog">
+
+
+    @endif
+
+@endsection
+
+@section('modal')
+
+    <div id="myModal" class="modal fade" role="dialog">
           <div class="modal-dialog">
 
             <!-- Modal content-->
@@ -614,8 +622,6 @@ color: #404d57;
                 </div>
             </div>
         </div>
-
-    @endif
 
 @endsection
 

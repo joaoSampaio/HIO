@@ -332,7 +332,7 @@ body:after {
 
                 <div>
                     <a style="padding-top: 0px; float: left;margin-right: 25px;" href="{{"/profile/".$sonChallenge->user_id}}">
-                        <img src="{{'/user/photo/'. $sonChallenge->user_id }}" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle" style="height: 50px; width: 50px">
+                        <img src="{{'/user/photo/'. $sonChallenge->user_id }}" alt="{{$sonChallenge->name}}" title="{{$sonChallenge->name}}" class="img-circle" style="height: 50px; width: 50px">
                     </a>
 
                     <div style="float: left">

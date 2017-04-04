@@ -9,6 +9,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Auth;
 use Session;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 //use Validator;
 //use App\Http\Controllers\Controller;
@@ -28,8 +29,8 @@ class SocialAuthController extends Controller
     public function redirectToProvider()
     {
 //        strcmp
-        if(str_contains(url()->previous(), 'challenge'))
-            session()->put('url.intended', url()->previous());
+//        if(str_contains(url()->previous(), 'challenge'))
+//            session()->put('url.intended', url()->previous());
 //        print_r(url()->previous());
         return Socialite::driver('facebook')->scopes(['publish_actions', 'user_birthday', 'user_likes', 'user_friends', 'user_location'])->redirect();
     }
@@ -77,7 +78,7 @@ class SocialAuthController extends Controller
 
                     }
                 } catch (\Exception $e) {
-                    echo $e;
+                    Log::info('Exception '. $e->getMessage());
                     //delete if no db things........
     //                    File::delete('images/'. $filename);
     //                    DB::rollback();
@@ -87,8 +88,8 @@ class SocialAuthController extends Controller
 
             return redirect()->intended($url);
         } catch (\Exception $e) {
-            echo 'Houve algo que nao veio do facebook!<br> possivelmente vou ter um outro form para preencher com dados em falta';
-            echo $e;
+            Log::info('Houve algo que nao veio do facebook!<br> possivelmente vou ter um outro form para preencher com dados em falta');
+            Log::info('Exception '. $e->getMessage());
             return redirect()->action('SocialAuthController@missingFB')->with('fbUser', $user);
         }
     }
