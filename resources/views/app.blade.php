@@ -300,13 +300,6 @@ background-color: #e91e63;
         </div>
     </nav>
 
-
-
-
-
-
-
-
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
@@ -399,7 +392,7 @@ background-color: #e91e63;
                                         </form>
 
                                     @endif
-                                    <li><a href="#">Logout</a></li>
+                                    <li><a href="{{ action('SocialAuthController@logout') }}">Logout</a></li>
                                 </ul>
                             </div>
                             {{--<a class="header-link" href="{{ url('profile', 'me') }}" style=" margin-bottom: 5px;text-align: left; padding-left: 0px;text-transform: capitalize;padding: 5px 0px 0px 0px;">{{getFirstLastName(Auth::user()->name)}}</a>--}}
