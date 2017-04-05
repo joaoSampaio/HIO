@@ -362,6 +362,16 @@ color: #404d57;
     box-shadow: 0px 0px 68px 0px rgba(0, 0, 0, 0.2);
 }
 
+.wall-fame-subtitle {
+    text-align: center;
+    font-size: 24px;
+    color: #43484c;
+    font-weight: 400;
+    margin-bottom: 20px;
+    margin-top: 0px;
+    text-transform: inherit;
+}
+
   </style>
 
 @endsection
@@ -517,21 +527,20 @@ color: #404d57;
 
         </section>
 
-
-
-
-
-
-
-
-
-
-
         <section class="bg-light-gray bg-text" data-bg-text="Proofs">
             <div class="container" >
 
                 <div class="col-sm-12 col-xs-12 col-lg-12" >
                     <h2 class="wall-fame-title">Uploaded Proofs</h2>
+
+                    @if($sonChallenges->total() == 0 || $sonChallenges->firstItem() == NULL ||
+                    ($sonChallenges->total() == 1 && $sonChallenges[0]->id == -1) )
+                        <h3 class="wall-fame-subtitle">No proofs uploaded yet!</h3>
+                    @endif
+                    {{--{{$sonChallenges->total()}}--}}
+                    {{--{{$sonChallenges->firstItem() == NULL ? "e null" : "nao e"}}--}}
+                    {{--{{json_encode($sonChallenges)}}--}}
+
                 </div>
                 <div class="col-sm-12 col-xs-12 col-lg-12" id="proofs">
                     @include('partials.multi_son_challenge')
@@ -821,6 +830,7 @@ color: #404d57;
 
                           //myModal
                           $('#myModal').modal('hide');
+                          $('.wall-fame-subtitle').hide();
 
 
                         //$( "#proofs> .proof-item:nth-child(3)" )

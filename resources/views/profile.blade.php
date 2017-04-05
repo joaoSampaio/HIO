@@ -399,6 +399,7 @@ text-transform: inherit;
 
     @if($user->role != "trainer")
         <section style="background-color: #e7e7e7">
+            <h3 class="col-md-12 text-center my-challenges-title" style="margin-bottom: 40px;margin-top: 0px;">Achievements</h3>
             <div id="wrapper" style="text-align: center">
                 <div id="yourdiv" style="display: inline-block;" >{{achievementToHtml($user->achievements)}}</div>
             </div>
