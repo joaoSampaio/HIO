@@ -71,6 +71,37 @@ margin-right: -15px;
     margin-left: -15px;
 }
 
+    .img-thumbnail{
+        width: 50px;
+        height: 50px;
+    }
+    /*tab-pane*/
+    .tab-pane div:first-child{
+        padding-top: 20px;
+    }
+
+
+
+
+    /*.tab-pane i*/
+    /*{*/
+        /*padding: 5px 10px;*/
+        /*display: inline-block;*/
+        /*-moz-border-radius: 100px;*/
+        /*-webkit-border-radius: 100px;*/
+        /*border-radius: 100px;*/
+        /*-moz-box-shadow: 0px 0px 2px #888;*/
+        /*-webkit-box-shadow: 0px 0px 2px #888;*/
+        /*box-shadow: 0px 0px 2px #888;*/
+    /*}*/
+
+    .my-challenges-title{
+        text-transform: inherit;
+        font-size: 45px;
+        font-weight: 300;
+        margin-top: 40px;
+    }
+
   </style>
 <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @endsection
@@ -78,323 +109,518 @@ margin-right: -15px;
 @section('content')
 
 
+    <section id="menu-challenges"  class="tab-pane fade in active" >
 
 
-        <section>
-            <div class="container">
+        <div class="container">
 
-               <div class="jumbotron list-content">
-
-
-                   <ul class="list-group">
-                       <li href="#" class="list-group-item title text-right search-select2">
-                           {!! Form::select('emailFriend[]', array(),null,array('required', 'data-validation'=>'required',  'class'=>'form-control js-data-example-ajax', 'multiple'=>'multiple')) !!}
-
-                       </li>
-                   </ul>
-
-                    @if(Auth::user()->role == "trainer")
-
-                    <ul class="list-group">
-                       <li href="#" class="list-group-item title">
-                           Followers
-                       </li>
-
-                       <div class="row">
-
-                           @foreach ($friendRequests as $friendRequest)
-                               <li href="#" class="list-group-item text-left">
-                                   <a href="{{"/profile/".$friendRequest->id}}">
-                                       @if($friendRequest->photo == "")
-                                           <img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">
-                                       @else
-                                           <img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >
-
-                                       @endif
-                                   </a>
-                                   <label class="name">
-                                       <a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>
-                                   </label>
-                                   <label class="pull-right">
-
-                                       <form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">
-                                           {{ csrf_field() }}
-                                           <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                           <input type="hidden" name="action" value="3">
-                                           <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-hand-paper-o ">
-                                               <i class="fa fa-btn fa-user"></i> Block
-                                           </button>
-                                       </form>
+            <div class="row">
+                <h3 class="col-md-12 text-center my-challenges-title" style="margin-bottom: 40px;margin-top: 0px;">Friends</h3>
 
 
-                                   </label>
-                                   <div class="break"></div>
-                               </li>
-                           @endforeach
-                           <li href="#" class="list-group-item ">
-                               {!! $friendRequests->links() !!}
-                           </li>
+            </div>
+
+            <div class="row">
+                <div class="tab-content col-md-6 col-md-offset-3 search-select2">
+                    {!! Form::select('emailFriend[]', array(),null,array('required', 'data-validation'=>'required',  'class'=>'form-control js-data-example-ajax', 'multiple'=>'multiple')) !!}
+                </div>
+
+                {{--<ul class="list-group">--}}
+                    {{--<li href="#" class="list-group-item title text-right search-select2">--}}
+
+                    {{--</li>--}}
+                {{--</ul>--}}
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-12" style="text-align: center">
+                    <div class="col-md-12" style="display: inline-block;margin-top: 25px;">
+                        <a class="btn btn-tab-challenge active" href="#f-requests" aria-controls="ongoing" data-toggle="tab">Friend Requests</a>
+                        <a class="btn btn-tab-challenge" href="#f-invites" aria-controls="ended" data-toggle="tab">Your Invites</a>
+                        <a class="btn btn-tab-challenge" href="#my-friends" aria-controls="mychallenges" data-toggle="tab">My Friends</a>
+                        <a class="btn btn-tab-challenge" href="#blocked" aria-controls="mychallenges" data-toggle="tab">Blocked</a>
+                    </div>
+                </div>
+
+                <div class="tab-content col-md-6 col-md-offset-3">
+                    <div role="tabpanel" class="tab-pane row active" style="padding-top:0px" id="f-requests">
+                        @foreach ($friendRequests as $friendRequest)
+                            <div class="col-md-12 text-left" >
+                                <a href="{{"/profile/".$friendRequest->id}}">
+                                    <img class="img-thumbnail img-circle" src="{{'/user/photo/'. $friendRequest->id }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >
+                                </a>
+                                <label class="name">
+                                    <a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>
+                                </label>
+                                <label class="pull-right">
+                                    <form class="pull-right" role="form" method="POST"action="{{ url('/friend') }}">
+                                        {{ csrf_field() }}
+                                        <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
+                                        <input type="hidden" name="action" value="1">
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fa fa-btn fa-check" title="Accept"></i>
+                                        </button>
+                                    </form>
+
+                                    <form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">
+                                        {{ csrf_field() }}
+                                        <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
+                                        <input type="hidden" name="action" value="2">
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fa fa-btn fa-trash" title="Decline"></i>
+                                        </button>
+                                    </form>
+
+                                    <form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">
+                                        {{ csrf_field() }}
+                                        <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
+                                        <input type="hidden" name="action" value="3">
+                                        <button type="submit" class="btn btn-danger ">
+                                            <i class="fa fa-btn fa-stop" title="Block"></i>
+                                        </button>
+                                    </form>
+
+
+                                </label>
+                                <div class="break"></div>
+                            </div>
+                        @endforeach
+                        <li href="#" class="list-group-item ">
+                            {!! $friendRequests->links() !!}
+                        </li>
+
+                    </div>
+                    <div role="tabpanel" class="tab-pane row" id="f-invites">
+                        @foreach ($sentFriendRequests as $friendRequest)
+                            <div class="col-md-12 text-left" >
+                                <a href="{{"/profile/".$friendRequest->id}}">
+                                    <img class="img-thumbnail img-circle" src="{{'/user/photo/'. $friendRequest->id }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >
+                                </a>
+                                <label class="name">
+                                    <a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>
+                                </label>
+                                <label class="pull-right">
+                                    <form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">
+                                        {{ csrf_field() }}
+                                        <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
+                                        <input type="hidden" name="action" value="5">
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fa fa-btn fa-trash" title="Decline"></i>
+                                        </button>
+                                    </form>
+                                    {{--<a  class="btn btn-success btn-xs glyphicon glyphicon-ok" href="#" title="View"></a>--}}
+                                    {{--<a  class="btn btn-danger  btn-xs glyphicon glyphicon-trash" href="#" title="Delete"></a>--}}
+                                    {{--<a  class="btn btn-info  btn-xs glyphicon glyphicon glyphicon-comment" href="#" title="Send message"></a>--}}
+                                </label>
+                                <div class="break"></div>
+                            </div>
+                        @endforeach
+                        <li href="#" class="list-group-item ">
+                            {!! $sentFriendRequests->links() !!}
+                        </li>
+                    </div>
+                    <div role="tabpanel" class="tab-pane row" id="my-friends">
+                        @foreach ($friends as $friendRequest)
+                            <div class="col-md-12 text-left" >
+                                <a href="{{"/profile/".$friendRequest->id}}">
+                                    @if($friendRequest->photo == "")
+                                        <img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">
+                                    @else
+                                        <img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >
+
+                                    @endif
+                                </a>
+                                <label class="name">
+                                    <a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>
+                                </label>
+                                <label class="pull-right">
+                                    <form class="pull-right" role="form" method="POST" action="{{ url('/friend') }}">
+                                        {{ csrf_field() }}
+                                        <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
+                                        <input type="hidden" name="action" value="6">
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fa fa-btn fa-trash" title="Decline"></i>
+                                        </button>
+                                    </form>
+
+                                    <form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">
+                                        {{ csrf_field() }}
+                                        <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
+                                        <input type="hidden" name="action" value="3">
+                                        <button type="submit" class="btn btn-danger ">
+                                            <i class="fa fa-btn fa-stop" title="Block"></i>
+                                        </button>
+                                    </form>
+
+                                    {{--<a  class="btn btn-success btn-xs glyphicon glyphicon-ok" href="#" title="View"></a>--}}
+                                    {{--<a  class="btn btn-danger  btn-xs glyphicon glyphicon-trash" href="#" title="Delete"></a>--}}
+                                    {{--<a  class="btn btn-info  btn-xs glyphicon glyphicon glyphicon-comment" href="#" title="Send message"></a>--}}
+                                </label>
+                                <div class="break"></div>
+                            </div>
+                        @endforeach
+                        <li href="#" class="list-group-item 222">
+                            {!! $friends->links() !!}
+                        </li>
+                    </div>
+
+
+                    <div role="tabpanel" class="tab-pane row" id="blocked">
+                        @foreach ($blockedFriends as $friendRequest)
+                            <div class="col-md-12 text-left" >
+                                <a href="{{"/profile/".$friendRequest->id}}">
+                                    @if($friendRequest->photo == "")
+                                        <img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">
+                                    @else
+                                        <img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >
+
+                                    @endif
+                                </a>
+                                <label class="name">
+                                    <a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>
+                                </label>
+                                <label class="pull-right">
+                                    <form class="pull-right" role="form" method="POST" action="{{ url('/friend') }}">
+                                        {{ csrf_field() }}
+                                        <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
+                                        <input type="hidden" name="action" value="4">
+                                        <button type="submit" class="btn btn-success">
+
+                                            <i class="fa fa-btn fa-trash" title="Unblock"></i>
+                                        </button>
+                                    </form>
+
+                                </label>
+                                <div class="break"></div>
+                            </div>
+                        @endforeach
+                        <li href="#" class="list-group-item 222">
+                            {!! $blockedFriends->links() !!}
+                        </li>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+        {{--<section>--}}
+            {{--<div class="container">--}}
+
+               {{--<div class="jumbotron list-content">--}}
+
+
+                   {{--<ul class="list-group">--}}
+                       {{--<li href="#" class="list-group-item title text-right search-select2">--}}
+                           {{--{!! Form::select('emailFriend[]', array(),null,array('required', 'data-validation'=>'required',  'class'=>'form-control js-data-example-ajax', 'multiple'=>'multiple')) !!}--}}
+
+                       {{--</li>--}}
+                   {{--</ul>--}}
+
+                    {{--@if(Auth::user()->role == "trainer")--}}
+
+                    {{--<ul class="list-group">--}}
+                       {{--<li href="#" class="list-group-item title">--}}
+                           {{--Followers--}}
+                       {{--</li>--}}
+
+                       {{--<div class="row">--}}
+
+                           {{--@foreach ($friendRequests as $friendRequest)--}}
+                               {{--<li href="#" class="list-group-item text-left">--}}
+                                   {{--<a href="{{"/profile/".$friendRequest->id}}">--}}
+                                       {{--@if($friendRequest->photo == "")--}}
+                                           {{--<img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">--}}
+                                       {{--@else--}}
+                                           {{--<img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >--}}
+
+                                       {{--@endif--}}
+                                   {{--</a>--}}
+                                   {{--<label class="name">--}}
+                                       {{--<a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>--}}
+                                   {{--</label>--}}
+                                   {{--<label class="pull-right">--}}
+
+                                       {{--<form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">--}}
+                                           {{--{{ csrf_field() }}--}}
+                                           {{--<input type="hidden" name="friendId" value="{{$friendRequest->id}}">--}}
+                                           {{--<input type="hidden" name="action" value="3">--}}
+                                           {{--<button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-hand-paper-o ">--}}
+                                               {{--<i class="fa fa-btn fa-user"></i> Block--}}
+                                           {{--</button>--}}
+                                       {{--</form>--}}
+
+
+                                   {{--</label>--}}
+                                   {{--<div class="break"></div>--}}
+                               {{--</li>--}}
+                           {{--@endforeach--}}
+                           {{--<li href="#" class="list-group-item ">--}}
+                               {{--{!! $friendRequests->links() !!}--}}
+                           {{--</li>--}}
 
 
 
-                   </ul>
+                   {{--</ul>--}}
 
-                    <ul class="list-group">
-                      <li href="#" class="list-group-item title">
-                        Blocked
-                      </li>
+                    {{--<ul class="list-group">--}}
+                      {{--<li href="#" class="list-group-item title">--}}
+                        {{--Blocked--}}
+                      {{--</li>--}}
 
-                      <div class="row">
+                      {{--<div class="row">--}}
 
-                      @foreach ($blockedFriends as $friendRequest)
-                          <li href="#" class="list-group-item text-left">
-                              <a href="{{"/profile/".$friendRequest->id}}">
-                                  @if($friendRequest->photo == "")
-                                      <img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">
-                                  @else
-                                      <img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >
+                      {{--@foreach ($blockedFriends as $friendRequest)--}}
+                          {{--<li href="#" class="list-group-item text-left">--}}
+                              {{--<a href="{{"/profile/".$friendRequest->id}}">--}}
+                                  {{--@if($friendRequest->photo == "")--}}
+                                      {{--<img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">--}}
+                                  {{--@else--}}
+                                      {{--<img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >--}}
 
-                                  @endif
-                              </a>
-                              <label class="name">
-                                  <a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>
-                              </label>
-                             <label class="pull-right">
-                                <form class="pull-right" role="form" method="POST" action="{{ url('/friend') }}">
-                                    {{ csrf_field() }}
-                                    <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                    <input type="hidden" name="action" value="4">
-                                    <button type="submit" class="btn btn-success btn-xs glyphicon glyphicon-trash ">
-                                         Unblock
-                                    </button>
-                                </form>
+                                  {{--@endif--}}
+                              {{--</a>--}}
+                              {{--<label class="name">--}}
+                                  {{--<a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>--}}
+                              {{--</label>--}}
+                             {{--<label class="pull-right">--}}
+                                {{--<form class="pull-right" role="form" method="POST" action="{{ url('/friend') }}">--}}
+                                    {{--{{ csrf_field() }}--}}
+                                    {{--<input type="hidden" name="friendId" value="{{$friendRequest->id}}">--}}
+                                    {{--<input type="hidden" name="action" value="4">--}}
+                                    {{--<button type="submit" class="btn btn-success btn-xs glyphicon glyphicon-trash ">--}}
+                                         {{--Unblock--}}
+                                    {{--</button>--}}
+                                {{--</form>--}}
 
-                             </label>
-                             <div class="break"></div>
-                           </li>
-                      @endforeach
-                      <li href="#" class="list-group-item 222">
-                        {!! $blockedFriends->links() !!}
-                       </li>
-
-
-
-
-                    </ul>
-
-
-                    @else
-                    <ul class="list-group">
-                       <li href="#" class="list-group-item title">
-                           New Friend Requests
-                       </li>
-
-                       <div class="row">
-
-                           @foreach ($friendRequests as $friendRequest)
-                               <li href="#" class="list-group-item text-left">
-                                   <a href="{{"/profile/".$friendRequest->id}}">
-                                       @if($friendRequest->photo == "")
-                                           <img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">
-                                       @else
-                                           <img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >
-
-                                       @endif
-                                   </a>
-                                   <label class="name">
-                                       <a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>
-                                   </label>
-                                   <label class="pull-right">
-                                       <form class="pull-right" role="form" method="POST"action="{{ url('/friend') }}">
-                                           {{ csrf_field() }}
-                                           <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                           <input type="hidden" name="action" value="1">
-                                           <button type="submit" class="btn btn-success btn-xs glyphicon glyphicon-ok ">
-                                               <i class="fa fa-btn fa-user"></i> Accept
-                                           </button>
-                                       </form>
-
-                                       <form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">
-                                           {{ csrf_field() }}
-                                           <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                           <input type="hidden" name="action" value="2">
-                                           <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-trash ">
-                                               <i class="fa fa-btn fa-user"></i> Decline
-                                           </button>
-                                       </form>
-
-                                       <form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">
-                                           {{ csrf_field() }}
-                                           <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                           <input type="hidden" name="action" value="3">
-                                           <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-hand-paper-o ">
-                                               <i class="fa fa-btn fa-user"></i> Block
-                                           </button>
-                                       </form>
-
-
-                                   </label>
-                                   <div class="break"></div>
-                               </li>
-                           @endforeach
-                           <li href="#" class="list-group-item ">
-                               {!! $friendRequests->links() !!}
-                           </li>
+                             {{--</label>--}}
+                             {{--<div class="break"></div>--}}
+                           {{--</li>--}}
+                      {{--@endforeach--}}
+                      {{--<li href="#" class="list-group-item 222">--}}
+                        {{--{!! $blockedFriends->links() !!}--}}
+                       {{--</li>--}}
 
 
 
-                   </ul>
 
-                    <ul class="list-group">
-                     <li href="#" class="list-group-item title">
-                       People you invited
-                     </li>
+                    {{--</ul>--}}
 
-                     <div class="row">
 
-                     @foreach ($sentFriendRequests as $friendRequest)
-                         <li href="#" class="list-group-item text-left">
-                             <a href="{{"/profile/".$friendRequest->id}}">
-                                 @if($friendRequest->photo == "")
-                                     <img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">
-                                 @else
-                                     <img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >
+                    {{--@else--}}
+                    {{--<ul class="list-group">--}}
+                       {{--<li href="#" class="list-group-item title">--}}
+                           {{--New Friend Requests--}}
+                       {{--</li>--}}
 
-                                 @endif
-                             </a>
-                             <label class="name">
-                                 <a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>
-                             </label>
-                            <label class="pull-right">
-                                <form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">
-                                    {{ csrf_field() }}
-                                    <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                    <input type="hidden" name="action" value="5">
-                                    <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-trash ">
-                                        Cancel
-                                    </button>
-                                </form>
+                       {{--<div class="row">--}}
+
+                           {{--@foreach ($friendRequests as $friendRequest)--}}
+                               {{--<li href="#" class="list-group-item text-left">--}}
+                                   {{--<a href="{{"/profile/".$friendRequest->id}}">--}}
+                                       {{--@if($friendRequest->photo == "")--}}
+                                           {{--<img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">--}}
+                                       {{--@else--}}
+                                           {{--<img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >--}}
+
+                                       {{--@endif--}}
+                                   {{--</a>--}}
+                                   {{--<label class="name">--}}
+                                       {{--<a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>--}}
+                                   {{--</label>--}}
+                                   {{--<label class="pull-right">--}}
+                                       {{--<form class="pull-right" role="form" method="POST"action="{{ url('/friend') }}">--}}
+                                           {{--{{ csrf_field() }}--}}
+                                           {{--<input type="hidden" name="friendId" value="{{$friendRequest->id}}">--}}
+                                           {{--<input type="hidden" name="action" value="1">--}}
+                                           {{--<button type="submit" class="btn btn-success btn-xs glyphicon glyphicon-ok ">--}}
+                                               {{--<i class="fa fa-btn fa-user"></i> Accept--}}
+                                           {{--</button>--}}
+                                       {{--</form>--}}
+
+                                       {{--<form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">--}}
+                                           {{--{{ csrf_field() }}--}}
+                                           {{--<input type="hidden" name="friendId" value="{{$friendRequest->id}}">--}}
+                                           {{--<input type="hidden" name="action" value="2">--}}
+                                           {{--<button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-trash ">--}}
+                                               {{--<i class="fa fa-btn fa-user"></i> Decline--}}
+                                           {{--</button>--}}
+                                       {{--</form>--}}
+
+                                       {{--<form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">--}}
+                                           {{--{{ csrf_field() }}--}}
+                                           {{--<input type="hidden" name="friendId" value="{{$friendRequest->id}}">--}}
+                                           {{--<input type="hidden" name="action" value="3">--}}
+                                           {{--<button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-hand-paper-o ">--}}
+                                               {{--<i class="fa fa-btn fa-user"></i> Block--}}
+                                           {{--</button>--}}
+                                       {{--</form>--}}
+
+
+                                   {{--</label>--}}
+                                   {{--<div class="break"></div>--}}
+                               {{--</li>--}}
+                           {{--@endforeach--}}
+                           {{--<li href="#" class="list-group-item ">--}}
+                               {{--{!! $friendRequests->links() !!}--}}
+                           {{--</li>--}}
+
+
+
+                   {{--</ul>--}}
+
+                    {{--<ul class="list-group">--}}
+                     {{--<li href="#" class="list-group-item title">--}}
+                       {{--People you invited--}}
+                     {{--</li>--}}
+
+                     {{--<div class="row">--}}
+
+                     {{--@foreach ($sentFriendRequests as $friendRequest)--}}
+                         {{--<li href="#" class="list-group-item text-left">--}}
+                             {{--<a href="{{"/profile/".$friendRequest->id}}">--}}
+                                 {{--@if($friendRequest->photo == "")--}}
+                                     {{--<img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">--}}
+                                 {{--@else--}}
+                                     {{--<img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >--}}
+
+                                 {{--@endif--}}
+                             {{--</a>--}}
+                             {{--<label class="name">--}}
+                                 {{--<a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>--}}
+                             {{--</label>--}}
+                            {{--<label class="pull-right">--}}
+                                {{--<form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">--}}
+                                    {{--{{ csrf_field() }}--}}
+                                    {{--<input type="hidden" name="friendId" value="{{$friendRequest->id}}">--}}
+                                    {{--<input type="hidden" name="action" value="5">--}}
+                                    {{--<button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-trash ">--}}
+                                        {{--Cancel--}}
+                                    {{--</button>--}}
+                                {{--</form>--}}
                                 {{--<a  class="btn btn-success btn-xs glyphicon glyphicon-ok" href="#" title="View"></a>--}}
                                 {{--<a  class="btn btn-danger  btn-xs glyphicon glyphicon-trash" href="#" title="Delete"></a>--}}
                                 {{--<a  class="btn btn-info  btn-xs glyphicon glyphicon glyphicon-comment" href="#" title="Send message"></a>--}}
-                            </label>
-                            <div class="break"></div>
-                          </li>
-                     @endforeach
-                     <li href="#" class="list-group-item ">
-                       {!! $sentFriendRequests->links() !!}
-                      </li>
+                            {{--</label>--}}
+                            {{--<div class="break"></div>--}}
+                          {{--</li>--}}
+                     {{--@endforeach--}}
+                     {{--<li href="#" class="list-group-item ">--}}
+                       {{--{!! $sentFriendRequests->links() !!}--}}
+                      {{--</li>--}}
 
 
-                   </ul>
+                   {{--</ul>--}}
 
-                    <ul class="list-group">
-                      <li href="#" class="list-group-item title">
-                        My Friends
-                      </li>
+                    {{--<ul class="list-group">--}}
+                      {{--<li href="#" class="list-group-item title">--}}
+                        {{--My Friends--}}
+                      {{--</li>--}}
 
-                      <div class="row">
+                      {{--<div class="row">--}}
 
-                      @foreach ($friends as $friendRequest)
-                          <li href="#" class="list-group-item text-left">
-                              <a href="{{"/profile/".$friendRequest->id}}">
-                                  @if($friendRequest->photo == "")
-                                      <img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">
-                                  @else
-                                      <img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >
+                      {{--@foreach ($friends as $friendRequest)--}}
+                          {{--<li href="#" class="list-group-item text-left">--}}
+                              {{--<a href="{{"/profile/".$friendRequest->id}}">--}}
+                                  {{--@if($friendRequest->photo == "")--}}
+                                      {{--<img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">--}}
+                                  {{--@else--}}
+                                      {{--<img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >--}}
 
-                                  @endif
-                              </a>
-                              <label class="name">
-                                  <a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>
-                              </label>
-                             <label class="pull-right">
-                                <form class="pull-right" role="form" method="POST" action="{{ url('/friend') }}">
-                                    {{ csrf_field() }}
-                                    <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                    <input type="hidden" name="action" value="6">
-                                    <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-trash ">
-                                         Remove
-                                    </button>
-                                </form>
+                                  {{--@endif--}}
+                              {{--</a>--}}
+                              {{--<label class="name">--}}
+                                  {{--<a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>--}}
+                              {{--</label>--}}
+                             {{--<label class="pull-right">--}}
+                                {{--<form class="pull-right" role="form" method="POST" action="{{ url('/friend') }}">--}}
+                                    {{--{{ csrf_field() }}--}}
+                                    {{--<input type="hidden" name="friendId" value="{{$friendRequest->id}}">--}}
+                                    {{--<input type="hidden" name="action" value="6">--}}
+                                    {{--<button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-trash ">--}}
+                                         {{--Remove--}}
+                                    {{--</button>--}}
+                                {{--</form>--}}
 
-                                <form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">
-                                    {{ csrf_field() }}
-                                    <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                    <input type="hidden" name="action" value="3">
-                                    <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-hand-paper-o ">
-                                        <i class="fa fa-btn fa-user"></i> Block
-                                    </button>
-                                </form>
+                                {{--<form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">--}}
+                                    {{--{{ csrf_field() }}--}}
+                                    {{--<input type="hidden" name="friendId" value="{{$friendRequest->id}}">--}}
+                                    {{--<input type="hidden" name="action" value="3">--}}
+                                    {{--<button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-hand-paper-o ">--}}
+                                        {{--<i class="fa fa-btn fa-user"></i> Block--}}
+                                    {{--</button>--}}
+                                {{--</form>--}}
 
                                  {{--<a  class="btn btn-success btn-xs glyphicon glyphicon-ok" href="#" title="View"></a>--}}
                                  {{--<a  class="btn btn-danger  btn-xs glyphicon glyphicon-trash" href="#" title="Delete"></a>--}}
                                  {{--<a  class="btn btn-info  btn-xs glyphicon glyphicon glyphicon-comment" href="#" title="Send message"></a>--}}
-                             </label>
-                             <div class="break"></div>
-                           </li>
-                      @endforeach
-                      <li href="#" class="list-group-item 222">
-                        {!! $friends->links() !!}
-                       </li>
+                             {{--</label>--}}
+                             {{--<div class="break"></div>--}}
+                           {{--</li>--}}
+                      {{--@endforeach--}}
+                      {{--<li href="#" class="list-group-item 222">--}}
+                        {{--{!! $friends->links() !!}--}}
+                       {{--</li>--}}
 
 
 
-                    </ul>
+                    {{--</ul>--}}
 
-                    <ul class="list-group">
-                      <li href="#" class="list-group-item title">
-                        Blocked
-                      </li>
+                    {{--<ul class="list-group">--}}
+                      {{--<li href="#" class="list-group-item title">--}}
+                        {{--Blocked--}}
+                      {{--</li>--}}
 
-                      <div class="row">
+                      {{--<div class="row">--}}
 
-                      @foreach ($blockedFriends as $friendRequest)
-                          <li href="#" class="list-group-item text-left">
-                              <a href="{{"/profile/".$friendRequest->id}}">
-                                  @if($friendRequest->photo == "")
-                                      <img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">
-                                  @else
-                                      <img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >
+                      {{--@foreach ($blockedFriends as $friendRequest)--}}
+                          {{--<li href="#" class="list-group-item text-left">--}}
+                              {{--<a href="{{"/profile/".$friendRequest->id}}">--}}
+                                  {{--@if($friendRequest->photo == "")--}}
+                                      {{--<img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">--}}
+                                  {{--@else--}}
+                                      {{--<img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >--}}
 
-                                  @endif
-                              </a>
-                              <label class="name">
-                                  <a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>
-                              </label>
-                             <label class="pull-right">
-                                <form class="pull-right" role="form" method="POST" action="{{ url('/friend') }}">
-                                    {{ csrf_field() }}
-                                    <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                    <input type="hidden" name="action" value="4">
-                                    <button type="submit" class="btn btn-success btn-xs glyphicon glyphicon-trash ">
-                                         Unblock
-                                    </button>
-                                </form>
+                                  {{--@endif--}}
+                              {{--</a>--}}
+                              {{--<label class="name">--}}
+                                  {{--<a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>--}}
+                              {{--</label>--}}
+                             {{--<label class="pull-right">--}}
+                                {{--<form class="pull-right" role="form" method="POST" action="{{ url('/friend') }}">--}}
+                                    {{--{{ csrf_field() }}--}}
+                                    {{--<input type="hidden" name="friendId" value="{{$friendRequest->id}}">--}}
+                                    {{--<input type="hidden" name="action" value="4">--}}
+                                    {{--<button type="submit" class="btn btn-success btn-xs glyphicon glyphicon-trash ">--}}
+                                         {{--Unblock--}}
+                                    {{--</button>--}}
+                                {{--</form>--}}
 
-                             </label>
-                             <div class="break"></div>
-                           </li>
-                      @endforeach
-                      <li href="#" class="list-group-item 222">
-                        {!! $blockedFriends->links() !!}
-                       </li>
-
-
-
-
-                    </ul>
-
-                    @endif
+                             {{--</label>--}}
+                             {{--<div class="break"></div>--}}
+                           {{--</li>--}}
+                      {{--@endforeach--}}
+                      {{--<li href="#" class="list-group-item 222">--}}
+                        {{--{!! $blockedFriends->links() !!}--}}
+                       {{--</li>--}}
 
 
 
-             </div>
+
+                    {{--</ul>--}}
+
+                    {{--@endif--}}
 
 
 
-            </div>
-        </section>
+             {{--</div>--}}
+
+
+
+            {{--</div>--}}
+        {{--</section>--}}
 
 
 
@@ -406,6 +632,11 @@ margin-right: -15px;
 @section('footer')
 <script src="{{ asset('js/select2.full.min.js') }}"></script>
 <script>
+
+    $('.btn-tab-challenge').on('click', function (e) {
+        $('.btn-tab-challenge').removeClass('active');
+        $(e.currentTarget).addClass('active');
+    })
 
     var search = $(".js-data-example-ajax").select2({
         ajax: {
