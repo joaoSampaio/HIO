@@ -35,7 +35,9 @@
 
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 
+
     <link href="{{ asset('css/hio.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/menu.css') }}" rel="stylesheet">
 
     <style>
 
@@ -214,110 +216,119 @@ background-color: #e91e63;
 <div id="outer-wrap">
 <div id="inner-wrap">
 
-    {{--<header id="top" role="banner">--}}
+
+
+    {{--<nav id="nav"  role="navigation">--}}
+
         {{--<div class="block">--}}
-            {{--<h1 class="block-title">Book Title</h1>--}}
-            {{--<a class="nav-btn" id="nav-open-btn" href="#nav">Book Navigation</a>--}}
+            {{--<h2 class="block-title">Chapters</h2>--}}
+            {{--@if(Auth::check())--}}
+                {{--<div class="sidebar-header">--}}
+                    {{--<!-- Top bar -->--}}
+                    {{--<div class="top-bar"></div>--}}
+                    {{--<!-- Sidebar toggle button -->--}}
+                    {{--<button type="button" class="sidebar-toggle" style="display: none;">--}}
+                        {{--<i class="icon-material-sidebar-arrow"></i>--}}
+                    {{--</button>--}}
+                    {{--<!-- Sidebar brand image -->--}}
+                    {{--<a class="sidebar-image" href="{{ url('profile', 'me') }}">--}}
+                        {{--<img src="{{'/user/photo/'. Auth::user()->id }}" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle" >--}}
+                    {{--</a>--}}
+                    {{--<!-- Sidebar brand name -->--}}
+                    {{--<a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">--}}
+                        {{--{{Auth::user()->name}}--}}
+                        {{--<b class="caret"></b>--}}
+                    {{--</a>--}}
+                {{--</div>--}}
+            {{--@endif--}}
+            {{--<ul>--}}
+                {{--@if(Auth::check())--}}
+                    {{--<li class="dropdown">--}}
+                        {{--<ul id="settings-dropdown" class="dropdown-menu" style="display: none;">--}}
+                            {{--<li>--}}
+                                {{--<a href="#" tabindex="-1">--}}
+                                    {{--Profile--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                                {{--<a href="#" tabindex="-1">--}}
+                                    {{--Settings--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                                {{--<a href="#" tabindex="-1">--}}
+                                    {{--Help--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                                {{--<a href="#" tabindex="-1">--}}
+                                    {{--Exit--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
+                    {{--</li>--}}
+
+                {{--@endif--}}
+
+                 {{--<li class="{{{Request::is('HIO-Mission') ? 'active is-active' : ''}}}"><a  class="header-link" href="{{ url('HIO-Mission') }}">HIO Mission</a></li>--}}
+
+                 {{--<li class="{{{Request::is('challenges') ? 'active is-active' : ''}}}" >--}}
+                     {{--<a class="header-link"  href="{{ url('challenges') }}">Challenges</a>--}}
+                 {{--</li>--}}
+
+                 {{--<li class="{{{Request::is('new') ? 'active is-active' : ''}}}"><a  class="header-link" href="{{ url('new') }}">New</a></li>--}}
+
+                 {{--@if(Auth::check())--}}
+
+                 {{--<li>--}}
+                    {{--<a href="{{ action('SocialAuthController@logout') }}">Logout</a>--}}
+                 {{--</li>--}}
+
+                 {{--@else--}}
+                     {{--<li >--}}
+                        {{--<a class="header-link" id="login_btn"  href="{{ url('/auth') }}">Login</a>--}}
+                    {{--</li>--}}
+                    {{--<li >--}}
+                        {{--<a class="header-link-secondary"  href="{{ url('/auth') }}">Register</a>--}}
+                    {{--</li>--}}
+                 {{--@endif--}}
+            {{--</ul>--}}
+            {{--<a class="close-btn" id="nav-close-btn" href="#top">Return to Content</a>--}}
         {{--</div>--}}
-    {{--</header>--}}
-
-    <nav id="nav"  role="navigation">
-
-        <div class="block">
-            <h2 class="block-title">Chapters</h2>
-            @if(Auth::check())
-                <div class="sidebar-header">
-                    <!-- Top bar -->
-                    <div class="top-bar"></div>
-                    <!-- Sidebar toggle button -->
-                    <button type="button" class="sidebar-toggle" style="display: none;">
-                        <i class="icon-material-sidebar-arrow"></i>
-                    </button>
-                    <!-- Sidebar brand image -->
-                    <a class="sidebar-image" href="{{ url('profile', 'me') }}">
-                        <img src="{{'/user/photo/'. Auth::user()->id }}" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle" >
-                    </a>
-                    <!-- Sidebar brand name -->
-                    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
-                        {{Auth::user()->name}}
-                        <b class="caret"></b>
-                    </a>
-                </div>
-            @endif
-            <ul>
-                @if(Auth::check())
-                    <li class="dropdown">
-                        <ul id="settings-dropdown" class="dropdown-menu" style="display: none;">
-                            <li>
-                                <a href="#" tabindex="-1">
-                                    Profile
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" tabindex="-1">
-                                    Settings
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" tabindex="-1">
-                                    Help
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" tabindex="-1">
-                                    Exit
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                @endif
-
-                 <li class="{{{Request::is('HIO-Mission') ? 'active is-active' : ''}}}"><a  class="header-link" href="{{ url('HIO-Mission') }}">HIO Mission</a></li>
-
-                 <li class="{{{Request::is('challenges') ? 'active is-active' : ''}}}" >
-                     <a class="header-link"  href="{{ url('challenges') }}">Challenges</a>
-                 </li>
-
-                 <li class="{{{Request::is('new') ? 'active is-active' : ''}}}"><a  class="header-link" href="{{ url('new') }}">New</a></li>
-
-                 @if(Auth::check())
-
-                 <li>
-                    <a href="{{ action('SocialAuthController@logout') }}">Logout</a>
-                 </li>
-
-                 @else
-                     <li >
-                        <a class="header-link" id="login_btn"  href="{{ url('/auth') }}">Login</a>
-                    </li>
-                    <li >
-                        <a class="header-link-secondary"  href="{{ url('/auth') }}">Register</a>
-                    </li>
-                 @endif
-            </ul>
-            <a class="close-btn" id="nav-close-btn" href="#top">Return to Content</a>
-        </div>
-    </nav>
+    {{--</nav>--}}
 
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header page-scroll">
-                <button type="button" id="nav-open-btn" class="navbar-toggle js-slideout-toggle" >
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+
+
+                {{--<button type="button" id="nav-open-btn" class="navbar-toggle" >--}}
+                    {{--<span class="sr-only">Toggle navigation</span>--}}
+                    {{--<span class="icon-bar"></span>--}}
+                    {{--<span class="icon-bar"></span>--}}
+                    {{--<span class="icon-bar"></span>--}}
+                {{--</button>--}}
+
+
+
+
+
+                <button class="button_container navbar-toggle" id="toggle">
+                    <span class="top"></span>
+                    <span class="middle"></span>
+                    <span class="bottom"></span>
                 </button>
+
+                    <i class="fa fa-search search-mobile main-search pointer" style="font-size: 28px;color: white;padding-top: 6px;" aria-hidden="true"></i>
+
                 <div class="navbar-brand page-scroll">
                     <a  href="{{ action('HomeController@home') }}">
                          <img style="width: 100px;" id="logo-hio-mobile" src="{{ asset('img/logo.png')}}" alt="HIO">
                     </a>
 
-
-                    <div style="width: 45px;float: right;margin-top: 13px;" id="mobile-notifications" >
+                    <div style="width: 45px;margin-right: 60px;float: right;margin-top: 13px;" id="mobile-notifications" >
 
                         <a id="notification-btn-mobile" class="header-link notification-btn" role="button" data-toggle="dropdown" data-target="#" href="#" aria-haspopup="true" aria-expanded="false" style="padding-left: 0px;padding-top: 5px;background-color: rgba(148, 0, 211, 0);">
                             <i class="glyphicon glyphicon-bell"></i>
@@ -338,7 +349,6 @@ background-color: #e91e63;
 
 
                     </div>
-
 
                 </div>
 
@@ -395,9 +405,8 @@ background-color: #e91e63;
                                     <li><a href="{{ action('SocialAuthController@logout') }}">Logout</a></li>
                                 </ul>
                             </div>
-                            {{--<a class="header-link" href="{{ url('profile', 'me') }}" style=" margin-bottom: 5px;text-align: left; padding-left: 0px;text-transform: capitalize;padding: 5px 0px 0px 0px;">{{getFirstLastName(Auth::user()->name)}}</a>--}}
 
-                            <a class="nav-logout header-link-secondary" style="padding-top: 0px;text-align: left;" href="{{ action('SocialAuthController@logout') }}">Logout</a>
+                            {{--<a class="nav-logout header-link-secondary" style="padding-top: 0px;text-align: left;" href="{{ action('SocialAuthController@logout') }}">Logout</a>--}}
                         </li>
                         <li style="width: 60px;" id="full-nav">
 
@@ -440,92 +449,77 @@ background-color: #e91e63;
         <!-- /.container-fluid -->
     </nav>
 
-    {{--<nav id="sidebar-wrapper" style="margin-top: 67px;">--}}
-  {{----}}
-      {{--<ul class="menu-lateral" style="padding-left: 0" >--}}
+
+        <div id="conteudo">
+            @yield('content')
+        </div>
 
 
-        {{--@if(Auth::check())--}}
+    <div class="overlay" id="overlay">
+        <nav class="overlay-menu">
+            <ul>
+            @if(Auth::check())
+                <li class="mobile-header">
 
-            {{--<li>--}}
-                {{--<div class="profile-wrapper">--}}
-                      {{--<a href="{{ url('profile', 'me') }}">--}}
-                            {{--@if(Auth::user()->photo == "")--}}
-                                {{--<img src="/uploads/users/default_user.png" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle profile-side-img" style="height: 90px; width: 90px">--}}
-                            {{--@else--}}
-                                {{--<img src="{{'/uploads/users/'. Auth::user()->photo }}" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle profile-side-img" style="height: 90px; width: 90px">--}}
+                    <div class="row" style="display: inline-block;padding: 15px 0px;">
+                        <a style="padding-top: 0px;float: left; width: 50px" href="{{ url('profile', 'me') }}">
+                            <img src="{{'/user/photo/'. Auth::user()->id }}" alt="{{Auth::user()->name}}" title="{{Auth::user()->name}}" class="img-circle mobile-img-header" >
+                        </a>
 
-                            {{--@endif--}}
-                        {{--</a>--}}
-                        {{----}}
-                  {{--</div>--}}
-              {{--</li>--}}
+                        <span class=" mobile-header-text" >
+                            <span class="dropdown-toggle" type="button" data-toggle="dropdown">{{getFirstLastName(Auth::user()->name)}}
+                            </span>
 
+                            <p style="    text-align: initial;    margin-bottom: 0px;color: #334650">ADVANCED</p>
 
-              {{--<li class="nav-list-item" id="mobile-notifications">--}}
+                        </span>
+                        <span class=" mobile-menu" type="button" >
+                            <span class="caret" style="color: #334650"></span>
+                        </span>
+                    </div>
+                </li>
 
-                  {{--<a id="dLabel2" role="button" data-toggle="dropdown" data-target="#" href="#" aria-haspopup="true" aria-expanded="false" style="background-color: rgba(148, 0, 211, 0);">--}}
-                      {{--<i class="glyphicon glyphicon-bell"></i>Notifications <span class="badge badge-notify">3</span>--}}
-                  {{--</a>--}}
+                    <li class="submenu hidden"><a href="{{ url('profile', 'me') }}">My Profile</a></li>
+                    <li class="submenu hidden"><a href="{{ action('UserProfileController@editProfile') }}">Settings</a></li>
+                    @if(Auth::user()->other_profile != NULL)
 
+                        @if(Auth::user()->role == "trainer")
+                        <li class="submenu hidden"><a href="javascript:{}" onclick="document.getElementById('switch-profile').submit(); return false;">Change to Normal User</a></li>
+                        @else
+                        <li class="submenu hidden"><a href="javascript:{}" onclick="document.getElementById('switch-profile').submit(); return false;">Change to Trainer account</a></li>
+                        @endif
+                        <form class="hidden hidden" role="form" id="switch-profile" method="POST"  action="{{ url('/switch-profile') }}">
+                        {{ csrf_field() }}
+                        <button type="submit" class=""></button>
+                        </form>
+                    @endif
+                    <li class="submenu hidden"><a href="{{ action('SocialAuthController@logout') }}">Logout</a></li>
 
+                @else
+                    <li class="mobile-header">
 
-                  {{--<ul class="dropdown-menu notifications pull-right" role="menu" aria-labelledby="dLabel2" style="position: inherit;">--}}
+                        <div class="row" style="display: inline-block;padding: 15px 0px;">
+                            <a class="header-link" id="login_btn"  style="font-size: 30px;float: left;margin-right: 25px;" href="{{ url('/auth') }}">Login</a>
 
-                      {{--<div class="notification-heading"><h4 class="menu-title">Notifications</h4><h4 class="menu-title pull-right">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4>--}}
-                      {{--</div>--}}
-                      {{--<li class="divider"></li>--}}
-                      {{--<div class="notifications-wrapper">--}}
+                            <a class="header-link-secondary" style="font-size: 30px;"  href="{{ url('/auth') }}">Register</a>
+                        </div>
+                    </li>
+                @endif
 
-                      {{--</div>--}}
-                      {{--<li class="divider"></li>--}}
-                      {{--<div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>--}}
-                  {{--</ul>--}}
+                <li {{Request::is('HIO-Mission') ? 'class=active' : ''}}>
+                    <a class="mobile-link" style="padding-top: 25px;" href="{{ url('HIO-Mission') }}">HIO Mission</a>
+                </li>
 
-
-              {{--</li>--}}
-
-
-          {{--@endif--}}
-
-
-          {{--<li>--}}
-              {{--<form class="search-form" role="search" _lpchecked="1">--}}
-                  {{--<div class="form-group form-control-search search-select2">--}}
-                      {{--<input type="text" class="form-control nav-side-search" placeholder="Search">--}}
-                      {{--{!! Form::select('search[]', array(),null,array( 'class'=>'form-control hidden nav-side-search search-ajax', 'multiple'=>'multiple')) !!}--}}
-                  {{--</div>--}}
-              {{--</form>--}}
-          {{--</li>--}}
-
-
-          {{--<li class="nav-list-item {{{Request::is('profile/me') ? ' active' : ''}}}">--}}
-            {{--<a class="arrow-r" href="{{ url('challenges') }}">--}}
-                {{--<i class="fa fa-user"></i> Challenges<i class="fa fa-angle-down rotate-icon"></i>--}}
-            {{--</a>--}}
-          {{--</li>--}}
-
-
-
-
-          {{--@if(Auth::check())--}}
-              {{--<li class="nav-list-item" >--}}
-                  {{--<a class="nav-logout" href="{{ action('SocialAuthController@logout') }}">--}}
-                    {{--<i class="fa fa-sign-out"></i>Logout--}}
-                    {{--</a>--}}
-              {{--</li>--}}
-          {{--@else--}}
-              {{--<li class="nav-profile nav-list-item">--}}
-                  {{--<a id="login_btn"  href="{{ url('/login') }}"><i class="fa fa-sign-in"></i>Login</a>--}}
-              {{--</li>--}}
-          {{--@endif--}}
-      {{--</ul>--}}
-    {{--</nav>--}}
-
-
-    <div >
-        @yield('content')
+                <li {{Request::is('challenges') ? 'class=active' : ''}} >
+                    <a class="mobile-link"href="{{ url('challenges') }}">Challenges</a>
+                </li>
+            </ul>
+        </nav>
     </div>
+
+
+
+
 
 
 
@@ -619,12 +613,30 @@ background-color: #e91e63;
     <script src="{{ asset('js/select2.full.min.js') }}"></script>
     <script src="{{ asset('js/jquery.timeago.js') }}"></script>
 
+    <script>
+        $('#toggle').click(function() {
+            $(this).toggleClass('active');
+            $('#overlay').toggleClass('open');
+            $('#conteudo').toggleClass('hidden');
 
+            $('.navbar-default').toggleClass('no-color-nav');
+
+        });
+
+        $('.mobile-menu').click(function() {
+            $(this).toggleClass('active');
+            $('.submenu').toggleClass('hidden');
+        });
+
+
+
+    </script>
 
 
 <script src="{{ asset('js/hio.js') }}"></script>
 
     @yield('footer')
+
 
 
 </body>
