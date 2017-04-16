@@ -18,7 +18,6 @@
 
     }
 
-/*<link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">*/
 .list-content{
  min-height:300px;
 }
@@ -100,6 +99,7 @@ margin-right: -15px;
         font-size: 45px;
         font-weight: 300;
         margin-top: 40px;
+            color: #43484c;
     }
 
   </style>
@@ -109,20 +109,20 @@ margin-right: -15px;
 @section('content')
 
 
-    <section id="menu-challenges"  class="tab-pane fade in active" >
+    <section id="menu-challenges"  style="padding-top: 100px" class="fade in active " >
 
 
-        <div class="container">
+        <div class="container  bg-text" style="    padding-top: 75px;" data-bg-text="Friends">
 
-            <div class="row">
-                <h3 class="col-md-12 text-center my-challenges-title" style="margin-bottom: 40px;margin-top: 0px;">Friends</h3>
+            <div class="row"  >
+                <h3 class="col-md-12 text-center my-challenges-title" style="margin-bottom: 40px;">Friends</h3>
 
 
             </div>
 
             <div class="row">
                 <div class="tab-content col-md-6 col-md-offset-3 search-select2">
-                    {!! Form::select('emailFriend[]', array(),null,array('required', 'data-validation'=>'required',  'class'=>'form-control js-data-example-ajax', 'multiple'=>'multiple')) !!}
+                    {!! Form::select('emailFriend[]', array(),null,array('required', 'data-validation'=>'required',  'class'=>'form-control hidden js-data-example-ajax', 'multiple'=>'multiple')) !!}
                 </div>
 
                 {{--<ul class="list-group">--}}
@@ -136,7 +136,7 @@ margin-right: -15px;
             <div class="row">
 
                 <div class="col-md-12" style="text-align: center">
-                    <div class="col-md-12" style="display: inline-block;margin-top: 25px;">
+                    <div class="col-md-12" style="display: inline-block;margin-top: 0px;padding-top: 0px">
                         <a class="btn btn-tab-challenge active" href="#f-requests" aria-controls="ongoing" data-toggle="tab">Friend Requests</a>
                         <a class="btn btn-tab-challenge" href="#f-invites" aria-controls="ended" data-toggle="tab">Your Invites</a>
                         <a class="btn btn-tab-challenge" href="#my-friends" aria-controls="mychallenges" data-toggle="tab">My Friends</a>
@@ -146,159 +146,18 @@ margin-right: -15px;
 
                 <div class="tab-content col-md-6 col-md-offset-3">
                     <div role="tabpanel" class="tab-pane row active" style="padding-top:0px" id="f-requests">
-                        @foreach ($friendRequests as $friendRequest)
-                            <div class="col-md-12 text-left" >
-                                <a href="{{"/profile/".$friendRequest->id}}">
-                                    <img class="img-thumbnail img-circle" src="{{'/user/photo/'. $friendRequest->id }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >
-                                </a>
-                                <label class="name">
-                                    <a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>
-                                </label>
-                                <label class="pull-right">
-                                    <form class="pull-right" role="form" method="POST"action="{{ url('/friend') }}">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                        <input type="hidden" name="action" value="1">
-                                        <button type="submit" class="btn btn-success">
-                                            <i class="fa fa-btn fa-check" title="Accept"></i>
-                                        </button>
-                                    </form>
-
-                                    <form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                        <input type="hidden" name="action" value="2">
-                                        <button type="submit" class="btn btn-danger">
-                                            <i class="fa fa-btn fa-trash" title="Decline"></i>
-                                        </button>
-                                    </form>
-
-                                    <form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                        <input type="hidden" name="action" value="3">
-                                        <button type="submit" class="btn btn-danger ">
-                                            <i class="fa fa-btn fa-stop" title="Block"></i>
-                                        </button>
-                                    </form>
-
-
-                                </label>
-                                <div class="break"></div>
-                            </div>
-                        @endforeach
-                        <li href="#" class="list-group-item ">
-                            {!! $friendRequests->links() !!}
-                        </li>
-
+                        @include('partials.friends_options', array('friends' => $friendRequests, 'type' => "request_tab"))
                     </div>
                     <div role="tabpanel" class="tab-pane row" id="f-invites">
-                        @foreach ($sentFriendRequests as $friendRequest)
-                            <div class="col-md-12 text-left" >
-                                <a href="{{"/profile/".$friendRequest->id}}">
-                                    <img class="img-thumbnail img-circle" src="{{'/user/photo/'. $friendRequest->id }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >
-                                </a>
-                                <label class="name">
-                                    <a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>
-                                </label>
-                                <label class="pull-right">
-                                    <form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                        <input type="hidden" name="action" value="5">
-                                        <button type="submit" class="btn btn-danger">
-                                            <i class="fa fa-btn fa-trash" title="Decline"></i>
-                                        </button>
-                                    </form>
-                                    {{--<a  class="btn btn-success btn-xs glyphicon glyphicon-ok" href="#" title="View"></a>--}}
-                                    {{--<a  class="btn btn-danger  btn-xs glyphicon glyphicon-trash" href="#" title="Delete"></a>--}}
-                                    {{--<a  class="btn btn-info  btn-xs glyphicon glyphicon glyphicon-comment" href="#" title="Send message"></a>--}}
-                                </label>
-                                <div class="break"></div>
-                            </div>
-                        @endforeach
-                        <li href="#" class="list-group-item ">
-                            {!! $sentFriendRequests->links() !!}
-                        </li>
+                        @include('partials.friends_options', array('friends' => $sentFriendRequests, 'type' => "invite_tab"))
                     </div>
                     <div role="tabpanel" class="tab-pane row" id="my-friends">
-                        @foreach ($friends as $friendRequest)
-                            <div class="col-md-12 text-left" >
-                                <a href="{{"/profile/".$friendRequest->id}}">
-                                    @if($friendRequest->photo == "")
-                                        <img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">
-                                    @else
-                                        <img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >
-
-                                    @endif
-                                </a>
-                                <label class="name">
-                                    <a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>
-                                </label>
-                                <label class="pull-right">
-                                    <form class="pull-right" role="form" method="POST" action="{{ url('/friend') }}">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                        <input type="hidden" name="action" value="6">
-                                        <button type="submit" class="btn btn-danger">
-                                            <i class="fa fa-btn fa-trash" title="Decline"></i>
-                                        </button>
-                                    </form>
-
-                                    <form class="pull-right" role="form" method="POST"  action="{{ url('/friend') }}">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                        <input type="hidden" name="action" value="3">
-                                        <button type="submit" class="btn btn-danger ">
-                                            <i class="fa fa-btn fa-stop" title="Block"></i>
-                                        </button>
-                                    </form>
-
-                                    {{--<a  class="btn btn-success btn-xs glyphicon glyphicon-ok" href="#" title="View"></a>--}}
-                                    {{--<a  class="btn btn-danger  btn-xs glyphicon glyphicon-trash" href="#" title="Delete"></a>--}}
-                                    {{--<a  class="btn btn-info  btn-xs glyphicon glyphicon glyphicon-comment" href="#" title="Send message"></a>--}}
-                                </label>
-                                <div class="break"></div>
-                            </div>
-                        @endforeach
-                        <li href="#" class="list-group-item 222">
-                            {!! $friends->links() !!}
-                        </li>
+                        @include('partials.friends_options', array('friends' => $friends, 'type' => "friend_tab"))
                     </div>
 
 
                     <div role="tabpanel" class="tab-pane row" id="blocked">
-                        @foreach ($blockedFriends as $friendRequest)
-                            <div class="col-md-12 text-left" >
-                                <a href="{{"/profile/".$friendRequest->id}}">
-                                    @if($friendRequest->photo == "")
-                                        <img class="img-thumbnail img-circle" src="/uploads/users/default_user.png" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}">
-                                    @else
-                                        <img class="img-thumbnail img-circle" src="{{'/uploads/users/'. $friendRequest->photo }}" alt="{{$friendRequest->name}}" title="{{$friendRequest->name}}" >
-
-                                    @endif
-                                </a>
-                                <label class="name">
-                                    <a href="{{"/profile/".$friendRequest->id}}">{{$friendRequest->name}}</a><br>
-                                </label>
-                                <label class="pull-right">
-                                    <form class="pull-right" role="form" method="POST" action="{{ url('/friend') }}">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="friendId" value="{{$friendRequest->id}}">
-                                        <input type="hidden" name="action" value="4">
-                                        <button type="submit" class="btn btn-success">
-
-                                            <i class="fa fa-btn fa-trash" title="Unblock"></i>
-                                        </button>
-                                    </form>
-
-                                </label>
-                                <div class="break"></div>
-                            </div>
-                        @endforeach
-                        <li href="#" class="list-group-item 222">
-                            {!! $blockedFriends->links() !!}
-                        </li>
+                        @include('partials.friends_options', array('friends' => $blockedFriends, 'type' => "block_tab"))
                     </div>
                 </div>
             </div>
@@ -633,10 +492,29 @@ margin-right: -15px;
 <script src="{{ asset('js/select2.full.min.js') }}"></script>
 <script>
 
-    $('.btn-tab-challenge').on('click', function (e) {
+ $('.btn-tab-challenge').on('click', function (e) {
         $('.btn-tab-challenge').removeClass('active');
         $(e.currentTarget).addClass('active');
     })
+
+    $(function() {
+        // for bootstrap 3 use 'shown.bs.tab', for bootstrap 2 use 'shown' in the next line
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            // save the latest tab; use cookies if you like 'em better:
+            localStorage.setItem('lastTab', $(this).attr('href'));
+        });
+
+        // go to the latest tab, if it exists:
+        var lastTab = localStorage.getItem('lastTab');
+        if (lastTab) {
+            $('[href="' + lastTab + '"]').tab('show');
+            $('.btn-tab-challenge').removeClass('active');
+                    $('[href="' + lastTab + '"]').addClass('active');
+        }
+    });
+
+
+
 
     var search = $(".js-data-example-ajax").select2({
         ajax: {

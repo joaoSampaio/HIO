@@ -70,36 +70,7 @@ color: #eb1946;
 
 
 
-.bg-text, .bg-text-brand-new {
-    /*background-color: #aaa;*/
-    /*overflow: hidden;*/
-    position: relative;
-}
-.bg-text::before {
-    color: #ececed;
-    content: attr(data-bg-text);
-    display: block;
-    font-size: 208px;
-    line-height: 1;
-    position: absolute;
-    top: 1px;
-    white-space: nowrap;
-        overflow: hidden;
-        max-width: 95%;
-}
 
-.bg-text-brand-new::before {
-      color: #e0e0e0;
-      content: attr(data-bg-text);
-      display: block;
-      font-size: 208px;
-      line-height: 1;
-      position: absolute;
-      top: 1px;
-      white-space: nowrap;
-          overflow: hidden;
-          max-width: 95%;
-  }
 
 .navbar-default {
         background-color: transparent;
