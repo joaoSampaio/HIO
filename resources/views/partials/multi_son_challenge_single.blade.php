@@ -16,7 +16,7 @@
             <span class="pull-right proves-icon">{{$sonChallenge->views}}<i class="fa fa-eye" style="padding-left: 5px" aria-hidden="true"></i></span>
         </div>
         <div class="col-md-12 col-xs-12 no-padding challenge-item-title-container" >
-            <span class="challenge-item-title">{{$sonChallenge->title}}</span>
+            <span class="challenge-item-title">{{$sonChallenge->description}}</span>
         </div>
 
         @if(isset($showDelete) &&Auth::check() && Auth::user()->id == $sonChallenge->user_id)

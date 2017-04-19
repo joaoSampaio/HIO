@@ -1,5 +1,5 @@
 
-     <img src="{{ asset('img/achievement/'.$icon)}}" class="" style="float: left" title="{{$title}}" alt="{{$title}}">
+     <img src="{{ asset('img/achievement/'.$icon)}}" class="achievement" title="{{$title}}" alt="{{$title}}">
 
 
 

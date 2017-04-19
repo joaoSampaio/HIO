@@ -263,6 +263,7 @@ class SonChallengeController extends Controller {
     public function uploadFile(Request $request){
 
         $challenge_id = $request->get('challenge');
+        $description = strip_tags($request->input('description'));
 
         $challenge = Challenge::findOrFail($challenge_id);
         if($challenge->isClosed()){
@@ -321,7 +322,7 @@ class SonChallengeController extends Controller {
 
         $file = new FileHio(array(
             'filename' => $fileName, 'user_id' => Auth::user()->id, 'challenge_id' => $request->get('challenge'),
-            'views' => 0, 'likes' => 0, 'type' => $type, 'is_ready' => ($type == 0)? true : false
+            'views' => 0, 'likes' => 0, 'type' => $type, 'description' => $description, 'is_ready' => ($type == 0)? true : false
         ));
 
         $file->save();

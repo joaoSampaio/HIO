@@ -73,39 +73,6 @@ position: absolute;
     cursor: pointer;
 }
 
-  #clockdiv{
-      font-family: 'Roboto', sans-serif;
-      color: #fff;
-      display: inline-block;
-      text-align: center;
-      font-size: 30px;
-      height: 200px;
-  }
-
-  #clockdiv > div{
-      padding: 10px;
-      border-radius: 3px;
-      background: #191c20;
-      display: inline-block;
-      width: 100px;
-      height: 146px;
-      font-size: 60px;
-      margin: 15px 5px;
-  }
-
-
-
-  #clockdiv div > span{
-      /*padding: 15px;*/
-      border-radius: 3px;
-      /*background: #00816A;*/
-      /*font-size: 70pt;*/
-      display: inline-block;
-  }
-
-
-
-
   .smalltext{
       font-size: 18px;
       color: #404d57;
@@ -127,124 +94,6 @@ cursor: pointer;
 
 
 
-
-
-
-
-.ch-grid {
-	margin: 20px 0 0 0;
-	padding: 0;
-	list-style: none;
-	display: block;
-	text-align: center;
-	width: 100%;
-}
-
-.ch-grid:after,
-.ch-item:before {
-	content: '';
-    display: table;
-}
-
-.ch-grid:after {
-	clear: both;
-}
-
-.ch-grid li {
-	width: 50px;
-	height: 50px;
-	display: inline-block;
-	margin: 10px;
-}
-
-.ch-item {
-	width: 100%;
-	height: 100%;
-	border-radius: 50%;
-	overflow: hidden;
-	position: relative;
-	cursor: default;
-	/*box-shadow:*/
-		/*inset 0 0 0 16px rgba(255,255,255,0.6),*/
-		/*0 1px 2px rgba(0,0,0,0.1);*/
-	/*transition: all 0.4s ease-in-out;*/
-}
-
-.ch-info {
-	position: absolute;
-    top: 0;
-	background: rgba(235, 25, 70, 0.7);
-	width: inherit;
-	height: inherit;
-	border-radius: 50%;
-	overflow: hidden;
-	opacity: 0;
-	transition: all 0.4s ease-in-out;
-	transform: scale(0);
-}
-
-
-.ch-info h3 {
-	color: #fff;
-	text-transform: uppercase;
-	letter-spacing: 2px;
-	font-size: 22px;
-	margin: 0 30px;
-	padding: 45px 0 0 0;
-	height: 140px;
-	font-family: 'Open Sans', Arial, sans-serif;
-	text-shadow:
-		0 0 1px #fff,
-		0 1px 2px rgba(0,0,0,0.3);
-}
-
-.ch-info p {
-	color: #fff;
-	padding: 10px 5px;
-	font-style: italic;
-	margin: 0 10px;
-	font-size: 12px;
-	border-top: 1px solid rgba(255,255,255,0.5);
-	opacity: 0;
-	transition: all 1s ease-in-out 0.4s;
-}
-
-.ch-info p a {
-	display: block;
-	color: rgba(255,255,255,1);
-	font-style: normal;
-    text-align: center;
-	font-weight: 700;
-	text-transform: uppercase;
-	font-size: 9px;
-	letter-spacing: 1px;
-	padding-top: 4px;
-	font-family: 'Open Sans', Arial, sans-serif;
-}
-
-.ch-info p a:hover {
-	color: rgba(255,242,34, 0.8);
-}
-
-.ch-item:hover {
-	box-shadow:
-		inset 0 0 0 1px rgba(255,255,255,0.1),
-		0 1px 2px rgba(0,0,0,0.1);
-}
-
-.ch-item:hover .ch-info {
-	transform: scale(1);
-	opacity: 1;
-}
-
-.ch-item:hover .ch-info p {
-	opacity: 1;
-}
-
-.ch-item img{
-    width: 100%;
-    height: 100%;
-    }
 
 .challenge-title{
     color: white;
@@ -307,24 +156,7 @@ width: 49px;
 .show-friends div{
 background-color: #c5c5c5;
 }
-.plus-sign {
-    background: white;
-    width: 2px;
-    height: 20px;
-    display: block;
-    position: relative;
-    margin-left: 2px;
-    margin-top: 15px;
-}
-.plus-sign:before {
-background: white;
-    content: "";
-    width: 21px;
-    height: 2px;
-    position: absolute;
-    top: 9px;
-    left: -10px;
-}
+
 
 .people-participating{
 font-size: 20px;
@@ -372,52 +204,129 @@ color: #404d57;
     text-transform: inherit;
 }
 
+.btn-file{
+    background-color: rgb(178, 178, 178);
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    font-family: "Roboto";
+    text-transform: uppercase;
+    padding: 6px 20px;
+    margin-top: 30px;
+}
+
+.dropzonebg{
+background-color: #E7EBEE;
+border: 0px;
+padding: 50px 20px;
+}
+
+.upload-file-title {
+    text-align: center;
+    font-weight: 400;
+    text-transform: initial;
+        margin-bottom: 20px;
+    font-size: 36px;
+    line-height: 1.7;
+    /*padding: 20px 0px;*/
+}
+
+.upload-subtitle{
+  font-size: 20px;
+  font-family: "Roboto";
+  color: rgb(188, 188, 188);
+  line-height: 1.2;
+  text-align: center;
+  -moz-transform: matrix( 2.12140524494472,0,0,2.13117012696179,0,0);
+  -webkit-transform: matrix( 2.12140524494472,0,0,2.13117012696179,0,0);
+  -ms-transform: matrix( 2.12140524494472,0,0,2.13117012696179,0,0);
+    font-weight: 400;
+}
+
+.dropzone {
+    padding: 20px 30px;
+    border: 0px;
+}
+
+.create-input{
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+
+.btn-upload{
+    margin-top: 25px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.dropzone .dz-preview.dz-image-preview {
+    background: transparent;
+}
+
+@media (max-width: 767px){
+
+    .modal-dialog {
+        margin: 0px;
+    }
+    .modal-content{
+        border-radius: 0px;
+        border: 0px;
+    }
+
+    .close-new {
+        right: 15px;
+        top: 15px;
+        line-height: 1;
+    }
+
+    .upload-file-title {
+        font-size: 25px;
+        margin-bottom: 5px;
+        margin-top: 20px;
+    }
+
+    #img-icon-upload{
+        display: none;
+    }
+
+    #proofs-upload-layout br{
+        display: none;
+    }
+    .btn-file{
+        margin-top: 0px;
+    }
+
+    .create-input {
+        margin-top: 20px;
+        font-size: 18px;
+    }
+
+}
+
   </style>
 
 @endsection
 
 @section('content')
 
-{{--<script>(function(d, s, id) {--}}
-                      {{--var js, fjs = d.getElementsByTagName(s)[0];--}}
-                      {{--if (d.getElementById(id)) return;--}}
-                      {{--js = d.createElement(s); js.id = id;--}}
-                      {{--js.src = "//connect.facebook.net/pt_PT/sdk.js#xfbml=1&version=v2.5&appId=948239501878979";--}}
-                      {{--fjs.parentNode.insertBefore(js, fjs);--}}
-                    {{--}(document, 'script', 'facebook-jssdk'));</script>--}}
-
-<!-- Header -->
-
     @if(isset($isPublic) && $isPublic == 0)
-<header>
-
-            <div class="container">
-                <div style="padding-top: 200px;padding-bottom: 200px;">
-                    <h1>Private Challenge</h1>
-                    <div class="intro-lead-in">
-
-
-                            <p> Use the link sent to your email to access</p>
-
-                    </div>
-
+    <header>
+        <div class="container">
+            <div style="padding-top: 200px;padding-bottom: 200px;">
+                <h1>Private Challenge</h1>
+                <div class="intro-lead-in">
+                        <p> Use the link sent to your email to access</p>
                 </div>
             </div>
-
-
-            </div>
-        </header>
+        </div>
+    </header>
 
     @else
 
         <header>
-
             <div class="container">
                 <div style="padding-top: 200px;padding-bottom: 200px;">
                     <h1 class="challenge-title">{{ $challenge->title }}</h1>
-
-
-
                     <div class="intro-lead-in"  style="    margin-top: 55px;">
 
                         @if(!$challenge->closed && $isValid)
@@ -497,7 +406,7 @@ color: #404d57;
             </div>
         </section>
 
-        <section style="background-color: #e7eaed">
+        <section id="friends-section" style="background-color: #e7eaed">
             <ul class="ch-grid" id="participants-list">
                 <?php $countFriends=0; ?>
                 @foreach ($peopleParticipating as $friend)
@@ -557,27 +466,52 @@ color: #404d57;
 
 @section('modal')
 
-    <div id="myModal" class="modal fade" role="dialog">
+    <div id="myModal" class="modal fade" style="padding: 0px !important;" role="dialog">
           <div class="modal-dialog">
 
             <!-- Modal content-->
             <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Upload your proof</h4>
+              <div class="modal-header" style="    padding: 30px 15px 0px;">
+                <button type="button" class="close close-new" data-dismiss="modal">&#10005;</button>
+                <h4 class="modal-title upload-file-title">Upload  proof</h4>
               </div>
-              <div class="modal-body">
-                {!! Form::open(array('action' => array('SonChallengeController@uploadFile'), 'class' => 'dropzone','novalidate' => 'novalidate', 'id' => 'myAwesomeDropzone',
+              <div class="modal-body" style="    text-align: center;    padding-top: 40px;">
+
+                <span class="upload-subtitle">Drop your media here or choose file.</span>
+                {!! Form::open(array('action' => array('SonChallengeController@uploadFile'), 'class' => 'dropzone ','novalidate' => 'novalidate', 'id' => 'myAwesomeDropzone',
                                                                                                                   'files' => true)) !!}
+
+                    <div id="dropzonePreview" class="dropzonebg pointer">
+
+                        <div id="proofs-upload-layout">
+                            <img id="img-icon-upload" src="/img/icon_upload.png">
+                            <div class="dz-message hidden" data-dz-message></div>
+                            <br>
+                            <button type="button" class="btn btn-file">Choose file</button>
+                        </div>
+                        <div id="proofs-upload-list"></div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <div class="col-md-8 col-md-offset-2 col-xs-12">
+                            {!! Form::text('description', null,array('required', 'data-validation'=>'required', 'data-parsley-required-message'=>'*information required', 'class'=>'form-control create-input', 'placeholder'=>'Description')) !!}
+                        </div>
+
+                    </div>
+
+                    <button id="upload-proof-btn" disabled class="btn btn-xl btn-header btn-upload" >Upload</button>
+
 
                 {{--<form action="/upload" class="dropzone">--}}
                 {{ Form::hidden('challenge', $challenge->id) }}
                 </form>
 
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
+              {{--<div class="modal-footer">--}}
+                {{--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>--}}
+              {{--</div>--}}
             </div>
 
           </div>
@@ -810,6 +744,9 @@ color: #404d57;
                 Dropzone.options.myAwesomeDropzone = {
                   paramName: "file", // The name that will be used to transfer the file
                   maxFiles: 1, // MB
+                  autoProcessQueue: false,
+                  clickable:'#dropzonePreview',
+                  previewsContainer:'#dropzonePreview',
                   accept: function(file, done) {
                     if (file.name == "gg.jpg") {
                       done("Naha, you don't.");
@@ -822,28 +759,42 @@ color: #404d57;
                       },
                   init: function() {
 
+                    var submitButton = $('#upload-proof-btn');
+                    var myDropzone = this; // closure
+
+                    submitButton.click( function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      myDropzone.processQueue(); // Tell Dropzone to process all queued files.
+                    });
+
+                    // You might want to show the submit button only when
+                    // files are dropped here:
+                    this.on("addedfile", function() {
+                      // Show submit button here and/or inform user to click it.
+                      $('#proofs-upload-layout').hide();
+                      $('#upload-proof-btn').prop("disabled",false);
+
+
+                    });
+                    this.on("removedfile", function(file) {
+                        $('#proofs-upload-layout').show();
+                     });
+
                       this.on("uploadprogress", function(file, progress, bytesSent) {
 
                       });
 
                       this.on("success", function(file, response) {
 
-                          //myModal
                           $('#myModal').modal('hide');
                           $('.wall-fame-subtitle').hide();
 
-
-                        //$( "#proofs> .proof-item:nth-child(3)" )
                         var tamanho = $("#proofs > .proof-item").length;
-
                         if(tamanho >= 6){
                             $("#proofs> .proof-item:nth-child(5)" ).hide();
                         }
-
                         $( "#proofs").prepend(response.html);
-//                        $( "#proofs> .proof-item:nth-child(1)" ).after(response.html)
-//                        $("#user_challenge").html(response.html);
-
                         });
                     }
                 };

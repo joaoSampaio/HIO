@@ -609,31 +609,6 @@ class HomeController extends Controller
                 $challenge->deadLine = $now;
                 $challenge->closed = true;
                 $challenge->save();
-
-
-                //
-//                $sonChallenges = DB::table('files')->where('files.challenge_id', $challenge->id)
-//                    ->select('files.user_id', DB::raw('count(*) as total'))
-//                    ->groupBy('files.user_id')
-//                    ->get();
-//                foreach ($sonChallenges as $sonChallenge) {
-//                    if ($user = User::where('id', $sonChallenge->user_id)->first()) {
-//                        $achievements = $user->achievements;
-//                        if ($achievements == NULL) {
-//                            $achievements = array('totalCompleted' => 1);
-//                        } else {
-//                            $achievements = json_decode($achievements, true);
-//                            if (!array_key_exists('totalCompleted', $achievements)) {
-//                                $achievements['totalCompleted'] = 1;
-//                            } else {
-//                                $achievements['totalCompleted'] = $achievements['totalCompleted'] + 1;
-//                            }
-//                        }
-//                        Auth::user()->achievements = json_encode($achievements);
-//                        Auth::user()->save();
-//                    }
-//                }
-
             }
         }
         return redirect()->action('HomeController@challengeDetail', $uuid);
@@ -831,7 +806,7 @@ class HomeController extends Controller
             ->join('users', 'files.user_id', '=', 'users.id')
 //            ->leftJoin('proof_approval as proofs_total', 'proofs_total.proof_id','=', 'files.id')
             ->select('files.*','users.name','challenges.uuid','challenges.title',
-                'challenges.judged', 'challenges.description')
+                'challenges.judged')
 
             ->orderBy('files.created_at', 'desc')
             ->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'all', $page = null);
@@ -853,7 +828,7 @@ class HomeController extends Controller
             ->where('challenges.judged','=', 0)
 //            ->leftJoin('proof_approval as proofs_total', 'proofs_total.proof_id','=', 'files.id')
             ->select('files.*','users.name','challenges.uuid','challenges.title',
-                'challenges.judged', 'challenges.description')
+                'challenges.judged')
 
             ->orderBy('files.created_at', 'desc')
             ->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ongoing', $page = null);
@@ -875,7 +850,7 @@ class HomeController extends Controller
             ->where('challenges.judged','=', 1)
 //            ->leftJoin('proof_approval as proofs_total', 'proofs_total.proof_id','=', 'files.id')
             ->select('files.*','users.name','challenges.uuid','challenges.title',
-                'challenges.judged', 'challenges.description')
+                'challenges.judged')
 
             ->orderBy('files.created_at', 'desc')
             ->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ended', $page = null);

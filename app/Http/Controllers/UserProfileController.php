@@ -147,15 +147,42 @@ class UserProfileController extends Controller
             $canBeFriend = $this->canBeFriend($idUser);
         }
 
-        $userFriends = $this->getAllFriends($idUser);
+        $userFriends = $this->getAllFriends($idUser, NULL, 6);
+        if(Auth::user()->id == $idUser)
+            $friendsMessage = 'You <span> are Friend with </span>';
+        else
+            $friendsMessage = $user->name .'<span> is Friend with </span>';
+        $count = 0;
+        foreach( $userFriends as $people){
+            $count++;
+            $friendsMessage = $friendsMessage .' '.$people->name . ',';
+            if($count >= 2)
+                break;
+        }
+        $friendsMessage = rtrim($friendsMessage, ",");
+        $friendsMessage = $friendsMessage . ' <span> and </span>' . ($userFriends->total() - $count) . ' other.';
 
+//        if(count($peopleParticipating) > 3) {
+//            $otherPeople = rtrim($otherPeople, ",");
+//            $end = $end . '  <span>and</span> <span id="showmore" class=""> ' . (count($peopleParticipating) - 3) .
+//                ' other people.</span> <span id="otherpeople" style="display: none;">' . $otherPeople . '</span>';
+//
+//        }
+//        if(count($peopleParticipating) == 1){
+//            $end = $creator.' is publically challenging everyone, accept his challenge and prove you are ahead';
+//        }
+//        if(count($peopleParticipating) <= 0){
+//            $end = 'Be the first to accept this challenge and prove you are ahead.';
+//        }
 
+//        return "ola";
         return view('profile')->with('challenges', $ongoingChallenges)
             ->with('user', $user)
             ->with('endedChallenges', $endedChallenges)
             ->with('challengeCreated', $challengeCreated)
             ->with('myChallenges', $myChallenges)
             ->with('canBeFriend', $canBeFriend)
+            ->with('friendsMessage', $friendsMessage)
             ->with('userFriends', $userFriends);
 
 

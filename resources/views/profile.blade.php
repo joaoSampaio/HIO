@@ -20,12 +20,12 @@ border-color: #C1C5C8;
 background: #C1C5C8;
     padding: 9px 40px !important;
 color: white;
-margin-top: 25px;
+font-weight: bold;
 }
 
 .btn-edit:hover  {
-border-color: #C1C5C8;
-background: #eb1946;
+border-color: #a6aaad;
+background: #a6aaad;
 padding: 10px 50px;
 color: white;
 }
@@ -73,116 +73,6 @@ color: white;
 
 
 
-.ch-grid {
-	margin: 20px 0 0 0;
-	padding: 0;
-	list-style: none;
-	display: block;
-	text-align: center;
-	width: 100%;
-}
-
-.ch-grid:after,
-.ch-item:before {
-	content: '';
-    display: table;
-}
-
-.ch-grid:after {
-	clear: both;
-}
-
-.ch-grid li {
-	width: 100px;
-	height: 100px;
-	display: inline-block;
-	margin: 20px;
-}
-
-.ch-item {
-	width: 100%;
-	height: 100%;
-	border-radius: 50%;
-	overflow: hidden;
-	position: relative;
-	cursor: default;
-	box-shadow:
-		inset 0 0 0 16px rgba(255,255,255,0.6),
-		0 1px 2px rgba(0,0,0,0.1);
-	transition: all 0.4s ease-in-out;
-}
-
-.ch-info {
-	position: absolute;
-    top: 0;
-	background: rgba(235, 25, 70, 0.7);
-	width: inherit;
-	height: inherit;
-	border-radius: 50%;
-	overflow: hidden;
-	opacity: 0;
-	transition: all 0.4s ease-in-out;
-	transform: scale(0);
-}
-
-
-.ch-info h3 {
-	color: #fff;
-	text-transform: uppercase;
-	letter-spacing: 2px;
-	font-size: 22px;
-	margin: 0 30px;
-	padding: 45px 0 0 0;
-	height: 140px;
-	font-family: 'Open Sans', Arial, sans-serif;
-	text-shadow:
-		0 0 1px #fff,
-		0 1px 2px rgba(0,0,0,0.3);
-}
-
-.ch-info p {
-	color: #fff;
-	padding: 10px 5px;
-	font-style: italic;
-	margin: 0 10px;
-	font-size: 12px;
-	border-top: 1px solid rgba(255,255,255,0.5);
-	opacity: 0;
-	transition: all 1s ease-in-out 0.4s;
-}
-
-.ch-info p a {
-	display: block;
-	color: rgba(255,255,255,1);
-	font-style: normal;
-    text-align: center;
-	font-weight: 700;
-	text-transform: uppercase;
-	font-size: 9px;
-	letter-spacing: 1px;
-	padding-top: 4px;
-	font-family: 'Open Sans', Arial, sans-serif;
-}
-
-.ch-info p a:hover {
-	color: rgba(255,242,34, 0.8);
-}
-
-.ch-item:hover {
-	box-shadow:
-		inset 0 0 0 1px rgba(255,255,255,0.1),
-		0 1px 2px rgba(0,0,0,0.1);
-}
-
-.ch-item:hover .ch-info {
-	transform: scale(1);
-	opacity: 1;
-}
-
-.ch-item:hover .ch-info p {
-	opacity: 1;
-}
-
 .ch-item img{
     width: 100%;
     height: 100%;
@@ -227,15 +117,12 @@ color: white;
 }
 
 
-.profile-main-photo{
-    width: 140px;
-    height: 140px;
-}
+
 
 .profile-main-name{
 margin-top: 30px;
     font-size: 36px;
-    font-weight: 500;
+    font-weight: 400;
 }
 
 
@@ -275,7 +162,252 @@ text-transform: inherit;
     background: #5cb85c;
     padding: 9px 40px !important;
     color: white;
+    font-weight: bold;
+}
+
+/*.profile-pic-anim{*/
+/*overflow: hidden;*/
+ /*width: 120px;*/
+  /*height: 120px;*/
+  /*z-index: -1;*/
+  /*position: relative;*/
+/*box-shadow: 60px -60px 0 2px #ffa86a, -60px -60px 0 2px #ffa86a, -60px 60px 0 2px #ffa86a, 60px 60px 0 2px #ffa86a, 0 0 0 2px #ffa86a;*/
+/*}*/
+/*.profile-pic-anim:hover{*/
+    /*animation: border .4s ease 1 forwards;*/
+/*}*/
+
+/*@keyframes border {*/
+  /*0% {*/
+    /*box-shadow: 60px -60px 0 2px #fff, -60px -60px 0 2px #fff, -60px 60px 0 2px #fff, 60px 60px 0 2px #fff, 0 0 0 2px #fff;*/
+  /*}*/
+  /*25% {*/
+    /*box-shadow: 0 -125px 0 2px #fff, -60px -60px 0 2px #fff, -60px 60px 0 2px #fff, 60px 60px 0 2px #fff, 0 0 0 2px #73ff00;*/
+  /*}*/
+  /*50% {*/
+    /*box-shadow: 0 -125px 0 2px #fff, -125px 0px 0 2px #fff, -60px 60px 0 2px #fff, 60px 60px 0 2px #fff, 0 0 0 2px #73ff00;*/
+  /*}*/
+  /*75% {*/
+    /*box-shadow: 0 -125px 0 2px #fff, -125px 0px 0 2px #fff, 0px 125px 0 2px #fff, 60px 60px 0 2px #fff, 0 0 0 2px #73ff00;*/
+  /*}*/
+  /*100% {*/
+    /*box-shadow: 0 -125px 0 2px #fff, -125px 0px 0 2px #fff, 0px 125px 0 2px #fff, 120px 40px 0 2px #fff, 0 0 0 2px #73ff00;*/
+  /*}*/
+/*}*/
+
+
+
+
+
+.profile-main-photo{
+    width: 150px;
+    height: 150px;
+        padding: 2px;
+}
+
+
+
+div[data-anim~=base] {
+  -webkit-animation-iteration-count: 1;  /* Only run once */
+  -webkit-animation-fill-mode: forwards; /* Hold the last keyframe */
+  -webkit-animation-timing-function:linear; /* Linear animation */
+}
+
+.wrapper[data-anim~=wrapper] {
+  -webkit-animation-duration: 0.01s; /* Complete keyframes asap */
+  -webkit-animation-delay: 0.5s; /* Wait half of the animation */
+  -webkit-animation-name: close-wrapper; /* Keyframes name */
+}
+
+.circle[data-anim~=left] {
+  -webkit-animation-duration: 1s; /* Full animation time */
+  -webkit-animation-name: left-spin;
+}
+
+.circle[data-anim~=right] {
+  -webkit-animation-duration: 0.5s; /* Half animation time */
+  -webkit-animation-name: right-spin;
+}
+
+.wrapper {
+  width: 150px; /* Set the size of the progress bar */
+  height: 150px;
+  position: absolute; /* Enable clipping */
+  clip: rect(0px, 150px, 150px, 75px); /* Hide half of the progress bar */
+}
+/* Set the sizes of the elements that make up the progress bar */
+.circle {
+  width: 150px;
+  height: 150px;
+  border: 4px solid #8dd39a;
+  border-radius: 50%;
+  position: absolute;
+  clip: rect(0px, 75px, 150px, 0px);
+}
+
+@-webkit-keyframes right-spin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(180deg);
+  }
+}
+/* Rotate the left side of the progress bar from 0 to 360 degrees */
+@-webkit-keyframes left-spin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+/* Set the wrapper clip to auto, effectively removing the clip */
+@-webkit-keyframes close-wrapper {
+  to {
+    clip: rect(auto, auto, auto, auto);
+  }
+}
+
+.badge-lvl {
+    background-color: rgb(72, 211, 98);
+    font-size: 22px;
+     color: rgb(255, 255, 255);
+      font-weight: bold;
+      text-transform: uppercase;
+      line-height: 1.2;
+      text-align: center;
+      margin-top: 25px;
+      border-radius: 25px;
+          padding: 5px 15px;
+
+}
+.badge-lvl span{
+        font-size: 14px;
+      font-family: "Roboto";
+      color: rgba(255, 255, 255, 0.749);
+      font-weight: bold;
+      text-transform: uppercase;
+      line-height: 1.2;
+
+}
+
+.progress-bar-container .progress {
+    border-right: solid 5px #FFF;
+}
+.progress-bar-container:last-child {
+    border: none;
+}
+
+.rank{
+    font-size: 18px;
+      font-family: "Roboto";
+      color: rgb(72, 211, 98);
+      font-weight: bold;
+      text-transform: uppercase;
+      line-height: 1.2;
+      text-align: center;
+      margin-right: 10px;
+      margin-left: 10px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+
+}
+
+
+.progress-bar-xp {
+  background-color: rgb(72, 211, 98);
+  height: 6px;
+}
+.progress-bar-base {
+  background-color: rgb(231, 234, 237);
+  height: 6px;
+}
+
+.progress-bar-container .progress{
+    height: initial;
+    width: 20%;
+    float: left;
+    margin-bottom: 10px;
+}
+
+.xp-text {
+  font-size: 20px;
+  font-family: "Roboto";
+  color: rgb(188, 188, 188);
+  line-height: 1.2;
+  text-align: center;
+  font-weight: 400;
+}
+
+.badge-category {
+    background-color: rgb(178, 178, 178);
+    font-size: 12px;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: left;
+    border-radius: 50%;
+    padding: 5px 8px;
+    margin-left: 7px;
+    line-height: 1.1;
+    vertical-align: top;
+}
+.span-category {
+    font-size: 16px;
+    color: rgb(178, 178, 178);
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: left;
+    margin-left: 15px;
+}
+.span-category-more{
+    text-decoration: underline;
+}
+
+.btn-lvl-up {
+    border-color: #eb1946;
+    background: #eb1946;
+    padding: 11px 31px !important;
+    color: white;
+    font-family: "Roboto";
+      color: rgb(255, 255, 255);
+      font-weight: bold;
+      text-transform: uppercase;
+      line-height: 1.2;
+      text-align: center;
+      margin-left: 12px;
+
+}
+
+.achievement{
+    float: left;
+    width: 110px;
+}
+
+.view-achievements{
+    color: rgb(178, 178, 178);
+    font-weight: bold;
+    font-size: 16px;
     margin-top: 25px;
+    text-decoration: underline;
+    text-transform: uppercase;
+    line-height: 1.43;
+    text-align: center;
+
+}
+
+.friend_message {
+  font-size: 20px;
+  font-family: "Roboto";
+  color: rgb(64, 77, 87);
+  line-height: 1.2;
+  text-align: center;
+  font-weight: 400;
+  margin-top: 20px;
+}
+.friend_message span {
+    color: #acaeb0
 }
 
   </style>
@@ -312,13 +444,50 @@ text-transform: inherit;
                         @endif
 
                         <div  style="display: inline-block;" >
-                            <div id="cropContainerEyecandy" style="position: relative;width: 140px; height: 140px">
-                                <img src="{{'/user/photo/'. $user->id }}" id="user-crop" alt="{{$user->name}}" title="{{$user->name}}" class="img-circle profile-main-photo">
+                            <div id="cropContainerEyecandy" class=" " style="position: relative;width: 140px; height: 140px">
+                                <div class="wrapper" data-anim="base wrapper">
+                                  <div class="circle" data-anim="base left"></div>
+                                  <div class="circle" data-anim="base right"></div>
+                                </div>
+                                <img src="{{'/user/photo/'. $user->id }}" id="user-crop" alt="{{$user->name}}"
+                                                                title="{{$user->name}}" class="img-circle profile-main-photo profile-pic-anim">
                             </div>
-
                         </div>
                     </div>
+
+                    <div><span class="badge badge-lvl">5 <span>LVL</span></span></div>
+
                     <div ><h3 class="text-capitalize profile-main-name">{{$user->name}}</h3></div>
+                    <div style="    margin-top: 20px;    margin-bottom: 20px;">
+                        <span class="rank">ADVANCED</span><svg width="17px" height="17px">
+                                                                 <path fill-rule="evenodd"  fill="rgb(72, 211, 98)"
+                                                                  d="M16.855,8.391 L4.327,16.931 C4.008,17.163 3.615,16.760 3.850,16.440 L10.558,6.643 C10.638,6.534 10.772,6.484 10.903,6.512 L16.726,7.766 C17.018,7.829 17.098,8.215 16.855,8.391 ZM6.453,10.355 C6.372,10.463 6.238,10.514 6.107,10.486 L0.284,9.232 C-0.008,9.169 -0.088,8.783 0.155,8.607 L12.683,0.067 C13.002,-0.166 13.395,0.238 13.161,0.558 L6.453,10.355 Z"/>
+                                                                 </svg>
+                        <span class="rank">GYM</span>
+
+                    </div>
+
+
+                </div>
+                <div class="col-sm-12 col-md-4 col-md-offset-4 progress-bar-container">
+                    <div class="progress">
+                          <div class="progress-bar progress-bar-xp" role="progressbar" style="width:100%"></div>
+                    </div>
+                    <div class="progress">
+                          <div class="progress-bar progress-bar-xp" role="progressbar" style="width:100%"></div>
+                    </div>
+                    <div class="progress">
+                          <div class="progress-bar progress-bar-xp" role="progressbar" style="width:80%"></div>
+                    </div>
+                    <div class="progress">
+                          <div class="progress-bar progress-bar-xp" role="progressbar" style="width:0%"></div>
+                    </div>
+                    <div class="progress">
+                          <div class="progress-bar progress-bar-xp" role="progressbar" style="width:0%"></div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-md-offset-4 ">
+                    <span class="xp-text">3120 / 4000XP</span>
 
                 </div>
 
@@ -336,25 +505,37 @@ text-transform: inherit;
 
             <div class="col-sm-12 col-md-12">
                 <?php $sports = multiexplode(array(",",".","|",":"),$user->sports) ?>
+                <?php $countSports=0; ?>
+
                 @foreach ($sports as $sport)
-                    <a href="{{action('HomeController@showChallenges', $sport)}}">#{{$sport}}</a>
-
+                    <?php $countSports++; ?>
+                    @if($countSports > 3)
+                        @break
+                    @endif
+                    <a href="{{action('HomeController@showChallenges', $sport)}}" class="span-category">{{$sport}}<span class="badge badge-category">1</span></a>
                 @endforeach
+                <a href="#" class="span-category span-category-more">SEE MORE</a>
             </div>
-
             @if(Auth::user()->email === $user->email)
-                <div class="col-sm-12 col-md-12">
+                <div class="col-sm-12 col-md-12" style="margin-top: 25px;">
                     <a class="btn btn-edit edit-profile" href="{{ action('UserProfileController@editProfile') }}">Edit</a>
+                    <a class="btn  btn-lvl-up" href="/friends">LEVEL UP</a>
                 </div>
-                <div class="col-sm-12 col-md-12">
-                    <a class="btn  btn-friends edit-profile" href="/friends">Friends</a>
-                </div>
-            @else
-                 <div class="col-sm-12 col-md-12">
-                    <a class="btn btn-friends edit-profile" href="{{action('HomeController@getFriendsUser', [ 'id' => $user->id, 'name'=>$user->name])}}">Friends</a>
-                </div>
+            @endif
 
-             @endif
+            {{--@if(Auth::user()->email === $user->email)--}}
+                {{--<div class="col-sm-12 col-md-12">--}}
+                    {{--<a class="btn btn-edit edit-profile" href="{{ action('UserProfileController@editProfile') }}">Edit</a>--}}
+                {{--</div>--}}
+                {{--<div class="col-sm-12 col-md-12">--}}
+                    {{--<a class="btn  btn-friends edit-profile" href="/friends">Friends</a>--}}
+                {{--</div>--}}
+            {{--@else--}}
+                 {{--<div class="col-sm-12 col-md-12">--}}
+                    {{--<a class="btn btn-friends edit-profile" href="{{action('HomeController@getFriendsUser', [ 'id' => $user->id, 'name'=>$user->name])}}">Friends</a>--}}
+                {{--</div>--}}
+
+             {{--@endif--}}
 
                 @if(Auth::user()->role === "admin" && $user->other_profile == NULL)
                     <form class="form-horizontal form-brand" role="form" method="POST" style="    margin-top: 30px;" action="{{ url('/upgrade-trainer') }}">
@@ -368,13 +549,13 @@ text-transform: inherit;
                 @endif
 
 
-             <div class="col-sm-12 col-md-12" style="margin-top: 30px">
-                 @if(!Auth::check() || Auth::user()->id == $user->id)
-                     <a href="#" id="openCreate" class="btn btn-xl">CREATE CHALLENGE</a>
-                 @elseif($user->role != "trainer")
-                     <a href="#" id="openCreate" class="btn btn-xl">CHALLENGE {{$user->name}}</a>
-                 @endif
-             </div>
+             {{--<div class="col-sm-12 col-md-12" style="margin-top: 30px">--}}
+                 {{--@if(!Auth::check() || Auth::user()->id == $user->id)--}}
+                     {{--<a href="#" id="openCreate" class="btn btn-xl">CREATE CHALLENGE</a>--}}
+                 {{--@elseif($user->role != "trainer")--}}
+                     {{--<a href="#" id="openCreate" class="btn btn-xl">CHALLENGE {{$user->name}}</a>--}}
+                 {{--@endif--}}
+             {{--</div>--}}
 
              <div class="col-sm-12 col-md-12" style="margin-top: 30px">
                  @if($canBeFriend && Auth::check() && Auth::user()->id != $user->id && Auth::user()->role != "trainer")
@@ -398,14 +579,52 @@ text-transform: inherit;
     </section >
 
     @if($user->role != "trainer")
-        <section style="background-color: #e7e7e7">
-            <h3 class="col-md-12 text-center my-challenges-title" style="margin-bottom: 40px;margin-top: 0px;">Achievements</h3>
+        <section style="background-color: #f2f5f8">
             <div id="wrapper" style="text-align: center">
                 <div id="yourdiv" style="display: inline-block;" >{{achievementToHtml($user->achievements)}}</div>
             </div>
+            <div class="view-achievements">View All achievements</div>
         </section>
     @endif
 
+{{--@if(Auth::user()->email === $user->email)--}}
+                {{--<div class="col-sm-12 col-md-12">--}}
+                    {{--<a class="btn btn-edit edit-profile" href="{{ action('UserProfileController@editProfile') }}">Edit</a>--}}
+                {{--</div>--}}
+                {{--<div class="col-sm-12 col-md-12">--}}
+                    {{--<a class="btn  btn-friends edit-profile" href="/friends">Friends</a>--}}
+                {{--</div>--}}
+            {{--@else--}}
+                 {{--<div class="col-sm-12 col-md-12">--}}
+                    {{--<a class="btn btn-friends edit-profile" href="{{action('HomeController@getFriendsUser', [ 'id' => $user->id, 'name'=>$user->name])}}">Friends</a>--}}
+                {{--</div>--}}
+
+             {{--@endif--}}
+    <section id="friends-section" style="background-color: #e7eaed;position: relative;">
+
+        @if(Auth::user()->email === $user->email)
+        <a href="/friends" data-notification="247"><span class="clickable"></span></a>
+        @else
+        <a href="{{action('HomeController@getFriendsUser', [ 'id' => $user->id, 'name'=>$user->name])}}" data-notification="247"><span class="clickable"></span></a>
+        @endif
+                <ul class="ch-grid" id="participants-list">
+                    <?php $countFriends=0; ?>
+                    @foreach ($userFriends as $friend)
+                        <?php $countFriends++; ?>
+
+                        <li class="{{$countFriends >= 6? "hide-friend" : "" }}">
+                            <div class="ch-item ch-img-1">
+                                <a href="{{"/profile/".$friend->id}}">
+                                    <img src="{{'/user/photo/'. $friend->id }}" alt="{{$friend->name}}" title="{{$friend->name}}" class="img-circle profile-participant friends {{$countFriends >= 6? "hide-friend" : "" }}">
+                                </a>
+                            </div>
+                        </li>
+
+                    @endforeach
+                </ul>
+                <p class="text-center friend_message" >{!!$friendsMessage!!}</p>
+
+    </section>
 
     <section  class="bg-text" data-bg-text="Challenges" >
 
