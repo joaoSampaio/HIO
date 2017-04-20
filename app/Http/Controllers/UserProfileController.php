@@ -160,8 +160,17 @@ class UserProfileController extends Controller
                 break;
         }
         $friendsMessage = rtrim($friendsMessage, ",");
-        $friendsMessage = $friendsMessage . ' <span> and </span>' . ($userFriends->total() - $count) . ' other.';
+        if($userFriends->total() > 2)
+            $friendsMessage = $friendsMessage . ' <span> and </span>' . ($userFriends->total() - $count) . ' other.';
+        elseif (Auth::user()->id == $idUser && $userFriends->total() == 0){
+            $friendsMessage = $user->name .'<span> is not socializing in the HIO yet</span>';
+        } elseif (Auth::user()->id != $idUser && $userFriends->total() == 0){
+            $friendsMessage = '<span> Time to challenge '.getFirstName($user->name).'</span>';
+        }
 
+
+
+//        if($userFriends->total() )
 //        if(count($peopleParticipating) > 3) {
 //            $otherPeople = rtrim($otherPeople, ",");
 //            $end = $end . '  <span>and</span> <span id="showmore" class=""> ' . (count($peopleParticipating) - 3) .

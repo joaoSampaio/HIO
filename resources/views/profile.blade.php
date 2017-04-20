@@ -351,7 +351,7 @@ div[data-anim~=base] {
     padding: 5px 8px;
     margin-left: 7px;
     line-height: 1.1;
-    vertical-align: top;
+    vertical-align: middle;
 }
 .span-category {
     font-size: 16px;
@@ -360,6 +360,7 @@ div[data-anim~=base] {
     text-transform: uppercase;
     text-align: left;
     margin-left: 15px;
+    line-height: 2;
 }
 .span-category-more{
     text-decoration: underline;
@@ -381,7 +382,7 @@ div[data-anim~=base] {
 }
 
 .achievement{
-    float: left;
+    float: none;
     width: 110px;
 }
 
@@ -491,11 +492,13 @@ div[data-anim~=base] {
 
                 </div>
 
-            @if(true)
+            @if($user->about != "")
                 <div class="col-sm-12 col-md-8 col-md-offset-2" style="  margin-top: 30px; margin-bottom: 30px;font-size: 16px;font-weight: 500;">
                     {!! nl2br(e($user->about)) !!}
 
                 </div>
+            @endif
+            @if($user->interests != "")
                 <div class="col-sm-12 col-md-8 col-md-offset-2" style="  margin-bottom: 30px;font-size: 16px;font-weight: 500;">
 
                     {!! nl2br(e($user->interests)) !!}
@@ -514,7 +517,9 @@ div[data-anim~=base] {
                     @endif
                     <a href="{{action('HomeController@showChallenges', $sport)}}" class="span-category">{{$sport}}<span class="badge badge-category">1</span></a>
                 @endforeach
-                <a href="#" class="span-category span-category-more">SEE MORE</a>
+                @if($countSports > 3)
+                    <a href="#" class="span-category span-category-more">SEE MORE</a>
+                @endif
             </div>
             @if(Auth::user()->email === $user->email)
                 <div class="col-sm-12 col-md-12" style="margin-top: 25px;">
@@ -557,22 +562,21 @@ div[data-anim~=base] {
                  {{--@endif--}}
              {{--</div>--}}
 
-             <div class="col-sm-12 col-md-12" style="margin-top: 30px">
-                 @if($canBeFriend && Auth::check() && Auth::user()->id != $user->id && Auth::user()->role != "trainer")
 
-                 <form class="form-horizontal form-brand" role="form" method="POST"  action="{{ url('/friend') }}">
-                     {{ csrf_field() }}
-                     <input type="hidden" name="friendId" value="{{$user->id}}">
-                     <input type="hidden" name="action" value="0">
-                     <button type="submit" class="btn btn-success ">
-                         <i class="fa fa-btn fa-user"></i>
-                            {{$user->role === "trainer"? "Follow" : "Send Friendship Request"}}
+                @if($canBeFriend && Auth::check() && Auth::user()->id != $user->id && Auth::user()->role != "trainer")
 
-                     </button>
-                 </form>
-                 @endif
-             </div>
-
+                    <div class="col-sm-12 col-md-12" style="margin-top: 30px">
+                         <form class="form-horizontal form-brand" role="form" method="POST"  action="{{ url('/friend') }}">
+                             {{ csrf_field() }}
+                             <input type="hidden" name="friendId" value="{{$user->id}}">
+                             <input type="hidden" name="action" value="0">
+                             <button type="submit" class="btn btn-success ">
+                                 <i class="fa fa-btn fa-user"></i>
+                                    {{$user->role === "trainer"? "Follow" : "Send Friendship Request"}}
+                             </button>
+                         </form>
+                     </div>
+                @endif
 
             </div>
         </div>
@@ -600,113 +604,140 @@ div[data-anim~=base] {
                 {{--</div>--}}
 
              {{--@endif--}}
-    <section id="friends-section" style="background-color: #e7eaed;position: relative;">
+    <section id="friends-section" style="background-color: #e7eaed;position: relative;padding-left: 5px;padding-right: 5px;">
 
-        @if(Auth::user()->email === $user->email)
-        <a href="/friends" data-notification="247"><span class="clickable"></span></a>
-        @else
-        <a href="{{action('HomeController@getFriendsUser', [ 'id' => $user->id, 'name'=>$user->name])}}" data-notification="247"><span class="clickable"></span></a>
+        @if($userFriends->total() > 0)
+        <ul class="ch-grid" id="participants-list">
+            <?php $countFriends=0; ?>
+            @foreach ($userFriends as $friend)
+                <?php $countFriends++; ?>
+
+                <li class="{{$countFriends >= 6? "hide-friend" : "" }}">
+                    <div class="ch-item ch-img-1">
+                        <a href="{{"/profile/".$friend->id}}">
+                            <img src="{{'/user/photo/'. $friend->id }}" alt="{{$friend->name}}" title="{{$friend->name}}" class="img-circle profile-participant friends {{$countFriends >= 6? "hide-friend" : "" }}">
+                        </a>
+                    </div>
+                </li>
+
+            @endforeach
+        </ul>
         @endif
-                <ul class="ch-grid" id="participants-list">
-                    <?php $countFriends=0; ?>
-                    @foreach ($userFriends as $friend)
-                        <?php $countFriends++; ?>
+        <p class="text-center friend_message" >{!!$friendsMessage!!}</p>
 
-                        <li class="{{$countFriends >= 6? "hide-friend" : "" }}">
-                            <div class="ch-item ch-img-1">
-                                <a href="{{"/profile/".$friend->id}}">
-                                    <img src="{{'/user/photo/'. $friend->id }}" alt="{{$friend->name}}" title="{{$friend->name}}" class="img-circle profile-participant friends {{$countFriends >= 6? "hide-friend" : "" }}">
-                                </a>
-                            </div>
-                        </li>
+        @if($userFriends->total() == 0 && $canBeFriend && Auth::check() && Auth::user()->id != $user->id && Auth::user()->role != "trainer")
 
-                    @endforeach
-                </ul>
-                <p class="text-center friend_message" >{!!$friendsMessage!!}</p>
-
-    </section>
-
-    <section  class="bg-text" data-bg-text="Challenges" >
-
-
-        <h3 class="col-md-12 text-center my-challenges-title">My challenges</h3>
-        <div style="text-align: center">
-            <div class="col-md-12" style="display: inline-block;margin-bottom: 100px;margin-top: 25px;">
-
-                <a class="btn btn-tab-challenge active" href="#ongoing" aria-controls="ongoing" data-toggle="tab">ON GOING</a>
-                <a class="btn btn-tab-challenge" href="#ended" aria-controls="ended" data-toggle="tab">FINISHED</a>
-                <a class="btn btn-tab-challenge" href="#mychallenges" aria-controls="mychallenges" data-toggle="tab">ALL</a>
+            <div class="" style="margin-top: 30px">
+                <form class="form-horizontal form-brand text-center" role="form" method="POST"  action="{{ url('/friend') }}">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="friendId" value="{{$user->id}}">
+                    <input type="hidden" name="action" value="0">
+                    <button type="submit" class="btn btn-success ">
+                        <i class="fa fa-btn fa-user"></i>
+                        {{$user->role === "trainer"? "Follow" : "Send Friendship Request"}}
+                    </button>
+                </form>
             </div>
+        @endif
+
+
+    @if($userFriends->total() > 0)
+        <div class="view-achievements">
+            @if(Auth::user()->email === $user->email)
+                <a href="/friends"  class="span-category span-category-more">
+                    My Friends
+                </a>
+            @else
+                <a href="{{action('HomeController@getFriendsUser', [ 'id' => $user->id, 'name'=>$user->name])}}"  class="span-category span-category-more">
+                    {{getFirstName($user->name)}}'s Friends
+                </a>
+            @endif
         </div>
+    @endif
 
-        <div class="container">
-            <div class="row" id="latest">
+</section>
 
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="ongoing">
-
-                        <div class="row">
-                            @foreach ($challenges as $challenge)
-                                @include('partials.single_challenge')
-                            @endforeach
-                        </div>
-
-                        <div class="row" style="text-align: center;">
-                            {!! $challenges->links() !!}
-                        </div>
+<section  class="bg-text" data-bg-text="Challenges" >
 
 
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="ended">
+    <h3 class="col-md-12 text-center my-challenges-title">My challenges</h3>
+    <div style="text-align: center">
+        <div class="col-md-12" style="display: inline-block;margin-bottom: 100px;margin-top: 25px;">
 
-                        <div class="row">
-                            @foreach ($endedChallenges as $challenge)
-                                @include('partials.single_challenge')
-                            @endforeach
-                        </div>
-                        <div class="row" style="text-align: center;">
-                            {!! $endedChallenges->links() !!}
-                        </div>
-
-                    </div>
-
-                    <div role="tabpanel" class="tab-pane" id="mychallenges">
-                        <div class="row">
-                            @foreach ($myChallenges as $challenge)
-                                @include('partials.single_challenge')
-                            @endforeach
-                        </div>
-                        <div class="row" style="text-align: center;">
-                            {!! $myChallenges->links() !!}
-                        </div>
-
-                    </div>
-                  </div>
-
-
-            </div>
-        </div>
-    </section>
-@endsection
-@section('modal')
-    <div class="modal fade" id="create-challenge" tabindex="-1" role="dialog" aria-labelledby="modalHome" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <div class="modal-header-create">
-                    <button type="button" class="close" style="font-size: 40px;font-weight: 300;" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="create-challenge-title" id="modalHome">Create Challenge</h4>
-                </div>
-
-                <div class="modal-body">
-                    <span id="create-spin" class="glyphicon glyphicon-refresh spinning"></span>
-                    <iframe id="create-challenge-iframe" src="" style="" width="99.6%" frameborder="0"></iframe>
-
-                </div>
-
-            </div>
+            <a class="btn btn-tab-challenge active" href="#ongoing" aria-controls="ongoing" data-toggle="tab">ON GOING</a>
+            <a class="btn btn-tab-challenge" href="#ended" aria-controls="ended" data-toggle="tab">FINISHED</a>
+            <a class="btn btn-tab-challenge" href="#mychallenges" aria-controls="mychallenges" data-toggle="tab">ALL</a>
         </div>
     </div>
+
+    <div class="container">
+        <div class="row" id="latest">
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="ongoing">
+
+                    <div class="row">
+                        @foreach ($challenges as $challenge)
+                            @include('partials.single_challenge')
+                        @endforeach
+                    </div>
+
+                    <div class="row" style="text-align: center;">
+                        {!! $challenges->links() !!}
+                    </div>
+
+
+                </div>
+                <div role="tabpanel" class="tab-pane" id="ended">
+
+                    <div class="row">
+                        @foreach ($endedChallenges as $challenge)
+                            @include('partials.single_challenge')
+                        @endforeach
+                    </div>
+                    <div class="row" style="text-align: center;">
+                        {!! $endedChallenges->links() !!}
+                    </div>
+
+                </div>
+
+                <div role="tabpanel" class="tab-pane" id="mychallenges">
+                    <div class="row">
+                        @foreach ($myChallenges as $challenge)
+                            @include('partials.single_challenge')
+                        @endforeach
+                    </div>
+                    <div class="row" style="text-align: center;">
+                        {!! $myChallenges->links() !!}
+                    </div>
+
+                </div>
+              </div>
+
+
+        </div>
+    </div>
+</section>
+@endsection
+@section('modal')
+<div class="modal fade" id="create-challenge" tabindex="-1" role="dialog" aria-labelledby="modalHome" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header-create">
+                <button type="button" class="close" style="font-size: 40px;font-weight: 300;" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="create-challenge-title" id="modalHome">Create Challenge</h4>
+            </div>
+
+            <div class="modal-body">
+                <span id="create-spin" class="glyphicon glyphicon-refresh spinning"></span>
+                <iframe id="create-challenge-iframe" src="" style="" width="99.6%" frameborder="0"></iframe>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 
 
 
@@ -717,22 +748,22 @@ div[data-anim~=base] {
 @section('footer')
 
 <script>
-    $('#openCreate').click(function(){
-        @if(Auth::check())
-            $('#create-challenge').on('shown.bs.modal', function() {
-                @if(!Auth::check() || Auth::user()->id == $user->id)
-                     $('#create-challenge-iframe').attr("src","{{ action('HomeController@createChallenge') }}");
-                 @else
-                    $('#create-challenge-iframe').attr("src","{{ action('HomeController@createChallenge', $user->id) }}");
-                 @endif
-             });
-            $('#create-challenge').modal({show:true})
-        @else
-            window.location.replace("/auth");
-        @endif
+$('#openCreate').click(function(){
+    @if(Auth::check())
+        $('#create-challenge').on('shown.bs.modal', function() {
+            @if(!Auth::check() || Auth::user()->id == $user->id)
+                 $('#create-challenge-iframe').attr("src","{{ action('HomeController@createChallenge') }}");
+             @else
+                $('#create-challenge-iframe').attr("src","{{ action('HomeController@createChallenge', $user->id) }}");
+             @endif
+         });
+        $('#create-challenge').modal({show:true})
+    @else
+        window.location.replace("/auth");
+    @endif
 
 
-    });
+});
 
 </script>
 
@@ -740,8 +771,8 @@ div[data-anim~=base] {
 <script>
 
 $('.btn-tab-challenge').on('click', function (e) {
-    $('.btn-tab-challenge').removeClass('active');
-    $(e.currentTarget).addClass('active');
+$('.btn-tab-challenge').removeClass('active');
+$(e.currentTarget).addClass('active');
 })
 
 
@@ -751,35 +782,35 @@ $('.btn-tab-challenge').on('click', function (e) {
 <script src="{{ asset('js/croppic.min.js') }}"></script>
 @if(Auth::user()->email == $user->email)
 <script>
-    var eyeCandy = $('#cropContainerEyecandy');
-    var croppedOptions = {
-        zoomFactor:10,
-        doubleZoomControls:false,
-        rotateFactor:10,
-        rotateControls:false,
-        customUploadButtonId:'user-crop',
-        uploadUrl: '/upload-photo',
-        cropUrl: '/crop-photo',
-        modal:true,
-        onAfterImgCrop:
-            function(){
-                var d = new Date();
-                $(".croppedImg").attr("src", "{{'/user/photo/'. $user->id }}?"+d.getTime());
-                $(".croppedImg").addClass('img-circle');
+var eyeCandy = $('#cropContainerEyecandy');
+var croppedOptions = {
+    zoomFactor:10,
+    doubleZoomControls:false,
+    rotateFactor:10,
+    rotateControls:false,
+    customUploadButtonId:'user-crop',
+    uploadUrl: '/upload-photo',
+    cropUrl: '/crop-photo',
+    modal:true,
+    onAfterImgCrop:
+        function(){
+            var d = new Date();
+            $(".croppedImg").attr("src", "{{'/user/photo/'. $user->id }}?"+d.getTime());
+            $(".croppedImg").addClass('img-circle');
 
 
-                $(".img-circle").attr("src", "{{'/user/photo/'. $user->id }}?"+d.getTime());
+            $(".img-circle").attr("src", "{{'/user/photo/'. $user->id }}?"+d.getTime());
 
-                console.log('onAfterImgCrop')
+            console.log('onAfterImgCrop')
 
 
-            },
-        cropData:{
-            'width' : 140,
-            'height': 140
-        }
-    };
-    var cropperBox = new Croppic('cropContainerEyecandy', croppedOptions);
+        },
+    cropData:{
+        'width' : 140,
+        'height': 140
+    }
+};
+var cropperBox = new Croppic('cropContainerEyecandy', croppedOptions);
 </script>
 @endif
 
@@ -794,79 +825,79 @@ $('.btn-tab-challenge').on('click', function (e) {
 //            }
 //        }
 //    });
-    $(document).ready(function() {
-        $(document).on('click', '#ended .pagination a', function (e) {
+$(document).ready(function() {
+    $(document).on('click', '#ended .pagination a', function (e) {
 
-            var userIDArray = $(this).attr('href').split('/');
+        var userIDArray = $(this).attr('href').split('/');
 
-            var userId = userIDArray[userIDArray.length-1].split('?')[0];
-            var url = '/ended-challenges/'+userId+'/?ended=';
+        var userId = userIDArray[userIDArray.length-1].split('?')[0];
+        var url = '/ended-challenges/'+userId+'/?ended=';
 
-            getEndedChallenges(url, $(this).attr('href').split('ended=')[1]);
-            e.preventDefault();
-        });
-
-        $(document).on('click', '#ongoing .pagination a', function (e) {
-
-            var userIDArray = $(this).attr('href').split('/');
-
-            var userId = userIDArray[userIDArray.length-1].split('?')[0];
-            var url = '/ongoing-challenges/'+userId+'/?ongoing=';
-
-            getOngoingChallenges(url, $(this).attr('href').split('ongoing=')[1]);
-            e.preventDefault();
-        });
-
-        $(document).on('click', '#mychallenges .pagination a', function (e) {
-
-            var userIDArray = $(this).attr('href').split('/');
-
-            var userId = userIDArray[userIDArray.length-1].split('?')[0];
-            var url = '/my-challenges/'+userId+'/?myChallenges=';
-
-            getMyChallenges(url, $(this).attr('href').split('myChallenges=')[1]);
-            e.preventDefault();
-        });
-
+        getEndedChallenges(url, $(this).attr('href').split('ended=')[1]);
+        e.preventDefault();
     });
-    function getEndedChallenges(url, page) {
+
+    $(document).on('click', '#ongoing .pagination a', function (e) {
+
+        var userIDArray = $(this).attr('href').split('/');
+
+        var userId = userIDArray[userIDArray.length-1].split('?')[0];
+        var url = '/ongoing-challenges/'+userId+'/?ongoing=';
+
+        getOngoingChallenges(url, $(this).attr('href').split('ongoing=')[1]);
+        e.preventDefault();
+    });
+
+    $(document).on('click', '#mychallenges .pagination a', function (e) {
+
+        var userIDArray = $(this).attr('href').split('/');
+
+        var userId = userIDArray[userIDArray.length-1].split('?')[0];
+        var url = '/my-challenges/'+userId+'/?myChallenges=';
+
+        getMyChallenges(url, $(this).attr('href').split('myChallenges=')[1]);
+        e.preventDefault();
+    });
+
+});
+function getEndedChallenges(url, page) {
+    $.ajax({
+        url : url + page,
+        dataType: 'json'
+    }).done(function (data) {
+        $('#ended').html(data);
+//            location.hash = page;
+    }).fail(function () {
+        alert('Posts could not be loaded.');
+    });
+}
+
+function getOngoingChallenges(url, page) {
         $.ajax({
             url : url + page,
             dataType: 'json'
         }).done(function (data) {
-            $('#ended').html(data);
-//            location.hash = page;
+            $('#ongoing').html(data);
         }).fail(function () {
             alert('Posts could not be loaded.');
         });
     }
 
-    function getOngoingChallenges(url, page) {
-            $.ajax({
-                url : url + page,
-                dataType: 'json'
-            }).done(function (data) {
-                $('#ongoing').html(data);
-            }).fail(function () {
-                alert('Posts could not be loaded.');
-            });
-        }
-
-        function getMyChallenges(url, page) {
-            $.ajax({
-                url : url + page,
-                dataType: 'json'
-            }).done(function (data) {
-                $('#mychallenges').html(data);
-            }).fail(function () {
-                alert('Posts could not be loaded.');
-            });
-        }
+    function getMyChallenges(url, page) {
+        $.ajax({
+            url : url + page,
+            dataType: 'json'
+        }).done(function (data) {
+            $('#mychallenges').html(data);
+        }).fail(function () {
+            alert('Posts could not be loaded.');
+        });
+    }
 
 
 
 
-    </script>
+</script>
 
 
 
