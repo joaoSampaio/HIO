@@ -39,7 +39,7 @@
     {{--    <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">--}}
 
 
-    <link href="{{ asset('css/s2-docs.css') }}" rel="stylesheet">
+    {{--<link href="{{ asset('css/s2-docs.css') }}" rel="stylesheet">--}}
     <link href="{{ asset('css/hio.css') }}" rel="stylesheet">
 
     @if($sonChallenge->type == 1)
@@ -286,6 +286,13 @@ body:after {
     display: none;
 }
 
+
+.alert-xp{
+position: absolute;
+    margin: 0;
+    top: -20px;
+}
+
 </style>
 
 </head>
@@ -357,11 +364,19 @@ body:after {
                                 <p class="num-approve">Your proof</p>
                             </div>
                          @else
-                            <div style="float: left;margin-right: 20px;">
+
+
+                            <div style="float: left;margin-right: 20px;position: relative;">
+                                <div class="badge alert-xp xp-like" style="display: none">
+                                      <span>+25 XP</span>
+                                </div>
                                 <button class="btn vote-btn aprove-btn like" data-proof-id="{{$sonChallenge->id}}"><i class="fa fa-trophy" style="margin-right: 5px" aria-hidden="true"></i> Aproved</button>
                                 <p class="num-approve"><span id="like-count-{{$sonChallenge->id}}" >{{$sonChallenge->positive}}</span></p>
                             </div>
-                            <div style="float: right">
+                            <div style="float: right;position: relative;">
+                                <div class="badge  alert-xp xp-dislike" style="display: none">
+                                      <span>+25 XP</span>
+                                </div>
                                 <button class="btn vote-btn dislike-btn dislike" style="float: initial;" data-proof-id="{{$sonChallenge->id}}"><i class="fa fa-thumbs-down" style="margin-right: 5px" aria-hidden="true"></i> Not Yet</button>
                                 <p class="num-approve"><span id="dislike-count-{{$sonChallenge->id}}">{{$sonChallenge->negative}}</span></p>
                             </div>
@@ -370,76 +385,6 @@ body:after {
                 </div>
 
             </div>
-
-
-            {{--<div class="col-xs-12 col-md-12" style="margin-bottom: 20px;">--}}
-
-
-                {{--@if($sonChallenge->judgment != NULL)--}}
-                    {{--<p class="post-meta" data-voted-{{$sonChallenge->id}}="{{($sonChallenge->judgment != NULL && $sonChallenge->judgment == 1)? "1" : "-1"}}">--}}
-                {{--@else--}}
-                    {{--<p class="post-meta" data-voted-{{$sonChallenge->id}}="0">--}}
-
-                {{--@endif--}}
-                        {{--<a class="badge-evt point">--}}
-                            {{--<span id="like-count-{{$sonChallenge->id}}" class="badge-item-like-count">{{$sonChallenge->positive}}</span> Up</a> ·--}}
-                        {{--<a class="badge-evt point">--}}
-                            {{--<span id="dislike-count-{{$sonChallenge->id}}" class="badge-item-dislike-count">{{$sonChallenge->negative}}</span> Down</a> ·--}}
-
-                        {{--<a class="badge-evt point">--}}
-                            {{--<span id="views-count-{{$sonChallenge->id}}" class="badge-item-dislike-count">{{$userViews}}</span> Views</a> ·--}}
-
-                        {{--<a class="comment badge-evt" href="#comment">0 comments</a> ·--}}
-
-                        {{--<a class="badge-evt point">--}}
-                            {{--<span class="">Created on {{$sonChallenge->created_at}}</span></a>--}}
-                    {{--</p>--}}
-            {{--</div>--}}
-
-            {{--<div class="col-md-12 col-xs-12" style="margin-bottom: 20px;padding: 0px;">--}}
-
-                {{--@if(Auth::check() && $sonChallenge->user_id != Auth::user()->id)--}}
-
-                {{--<p>You are the judge!</p>--}}
-                {{--<p style="font-size: 16px">Do you Approve--}}
-                    {{--<a href="{{"/profile/".$sonChallenge->user_id}}" class="" title="" style="color: #333;text-decoration: underline;">{{getFirstLastName($sonChallenge->name)}}</a>--}}
-                    {{--´s challenge or is it a Fail?--}}
-                {{--</p>--}}
-                {{--@endif--}}
-
-
-                {{--<div class="badge-item-vote-container post-afterbar-a in-list-view  " style="width: 100%">--}}
-                    {{--<div class="vote">--}}
-                        {{--<ul class="btn-vote left">--}}
-                            {{--@if(false)--}}
-                            {{--@if(Auth::check() && $sonChallenge->user_id == Auth::user()->id)--}}
-                                {{--<li><a href="{{ action('SonChallengeController@showSonChallenge', [ 'uuid' => $sonChallenge->uuid, 'user_id'=>$sonChallenge->id]) }}" class="your-proof">Your proof</a></li>--}}
-                            {{--@else--}}
-                                {{--<li><a href="javascript:void(0);" class="badge-item-vote-up up like {{($sonChallenge->judgment != NULL && $sonChallenge->judgment == 1)? "active" : ""}}" data-proof-id="{{$sonChallenge->id}}">Upvote</a></li>--}}
-                                {{--<li><a href="javascript:void(0);" class="badge-item-vote-down down dislike {{($sonChallenge->judgment != NULL && $sonChallenge->judgment == -1)? "active" : ""}}" data-proof-id="{{$sonChallenge->id}}">Downvote</a></li>--}}
-                            {{--@endif--}}
-                            {{--<li><a class="comment badge-evt badge-item-comment" href="#comment">Comment</a></li>--}}
-
-                        {{--</ul>--}}
-                    {{--</div>--}}
-                    {{--<div class="share right">--}}
-                        {{--<ul>--}}
-                            {{--<li><a href="javascript:void(0);" class="badge-facebook-share badge-evt badge-track btn-share facebook" data-track="social,fb.s,,,d,aebrrNQ,l" data-evt="PostList,ShareSocial,Fresh,,FacebookButton" data-entry-id="aebrrNQ" data-position="9" data-share="http://9gag.com/gag/aebrrNQ?ref=fb.s" rel="nofollow">Facebook</a></li>--}}
-
-                            {{--<li><a href="javascript:void(0);" class="badge-twitter-share badge-evt badge-track btn-share twitter" data-track="social,t.s,,,d,aebrrNQ,l" data-evt="PostList,ShareSocial,Fresh,,TwitterButton" data-title="How%20I%20feel%20after%20watching%20HIMYM%20or%20any%20other%20good%20show" data-entry-id="aebrrNQ" data-position="9" data-share="http://9gag.com/gag/aebrrNQ?ref=t" rel="nofollow">Twitter</a>--}}
-                            {{--</li>--}}
-                        {{--</ul>--}}
-                    {{--</div>--}}
-                    {{--<div class="clearfix"></div>--}}
-                {{--</div>--}}
-
-                 {{--<div class="col-md-12 col-xs-12 judge-info alert-hio" id="list-proofs">--}}
-
-
-                    {{----}}
-                 {{--</div>--}}
-            {{--</div>--}}
-
 
         </div>
         </div>
@@ -535,6 +480,8 @@ body:after {
                         $('#dislike-count-'+id).html(parseInt($('#dislike-count-'+id).html())-1);
                         $('[data-voted-'+id+'= -1]').attr( "data-voted-"+id, 1 );
                     }
+                    if(data.is_new)
+                    $(".xp-like").slideDown(500).delay(2000).slideUp(500);
                 });
         }
     }
@@ -548,6 +495,10 @@ body:after {
                     value: 0
                 },
                 function(data, status){
+
+                var success = data.status;
+                if(success){
+
                     $('[data-proof-id=' + id + ']').removeClass("active");
                     $(e.currentTarget).addClass("active");
 
@@ -558,6 +509,9 @@ body:after {
                         $('#like-count-'+id).html(parseInt($('#like-count-'+id).html())-1);
                         $('#dislike-count-'+id).html(parseInt($('#dislike-count-'+id).html())+1);
                         $('[data-voted-'+id+'= 1]').attr( "data-voted-"+id, -1 );
+                    }
+                    if(data.is_new)
+                        $(".xp-dislike").slideDown(500).delay(2000).slideUp(500);
                     }
                 });
         }

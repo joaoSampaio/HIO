@@ -248,7 +248,7 @@ color: #eb1946;
 <script type="text/javascript">
   function enableProofSlider(container){
     $(container).magnificPopup({
-      disableOn: 700,
+      disableOn: 0,
       type: 'iframe',
       mainClass: 'mfp-fade',
       removalDelay: 160,
@@ -284,6 +284,42 @@ color: #eb1946;
 </script>
 
 <script>
+
+    $(function() {
+            // for bootstrap 3 use 'shown.bs.tab', for bootstrap 2 use 'shown' in the next line
+            $('.btn-tab-challenge').on('shown.bs.tab', function (e) {
+                // save the latest tab; use cookies if you like 'em better:
+                localStorage.setItem('lastTab_challenges', $(this).attr('href'));
+                console.log("saved:"+$(this).attr('href'));
+            });
+            $('.challenge-selector a').on('shown.bs.tab', function (e) {
+                var currentMainTab = $(this).attr('href');
+                localStorage.setItem('lastTab_challenges_main', currentMainTab);
+                if(currentMainTab == "#menu-challenges")
+                    localStorage.setItem('lastTab_challenges', $('#menu-challenges .btn-tab-challenge.active').attr('href'));
+                else
+                    localStorage.setItem('lastTab_challenges', $('#menu-proofs .btn-tab-challenge.active').attr('href'));
+                console.log("saved main:"+currentMainTab);
+            });
+
+
+            // go to the latest tab, if it exists:
+            var lastSubTab = localStorage.getItem('lastTab_challenges');
+            var lastMainTab = localStorage.getItem('lastTab_challenges_main');
+            console.log("lastMainTab:"+lastMainTab);
+            console.log("lastSubTab:"+lastSubTab);
+            if (lastSubTab) {
+                $('[href="' + lastSubTab + '"]').tab('show');
+                if (lastMainTab)
+                    $('[href="' + lastMainTab + '"]').tab('show');
+                    //menu-challenges
+                    if(lastMainTab && lastMainTab == "#menu-challenges")
+                        $('#menu-challenges .btn-tab-challenge').removeClass('active');
+                    else
+                        $('#menu-proofs .btn-tab-challenge').removeClass('active');
+                    $('[href="' + lastSubTab + '"]').addClass('active');
+            }
+        });
 
 
     $(document).ready(function() {

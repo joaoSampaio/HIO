@@ -120,6 +120,28 @@
                     <time class="timeago notification-time" datetime="{{$notification->created_at}}">July 17, 2008</time>
                 </div>
             </div>
+        @elseif($notification->type == 5)
+            {{--gained xp--}}
+            <div class="notification-item row notification-text">
+                <a href="/challenge/{{ $notification->reference_id}}" data-notification="{{ $notification->id}}"><span class="clickable"></span></a>
+
+                <div class="col-sm-1 col-xs-1 col-md-1">
+                    <i class="fa fa-circle {{$notification->unread == 1? "unread":"read"}}" aria-hidden="true"></i>
+                </div>
+
+                <div class="col-sm-2 col-xs-2 col-md-2">
+                    <a class="clickable-link" href="/profile/{{$notification->sender_id}}" data-notification="{{ $notification->id}}">
+                        <img src="/user/photo/{{$notification->sender_id}}"  class="img-circle img-responsive clickable-link">
+                    </a>
+                </div>
+
+                <div class="col-sm-9 col-xs-8 col-md-9 text-color1" >
+                    You received +100 xp for successfully completing the challenge,
+                    <a class="clickable-link" href="/challenge/{{ $notification->reference_id}}" data-notification="{{ $notification->id}}">{{truncateString($notification->parameters, 25)}}</a>
+                    <br>
+                    <time class="timeago notification-time" datetime="{{$notification->created_at}}">July 17, 2008</time>
+                </div>
+            </div>
         @endif
 
 

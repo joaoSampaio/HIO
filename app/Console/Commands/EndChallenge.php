@@ -3,6 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Model\FileHio;
+use App\Model\LikedChallengeNotification;
+use App\Model\Notification;
+use app\Model\NotificationManager;
 use Illuminate\Console\Command;
 use DateTime;
 use App\Model\User;
@@ -37,7 +40,7 @@ class EndChallenge extends Command
     {
         try {
             $now = new DateTime();
-            Log::info('end_approve_challenge called');
+            Log::info('end_approve_challenge called nova versao - 23/04');
             Challenge::where('judged', '=', 0)->chunk(100, function ($challenges) use ($now) {
                 foreach ($challenges as $challenge) {
 
@@ -77,6 +80,7 @@ class EndChallenge extends Command
                             ->lists('files.id');
 
 
+//                        DB::table('users')->whereIn('id', $sonChallengesIds)->increment('xp', 100);
 
 
 
@@ -117,7 +121,14 @@ class EndChallenge extends Command
                                 }
                             }
                             $user->achievements = json_encode($achievements);
+                            $user->xp = $user->xp + 100;
                             $user->save();
+
+                            $notificationManager = new NotificationManager();
+                            $notification = new LikedChallengeNotification(['recipient_id' => $user->id, 'sender_id' => $user->id, 'unread' => 1,
+                                'type' => Notification::TYPE_XP, 'parameters' => $challenge->title, 'reference_id' => $challenge->uuid]);
+                            $notificationManager->add($notification);
+
                         }
                     }
                 }

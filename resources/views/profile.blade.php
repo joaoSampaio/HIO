@@ -488,7 +488,7 @@ div[data-anim~=base] {
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-4 col-md-offset-4 ">
-                    <span class="xp-text">3120 / 4000XP</span>
+                    <span class="xp-text">{{$user->xp}} / 4000XP</span>
 
                 </div>
 

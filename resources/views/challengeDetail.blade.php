@@ -574,7 +574,7 @@ padding: 50px 20px;
 <script type="text/javascript">
   function enableProofSlider(){
     $('.open-iframe').magnificPopup({
-      disableOn: 700,
+      disableOn: 0,
       type: 'iframe',
       mainClass: 'mfp-fade',
       removalDelay: 160,

@@ -225,21 +225,23 @@ class SonChallengeController extends Controller {
                     ->where('user_id', Auth::user()->id)
                     ->update(['judgment' => $value]);
 //            ->update(['delayed' => 1]);
-
+                $arr = array('status' => true, 'is_new' => false);
 
             }else{
                 $judgement = new ProofApproval(array(
                     'user_id' => Auth::user()->id, 'proof_id' => $proof_id, 'judgment' => $value
                 ));
                 $judgement->save();
+                DB::table('users')->whereId(Auth::user()->id)->increment('xp', 20);
 
                 Cache::forget('has-judged-'.Auth::user()->id.'-'.$proof_id);
                 Cache::forever('has-judged-'.Auth::user()->id.'-'.$proof_id, true);
-                $arr = array('status' => true);
+                $arr = array('status' => true, 'is_new' => true);
             }
 
         }
-        return json_encode($arr);
+        return response()->json($arr);
+//        return json_encode($arr);
     }
 
     public function deleteProof($id)

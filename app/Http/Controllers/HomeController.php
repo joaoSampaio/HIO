@@ -809,7 +809,7 @@ class HomeController extends Controller
                 'challenges.judged')
 
             ->orderBy('files.created_at', 'desc')
-            ->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'all', $page = null);
+            ->paginate($perPage = 6, $columns = ['*'], $pageName = 'all', $page = null);
         return $proofs;
     }
 
@@ -831,7 +831,7 @@ class HomeController extends Controller
                 'challenges.judged')
 
             ->orderBy('files.created_at', 'desc')
-            ->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ongoing', $page = null);
+            ->paginate($perPage = 6, $columns = ['*'], $pageName = 'ongoing', $page = null);
         return $proofs;
     }
 
@@ -853,7 +853,7 @@ class HomeController extends Controller
                 'challenges.judged')
 
             ->orderBy('files.created_at', 'desc')
-            ->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ended', $page = null);
+            ->paginate($perPage = 6, $columns = ['*'], $pageName = 'ended', $page = null);
         return $proofs;
     }
 
@@ -916,29 +916,111 @@ class HomeController extends Controller
     public function teste()
     {
 
-        Challenge::where('judged', '!=', 2)->chunk(100, function ($challenges) {
+        $now = new DateTime();
+        Log::info('end_approve_challenge called');
+        Challenge::where('judged', '=', 0)->chunk(100, function ($challenges) use ($now) {
             foreach ($challenges as $challenge) {
 
-                $sonChallengesIds = DB::table('files')->where('files.challenge_id', $challenge->id)
-                    ->join('proof_approval', 'proof_approval.proof_id', '=', 'files.id')
-                    ->where('proof_approval.judgment', '=', '1')
-                    ->groupBy('files.id')
-                    ->leftJoin(
-                        DB::raw("
-                            (select
-                                `proof_approval`.`proof_id`,
-                                COUNT(*) as total_judgment
-                            from `proof_approval`
-                            group by `proof_approval`.`proof_id`) `p`
-                        "), 'files.id', '=', 'p.proof_id')
-                    ->select('files.id', 'total_judgment',
-                        DB::raw('COUNT(proof_approval.judgment) as positive_judgment'),
-                        DB::raw('COUNT(proof_approval.judgment)/total_judgment as percent')
-                        )
-                    ->havingRaw('percent >= 0.7')
-                    ->lists('files.id');
+                $idsUserCompletedChallenge = [];
+                $deadLine = Carbon::parse($challenge->deadLine);
+                $deadLine = $deadLine->addHours(36);
+                $isValid = $now < $deadLine;
+                if (!$isValid) {
+                    //validar provas e judgments
 
-                echo "<br>$challenge->id ". json_encode($sonChallengesIds);
+//                        $sonChallengesIds = DB::table('files')->where('files.challenge_id', $challenge->id)
+//                            ->join('proof_approval', 'proof_approval.proof_id', '=', 'files.id')
+//                            ->where('proof_approval.judgment', '=', '1')
+//                            ->select('files.id', DB::raw('SUM(judgment) as total_judgment'))
+//                            ->groupBy('files.id')
+//                            ->havingRaw('SUM(judgment) > 0')
+//                            ->lists('files.id');
+
+
+                    $sonChallengesIds = DB::table('files')->where('files.challenge_id', $challenge->id)
+                        ->join('proof_approval', 'proof_approval.proof_id', '=', 'files.id')
+                        ->where('proof_approval.judgment', '=', '1')
+                        ->groupBy('files.id')
+                        ->leftJoin(
+                            DB::raw("
+                                (select
+                                    `proof_approval`.`proof_id`,
+                                    COUNT(*) as total_judgment
+                                from `proof_approval`
+                                group by `proof_approval`.`proof_id`) `p`
+                            "), 'files.id', '=', 'p.proof_id')
+                        ->select('files.id', 'total_judgment',
+                            DB::raw('COUNT(proof_approval.judgment) as positive_judgment'),
+                            DB::raw('COUNT(proof_approval.judgment)/total_judgment as percent')
+                        )
+                        ->havingRaw('percent >= 0.7')
+                        ->lists('files.id');
+
+
+//                        DB::table('users')->whereIn('id', $sonChallengesIds)->increment('xp', 100);
+
+
+
+                    FileHio::whereIn('id', $sonChallengesIds)
+                        ->update([
+                            'approved' => true
+                        ]);
+
+//                    $sonChallengesIds = DB::table('files')->whereIn('id',$sonChallengesIds)
+//                        ->select('files.user_id')
+//                        ->groupBy('files.user_id')
+//                        ->lists('files.user_id');
+
+
+                    $challenge->judged = true;
+                    $challenge->save();
+
+                    $users = DB::table('users')
+                        ->whereIn('id', function ($query) use ($sonChallengesIds) {
+                            $query->from('files')
+                                ->whereIn('id', $sonChallengesIds)
+                                ->select('files.user_id')
+                                ->groupBy('files.user_id');
+                        })
+                        ->get();
+
+                    foreach ($users as $usertmp) {
+                        $user = User::find($usertmp->id);
+                        $achievements = $user->achievements;
+                        if ($achievements == NULL) {
+                            $achievements = array('totalCompleted' => 1);
+                        } else {
+                            $achievements = json_decode($achievements, true);
+                            if (!array_key_exists('totalCompleted', $achievements)) {
+                                $achievements['totalCompleted'] = 1;
+                            } else {
+                                $achievements['totalCompleted'] = $achievements['totalCompleted'] + 1;
+                            }
+                        }
+                        $user->achievements = json_encode($achievements);
+                        $user->xp = $user->xp + 100;
+                        $user->save();
+                        $notificationManager = new NotificationManager();
+                        $notification = new LikedChallengeNotification(['recipient_id' => $user->id, 'sender_id' => $user->id, 'unread' => 1,
+                            'type' => Notification::TYPE_XP, 'parameters' => $challenge->title, 'reference_id' => $challenge->uuid]);
+                        $notificationManager->add($notification);
+                    }
+                }
+            }
+        });
+
+
+        Challenge::where('closed', '=', 0)->chunk(100, function ($ongoingChallenges) use ($now) {
+            foreach ($ongoingChallenges as $challenge) {
+                //
+                $deadLine = new DateTime($challenge->deadLine);
+                $isValid = $now < $deadLine;
+
+                if (!$isValid) {
+                    //we end challenge
+                    $challenge->closed = true;
+                    $challenge->save();
+                }
             }
         });
 
