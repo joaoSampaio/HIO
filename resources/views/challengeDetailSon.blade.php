@@ -368,14 +368,14 @@ position: absolute;
 
                             <div style="float: left;margin-right: 20px;position: relative;">
                                 <div class="badge alert-xp xp-like" style="display: none">
-                                      <span>+25 XP</span>
+                                      <span>+20 XP</span>
                                 </div>
                                 <button class="btn vote-btn aprove-btn like" data-proof-id="{{$sonChallenge->id}}"><i class="fa fa-trophy" style="margin-right: 5px" aria-hidden="true"></i> Aproved</button>
                                 <p class="num-approve"><span id="like-count-{{$sonChallenge->id}}" >{{$sonChallenge->positive}}</span></p>
                             </div>
                             <div style="float: right;position: relative;">
                                 <div class="badge  alert-xp xp-dislike" style="display: none">
-                                      <span>+25 XP</span>
+                                      <span>+20 XP</span>
                                 </div>
                                 <button class="btn vote-btn dislike-btn dislike" style="float: initial;" data-proof-id="{{$sonChallenge->id}}"><i class="fa fa-thumbs-down" style="margin-right: 5px" aria-hidden="true"></i> Not Yet</button>
                                 <p class="num-approve"><span id="dislike-count-{{$sonChallenge->id}}">{{$sonChallenge->negative}}</span></p>

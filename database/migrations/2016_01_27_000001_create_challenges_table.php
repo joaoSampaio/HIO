@@ -17,7 +17,7 @@ class CreateChallengesTable extends Migration
             $table->uuid('uuid');
             $table->string('title');
             $table->boolean('public')->default(true);
-            $table->string('category');
+            $table->integer('category');
             $table->text('description');
             $table->string('reward');
             $table->string('penalty');

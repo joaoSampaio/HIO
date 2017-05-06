@@ -2,6 +2,9 @@
     @foreach ($challenges as $challenge)
         @include('partials.single_challenge')
     @endforeach
+
+{{--    {{$showCreate == "false" ? "false-------------" : "true+++++++++++"}}--}}
+    @if(!isset($showCreate) || $showCreate != "false")
         <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 portfolio-item proof-item openCreate" style="cursor: pointer;padding-left: 4.333333%;display: table;height: 230px;" data-toggle="modal" data-target="#myModal">
             <div  class="portfolio-link" style="box-shadow: 0px 0px 68px 0px rgba(0, 0, 0, 0.2);text-align: center;background: #fff;display: table-cell;vertical-align: middle;" title="">
                 <img src="/img/add.png"   alt="">
@@ -9,6 +12,7 @@
             </div>
 
         </div>
+    @endif
 </div>
 <div class="" style="text-align: center;">
     {!! $challenges->links() !!}

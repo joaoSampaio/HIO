@@ -32,6 +32,7 @@ class CreateUsersTable extends Migration
             $table->string('photo', 40);
             $table->integer('other_profile');
             $table->integer('number_profile');
+            $table->integer('xp');
             $table->integer('id_last_notification');
             $table->boolean('public')->default(true);
             $table->boolean('activated')->default(false);

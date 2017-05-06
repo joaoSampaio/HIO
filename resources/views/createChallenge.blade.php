@@ -133,7 +133,7 @@ label.custom-select {
 
 
 
-.ch-grid {
+.create-tab-grid {
 	padding: 0;
 	list-style: none;
 	display: block;
@@ -141,17 +141,17 @@ label.custom-select {
 	width: 100%;
 }
 
-.ch-grid:after,
+.create-tab-grid:after,
 .ch-item:before {
 	content: '';
     display: table;
 }
 
-.ch-grid:after {
+.create-tab-grid:after {
 	clear: both;
 }
 
-.ch-grid li {
+.create-tab-grid li {
 	width: 40px;
 	height: 40px;
 	display: inline-block;
@@ -160,7 +160,7 @@ label.custom-select {
 }
 
 @media (max-width: 500px){
-    .ch-grid li {
+    .create-tab-grid li {
 
     	margin-left: 0px;
     	margin-right: 10px;
@@ -472,7 +472,7 @@ width: 2em;
                 <div class="col-md-offset-1 col-md-10 col-sm-12 col-xs-12 personal-info">
                     {!! Form::open(array('action' => array('HomeController@storeChallenge'), 'class' => 'form-horizontal', 'id' => 'form-challenge', 'autocomplete' => 'off')) !!}
 
-                        <ul class="ch-grid friends-grid">
+                        <ul class="create-tab-grid friends-grid">
                             <li class="show-friends pointer" id="circle1">
                                 1
 

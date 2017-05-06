@@ -144,6 +144,10 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('teste', 'HomeController@teste');
         Route::get('amigos', 'SocialAuthController@getFriends');
+
+        Route::get('lvl-up', 'UserProfileController@showLvlUp');
+
+
     });
 
 });

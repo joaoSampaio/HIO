@@ -2,6 +2,7 @@
 
 use App;
 use App\Model\Challenge;
+use App\Model\ChallengeCategory;
 use App\Model\FileHio;
 use App\Model\LikedChallengeNotification;
 use App\Model\Notification;
@@ -154,41 +155,42 @@ class HomeController extends Controller
     {
         //$uuid = Uuid::uuid4();
 
-        $category = [
-            '' => 'Choose your Sport',
-            'Awesome Stuff' => 'Awesome Stuff',
-            'Basketball' => 'Basketball',
-            'Bodyboard' => 'Bodyboard',
-            'Boxe' => 'Boxe',
-            'Cycling' => 'Cycling',
-            'Fitness' => 'Fitness',
-            'Football' => 'Football',
-            'Golf' => 'Golf',
-            'Gym' => 'Gym',
-            'Gymnastics' => 'Gymnastics',
-            'Hockey' => 'Hockey',
-            'Jiu-Jitsu' => 'Jiu-Jitsu',
-            'Judo' => 'Judo',
-            'Karate' => 'Karate',
-            'Kickboxing' => 'Kickboxing',
-            'MMA' => 'MMA',
-            'Muay Thai' => 'Muay Thai',
-            'Rugby' => 'Rugby',
-            'Running' => 'Running',
-            'Snow Sports' => 'Snow Sports',
-            'Surf' => 'Surf',
-            'Swimming' => 'Swimming',
-            'Taekwondo' => 'Taekwondo',
-            'Tennis' => 'Tennis',
-            'Trail' => 'Trail',
-            'Volleyball' => 'Volleyball',
+//        $category = [
+//            '' => 'Choose your Sport',
+//            'Awesome Stuff' => 'Awesome Stuff',
+//            'Basketball' => 'Basketball',
+//            'Bodyboard' => 'Bodyboard',
+//            'Boxe' => 'Boxe',
+//            'Cycling' => 'Cycling',
+//            'Fitness' => 'Fitness',
+//            'Football' => 'Football',
+//            'Golf' => 'Golf',
+//            'Gym' => 'Gym',
+//            'Gymnastics' => 'Gymnastics',
+//            'Hockey' => 'Hockey',
+//            'Jiu-Jitsu' => 'Jiu-Jitsu',
+//            'Judo' => 'Judo',
+//            'Karate' => 'Karate',
+//            'Kickboxing' => 'Kickboxing',
+//            'MMA' => 'MMA',
+//            'Muay Thai' => 'Muay Thai',
+//            'Rugby' => 'Rugby',
+//            'Running' => 'Running',
+//            'Snow Sports' => 'Snow Sports',
+//            'Surf' => 'Surf',
+//            'Swimming' => 'Swimming',
+//            'Taekwondo' => 'Taekwondo',
+//            'Tennis' => 'Tennis',
+//            'Trail' => 'Trail',
+//            'Volleyball' => 'Volleyball',
+//
+//        ];
+        $categories = ChallengeCategory::where('visible', '=', 1)->where('active', '=', 1)->pluck('name','id');
 
-
-        ];
         if ($userFB != null && $targetUser = User::where('id', $userFB)->first()) {
-            return View('createChallenge')->with('category', $category)->with('targetUser', $targetUser);
+            return View('createChallenge')->with('category', $categories)->with('targetUser', $targetUser);
         } else {
-            return View('createChallenge')->with('category', $category);
+            return View('createChallenge')->with('category', $categories);
         }
 
 
@@ -248,8 +250,8 @@ class HomeController extends Controller
 
         $description = strip_tags($request->input('description'));
         $category = $request->input('category');
-        $reward = $request->input('reward');
-        $penalty = $request->input('penalty');
+        $reward = strip_tags($request->input('reward'));
+        $penalty = strip_tags($request->input('penalty'));
         $deadLine = $request->input('deadLine');
         $public = $request->input('public', false);
 
@@ -292,7 +294,7 @@ class HomeController extends Controller
         }
 
         $challenge = new Challenge(['title' => $title, 'creator_id' => $creator_id, 'rank' => $rank,
-            'description' => $description, 'category' => $category, 'reward' => $reward, 'penalty' => $penalty,
+            'description' => $description, 'category_id' => $category, 'reward' => $reward, 'penalty' => $penalty,
             'deadLine' => $deadLine, 'uuid' => $uuid, 'public' => $public, 'secret' => $secret,]);
         if ($challengeMyself) {
             Auth::user()->challenges()->save($challenge);
@@ -340,7 +342,7 @@ class HomeController extends Controller
 //        echo "...".json_encode($emailsToSend);
         \Session::flash('challengeCreated', 'true');
 //return "";
-        return View('partials.create_result');
+        return View('partials.create_result')->with('challengeId', $uuid);
 //        return redirect()->action('UserProfileController@userProfile', 'me')->with(['challengeCreated' => 'true']);
     }
 
@@ -568,7 +570,9 @@ class HomeController extends Controller
         if ($participating && $isValid && $page == 1) {
             $copia = new \stdClass;
             $copia->id = -1;
-            array_push($modelResults, $copia);
+//            array_push($modelResults, $copia);
+            array_unshift($modelResults, $copia);
+
         }
         $perPage = 6;
 //        echo json_encode($modelResults);
@@ -665,8 +669,10 @@ class HomeController extends Controller
         $latest = Cache::remember('latest-home', 15, function() {
             $now = Carbon::now();
             return DB::table('challenges')->where('closed', '=', 0)
+                ->join('challenge_category', 'challenge_category.id', '=', 'challenges.category_id')
                 ->where('deadLine', '>', $now)
                 ->where('public', '=', 1)
+                ->select('challenges.*', 'challenge_category.name as category')
                 ->orderBy('deadLine', 'asc')
                 ->take(6)->get();
         });
@@ -695,10 +701,13 @@ class HomeController extends Controller
         $mostParticipants = DB::table('challenge_user')
             ->join('challenges', 'challenges.id', '=', 'challenge_id')->where('challenges.public', '=', 1)
             ->join('users', 'challenge_user.user_id', '=', 'users.id')
-            ->select('challenge_id', 'challenges.title', 'challenges.category', 'challenges.uuid', 'challenges.id AS user_id', 'users.name', DB::raw('count(*) as total'))
+            ->join('challenge_category', 'challenge_category.id', '=', 'challenges.category_id')
+            ->select('challenge_id', 'challenges.title', 'challenge_category.name as category', 'challenges.uuid', 'challenges.id AS user_id', 'users.name', DB::raw('count(*) as total'))
             ->groupBy('challenge_id')
             ->orderBy('total', 'desc')
             ->take(3)->get();
+
+        $categories = ChallengeCategory::where('visible', '=', 1)->where('active', '=', 1)->pluck('name','id');
 
         return json_encode(view('partials.home_participants')->with('challenges', $mostParticipants)->render());
     }
@@ -916,6 +925,7 @@ class HomeController extends Controller
     public function teste()
     {
 
+        return View('partials.create_result')->with('challengeId', '11f23b57-ce5f-4ea4-a218-b3e184a60b89');
         $now = new DateTime();
         Log::info('end_approve_challenge called');
         Challenge::where('judged', '=', 0)->chunk(100, function ($challenges) use ($now) {
@@ -1124,58 +1134,63 @@ class HomeController extends Controller
         $search = $request->input('q');
 
 
-        $category = [
-            'Awesome Stuff' => 'Awesome Stuff',
-            'Basketball' => 'Basketball',
-            'Bodyboard' => 'Bodyboard',
-            'Boxe' => 'Boxe',
-            'Cycling' => 'Cycling',
-            'Fitness' => 'Fitness',
-            'Football' => 'Football',
-            'Golf' => 'Golf',
-            'Gym' => 'Gym',
-            'Gymnastics' => 'Gymnastics',
-            'Hockey' => 'Hockey',
-            'Jiu-Jitsu' => 'Jiu-Jitsu',
-            'Judo' => 'Judo',
-            'Karate' => 'Karate',
-            'Kickboxing' => 'Kickboxing',
-            'MMA' => 'MMA',
-            'Muay Thai' => 'Muay Thai',
-            'Rugby' => 'Rugby',
-            'Running' => 'Running',
-            'Snow Sports' => 'Snow Sports',
-            'Surf' => 'Surf',
-            'Swimming' => 'Swimming',
-            'Taekwondo' => 'Taekwondo',
-            'Tennis' => 'Tennis',
-            'Trail' => 'Trail',
-            'Volleyball' => 'Volleyball',
-        ];
+//        $category = [
+//            'Awesome Stuff' => 'Awesome Stuff',
+//            'Basketball' => 'Basketball',
+//            'Bodyboard' => 'Bodyboard',
+//            'Boxe' => 'Boxe',
+//            'Cycling' => 'Cycling',
+//            'Fitness' => 'Fitness',
+//            'Football' => 'Football',
+//            'Golf' => 'Golf',
+//            'Gym' => 'Gym',
+//            'Gymnastics' => 'Gymnastics',
+//            'Hockey' => 'Hockey',
+//            'Jiu-Jitsu' => 'Jiu-Jitsu',
+//            'Judo' => 'Judo',
+//            'Karate' => 'Karate',
+//            'Kickboxing' => 'Kickboxing',
+//            'MMA' => 'MMA',
+//            'Muay Thai' => 'Muay Thai',
+//            'Rugby' => 'Rugby',
+//            'Running' => 'Running',
+//            'Snow Sports' => 'Snow Sports',
+//            'Surf' => 'Surf',
+//            'Swimming' => 'Swimming',
+//            'Taekwondo' => 'Taekwondo',
+//            'Tennis' => 'Tennis',
+//            'Trail' => 'Trail',
+//            'Volleyball' => 'Volleyball',
+//        ];
 
 
         $queryUsers = DB::table('users')->where('name', 'like', '%' . $search . '%')
             ->select(['name','role', 'id', 'photo as image', DB::raw('0 as type')]);
 
-        $queryUsers = DB::table('challenges')->where('title', 'like', '%' . $search . '%')
-            ->select(['title as name', DB::raw('0 as role'), 'uuid as id', 'category as image', DB::raw('1 as type')])
+        $queryCat = DB::table('challenge_category')->where('name', 'like', '%' . $search . '%')
+            ->select(['name', DB::raw('0 as role'), 'name as id', 'photo as image',  DB::raw('2 as type')]);
+
+        $queryUsers = DB::table('challenges')->where('title', 'like', '%' . $search . '%')->where('public','=','1')
+            ->join('challenge_category', 'challenge_category.id', '=', 'challenges.category_id')
+            ->select(['title as name', DB::raw('0 as role'), 'uuid as id', 'challenge_category.photo as image', DB::raw('1 as type')])
             ->union($queryUsers)
+            ->union($queryCat)
             ->get();
 
 
-        $search = strtolower($search);
-        foreach ($category as $url) {
-            if (str_contains(strtolower($url), $search)) { // Yoshi version
-                $temp = [
-                    'name' => $url,
-                    'id' => $url,
-                    'image' => $url,
-                    'type' => '2',
-                ];
-                array_push($queryUsers, $temp);
-
-            }
-        }
+//        $search = strtolower($search);
+//        foreach ($category as $url) {
+//            if (str_contains(strtolower($url), $search)) { // Yoshi version
+//                $temp = [
+//                    'name' => $url,
+//                    'id' => $url,
+//                    'image' => $url,
+//                    'type' => '2',
+//                ];
+//                array_push($queryUsers, $temp);
+//
+//            }
+//        }
         return json_encode($queryUsers);
     }
 

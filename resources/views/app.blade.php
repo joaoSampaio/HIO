@@ -12,7 +12,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
 
-    <title>HIO - Challenge Your Friends</title>
+    <title>HIO - Self Made Legends</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
@@ -540,19 +540,19 @@ background-color: #e91e63;
 
 <footer>
     <div style="text-align: center; margin-bottom: 15px;margin-top: 50px;" class="container">
-        <div style="margin-bottom: 40px" class="row">
-            <div class="col-md-12">
-                <ul class="list-inline footer-icon">
-                    <li><a href="https://www.instagram.com/hioselfmadelegends/"><i class="fa fa-instagram"></i></a>
-                    </li>
-                    <li style="margin-left: 50px;margin-right: 50px"><a href="https://www.facebook.com/HIO-978238685528426/?fref=ts"><i class="fa fa-facebook"></i></a>
-                    </li>
-                    <li><a href="https://hioblog.wordpress.com"><i class="fa fa-wordpress"></i></a>
-                    </li>
-                </ul>
+        {{--<div style="margin-bottom: 40px" class="row">--}}
+            {{--<div class="col-md-12">--}}
+                {{--<ul class="list-inline footer-icon">--}}
+                    {{--<li><a href="https://www.instagram.com/hioselfmadelegends/"><i class="fa fa-instagram"></i></a>--}}
+                    {{--</li>--}}
+                    {{--<li style="margin-left: 50px;margin-right: 50px"><a href="https://www.facebook.com/HIO-978238685528426/?fref=ts"><i class="fa fa-facebook"></i></a>--}}
+                    {{--</li>--}}
+                    {{--<li><a href="https://hioblog.wordpress.com"><i class="fa fa-wordpress"></i></a>--}}
+                    {{--</li>--}}
+                {{--</ul>--}}
 
-            </div>
-        </div>
+            {{--</div>--}}
+        {{--</div>--}}
 
         <div class="row">
             <div class="col-md-12">

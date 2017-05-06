@@ -62,6 +62,11 @@ $(function() {
     if($frame != null)
         $frame.style.height =  curHeight + 'px' ;
         $( "#form-challenge" ).trigger( "myCustomEvent" );
+
+
+    var myCustomData = { challengeId: '{{$challengeId}}' }
+    var event = new CustomEvent('myEvent', { detail: myCustomData })
+    window.parent.document.dispatchEvent(event)
 });
 
 

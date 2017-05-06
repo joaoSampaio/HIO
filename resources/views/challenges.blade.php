@@ -269,6 +269,13 @@ color: #eb1946;
 </script>
 
 <script>
+@if(Auth::check())
+        window.document.addEventListener('myEvent', handleEvent, false)
+        function handleEvent(e) {
+          console.log(e.detail.challengeId) // outputs: {foo: 'bar'}
+          window.location.replace("/challenge/"+e.detail.challengeId);
+        }
+    @endif
     $('.openCreate').click(function(){
 
         @if(Auth::check())
@@ -295,11 +302,22 @@ color: #eb1946;
             $('.challenge-selector a').on('shown.bs.tab', function (e) {
                 var currentMainTab = $(this).attr('href');
                 localStorage.setItem('lastTab_challenges_main', currentMainTab);
+                var subTab = null;
                 if(currentMainTab == "#menu-challenges")
-                    localStorage.setItem('lastTab_challenges', $('#menu-challenges .btn-tab-challenge.active').attr('href'));
+                    subTab = $('#menu-challenges .btn-tab-challenge.active').attr('href');
                 else
-                    localStorage.setItem('lastTab_challenges', $('#menu-proofs .btn-tab-challenge.active').attr('href'));
+                    subTab =  $('#menu-proofs .btn-tab-challenge.active').attr('href');
+
+                if (subTab == undefined) {
+                    if(currentMainTab == "#menu-challenges")
+                        subTab = $('#menu-challenges .btn-tab-challenge').first().attr('href');
+                    else
+                        subTab =  $('#menu-proofs .btn-tab-challenge').first().attr('href');
+                }
+                localStorage.setItem('lastTab_challenges', subTab);
+                $('[href="' + subTab + '"]').addClass('active');
                 console.log("saved main:"+currentMainTab);
+                console.log("saved sub:"+subTab);
             });
 
 
@@ -308,7 +326,7 @@ color: #eb1946;
             var lastMainTab = localStorage.getItem('lastTab_challenges_main');
             console.log("lastMainTab:"+lastMainTab);
             console.log("lastSubTab:"+lastSubTab);
-            if (lastSubTab) {
+            if (lastSubTab != "undefined") {
                 $('[href="' + lastSubTab + '"]').tab('show');
                 if (lastMainTab)
                     $('[href="' + lastMainTab + '"]').tab('show');

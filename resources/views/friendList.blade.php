@@ -521,7 +521,11 @@ margin-right: -15px;
           url: "{{ action('HomeController@searchFriend') }}",
           dataType: 'json',
           delay: 250,
-          allowClear: true,
+          selectOnClose: true,
+          selectOnBlur: true,
+          tags: false,
+          maximumSelectionLength: 0,
+          multiple: false,
           data: function (params) {
           console.log('params:'+params);
             return {
@@ -531,11 +535,7 @@ margin-right: -15px;
           },
           processResults: function (data, params) {
           console.log('data:'+data);
-            // parse the results into the format expected by Select2
-            // since we are using custom formatting functions we do not need to
-            // alter the remote JSON data, except to indicate that infinite
-            // scrolling can be used
-            //params.page = params.page || 1;
+
 
             return {
               results: $.map(data, function(obj) {
@@ -548,8 +548,6 @@ margin-right: -15px;
           cache: true
         },
         placeholder: "Search Friend",
-        tags: true,
-        tokenSeparators: [',','\n', '\t'],
         escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
         minimumInputLength: 1,
         templateResult: formatRepo, // omitted for brevity, see the source of this page
@@ -567,13 +565,20 @@ function formatRepo (repo) {
          return;
 
     var url = (repo.photo == "")? "/uploads/users/default_user.png" : "/uploads/users/"+repo.photo;
-      var markup = "<a class='detail-link' href='/profile/"+repo.id+"'>"+
-      "<div class='select2-result-repository clearfix'>" +
-        "<div class='select2-result-repository__avatar'><img style='width: 100px; height: 100px' src='"+url +"' /></div>" +
-        "<div class='select2-result-repository__meta'>" +
-          "<div class='select2-result-repository__title'>" + repo.name + "</div>";
 
-      "</div></div></a>";
+    var markup =
+        "<img class='search-img' src='"+url +"' />"+
+
+        "<span class='k-state-default'><h3>"+repo.name+"</h3></span>";
+
+
+//      var markup = "<a class='detail-link' href='/profile/"+repo.id+"'>"+
+//      "<div class='select2-result-repository clearfix'>" +
+//        "<div class='select2-result-repository__avatar'><img style='width: 100px; height: 100px' src='"+url +"' /></div>" +
+//        "<div class='select2-result-repository__meta'>" +
+//          "<div class='select2-result-repository__title'>" + repo.name + "</div>";
+//
+//      "</div></div></a>";
 
       return markup;
     }

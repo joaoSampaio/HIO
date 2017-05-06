@@ -118,116 +118,136 @@ width: 200px;
                       </div>
                     </div>
 
+
+
+
+
                     <div class="form-group" style="margin-left: 20px">
-                        <div class="controls span2 col-lg-3 col-xs-12 ">
 
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Basketball" {{in_array('Basketball', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Basketball
-                            </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Bodyboard" {{in_array('Bodyboard', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox2"> Bodyboard
-                            </label>
-                             <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Boxe" {{in_array('Boxe', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox2"> Boxe
-                            </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Cycling" {{in_array('Cycling', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Cycling
-                            </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Fitness" {{in_array('Fitness', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Fitness
-                            </label>
-                             <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Football" {{in_array('Football', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox1"> Football
-                            </label>
+                        @foreach ($categories->chunk(ceil (count($categories)/4)) as $row)
+                                <div class="controls span2 col-lg-3 col-xs-12 ">
+                                    @foreach ($row as $category)
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="sports[]" {{$category->active == 0? 'disabled' : '' }} value="{{ $category->id}}" {{in_array($category->id, $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> {{ $category->name}}
+                                        </label>
 
 
 
-
-                        </div>
-                        <div class="controls span2 col-lg-3 col-xs-12">
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Golf" {{in_array('Golf', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox2"> Golf
-                            </label>
-
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Gym" {{in_array('Gym', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Gym
-                            </label>
-
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Gymnastics" {{in_array('Gymnastics', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Gymnastics
-                            </label>
-
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Hockey" {{in_array('Hockey', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Hockey
-                            </label>
-
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Jiu-Jitsu" {{in_array('Jiu-Jitsu', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Jiu-Jitsu
-                            </label>
-
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Judo" {{in_array('Judo', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Judo
-                            </label>
-
-                        </div>
-
-                        <div class="controls span2 col-lg-3 col-xs-12 ">
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Karate" {{in_array('Karate', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Karate
-                            </label>
-
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Kickboxing" {{in_array('Kickboxing', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Kickboxing
-                            </label>
-
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="MMA" {{in_array('MMA', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> MMA
-                            </label>
-
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Muay Thai" {{in_array('Muay Thai', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Muay Thai
-                            </label>
-
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Rugby" {{in_array('Rugby', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Rugby
-                            </label>
-
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Running" {{in_array('Running', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox1"> Running
-                            </label>
-
-                        </div>
-                        <div class="controls span2 col-lg-3 col-sm-12">
+                                    @endforeach
+                                </div>
+                            @endforeach
 
 
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Snow Sports" {{in_array('Snow Sports', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Snow Sports
-                            </label>
+
+                        {{--<div class="controls span2 col-lg-3 col-xs-12 ">--}}
+
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Basketball" {{in_array('Basketball', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Basketball--}}
+                            {{--</label>--}}
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Bodyboard" {{in_array('Bodyboard', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox2"> Bodyboard--}}
+                            {{--</label>--}}
+                             {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Boxe" {{in_array('Boxe', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox2"> Boxe--}}
+                            {{--</label>--}}
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Cycling" {{in_array('Cycling', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Cycling--}}
+                            {{--</label>--}}
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Fitness" {{in_array('Fitness', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Fitness--}}
+                            {{--</label>--}}
+                             {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Football" {{in_array('Football', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox1"> Football--}}
+                            {{--</label>--}}
 
 
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Surf" {{in_array('Surf', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox1"> Surf
-                            </label>
 
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Swimming" {{in_array('Swimming', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Swimming
-                            </label>
 
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Taekwondo" {{in_array('Taekwondo', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Taekwondo
-                            </label>
+                        {{--</div>--}}
+                        {{--<div class="controls span2 col-lg-3 col-xs-12">--}}
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Golf" {{in_array('Golf', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox2"> Golf--}}
+                            {{--</label>--}}
 
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Tennis" {{in_array('Tennis', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Tennis
-                            </label>
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Gym" {{in_array('Gym', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Gym--}}
+                            {{--</label>--}}
 
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Trail" {{in_array('Trail', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox2"> Trail
-                            </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="sports[]" value="Volleyball" {{in_array('Volleyball', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Volleyball
-                            </label>
-                        </div>
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Gymnastics" {{in_array('Gymnastics', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Gymnastics--}}
+                            {{--</label>--}}
+
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Hockey" {{in_array('Hockey', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Hockey--}}
+                            {{--</label>--}}
+
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Jiu-Jitsu" {{in_array('Jiu-Jitsu', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Jiu-Jitsu--}}
+                            {{--</label>--}}
+
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Judo" {{in_array('Judo', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Judo--}}
+                            {{--</label>--}}
+
+                        {{--</div>--}}
+
+                        {{--<div class="controls span2 col-lg-3 col-xs-12 ">--}}
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Karate" {{in_array('Karate', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Karate--}}
+                            {{--</label>--}}
+
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Kickboxing" {{in_array('Kickboxing', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Kickboxing--}}
+                            {{--</label>--}}
+
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="MMA" {{in_array('MMA', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> MMA--}}
+                            {{--</label>--}}
+
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Muay Thai" {{in_array('Muay Thai', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Muay Thai--}}
+                            {{--</label>--}}
+
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Rugby" {{in_array('Rugby', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Rugby--}}
+                            {{--</label>--}}
+
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Running" {{in_array('Running', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox1"> Running--}}
+                            {{--</label>--}}
+
+                        {{--</div>--}}
+                        {{--<div class="controls span2 col-lg-3 col-sm-12">--}}
+
+
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Snow Sports" {{in_array('Snow Sports', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Snow Sports--}}
+                            {{--</label>--}}
+
+
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Surf" {{in_array('Surf', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox1"> Surf--}}
+                            {{--</label>--}}
+
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Swimming" {{in_array('Swimming', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Swimming--}}
+                            {{--</label>--}}
+
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Taekwondo" {{in_array('Taekwondo', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Taekwondo--}}
+                            {{--</label>--}}
+
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Tennis" {{in_array('Tennis', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Tennis--}}
+                            {{--</label>--}}
+
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Trail" {{in_array('Trail', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox2"> Trail--}}
+                            {{--</label>--}}
+                            {{--<label class="checkbox">--}}
+                                {{--<input type="checkbox" name="sports[]" value="Volleyball" {{in_array('Volleyball', $sportsSelected )? 'checked="checked"' : ''}} id="inlineCheckbox3"> Volleyball--}}
+                            {{--</label>--}}
+                        {{--</div>--}}
                     </div>
 
 

@@ -24,8 +24,7 @@ class CreateFilesTable extends Migration
             $table->foreign('challenge_id')->references('id')->on('challenges');
             $table->integer('challenge_id')->unsigned()->index();
             $table->string('filename');
-
-
+            $table->text('description');
 
             $table->timestamps();
         });

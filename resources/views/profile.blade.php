@@ -510,12 +510,12 @@ div[data-anim~=base] {
                 <?php $sports = multiexplode(array(",",".","|",":"),$user->sports) ?>
                 <?php $countSports=0; ?>
 
-                @foreach ($sports as $sport)
+                @foreach ($categories as $sport)
                     <?php $countSports++; ?>
                     @if($countSports > 3)
                         @break
                     @endif
-                    <a href="{{action('HomeController@showChallenges', $sport)}}" class="span-category">{{$sport}}<span class="badge badge-category">1</span></a>
+                    <a href="{{action('HomeController@showChallenges', $sport->name)}}" class="span-category">{{$sport->name}}<span class="badge badge-category">{{$sport->level != null? $sport->level : 0}}</span></a>
                 @endforeach
                 @if($countSports > 3)
                     <a href="#" class="span-category span-category-more">SEE MORE</a>
@@ -677,13 +677,13 @@ div[data-anim~=base] {
                 <div role="tabpanel" class="tab-pane active" id="ongoing">
 
                     <div class="row">
-                        @foreach ($challenges as $challenge)
+                        @foreach ($ongoingChallenges as $challenge)
                             @include('partials.single_challenge')
                         @endforeach
                     </div>
 
                     <div class="row" style="text-align: center;">
-                        {!! $challenges->links() !!}
+                        {!! $ongoingChallenges->links() !!}
                     </div>
 
 
@@ -748,6 +748,13 @@ div[data-anim~=base] {
 @section('footer')
 
 <script>
+@if(Auth::check())
+        window.document.addEventListener('myEvent', handleEvent, false)
+        function handleEvent(e) {
+          console.log(e.detail.challengeId) // outputs: {foo: 'bar'}
+          window.location.replace("/challenge/"+e.detail.challengeId);
+        }
+    @endif
 $('#openCreate').click(function(){
     @if(Auth::check())
         $('#create-challenge').on('shown.bs.modal', function() {
@@ -862,7 +869,7 @@ $(document).ready(function() {
 });
 function getEndedChallenges(url, page) {
     $.ajax({
-        url : url + page,
+        url : url + page+"&showcreate=false",
         dataType: 'json'
     }).done(function (data) {
         $('#ended').html(data);
@@ -874,7 +881,7 @@ function getEndedChallenges(url, page) {
 
 function getOngoingChallenges(url, page) {
         $.ajax({
-            url : url + page,
+            url : url + page+"&showcreate=false",
             dataType: 'json'
         }).done(function (data) {
             $('#ongoing').html(data);
@@ -885,7 +892,7 @@ function getOngoingChallenges(url, page) {
 
     function getMyChallenges(url, page) {
         $.ajax({
-            url : url + page,
+            url : url + page+"&showcreate=false",
             dataType: 'json'
         }).done(function (data) {
             $('#mychallenges').html(data);

@@ -24,7 +24,7 @@ class Challenge extends Model
      */
     protected $fillable = [
          'title','creator_id', 'rank', 'public', 'description',
-        'category', 'reward', 'penalty', 'deadLine', 'secret', 'uuid','closed', 'judged', 'reminded'
+        'category_id', 'reward', 'penalty', 'deadLine', 'secret', 'uuid','closed', 'judged', 'reminded'
     ];
 
     /**
@@ -54,6 +54,11 @@ class Challenge extends Model
         $deadLine = new DateTime($this->deadLine);
         return ($now > $deadLine);
 
+    }
+
+    public function category()
+    {
+        return $this->hasOne('App\Model\ChallengeCategory', 'id', 'category_id');
     }
 
 

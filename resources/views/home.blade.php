@@ -276,12 +276,21 @@ color: #eb1946;
 
 
 <script>
+    @if(Auth::check())
+        window.document.addEventListener('myEvent', handleEvent, false)
+        function handleEvent(e) {
+          console.log(e.detail.challengeId) // outputs: {foo: 'bar'}
+          window.location.replace("/challenge/"+e.detail.challengeId);
+        }
+    @endif
     $('#openCreate').click(function(){
         @if(Auth::check())
         $('#create-challenge').on('shown.bs.modal', function() {
             $('#create-challenge-iframe').attr("src","/new/challenge");
+//            $('#create-challenge-iframe').attr("src","/teste");
         });
         $('#create-challenge').modal({show:true})
+
         @else
         window.location.replace("/auth");
         @endif

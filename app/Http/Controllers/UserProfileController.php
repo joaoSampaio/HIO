@@ -2,6 +2,7 @@
 
 use App;
 use App\Model\Challenge;
+use App\Model\ChallengeCategory;
 use App\Model\FileHio;
 use Carbon\Carbon;
 
@@ -84,6 +85,20 @@ class UserProfileController extends Controller
             return view('home')->with('authUser', "");
         }
 
+        $sportsSelected = multiexplode(array(",",".","|",":"),$user->sports);
+//        $catLevel =CategoryLevel::where('user_id', $idUser)->whereIn('category_id', $sportsSelected)->get();
+        $categories = DB::table('challenge_category')->whereIn('challenge_category.id', $sportsSelected)
+            ->leftJoin('category_level', function($join) use ($idUser)
+            {
+                $join->on('category_level.user_id', '=',  DB::raw("'".$idUser."'"));
+                $join->on('category_level.category_id','=', 'challenge_category.id');
+            })
+            ->select('challenge_category.name', 'challenge_category.id', 'category_level.level')->get();
+
+
+//            return json_encode($categories);
+
+
         $endedChallenges = Challenge::
             where(function ($query) use ($idUser) {
                 $query->whereIn('challenges.id', function ($query) use ($idUser)
@@ -106,9 +121,8 @@ class UserProfileController extends Controller
             ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ended', $page = null);
 
 
-        $ongoingChallenges = DB::table('challenges')
-
-            ->where(function ($query) use ($idUser) {
+        $ongoingChallenges = Challenge::
+            where(function ($query) use ($idUser) {
                 $query->whereIn('challenges.id', function ($query) use ($idUser)
                 {
                     $query->from('challenge_user')
@@ -125,8 +139,8 @@ class UserProfileController extends Controller
             ->orderBy('deadLine', 'asc')
             ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ongoing', $page = null);
 
-        $myChallenges = DB::table('challenges')
-            ->where(function ($query) use ($idUser) {
+        $myChallenges = Challenge::
+            where(function ($query) use ($idUser) {
                 $query->whereIn('challenges.id', function ($query) use ($idUser)
                 {
                     $query->from('challenge_user')
@@ -185,20 +199,21 @@ class UserProfileController extends Controller
 //        }
 
 //        return "ola";
-        return view('profile')->with('challenges', $ongoingChallenges)
+        return view('profile')->with('ongoingChallenges', $ongoingChallenges)
             ->with('user', $user)
             ->with('endedChallenges', $endedChallenges)
             ->with('challengeCreated', $challengeCreated)
             ->with('myChallenges', $myChallenges)
             ->with('canBeFriend', $canBeFriend)
             ->with('friendsMessage', $friendsMessage)
-            ->with('userFriends', $userFriends);
+            ->with('userFriends', $userFriends)
+            ->with('categories', $categories);
 
 
     }
 
 
-    public function getUserEndedChallenges($id)
+    public function getUserEndedChallenges($id, Request $request)
     {
 
         $idUser = $id;
@@ -236,11 +251,14 @@ class UserProfileController extends Controller
             ->orderBy('deadLine', 'desc')
             ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ended', $page = null);
 
-        return json_encode(view('partials.challenge')->with('challenges', $endedChallenges)->render());
+        $showCreate = $request->input('showcreate');
+
+        return json_encode(view('partials.challenge')->with('challenges', $endedChallenges)
+            ->with('showCreate',$showCreate)->render());
     }
 
 
-    public function getUserCreatedChallenges($id)
+    public function getUserCreatedChallenges($id, Request $request)
     {
 
         $idUser = $id;
@@ -258,8 +276,7 @@ class UserProfileController extends Controller
             return view('home')->with('authUser', "");
         }
 
-        $myChallenges = DB::table('challenges')
-            ->where(function ($query) use ($idUser) {
+        $myChallenges = Challenge::where(function ($query) use ($idUser) {
                 $query->whereIn('challenges.id', function ($query) use ($idUser)
                 {
                     $query->from('challenge_user')
@@ -274,11 +291,13 @@ class UserProfileController extends Controller
             ->orderBy('deadLine', 'desc')
             ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'myChallenges', $page = null);
 
-        return json_encode(view('partials.challenge')->with('challenges', $myChallenges)->render());
+        $showCreate = $request->input('showcreate');
+        return json_encode(view('partials.challenge')->with('challenges', $myChallenges)
+            ->with('showCreate',$showCreate)->render());
     }
 
 
-    public function getUserOngoingChallenges($id)
+    public function getUserOngoingChallenges($id, Request $request)
     {
 
         $idUser = $id;
@@ -297,9 +316,7 @@ class UserProfileController extends Controller
         }
 
 
-        $ongoingChallenges = DB::table('challenges')
-
-            ->where(function ($query) use ($idUser) {
+        $ongoingChallenges = Challenge::where(function ($query) use ($idUser) {
                 $query->whereIn('challenges.id', function ($query) use ($idUser)
                 {
                     $query->from('challenge_user')
@@ -316,13 +333,17 @@ class UserProfileController extends Controller
             ->orderBy('deadLine', 'asc')
             ->select('challenges.*')->paginate($perPage = $this->getPageTotal(), $columns = ['*'], $pageName = 'ongoing', $page = null);
 
-        return json_encode(view('partials.challenge')->with('challenges', $ongoingChallenges)->render());
+        $showCreate = $request->input('showcreate');
+        return json_encode(view('partials.challenge')->with('challenges', $ongoingChallenges)
+            ->with('showCreate',$showCreate)->render());
     }
 
 
     public function editProfile()
     {
-        return view('edit_profile');
+
+        $categories = ChallengeCategory::where('visible', '=', 1)->get();
+        return view('edit_profile')->with('categories',$categories);
     }
 
     public function fixPhotos()
@@ -354,7 +375,7 @@ class UserProfileController extends Controller
 //            }
 //        }
 
-        $user->about = $request->input('about');
+        $user->about = strip_tags($request->input('about'));
 
         if (!empty($request->input('sports'))) {
             $user->sports = implode(",", $request->input('sports'));
@@ -363,8 +384,8 @@ class UserProfileController extends Controller
         }
 
 
-        $user->name = $request->input('name');
-        $user->interests = $request->input('interests');
+        $user->name = strip_tags($request->input('name'));
+        $user->interests = strip_tags($request->input('interests'));
 
 
         $user->save();
@@ -580,12 +601,10 @@ class UserProfileController extends Controller
 
     public function changePassword()
     {
-
         return view('auth.passwords.change');
-
-
-
     }
+
+
 
     public function postCredentials(Request $request)
     {
@@ -626,6 +645,10 @@ class UserProfileController extends Controller
         }
     }
 
+    public function showLvlUp()
+    {
+        return view('levelup');
+    }
 
 
 

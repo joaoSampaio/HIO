@@ -301,6 +301,12 @@ padding: 50px 20px;
         font-size: 18px;
     }
 
+
+
+}
+
+.navbar-default {
+    background-color: transparent !important;
 }
 
   </style>
@@ -396,7 +402,16 @@ padding: 50px 20px;
                         <h2 class="text-capitalize" style="color: #333; margin-bottom: 30px;font-size: 36px;font-weight: 400;">About the Challenge</h2>
                         <p style="font-size: 16px;font-weight: 400;">{!! nl2br(e($challenge->description)) !!}</p>
 
-                        <a href="{{action('HomeController@showChallenges', $challenge->category)}}">#{{$challenge->category}}</a>
+
+                        @if($challenge->public == 0)
+                            <span  style="font-size: 16px;font-weight: 600;">Reward</span>
+                            <p  style="font-size: 16px;font-weight: 400;">{!! nl2br(e($challenge->reward)) !!}</p>
+
+                            <span  style="font-size: 16px;font-weight: 600;">Penalty</span>
+                            <p  style="font-size: 16px;font-weight: 400;">{!! nl2br(e($challenge->penalty)) !!}</p>
+                        @endif
+
+                        <a href="{{action('HomeController@showChallenges', $challenge->category->name)}}">#{{$challenge->category->name}}</a>
 
                         @if(!$challenge->closed && $isValid && Auth::check() && Auth::user()->id == $challenge->creator_id)
                             <p><a class="btn edit-btn" href="{{ action('HomeController@editChallenge', $challenge->uuid) }}">Edit</a></p>
@@ -789,12 +804,13 @@ padding: 50px 20px;
 
                           $('#myModal').modal('hide');
                           $('.wall-fame-subtitle').hide();
+                          myDropzone.removeFile(file);
 
                         var tamanho = $("#proofs > .proof-item").length;
                         if(tamanho >= 6){
                             $("#proofs> .proof-item:nth-child(5)" ).hide();
                         }
-                        $( "#proofs").prepend(response.html);
+                        $( "#proofs> .proof-item").first().after(response.html);
                         });
                     }
                 };
