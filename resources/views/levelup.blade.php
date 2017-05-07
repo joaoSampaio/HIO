@@ -300,6 +300,25 @@ padding: 50px 20px;
     background-color: transparent !important;
 }
 
+.btn-accept {
+    border-color: #eb1946;
+    background: #eb1946;
+    padding: 11px 31px !important;
+    color: white;
+    font-family: "Roboto";
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    text-transform: uppercase;
+    line-height: 1.2;
+    text-align: center;
+    margin-left: 12px;
+
+}
+
+    .small-margin{
+        margin-bottom: 10px;
+    }
+
   </style>
 
 @endsection
@@ -345,39 +364,73 @@ padding: 50px 20px;
             </div>
         </header>
 
-        <section style="padding-top: 0px;background-color: #e7eaed">
+
+
+
+        @if($selectedProfileCategory == null)
+            <section style="padding-top: 0px;background-color: #e7eaed">
             <div class="container">
                 <div class="row text-center">
-
-
                     <div class="col-sm-12 col-md-10 col-md-offset-1" style="margin-top: 50px">
 
-                        <h2 class="text-capitalize" style="color: #333; margin-bottom: 30px;font-size: 36px;font-weight: 400;">Reaching</h2>
-                        <div><span class="badge badge-lvl">5 <span>LVL</span></span></div>
-                        <div style="    margin-top: 20px;    margin-bottom: 20px;">
-                            <span class="rank">ADVANCED</span><svg width="17px" height="17px">
-                             <path fill-rule="evenodd"  fill="rgb(72, 211, 98)"
-                              d="M16.855,8.391 L4.327,16.931 C4.008,17.163 3.615,16.760 3.850,16.440 L10.558,6.643 C10.638,6.534 10.772,6.484 10.903,6.512 L16.726,7.766 C17.018,7.829 17.098,8.215 16.855,8.391 ZM6.453,10.355 C6.372,10.463 6.238,10.514 6.107,10.486 L0.284,9.232 C-0.008,9.169 -0.088,8.783 0.155,8.607 L12.683,0.067 C13.002,-0.166 13.395,0.238 13.161,0.558 L6.453,10.355 Z"/>
-                             </svg>
-                            <span class="rank">GYM</span>
+                        <h2 class="text-capitalize" style="color: #333; margin-bottom: 30px;font-size: 36px;font-weight: 400;">No category selected in user profile</h2>
 
-                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+            </section>
 
 
-        <section  >
-            <div class="container" >
+        @else
 
-                <div class="col-sm-12 col-xs-12 col-lg-12" >
-                    <h2 class="wall-fame-title">Uploaded Proofs</h2>
+            <section style="padding-top: 0px;background-color: #e7eaed">
+                <div class="container">
+                    <div class="row text-center">
+                        <div class="col-sm-12 col-md-10 col-md-offset-1" style="margin-top: 50px">
+
+                            <h2 class="text-capitalize" style="color: #333; margin-bottom: 30px;font-size: 36px;font-weight: 400;">Reaching</h2>
+                            <div><span class="badge badge-lvl">{{$level+1}} <span>LVL</span></span></div>
+                            <div style="    margin-top: 20px;    margin-bottom: 20px;">
+                                <span class="rank">ADVANCED</span><svg width="17px" height="17px">
+                                 <path fill-rule="evenodd"  fill="rgb(72, 211, 98)"
+                                  d="M16.855,8.391 L4.327,16.931 C4.008,17.163 3.615,16.760 3.850,16.440 L10.558,6.643 C10.638,6.534 10.772,6.484 10.903,6.512 L16.726,7.766 C17.018,7.829 17.098,8.215 16.855,8.391 ZM6.453,10.355 C6.372,10.463 6.238,10.514 6.107,10.486 L0.284,9.232 C-0.008,9.169 -0.088,8.783 0.155,8.607 L12.683,0.067 C13.002,-0.166 13.395,0.238 13.161,0.558 L6.453,10.355 Z"/>
+                                 </svg>
+                                <span class="rank">{{$selectedProfileCategory->name}}</span>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
 
-            </div>
-        </section>
+            <section  >
+                <div class="container" >
 
+                    <div class="col-sm-12 col-xs-12 col-md-8 col-md-offset-2" >
+
+                        <div class="col-sm-4 col-xs-12 col-lg-4 small-margin" >Difficulty</div>
+                        <div class="col-sm-4 col-xs-12 col-lg-4 small-margin" >Challenge</div>
+                        <div class="col-sm-4 col-xs-12 col-lg-4 small-margin" >State</div>
+
+                        @foreach($levelUpChallenges as $challengeLvlUp)
+                            <div class="col-sm-4 col-xs-12 col-lg-4 small-margin" >{{$challengeLvlUp->difficulty}}</div>
+                            <div class="col-sm-4 col-xs-12 col-lg-4 small-margin" >
+                                <p>{{$challengeLvlUp->title}}</p>
+                                <p>{{$challengeLvlUp->sub-title}}</p>
+                            </div>
+                            <div class="col-sm-4 col-xs-12 col-lg-4 small-margin" >
+                                <a class="btn  btn-accept" href="#" data-id="{{$challengeLvlUp->id}}">Accept</a>
+                            </div>
+                        @endforeach
+
+
+
+
+
+                </div>
+            </section>
+        @endif
 @endsection
 
 

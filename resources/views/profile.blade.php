@@ -411,6 +411,15 @@ div[data-anim~=base] {
     color: #acaeb0
 }
 
+    .category-btn{
+        background: transparent;
+        border: 0px;
+    }
+
+.category-btn.active {
+    color: green;
+}
+
   </style>
 
 @endsection
@@ -460,12 +469,13 @@ div[data-anim~=base] {
 
                     <div ><h3 class="text-capitalize profile-main-name">{{$user->name}}</h3></div>
                     <div style="    margin-top: 20px;    margin-bottom: 20px;">
+                        @if($selectedProfileCategory != null)
                         <span class="rank">ADVANCED</span><svg width="17px" height="17px">
                                                                  <path fill-rule="evenodd"  fill="rgb(72, 211, 98)"
                                                                   d="M16.855,8.391 L4.327,16.931 C4.008,17.163 3.615,16.760 3.850,16.440 L10.558,6.643 C10.638,6.534 10.772,6.484 10.903,6.512 L16.726,7.766 C17.018,7.829 17.098,8.215 16.855,8.391 ZM6.453,10.355 C6.372,10.463 6.238,10.514 6.107,10.486 L0.284,9.232 C-0.008,9.169 -0.088,8.783 0.155,8.607 L12.683,0.067 C13.002,-0.166 13.395,0.238 13.161,0.558 L6.453,10.355 Z"/>
                                                                  </svg>
-                        <span class="rank">GYM</span>
-
+                        <span class="rank">{{$selectedProfileCategory->name}}</span>
+                        @endif
                     </div>
 
 
@@ -507,16 +517,20 @@ div[data-anim~=base] {
 
 
             <div class="col-sm-12 col-md-12">
-                <?php $sports = multiexplode(array(",",".","|",":"),$user->sports) ?>
+<!--                --><?php //$sports = multiexplode(array(",",".","|",":"),$user->sports) ?>
                 <?php $countSports=0; ?>
 
-                @foreach ($categories as $sport)
-                    <?php $countSports++; ?>
-                    @if($countSports > 3)
-                        @break
-                    @endif
-                    <a href="{{action('HomeController@showChallenges', $sport->name)}}" class="span-category">{{$sport->name}}<span class="badge badge-category">{{$sport->level != null? $sport->level : 0}}</span></a>
-                @endforeach
+                <form class="form-horizontal form-brand" role="form" method="POST" action="{{ url('/profile/me/category') }}">
+                    {{ csrf_field() }}
+                    @foreach ($categories as $sport)
+                        <?php $countSports++; ?>
+                        @if($countSports > 3)
+                            @break
+                        @endif
+                        {{--href="{{action('HomeController@showChallenges', $sport->name)}}"--}}
+                        <button type="submit" name="category_id" value="{{$sport->id}}" class=" {{$user->selected_category_id == $sport->id? "active":""}} category-btn span-category">{{$sport->name}}<span class="badge badge-category">{{$sport->level != null? $sport->level : 0}}</span></button>
+                    @endforeach
+                </form>
                 @if($countSports > 3)
                     <a href="#" class="span-category span-category-more">SEE MORE</a>
                 @endif
@@ -524,7 +538,7 @@ div[data-anim~=base] {
             @if(Auth::user()->email === $user->email)
                 <div class="col-sm-12 col-md-12" style="margin-top: 25px;">
                     <a class="btn btn-edit edit-profile" href="{{ action('UserProfileController@editProfile') }}">Edit</a>
-                    <a class="btn  btn-lvl-up" href="/friends">LEVEL UP</a>
+                    <a class="btn  btn-lvl-up" href="/lvl-up">LEVEL UP</a>
                 </div>
             @endif
 

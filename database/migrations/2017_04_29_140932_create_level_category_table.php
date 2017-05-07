@@ -18,6 +18,7 @@ class CreateLevelCategoryTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->index(['category_id', 'user_id']);
             $table->integer('level', 2);
+            $table->dateTime('deadLineLvl');
             $table->timestamps();
 
         });

@@ -23,7 +23,7 @@ class ChallengeLevelUp extends Model
      * @var array
      */
     protected $fillable = [
-         'title','sub-title', 'category_id', 'level'
+         'title','sub-title', 'category_id', 'level', 'difficulty'
     ];
 
 

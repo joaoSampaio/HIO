@@ -37,7 +37,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $fillable = [
         'name', 'email', 'about', 'sports', 'birthday', 'public', 'facebook_id','gender',
         'facebook_token', 'friends','location','interests', 'achievements', 'activated',
-        'password','role', 'address', 'photo', 'id_last_notification', 'other_profile','number_profile','xp',
+        'password','role', 'address', 'photo', 'id_last_notification', 'other_profile','number_profile','xp','selected_category_id'
     ];
 
     protected $hidden = [

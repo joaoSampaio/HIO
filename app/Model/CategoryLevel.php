@@ -23,7 +23,7 @@ class CategoryLevel extends Model
      * @var array
      */
     protected $fillable = [
-         'category_id','user_id',  'level'
+         'category_id','user_id',  'level', 'deadLineLvl'
     ];
 
 

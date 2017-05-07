@@ -1,8 +1,10 @@
 <?php namespace App\Http\Controllers;
 
 use App;
+use App\Model\CategoryLevel;
 use App\Model\Challenge;
 use App\Model\ChallengeCategory;
+use App\Model\ChallengeLevelUp;
 use App\Model\FileHio;
 use Carbon\Carbon;
 
@@ -95,6 +97,10 @@ class UserProfileController extends Controller
             })
             ->select('challenge_category.name', 'challenge_category.id', 'category_level.level')->get();
 
+        $selectedProfileCategory = null;
+        if($user->selected_category_id > 0){
+            $selectedProfileCategory = DB::table('challenge_category')->find($user->selected_category_id);
+        }
 
 //            return json_encode($categories);
 
@@ -207,7 +213,9 @@ class UserProfileController extends Controller
             ->with('canBeFriend', $canBeFriend)
             ->with('friendsMessage', $friendsMessage)
             ->with('userFriends', $userFriends)
-            ->with('categories', $categories);
+            ->with('categories', $categories)
+            ->with('selectedProfileCategory', $selectedProfileCategory)
+            ;
 
 
     }
@@ -647,8 +655,110 @@ class UserProfileController extends Controller
 
     public function showLvlUp()
     {
-        return view('levelup');
+
+        $selectedProfileCategory = null;
+        $userLevelCategory = 0;
+        $deadLine = null;
+        if(Auth::User()->selected_category_id > 0){
+            $selectedProfileCategory = DB::table('challenge_category')->find(Auth::User()->selected_category_id);
+
+            if($level = CategoryLevel::where('user_id', Auth::User()->id)->where('category_id',$selectedProfileCategory->id)->first()){
+                $userLevelCategory = $level->level;
+                $deadLine = $level->deadLineLvl;
+            }
+            $levelUpChallenges = ChallengeLevelUp::where('category_id',Auth::User()->selected_category_id)->where('level',$userLevelCategory)->orderBy('title', 'desc')->get();
+
+        }
+
+        return view('levelup')
+            ->with('levelUpChallenges', $levelUpChallenges)
+            ->with('selectedProfileCategory', $selectedProfileCategory)
+            ->with('level', $userLevelCategory)
+            ->with('deadline', $deadLine);
     }
+
+
+    public function selectCategory(Request $request){
+
+        $categoryId= $request->input('category_id');
+        Auth::User()->selected_category_id = $categoryId;
+        Auth::User()->save();
+
+        return redirect()->action('UserProfileController@userProfile', 'me');
+
+
+    }
+
+    public function createCategoryChallenge(Request $request){
+
+        $challengeLevelUpId =  $request->input('challenge_lvl_up_id');
+
+        if(Challenge::where('creator_id',Auth::User()->id)->where('challenge_lvl_up_id', $challengeLevelUpId)->first()){
+            return "false";
+        }
+
+        if($challengeLvlUp = ChallengeLevelUp::find($challengeLevelUpId)){
+
+            $title = $challengeLvlUp->title;
+            $description = $challengeLvlUp->title + " " + $challengeLvlUp->sub-title;
+            $creator_id = Auth::user()->id;
+            $public = 1;
+            $uuid = Uuid::uuid4();
+            $secret = 0;
+            $reward = "";
+            $penalty = "";
+            $categoryId = $challengeLvlUp->category_id;
+
+
+            if($level = CategoryLevel::where('user_id', Auth::User()->id)->where('category_id',$categoryId)->first()){
+                $deadLine = $level->deadLineLvl;
+
+
+            }else{
+                $now = Carbon::now();
+                $deadLine = $now->addDays(7);
+                //'category_id','user_id',  'level', 'deadLineLvl'
+                $level = new CategoryLevel(['category_id' => $categoryId,
+                    'user_id' => Auth::user()->id,
+                    'deadLine' => $deadLine, 'level' => 0]);
+                $level->save();
+            }
+
+
+
+
+            $challenge = new Challenge(['title' => $title, 'creator_id' => $creator_id, 'lvl_up_id' => $challengeLevelUpId,
+                'description' => $description, 'category_id' => $categoryId, 'reward' => $reward, 'penalty' => $penalty,
+                'deadLine' => $deadLine, 'uuid' => $uuid, 'public' => $public, 'secret' => $secret,]);
+
+
+            Auth::user()->challenges()->save($challenge);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        return View('partials.create_result')->with('challengeId', $uuid);
+
+
+
+    }
+
+
+
+
+
+
+
 
 
 

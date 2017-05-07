@@ -17,7 +17,7 @@ class CreateChallengesTable extends Migration
             $table->uuid('uuid');
             $table->string('title');
             $table->boolean('public')->default(true);
-            $table->integer('category');
+            $table->integer('category_id');
             $table->text('description');
             $table->string('reward');
             $table->string('penalty');
@@ -27,7 +27,7 @@ class CreateChallengesTable extends Migration
             $table->boolean('judged')->default(false);
             $table->boolean('reminded')->default(false);
             $table->integer('creator_id')->unsigned();
-            $table->integer('rank')->unsigned();
+            $table->integer('challenge_lvl_up_id')->unsigned();
             $table->integer('secret')->unsigned();
 //            $table->foreign('creator_id')->references('id')->on('users');
         });

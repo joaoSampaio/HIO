@@ -246,7 +246,6 @@ class HomeController extends Controller
 
         $title = strip_tags($request->input('title'));
         $creator_id = Auth::user()->id;
-        $rank = 0;
 
         $description = strip_tags($request->input('description'));
         $category = $request->input('category');
@@ -254,15 +253,6 @@ class HomeController extends Controller
         $penalty = strip_tags($request->input('penalty'));
         $deadLine = $request->input('deadLine');
         $public = $request->input('public', false);
-
-//        echo "pub->".$public;
-//        return "";
-//        echo "<br>description:".$description;
-//        echo "<br>cat:".$category;
-//        echo "<br>rew:".$reward;
-//        echo "<br>pen:".$penalty;
-//        echo "<br>dead:".$deadLine;
-//        echo "<br>pub:".$public;
 
         if ($public == "true") {
             $public = 1;
@@ -293,7 +283,7 @@ class HomeController extends Controller
             }
         }
 
-        $challenge = new Challenge(['title' => $title, 'creator_id' => $creator_id, 'rank' => $rank,
+        $challenge = new Challenge(['title' => $title, 'creator_id' => $creator_id,
             'description' => $description, 'category_id' => $category, 'reward' => $reward, 'penalty' => $penalty,
             'deadLine' => $deadLine, 'uuid' => $uuid, 'public' => $public, 'secret' => $secret,]);
         if ($challengeMyself) {
