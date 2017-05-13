@@ -465,7 +465,7 @@ div[data-anim~=base] {
                         </div>
                     </div>
 
-                    <div><span class="badge badge-lvl">5 <span>LVL</span></span></div>
+                    <div><span class="badge badge-lvl">0 <span>LVL</span></span></div>
 
                     <div ><h3 class="text-capitalize profile-main-name">{{$user->name}}</h3></div>
                     <div style="    margin-top: 20px;    margin-bottom: 20px;">
@@ -482,23 +482,23 @@ div[data-anim~=base] {
                 </div>
                 <div class="col-sm-12 col-md-4 col-md-offset-4 progress-bar-container">
                     <div class="progress">
-                          <div class="progress-bar progress-bar-xp" role="progressbar" style="width:100%"></div>
+                          <div class="progress-bar progress-bar-xp bar1" role="progressbar" style="width:0%"></div>
                     </div>
                     <div class="progress">
-                          <div class="progress-bar progress-bar-xp" role="progressbar" style="width:100%"></div>
+                          <div class="progress-bar progress-bar-xp bar2" role="progressbar" style="width:0%"></div>
                     </div>
                     <div class="progress">
-                          <div class="progress-bar progress-bar-xp" role="progressbar" style="width:80%"></div>
+                          <div class="progress-bar progress-bar-xp bar3" role="progressbar" style="width:0%"></div>
                     </div>
                     <div class="progress">
-                          <div class="progress-bar progress-bar-xp" role="progressbar" style="width:0%"></div>
+                          <div class="progress-bar progress-bar-xp bar4" role="progressbar" style="width:0%"></div>
                     </div>
                     <div class="progress">
-                          <div class="progress-bar progress-bar-xp" role="progressbar" style="width:0%"></div>
+                          <div class="progress-bar progress-bar-xp bar5" role="progressbar" style="width:0%"></div>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-4 col-md-offset-4 ">
-                    <span class="xp-text">{{$user->xp}} / 4000XP</span>
+                    <span class="xp-text">{{$user->xp}} / 1000XP</span>
 
                 </div>
 
@@ -542,19 +542,6 @@ div[data-anim~=base] {
                 </div>
             @endif
 
-            {{--@if(Auth::user()->email === $user->email)--}}
-                {{--<div class="col-sm-12 col-md-12">--}}
-                    {{--<a class="btn btn-edit edit-profile" href="{{ action('UserProfileController@editProfile') }}">Edit</a>--}}
-                {{--</div>--}}
-                {{--<div class="col-sm-12 col-md-12">--}}
-                    {{--<a class="btn  btn-friends edit-profile" href="/friends">Friends</a>--}}
-                {{--</div>--}}
-            {{--@else--}}
-                 {{--<div class="col-sm-12 col-md-12">--}}
-                    {{--<a class="btn btn-friends edit-profile" href="{{action('HomeController@getFriendsUser', [ 'id' => $user->id, 'name'=>$user->name])}}">Friends</a>--}}
-                {{--</div>--}}
-
-             {{--@endif--}}
 
                 @if(Auth::user()->role === "admin" && $user->other_profile == NULL)
                     <form class="form-horizontal form-brand" role="form" method="POST" style="    margin-top: 30px;" action="{{ url('/upgrade-trainer') }}">
@@ -605,19 +592,6 @@ div[data-anim~=base] {
         </section>
     @endif
 
-{{--@if(Auth::user()->email === $user->email)--}}
-                {{--<div class="col-sm-12 col-md-12">--}}
-                    {{--<a class="btn btn-edit edit-profile" href="{{ action('UserProfileController@editProfile') }}">Edit</a>--}}
-                {{--</div>--}}
-                {{--<div class="col-sm-12 col-md-12">--}}
-                    {{--<a class="btn  btn-friends edit-profile" href="/friends">Friends</a>--}}
-                {{--</div>--}}
-            {{--@else--}}
-                 {{--<div class="col-sm-12 col-md-12">--}}
-                    {{--<a class="btn btn-friends edit-profile" href="{{action('HomeController@getFriendsUser', [ 'id' => $user->id, 'name'=>$user->name])}}">Friends</a>--}}
-                {{--</div>--}}
-
-             {{--@endif--}}
     <section id="friends-section" style="background-color: #e7eaed;position: relative;padding-left: 5px;padding-right: 5px;">
 
         @if($userFriends->total() > 0)
@@ -916,7 +890,21 @@ function getOngoingChallenges(url, page) {
     }
 
 
+    var xpNeeded = 1000;
+    var currentXp = {{$user->xp}};
+    var xpPerBar = xpNeeded/5;
+    var numBarFilled = Math.floor(currentXp/xpPerBar);
+    var remainder = currentXp % xpPerBar;
+    for(var i=1;i<=numBarFilled; i++){
+        $( ".bar"+i+"").width('100%');
+    }
+    if(remainder > 0){
+        var rest = remainder*100/xpPerBar;
+        $( ".bar"+(numBarFilled+1)+"").width(rest+'%');
+    }
 
+    //progress-bar-container
+//<div class="progress-bar progress-bar-xp" role="progressbar" style="width:100%"></div>
 
 </script>
 

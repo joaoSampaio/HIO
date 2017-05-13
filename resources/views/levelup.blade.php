@@ -367,7 +367,7 @@ padding: 50px 20px;
 
 
 
-        @if($selectedProfileCategory == null)
+        @if($selectedProfileCategory == null )
             <section style="padding-top: 0px;background-color: #e7eaed">
             <div class="container">
                 <div class="row text-center">
@@ -417,11 +417,12 @@ padding: 50px 20px;
                             <div class="col-sm-4 col-xs-12 col-lg-4 small-margin" >{{$challengeLvlUp->difficulty}}</div>
                             <div class="col-sm-4 col-xs-12 col-lg-4 small-margin" >
                                 <p>{{$challengeLvlUp->title}}</p>
-                                <p>{{$challengeLvlUp->sub-title}}</p>
+                                <p>{{$challengeLvlUp->sub_title}}</p>
                             </div>
                             <div class="col-sm-4 col-xs-12 col-lg-4 small-margin" >
                                 <a class="btn  btn-accept" href="#" data-id="{{$challengeLvlUp->id}}">Accept</a>
                             </div>
+                            <div class="clearfix visible-xs visible-lg"></div>
                         @endforeach
 
 

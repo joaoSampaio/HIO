@@ -657,6 +657,7 @@ class UserProfileController extends Controller
     {
 
         $selectedProfileCategory = null;
+        $levelUpChallenges = null;
         $userLevelCategory = 0;
         $deadLine = null;
         if(Auth::User()->selected_category_id > 0){
@@ -667,7 +668,7 @@ class UserProfileController extends Controller
                 $deadLine = $level->deadLineLvl;
             }
             $levelUpChallenges = ChallengeLevelUp::where('category_id',Auth::User()->selected_category_id)->where('level',$userLevelCategory)->orderBy('title', 'desc')->get();
-
+//            echo json_encode($levelUpChallenges);
         }
 
         return view('levelup')
@@ -734,16 +735,6 @@ class UserProfileController extends Controller
 
             Auth::user()->challenges()->save($challenge);
         }
-
-
-
-
-
-
-
-
-
-
 
 
 
