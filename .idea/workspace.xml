@@ -24,46 +24,52 @@
       <file leaf-file-name="Challenge.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Model/Challenge.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="25" column="51" lean-forward="false" selection-start-line="25" selection-start-column="32" selection-end-line="25" selection-end-column="51" />
+            <state relative-caret-position="15">
+              <caret line="25" column="76" lean-forward="false" selection-start-line="25" selection-start-column="65" selection-end-line="25" selection-end-column="76" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserProfileController.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CategoryLevel.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Model/CategoryLevel.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="207">
+              <caret line="46" column="35" lean-forward="false" selection-start-line="46" selection-start-column="35" selection-end-line="46" selection-end-column="35" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UserProfileController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/UserProfileController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="284">
-              <caret line="697" column="9" lean-forward="true" selection-start-line="697" selection-start-column="9" selection-end-line="697" selection-end-column="9" />
+            <state relative-caret-position="105">
+              <caret line="719" column="43" lean-forward="true" selection-start-line="719" selection-start-column="43" selection-end-line="719" selection-end-column="43" />
               <folding>
-                <element signature="e#3112#3484#2#PHP" expanded="false" />
-                <element signature="e#3520#3620#1#PHP" expanded="false" />
-                <element signature="e#3642#3837#2#PHP" expanded="false" />
-                <element signature="e#4077#4449#2#PHP" expanded="false" />
-                <element signature="e#4485#4585#1#PHP" expanded="false" />
-                <element signature="e#4901#5273#2#PHP" expanded="false" />
+                <element signature="e#39#47#0#PHP" expanded="true" />
+                <element signature="e#3209#3581#2#PHP" expanded="false" />
+                <element signature="e#3617#3717#1#PHP" expanded="false" />
+                <element signature="e#3739#3934#2#PHP" expanded="false" />
+                <element signature="e#4174#4546#2#PHP" expanded="false" />
+                <element signature="e#4582#4682#1#PHP" expanded="false" />
+                <element signature="e#4998#5370#2#PHP" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="levelup.blade.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="levelup.blade.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/levelup.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="438">
-              <caret line="422" column="98" lean-forward="false" selection-start-line="422" selection-start-column="98" selection-end-line="422" selection-end-column="98" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HomeController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/HomeController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="291" column="31" lean-forward="true" selection-start-line="285" selection-start-column="7" selection-end-line="291" selection-end-column="31" />
-              <folding />
+            <state relative-caret-position="176">
+              <caret line="421" column="104" lean-forward="false" selection-start-line="421" selection-start-column="104" selection-end-line="421" selection-end-column="104" />
+              <folding>
+                <element signature="e#9351#9378#0#HTML" expanded="true" />
+                <element signature="e#12074#12120#0#HTML" expanded="true" />
+                <element signature="e#12461#12507#0#HTML" expanded="true" />
+                <marker date="1494701655458" expanded="false" signature="10950:10988" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -79,13 +85,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>userP</find>
-      <find>omeController</find>
-      <find>search</find>
-      <find>create-challenge</find>
-      <find>challenges</find>
-      <find>'challenges</find>
-      <find>getPageTotal</find>
       <find>files</find>
       <find>$sonChallenge</find>
       <find>getHelperPaginatorSon</find>
@@ -109,6 +108,13 @@
       <find>sortBy</find>
       <find>order</find>
       <find>Carbon</find>
+      <find>latest</find>
+      <find>,</find>
+      <find>category</find>
+      <find>store</find>
+      <find>CategoryLevel</find>
+      <find>createCategoryChallenge</find>
+      <find>deadline</find>
     </findStrings>
     <replaceStrings>
       <replace>col-sm-9 col-xs-9 col-md-9</replace>
@@ -122,7 +128,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/resources/views/editChallenge.blade.php" />
         <option value="$PROJECT_DIR$/config/filesystems.php" />
         <option value="$PROJECT_DIR$/database/migrations/2016_01_27_000003_create_files_table.php" />
         <option value="$PROJECT_DIR$/app/Exceptions/Handler.php" />
@@ -163,16 +168,17 @@
         <option value="$PROJECT_DIR$/public/css/menu.css" />
         <option value="$PROJECT_DIR$/resources/views/app.blade.php" />
         <option value="$PROJECT_DIR$/app/Model/User.php" />
-        <option value="$PROJECT_DIR$/app/Http/routes.php" />
         <option value="$PROJECT_DIR$/resources/views/profile.blade.php" />
-        <option value="$PROJECT_DIR$/app/Model/ChallengeLevelUp.php" />
         <option value="$PROJECT_DIR$/database/migrations/2016_01_27_000001_create_challenges_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2017_04_29_140932_create_level_category_table.php" />
-        <option value="$PROJECT_DIR$/app/Model/CategoryLevel.php" />
         <option value="$PROJECT_DIR$/app/Model/Challenge.php" />
+        <option value="$PROJECT_DIR$/app/Model/ChallengeLevelUp.php" />
+        <option value="$PROJECT_DIR$/app/Model/ChallengeLevelUpGroup.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" />
-        <option value="$PROJECT_DIR$/resources/views/levelup.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/routes.php" />
+        <option value="$PROJECT_DIR$/app/Model/CategoryLevel.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/UserProfileController.php" />
+        <option value="$PROJECT_DIR$/resources/views/levelup.blade.php" />
       </list>
     </option>
   </component>
@@ -214,7 +220,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -417,7 +423,7 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -432,19 +438,19 @@
     <property name="list.type.of.created.stylesheet" value="CSS" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/resources/views/auth/passwords" />
-      <recent name="$PROJECT_DIR$/resources/views" />
-      <recent name="$PROJECT_DIR$/resources/views/partials" />
-      <recent name="$PROJECT_DIR$/public/img" />
-      <recent name="$PROJECT_DIR$/resources/views/mail" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/app/Model" />
       <recent name="D:\documents\laravel\HIO\public\css" />
       <recent name="D:\documents\laravel\HIO\app" />
       <recent name="D:\documents\laravel\HIO\app\Model" />
       <recent name="D:\documents\laravel\HIO\public\uploads" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/Model" />
+      <recent name="$PROJECT_DIR$/resources/views/auth/passwords" />
+      <recent name="$PROJECT_DIR$/resources/views" />
+      <recent name="$PROJECT_DIR$/resources/views/partials" />
+      <recent name="$PROJECT_DIR$/public/img" />
     </key>
   </component>
   <component name="RunManager">
@@ -556,21 +562,23 @@
       <workItem from="1492700560214" duration="18000" />
       <workItem from="1492700944532" duration="3776000" />
       <workItem from="1494081117206" duration="12040000" />
+      <workItem from="1494685441703" duration="16221000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="243113000" />
+    <option name="totallyTimeSpent" value="259334000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1301" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33205226" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32359722" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.114754096" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
@@ -583,7 +591,6 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3315565" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
@@ -609,13 +616,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Console/Kernel.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="31" column="12" lean-forward="false" selection-start-line="31" selection-start-column="12" selection-end-line="31" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/js/hio.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="506">
@@ -655,13 +655,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
           <caret line="25" column="78" lean-forward="false" selection-start-line="25" selection-start-column="71" selection-end-line="25" selection-end-column="78" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/challengeDetailSon.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="250" column="65" lean-forward="false" selection-start-line="250" selection-start-column="65" selection-end-line="250" selection-end-column="65" />
         </state>
       </provider>
     </entry>
@@ -811,13 +804,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/home.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4065">
-          <caret line="271" column="18" lean-forward="false" selection-start-line="271" selection-start-column="18" selection-end-line="271" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/friendList.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -829,7 +815,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3705">
           <caret line="247" column="20" lean-forward="false" selection-start-line="246" selection-start-column="4" selection-end-line="246" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -837,7 +822,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="7815">
           <caret line="521" column="0" lean-forward="false" selection-start-line="521" selection-start-column="0" selection-end-line="521" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -855,46 +839,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/helpers.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="100" column="30" lean-forward="false" selection-start-line="100" selection-start-column="27" selection-end-line="100" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Model/User.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="39" column="130" lean-forward="false" selection-start-line="39" selection-start-column="110" selection-end-line="39" selection-end-column="130" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="474">
-          <caret line="148" column="21" lean-forward="false" selection-start-line="148" selection-start-column="21" selection-end-line="148" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Model/ChallengeUserAssociation.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/profile.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="368" column="0" lean-forward="false" selection-start-line="368" selection-start-column="0" selection-end-line="381" selection-end-column="1" />
-          <folding>
-            <element signature="e#10679#10732#0#HTML" expanded="false" />
-            <element signature="e#20059#20083#0#HTML" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -906,19 +855,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Model/ChallengeLevelUp.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="25" column="42" lean-forward="false" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2016_01_27_204352_create_user_challenge_table.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -926,7 +866,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="20" column="41" lean-forward="false" selection-start-line="20" selection-start-column="30" selection-end-line="20" selection-end-column="41" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -934,6 +873,93 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
           <caret line="29" column="48" lean-forward="false" selection-start-line="29" selection-start-column="29" selection-end-line="29" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Console/Commands/EndChallenge.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="47" column="38" lean-forward="false" selection-start-line="47" selection-start-column="32" selection-end-line="47" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Model/ChallengeLevelUpGroup.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="28" column="35" lean-forward="false" selection-start-line="28" selection-start-column="23" selection-end-line="28" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/home.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="286" column="12" lean-forward="false" selection-start-line="286" selection-start-column="12" selection-end-line="286" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/helpers.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1">
+          <caret line="23" column="1" lean-forward="true" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Model/User.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="39" column="130" lean-forward="false" selection-start-line="39" selection-start-column="110" selection-end-line="39" selection-end-column="130" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/profile.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5129">
+          <caret line="377" column="23" lean-forward="true" selection-start-line="377" selection-start-column="23" selection-end-line="377" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/challengeDetailSon.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="449">
+          <caret line="515" column="19" lean-forward="true" selection-start-line="491" selection-start-column="12" selection-end-line="515" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Model/ChallengeLevelUp.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="25" column="84" lean-forward="false" selection-start-line="25" selection-start-column="69" selection-end-line="25" selection-end-column="84" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="149" column="37" lean-forward="false" selection-start-line="149" selection-start-column="21" selection-end-line="149" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Model/CategoryLevel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="46" column="35" lean-forward="false" selection-start-line="46" selection-start-column="35" selection-end-line="46" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/HomeController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="9" />
           <folding />
         </state>
       </provider>
@@ -946,57 +972,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Console/Commands/EndChallenge.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="47" column="38" lean-forward="false" selection-start-line="47" selection-start-column="32" selection-end-line="47" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/HomeController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="291" column="31" lean-forward="true" selection-start-line="285" selection-start-column="7" selection-end-line="291" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Model/CategoryLevel.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="25" column="57" lean-forward="true" selection-start-line="25" selection-start-column="10" selection-end-line="25" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/levelup.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="438">
-          <caret line="422" column="98" lean-forward="false" selection-start-line="422" selection-start-column="98" selection-end-line="422" selection-end-column="98" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Model/Challenge.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="25" column="51" lean-forward="false" selection-start-line="25" selection-start-column="32" selection-end-line="25" selection-end-column="51" />
+        <state relative-caret-position="15">
+          <caret line="25" column="76" lean-forward="false" selection-start-line="25" selection-start-column="65" selection-end-line="25" selection-end-column="76" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/UserProfileController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="697" column="9" lean-forward="true" selection-start-line="697" selection-start-column="9" selection-end-line="697" selection-end-column="9" />
+        <state relative-caret-position="105">
+          <caret line="719" column="43" lean-forward="true" selection-start-line="719" selection-start-column="43" selection-end-line="719" selection-end-column="43" />
           <folding>
-            <element signature="e#3112#3484#2#PHP" expanded="false" />
-            <element signature="e#3520#3620#1#PHP" expanded="false" />
-            <element signature="e#3642#3837#2#PHP" expanded="false" />
-            <element signature="e#4077#4449#2#PHP" expanded="false" />
-            <element signature="e#4485#4585#1#PHP" expanded="false" />
-            <element signature="e#4901#5273#2#PHP" expanded="false" />
+            <element signature="e#39#47#0#PHP" expanded="true" />
+            <element signature="e#3209#3581#2#PHP" expanded="false" />
+            <element signature="e#3617#3717#1#PHP" expanded="false" />
+            <element signature="e#3739#3934#2#PHP" expanded="false" />
+            <element signature="e#4174#4546#2#PHP" expanded="false" />
+            <element signature="e#4582#4682#1#PHP" expanded="false" />
+            <element signature="e#4998#5370#2#PHP" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/levelup.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="421" column="104" lean-forward="false" selection-start-line="421" selection-start-column="104" selection-end-line="421" selection-end-column="104" />
+          <folding>
+            <element signature="e#9351#9378#0#HTML" expanded="true" />
+            <element signature="e#12074#12120#0#HTML" expanded="true" />
+            <element signature="e#12461#12507#0#HTML" expanded="true" />
+            <marker date="1494701655458" expanded="false" signature="10950:10988" ph="..." />
           </folding>
         </state>
       </provider>

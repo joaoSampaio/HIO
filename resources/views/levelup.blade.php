@@ -319,6 +319,18 @@ padding: 50px 20px;
         margin-bottom: 10px;
     }
 
+    .btn-difficulty{
+        background-color: white;
+        color: black;
+        border: 1px solid black;
+        margin: 0px 5px;
+    }
+
+    .btn-difficulty.active{
+        background-color: #eb1946;
+        color: white;
+    }
+
   </style>
 
 @endsection
@@ -407,28 +419,63 @@ padding: 50px 20px;
             <section  >
                 <div class="container" >
 
-                    <div class="col-sm-12 col-xs-12 col-md-8 col-md-offset-2" >
+                    <div class="col-sm-12 col-xs-12 col-md-8 col-md-offset-2" style="text-align: center;">
 
-                        <div class="col-sm-4 col-xs-12 col-lg-4 small-margin" >Difficulty</div>
+                        <div class="col-sm-4 col-xs-12 col-lg-4 small-margin" >Choose Difficulty</div>
                         <div class="col-sm-4 col-xs-12 col-lg-4 small-margin" >Challenge</div>
                         <div class="col-sm-4 col-xs-12 col-lg-4 small-margin" >State</div>
 
-                        @foreach($levelUpChallenges as $challengeLvlUp)
-                            <div class="col-sm-4 col-xs-12 col-lg-4 small-margin" >{{$challengeLvlUp->difficulty}}</div>
+                        @php($inProgress = $categoryLevel != null ? $categoryLevel->getInProgressAndCompleted() : array())
+
+                        @foreach($levelUpChallenges->group as $key => $challengeLvlUp)
+
+{{--                            {{json_encode($challengeLvlUp)}}--}}
+
                             <div class="col-sm-4 col-xs-12 col-lg-4 small-margin" >
-                                <p>{{$challengeLvlUp->title}}</p>
-                                <p>{{$challengeLvlUp->sub_title}}</p>
+                                <div class="btn-group">
+                                @foreach($levelUpChallenges->difficulties[$key] as $chave=> $levelChallenge)
+                                    <button type="button" class="btn {{$chave == 0? "active" : ""}} btn-difficulty" data-group="{{$key}}" data-diff="{{$levelChallenge}}">{{$levelChallenge}}</button>
+                                @endforeach
+                                </div>
+
+
+{{--                                {{json_encode($levelUpChallenges->difficulties[$key])}}--}}
                             </div>
-                            <div class="col-sm-4 col-xs-12 col-lg-4 small-margin" >
-                                <a class="btn  btn-accept" href="#" data-id="{{$challengeLvlUp->id}}">Accept</a>
-                            </div>
+
+                            {{--<div class="col-sm-8 col-xs-12 col-lg-8 small-margin" >--}}
+                                {{--@foreach($challengeLvlUp as $chave => $challenge)--}}
+                                    {{--<div class="col-sm-12 col-xs-12 col-lg-12 small-margin group-{{$key}} diff-{{$challenge->difficulty}}" style="{{$chave != 0? "display: none;" : ""}}">--}}
+                                        {{--<div class="col-sm-6 col-xs-12 col-lg-6 small-margin" >--}}
+                                            {{--<p>{{$challenge->title}}</p>--}}
+                                            {{--<p>{{$challenge->sub_title}}</p>--}}
+                                        {{--</div>--}}
+                                        {{--<div class="col-sm-6 col-xs-12 col-lg-6 small-margin" >--}}
+                                            {{--<button class="btn btn-accept {{in_array($challenge->group_challenge, $inProgress)? "disabled" : "btn-accept-lvl"}}" href="#" data-id="{{$challenge->id}}">Accept</button>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                {{--@endforeach--}}
+                            {{--</div>--}}
+
+
+
+                                @foreach($challengeLvlUp as $chave => $challenge)
+                                        <div class="col-sm-4 col-xs-12 col-lg-4 small-margin group-{{$key}} diff-{{$challenge->difficulty}}" style="{{$chave != 0? "display: none;" : ""}}" >
+                                            <p>{{$challenge->title}}</p>
+                                            <p>{{$challenge->sub_title}}</p>
+                                        </div>
+                                        <div class="col-sm-4 col-xs-12 col-lg-4 small-margin group-{{$key}} diff-{{$challenge->difficulty}}" style="{{$chave != 0? "display: none;" : ""}}">
+                                            <button class="btn btn-accept {{in_array($challenge->group_challenge, $inProgress)? "disabled" : "btn-accept-lvl"}}" href="#" data-id="{{$challenge->id}}">Accept</button>
+                                        </div>
+                                @endforeach
+
+
+
                             <div class="clearfix visible-xs visible-lg"></div>
                         @endforeach
 
 
 
-
-
+                    </div>
                 </div>
             </section>
         @endif
@@ -480,6 +527,37 @@ padding: 50px 20px;
         {{--var deadline = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);--}}
         {{--initializeClock('clockdiv', deadline);--}}
         {{--console.log(deadline);--}}
+
+
+
+        $('.btn-difficulty').click(function(){
+            var group = $(this).data('group');
+            var diff = $(this).data('diff');
+
+            $('.btn-difficulty[data-group='+group+']').removeClass('active')
+            $(this).addClass('active')
+            $('.group-'+group).hide();
+            $('.group-'+group+'.diff-'+diff).show();
+        });
+
+            $('.btn-accept-lvl').click(function(){
+                var id = $(this).data('id');
+
+                $.post("/lvl-up/challenge",
+                    {
+                        challenge_lvl_up_id: id,
+                    },
+                    function(data, status){
+
+                        var success = data.status;
+                        location.reload();
+                        if(success){
+
+                        }
+                    });
+            });
+
+
 
         </script>
 

@@ -146,6 +146,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('amigos', 'SocialAuthController@getFriends');
 
         Route::get('lvl-up', 'UserProfileController@showLvlUp');
+
+        Route::post('lvl-up/challenge', 'UserProfileController@createCategoryChallenge');
+
         Route::post('profile/me/category', 'UserProfileController@selectCategory');
 
 

@@ -656,16 +656,16 @@ class HomeController extends Controller
     public function latestChallenges()
     {
 
-        $latest = Cache::remember('latest-home', 15, function() {
+//        $latest = Cache::remember('latest-home', 15, function() {
             $now = Carbon::now();
-            return DB::table('challenges')->where('closed', '=', 0)
+            $latest =  Challenge::where('closed', '=', 0)
                 ->join('challenge_category', 'challenge_category.id', '=', 'challenges.category_id')
                 ->where('deadLine', '>', $now)
                 ->where('public', '=', 1)
-                ->select('challenges.*', 'challenge_category.name as category')
+                ->select('challenges.*')
                 ->orderBy('deadLine', 'asc')
                 ->take(6)->get();
-        });
+//        });
 
 
         return json_encode(view('partials.multi_challenge')->with('challenges', $latest)->render());
