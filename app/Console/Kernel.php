@@ -26,7 +26,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
          $schedule->command('end_approve_challenge_dois')
-             ->everyThirtyMinutes();
+             ->everyTenMinutes();
+//        ->everyMinute();
 
         $schedule->command('remind_user_1')
             ->twiceDaily(1, 13);

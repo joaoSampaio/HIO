@@ -465,7 +465,7 @@ div[data-anim~=base] {
                         </div>
                     </div>
 
-                    <div><span class="badge badge-lvl">0 <span>LVL</span></span></div>
+                    <div><span class="badge badge-lvl">{{$userMaxLevel}} <span>LVL</span></span></div>
 
                     <div ><h3 class="text-capitalize profile-main-name">{{$user->name}}</h3></div>
                     <div style="    margin-top: 20px;    margin-bottom: 20px;">
@@ -498,7 +498,7 @@ div[data-anim~=base] {
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-4 col-md-offset-4 ">
-                    <span class="xp-text">{{$user->xp}} / 1000XP</span>
+                    <span class="xp-text">{{\App\Model\CategoryLevel::getCurrentXPForLevel($userMaxLevel, $user->xp)}} / {{\App\Model\CategoryLevel::getXPForLevel($userMaxLevel)}}XP</span>
 
                 </div>
 
@@ -538,7 +538,13 @@ div[data-anim~=base] {
             @if(Auth::user()->email === $user->email)
                 <div class="col-sm-12 col-md-12" style="margin-top: 25px;">
                     <a class="btn btn-edit edit-profile" href="{{ action('UserProfileController@editProfile') }}">Edit</a>
-                    <a class="btn  btn-lvl-up" href="/lvl-up">LEVEL UP</a>
+
+                    @if(\App\Model\CategoryLevel::isLvlUpAvailable($userMaxLevel, $user->xp))
+                        <a class="btn  btn-lvl-up" href="/lvl-up">LEVEL UP</a>
+                    @else
+                        <a class="btn  btn-lvl-up" disabled >LEVEL UP</a>
+                    @endif
+
                 </div>
             @endif
 
@@ -890,8 +896,8 @@ function getOngoingChallenges(url, page) {
     }
 
 
-    var xpNeeded = 1000;
-    var currentXp = {{$user->xp}};
+    var xpNeeded = {{\App\Model\CategoryLevel::getXPForLevel($userMaxLevel)}};
+    var currentXp = {{\App\Model\CategoryLevel::getCurrentXPForLevel($userMaxLevel, $user->xp)}};
     var xpPerBar = xpNeeded/5;
     var numBarFilled = Math.floor(currentXp/xpPerBar);
     var remainder = currentXp % xpPerBar;

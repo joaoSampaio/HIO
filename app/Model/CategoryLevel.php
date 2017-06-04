@@ -26,15 +26,125 @@ class CategoryLevel extends Model
      * @var array
      */
     protected $fillable = [
-         'category_id','user_id',  'level', 'deadLineLvl', 'inProgress', 'completedGroups'
+         'category_id','user_id',  'level', 'deadLineLvl', 'inProgress', 'completedGroups', 'failedGroups'
     ];
 
 
-    public function getInProgressAndCompleted(){
+    public function addCompleted($group){
 
-        return array_merge(multiexplode(array(","),$this->inProgress),
-            multiexplode(array(","),$this->completedGroups));
+        $groupsInProgress = $this->getInProgressGroups();
+        $completed = $this->getCompletedGroups();
+
+        //se o desafio estiver nos desafios em progresso
+        if (array_key_exists($group, $groupsInProgress)) {
+            $value = $groupsInProgress[$group];
+            $completed[$group] = $value;
+            unset($groupsInProgress[$group]);
+            $this->inProgress = json_encode($groupsInProgress);
+            $this->completedGroups = json_encode($completed);
+        }
     }
+
+    public function addFailed($group){
+        echo "<br>addFailed called:".$group;
+        $groupsInProgress = $this->getInProgressGroups();
+        $failed = $this->getFailedGroups();
+
+        echo "<br>array_key_exists:".array_key_exists($group, $groupsInProgress);
+        //se o desafio estiver nos desafios em progresso
+        if (array_key_exists($group, $groupsInProgress)) {
+            $value = $groupsInProgress[$group];
+            $failed[$group] = $value;
+            unset($groupsInProgress[$group]);
+            $this->inProgress = json_encode($groupsInProgress);
+            $this->failedGroups = json_encode($failed);
+        }
+    }
+
+
+    public function getInProgressAndCompleted(){
+        return array_merge($this->getInProgressGroups(), $this->getCompletedGroups());
+    }
+
+    public function getFailedGroups(){
+        $failed = json_decode($this->failedGroups, true);
+//        $failed = multiexplode(array(","),$this->failedGroups);
+//        if(count($failed) == 0){
+//            $failed = array($this->failedGroups);
+//        }
+        if($failed == null)
+            $failed = array();
+        return $failed;
+    }
+
+
+    public function getInProgressGroups(){
+        $inProgress = json_decode($this->inProgress, true);
+//        $inProgress = multiexplode(array(","),$this->inProgress);
+//        if(count($inProgress) == 0){
+//            $inProgress = array($this->inProgress);
+//        }
+        if($inProgress == null)
+            $inProgress = array();
+        return $inProgress;
+    }
+
+    public function getCompletedGroups(){
+        $completed = json_decode($this->completedGroups, true);
+//        $completed = multiexplode(array(","),$this->completedGroups);
+//        if(count($completed) == 0){
+//            $completed = array($this->completedGroups);
+//        }
+        if($completed == null)
+            $completed = array();
+        return $completed;
+    }
+
+    public function getCountCompleted(){
+        $completed = $this->getCompletedGroups();
+        return count($completed);
+    }
+
+
+    public static function getXPForLevel($level){
+        $levels =  [
+            '0' => '100',
+            '1' => '200',
+            '2' => '300',
+            '3' => '400',
+            '4' => '500'
+        ];
+        //nao existe maior que nivel 5
+        if($level >= 5){
+            return 1000000;
+        }
+
+        return $levels[$level];
+    }
+
+    public static function getCurrentXPForLevel($level, $currentXP){
+        $levels =  [
+            '0' => '0',
+            '1' => '100',
+            '2' => '300',
+            '3' => '600',
+            '4' => '1000',
+            '5' => '1500'
+        ];
+        //nao existe maior que nivel 5
+        if($level > 5){
+            return 1000000;
+        }
+
+        return $currentXP - $levels[$level];
+    }
+
+    public static function isLvlUpAvailable($level, $currentXP){
+
+        return CategoryLevel::getCurrentXPForLevel($level, $currentXP) >= CategoryLevel::getXPForLevel($level);
+
+    }
+
 
 
     protected function setKeysForSaveQuery(Builder $query)

@@ -100,12 +100,15 @@ class UserProfileController extends Controller
             ->select('challenge_category.name', 'challenge_category.id', 'category_level.level')->get();
 
         $selectedProfileCategory = null;
+        $userMaxLevel = 0;
         if($user->selected_category_id > 0){
-            $selectedProfileCategory = DB::table('challenge_category')->find($user->selected_category_id);
+            //$selectedProfileCategory = DB::table('challenge_category')->find($user->selected_category_id);
+
+
+                if($categoryLevel = CategoryLevel::where('user_id', $user->id)->where('category_id',$user->selected_category_id)->first()){
+                    $userMaxLevel = $categoryLevel->level;
+                }
         }
-
-//            return json_encode($categories);
-
 
         $endedChallenges = Challenge::
             where(function ($query) use ($idUser) {
@@ -191,22 +194,6 @@ class UserProfileController extends Controller
         }
 
 
-
-//        if($userFriends->total() )
-//        if(count($peopleParticipating) > 3) {
-//            $otherPeople = rtrim($otherPeople, ",");
-//            $end = $end . '  <span>and</span> <span id="showmore" class=""> ' . (count($peopleParticipating) - 3) .
-//                ' other people.</span> <span id="otherpeople" style="display: none;">' . $otherPeople . '</span>';
-//
-//        }
-//        if(count($peopleParticipating) == 1){
-//            $end = $creator.' is publically challenging everyone, accept his challenge and prove you are ahead';
-//        }
-//        if(count($peopleParticipating) <= 0){
-//            $end = 'Be the first to accept this challenge and prove you are ahead.';
-//        }
-
-//        return "ola";
         return view('profile')->with('ongoingChallenges', $ongoingChallenges)
             ->with('user', $user)
             ->with('endedChallenges', $endedChallenges)
@@ -217,6 +204,7 @@ class UserProfileController extends Controller
             ->with('userFriends', $userFriends)
             ->with('categories', $categories)
             ->with('selectedProfileCategory', $selectedProfileCategory)
+            ->with('userMaxLevel', $userMaxLevel)
             ;
 
 
@@ -448,8 +436,6 @@ class UserProfileController extends Controller
         }
 
         $photo = $form_data['img'];
-
-//        $user = User::where('id', Auth::user()->id)->first();
         $allowed_filename = md5(Auth::user()->id);
         $filename_ext = 'cropped-' . $allowed_filename .'.jpg';
 
@@ -684,7 +670,6 @@ class UserProfileController extends Controller
 
 //            echo json_encode($levelUpChallenges);
         }
-        echo "ççççççççççççççççç".json_encode($categoryLevel);
 
         return view('levelup')
             ->with('levelUpChallenges', $levelUpChallenges)
@@ -701,9 +686,9 @@ class UserProfileController extends Controller
         Auth::User()->save();
 
         return redirect()->action('UserProfileController@userProfile', 'me');
-
-
     }
+
+
 
     public function createCategoryChallenge(Request $request){
 
@@ -725,36 +710,25 @@ class UserProfileController extends Controller
             $penalty = "";
             $categoryId = $challengeLvlUp->category_id;
 
-
+            $bExists = false;
+            $existingLevel = null;
             if($level = CategoryLevel::where('user_id', Auth::User()->id)
                 ->where('category_id',$categoryId)
                 ->where('level',$challengeLvlUp->level)->first()){
                 $deadLine = $level->deadLineLvl;
-
-                $groupsInProgress = multiexplode(array(",",".","|",":"),$level->inProgress);
-
-                //ainda nao está a fazer um desafio daquele grupo de dificuldades
-                if (!in_array($challengeLvlUp->group_challenge, $groupsInProgress)) {
-                    array_push($groupsInProgress, $challengeLvlUp->group_challenge);
-                }else{
-                    //o utilizador ja esta a fazer esse desafio
-                    return "false";
+                if($level->deadLineLvl == 0){
+                    $now = Carbon::now();
+                    $deadLine = $now->addDays(7);
                 }
 
-                //guarda os grupos em progresso separados por virgula
-                $level->inProgress  = implode(",", $groupsInProgress);
-                $level->save();
+                $existingLevel = $level;
+                $bExists = true;
+
+
 
             }else{
                 $now = Carbon::now();
                 $deadLine = $now->addDays(7);
-                //'category_id','user_id',  'level', 'deadLineLvl'
-                $level = new CategoryLevel(['category_id' => $categoryId,
-                    'user_id' => Auth::user()->id,
-                    'deadLineLvl' => $deadLine, 'level' => $challengeLvlUp->level,
-                    'inProgress' => $challengeLvlUp->group_challenge]);
-
-                $level->save();
             }
 
 
@@ -763,14 +737,51 @@ class UserProfileController extends Controller
             $challenge = new Challenge(['title' => $title, 'creator_id' => $creator_id, 'challenge_lvl_up_id' => $challengeLevelUpId,
                 'description' => $description, 'category_id' => $categoryId, 'reward' => $reward, 'penalty' => $penalty,
                 'deadLine' => $deadLine, 'uuid' => $uuid, 'public' => $public, 'secret' => $secret,]);
-
-
             Auth::user()->challenges()->save($challenge);
+
+            if($bExists){
+
+                if(strlen( $existingLevel->inProgress) > 0){
+                    $groupsInProgress = json_decode($existingLevel->inProgress, true);
+                }else{
+                    $groupsInProgress = array();
+                }
+
+
+                //$groupsInProgress = multiexplode(array(",",".","|",":"),$level->inProgress);
+
+                //ainda nao está a fazer um desafio daquele grupo de dificuldades
+                if (!array_key_exists($challengeLvlUp->group_challenge, $groupsInProgress)) {
+                    $groupsInProgress[$challengeLvlUp->group_challenge] = $challenge->uuid;
+                }else{
+                    //o utilizador ja esta a fazer esse desafio
+                    return "false";
+                }
+
+                //guarda os grupos em progresso separados por virgula
+                $existingLevel->inProgress  = json_encode($groupsInProgress);
+                $existingLevel->deadLineLvl = $deadLine;
+                $existingLevel->save();
+
+
+            }else{
+                //nao existe ainda
+                $groupsInProgress = array();
+                $groupsInProgress[$challengeLvlUp->group_challenge] = $challenge->uuid;
+                $level = new CategoryLevel(['category_id' => $categoryId,
+                    'user_id' => Auth::user()->id,
+                    'deadLineLvl' => $deadLine, 'level' => $challengeLvlUp->level,
+                    'inProgress' => json_encode($groupsInProgress)]);
+
+                $level->save();
+            }
+            return View('partials.create_result')->with('challengeId', $uuid);
+
         }
 
 
 
-        return View('partials.create_result')->with('challengeId', $uuid);
+        return false;
 
 
 

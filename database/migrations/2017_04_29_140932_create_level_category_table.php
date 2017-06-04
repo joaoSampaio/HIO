@@ -19,11 +19,13 @@ class CreateLevelCategoryTable extends Migration
             $table->index(['category_id', 'user_id']);
             $table->integer('level', 2);
             $table->dateTime('deadLineLvl');
+            $table->string('inProgress');
+            $table->string('completedGroups');
+            $table->string('failedGroups');
             $table->timestamps();
 
         });
     }
-
     /**
      * Reverse the migrations.
      *

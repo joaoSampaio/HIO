@@ -40,7 +40,8 @@ function multiexplode ($delimiters,$string) {
             $ary[$key] = multiexplode($delimiters, $val);
         }
     }
-    return  array_filter(array_flatten($ary));
+//    return array_filter($inProg, function($var){return !is_null($var);} );
+    return  array_filter(array_flatten($ary), function($var){return !is_null($var);} );
 }
 
 function ola(){

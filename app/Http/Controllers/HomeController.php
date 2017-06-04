@@ -1,8 +1,10 @@
 <?php namespace App\Http\Controllers;
 
 use App;
+use App\Model\CategoryLevel;
 use App\Model\Challenge;
 use App\Model\ChallengeCategory;
+use App\Model\ChallengeLevelUp;
 use App\Model\FileHio;
 use App\Model\LikedChallengeNotification;
 use App\Model\Notification;
@@ -494,6 +496,10 @@ class HomeController extends Controller
                 $end = 'Be the first to accept this challenge and prove you are ahead.';
             }
 
+            if($challenge->challenge_lvl_up_id != 0){
+                $end = '<a class="participating-link-text" href="/profile/'.$challenge->creator_id.'">'.$creator . '</a> is leveling up at ' . $challenge->category->name;
+            }
+
             $sonChallenges = $this->getHelperPaginatorSon($challenge->id, $participating, $isValid);
 
             if ($isPublic == 1 || $participating) {
@@ -914,118 +920,207 @@ class HomeController extends Controller
 
     public function teste()
     {
+        try {
+            $now = new DateTime();
+            Log::info('end_approve_challenge called nova versao - 23/04');
+            $challengesIds = array();
+            Challenge::where('judged', '=', 0)->chunk(100, function ($challenges) use ($now, &$challengesIds) {
+                foreach ($challenges as $challenge) {
 
-        return View('partials.create_result')->with('challengeId', '11f23b57-ce5f-4ea4-a218-b3e184a60b89');
-        $now = new DateTime();
-        Log::info('end_approve_challenge called');
-        Challenge::where('judged', '=', 0)->chunk(100, function ($challenges) use ($now) {
-            foreach ($challenges as $challenge) {
+                    $idsUserCompletedChallenge = [];
+                    $deadLine = Carbon::parse($challenge->deadLine);
+                    $deadLine = $deadLine->addHours(36);
+                    $isValid = $now < $deadLine;
+                    if (!$isValid) {
 
-                $idsUserCompletedChallenge = [];
-                $deadLine = Carbon::parse($challenge->deadLine);
-                $deadLine = $deadLine->addHours(36);
-                $isValid = $now < $deadLine;
-                if (!$isValid) {
-                    //validar provas e judgments
-
-//                        $sonChallengesIds = DB::table('files')->where('files.challenge_id', $challenge->id)
-//                            ->join('proof_approval', 'proof_approval.proof_id', '=', 'files.id')
-//                            ->where('proof_approval.judgment', '=', '1')
-//                            ->select('files.id', DB::raw('SUM(judgment) as total_judgment'))
-//                            ->groupBy('files.id')
-//                            ->havingRaw('SUM(judgment) > 0')
-//                            ->lists('files.id');
+                        echo "aaa".$challenge->id;
+                        //validar provas e judgments
 
 
-                    $sonChallengesIds = DB::table('files')->where('files.challenge_id', $challenge->id)
-                        ->join('proof_approval', 'proof_approval.proof_id', '=', 'files.id')
-                        ->where('proof_approval.judgment', '=', '1')
-                        ->groupBy('files.id')
-                        ->leftJoin(
-                            DB::raw("
+                        $sonChallengesIds = DB::table('files')->where('files.challenge_id', $challenge->id)
+                            ->join('proof_approval', 'proof_approval.proof_id', '=', 'files.id')
+                            ->where('proof_approval.judgment', '=', '1')
+                            ->groupBy('files.id')
+                            ->leftJoin(
+                                DB::raw("
                                 (select
                                     `proof_approval`.`proof_id`,
                                     COUNT(*) as total_judgment
                                 from `proof_approval`
                                 group by `proof_approval`.`proof_id`) `p`
                             "), 'files.id', '=', 'p.proof_id')
-                        ->select('files.id', 'total_judgment',
-                            DB::raw('COUNT(proof_approval.judgment) as positive_judgment'),
-                            DB::raw('COUNT(proof_approval.judgment)/total_judgment as percent')
-                        )
-                        ->havingRaw('percent >= 0.7')
-                        ->lists('files.id');
+                            ->select('files.id', 'total_judgment',
+                                DB::raw('COUNT(proof_approval.judgment) as positive_judgment'),
+                                DB::raw('COUNT(proof_approval.judgment)/total_judgment as percent')
+                            )
+                            ->havingRaw('percent >= 0.7')
+                            ->lists('files.id');
 
 
-//                        DB::table('users')->whereIn('id', $sonChallengesIds)->increment('xp', 100);
+                        $failedProofs = DB::table('files')->where('files.challenge_id', $challenge->id)->whereNotIn('id', $sonChallengesIds)->lists('files.id');
+
+                        //proof can have no votes
+                        if(count($failedProofs) == 0){
+
+                        }
+
+                        FileHio::whereIn('id', $sonChallengesIds)
+                            ->update([
+                                'approved' => true
+                            ]);
 
 
+                        //check if challenge is level up and has any proofs
+                        $numProofs = DB::table('files')->where('files.challenge_id', $challenge->id)->count();
+                        echo "<br>numProofs->".$numProofs;
+                        if($numProofs == 0){
+                            $catLevel = CategoryLevel::where('category_id', '=', $challenge->category_id)
+                                ->where('user_id', '=', $challenge->creator_id)->first();
 
-                    FileHio::whereIn('id', $sonChallengesIds)
-                        ->update([
-                            'approved' => true
-                        ]);
-
-//                    $sonChallengesIds = DB::table('files')->whereIn('id',$sonChallengesIds)
-//                        ->select('files.user_id')
-//                        ->groupBy('files.user_id')
-//                        ->lists('files.user_id');
-
-
-                    $challenge->judged = true;
-                    $challenge->save();
-
-                    $users = DB::table('users')
-                        ->whereIn('id', function ($query) use ($sonChallengesIds) {
-                            $query->from('files')
-                                ->whereIn('id', $sonChallengesIds)
-                                ->select('files.user_id')
-                                ->groupBy('files.user_id');
-                        })
-                        ->get();
-
-                    foreach ($users as $usertmp) {
-                        $user = User::find($usertmp->id);
-                        $achievements = $user->achievements;
-                        if ($achievements == NULL) {
-                            $achievements = array('totalCompleted' => 1);
-                        } else {
-                            $achievements = json_decode($achievements, true);
-                            if (!array_key_exists('totalCompleted', $achievements)) {
-                                $achievements['totalCompleted'] = 1;
-                            } else {
-                                $achievements['totalCompleted'] = $achievements['totalCompleted'] + 1;
+                            //get the ChallengeLevelUp by the id stored in the challenge
+                            if($challengeLevelUp = ChallengeLevelUp::find($challenge->challenge_lvl_up_id)){
+                                $catLevel->addFailed($challengeLevelUp->group_challenge);
+                                $catLevel->save();
                             }
                         }
-                        $user->achievements = json_encode($achievements);
-                        $user->xp = $user->xp + 100;
-                        $user->save();
-                        $notificationManager = new NotificationManager();
-                        $notification = new LikedChallengeNotification(['recipient_id' => $user->id, 'sender_id' => $user->id, 'unread' => 1,
-                            'type' => Notification::TYPE_XP, 'parameters' => $challenge->title, 'reference_id' => $challenge->uuid]);
-                        $notificationManager->add($notification);
+                        echo "<br>qwe";
+                        echo "<br>".json_encode($failedProofs);
+                        echo "<br>count failed->".count($failedProofs);
+                        //failed proofs
+                        FileHio::whereIn('id', $failedProofs)->chunk(100, function ($files) {
+                            foreach ($files as $file) {
+                                echo "<br>inside";
+                                DB::table('challenges')->where('challenges.id', '=', $file->challenge_id)->where('challenges.challenge_lvl_up_id', '!=', '0')
+                                    ->join('challenge_levelup', 'challenges.challenge_lvl_up_id', '=', 'challenge_levelup.id')
+                                    ->join('category_level', function($join) use ($file)
+                                    {
+                                        $join->on('category_level.user_id', '=',  DB::raw("'".$file->user_id."'"));
+                                        $join->on('category_level.category_id','=', 'challenge_levelup.category_id');
+                                    })->chunk(100, function($data) {
+
+                                        foreach ($data as $db) {
+                                            $catLevel = CategoryLevel::where('category_id', '=', $db->category_id)
+                                                ->where('user_id', '=', $db->user_id)->first();
+                                            $catLevel->addFailed($db->group_challenge);
+                                            $catLevel->save();
+                                        }
+                                });
+                            }
+                        });
+                        echo "<br>qwe1111";
+
+
+                        //se a prova pertence a um desafio de lvl up, entao vai actualizar os inprogress e os completed
+                        FileHio::whereIn('id', $sonChallengesIds)->chunk(100, function ($files) {
+                            foreach ($files as $file) {
+
+                                DB::table('challenges')->where('challenges.id', '=', $file->challenge_id)->where('challenges.challenge_lvl_up_id', '!=', '0')
+                                    ->join('challenge_levelup', 'challenges.challenge_lvl_up_id', '=', 'challenge_levelup.id')
+                                    ->join('category_level', function($join) use ($file)
+                                    {
+                                        $join->on('category_level.user_id', '=',  DB::raw("'".$file->user_id."'"));
+                                        $join->on('category_level.category_id','=', 'challenge_levelup.category_id');
+                                    })->chunk(100, function($data) {
+                                        // Process the records...
+                                        echo "data:".json_encode($data);
+                                        //[{"id":1,"uuid":"ee5249c7-58fd-4cc1-bcc0-de70edecf609",
+//                                        "title":"Leg press 40kg","public":1,"description":"Leg press 40kg 3 reps",
+//                                        "reward":"","penalty":"","deadLine":"2017-05-18 14:47:18",
+//                                        "created_at":"2017-05-20 12:47:32","updated_at":"2017-05-20 12:47:32","closed":1,"creator_id":2,
+//                                        "judged":0,"reminded":0,"rank":0,"secret":0,"category_id":1,"challenge_lvl_up_id":1,
+//                                        "sub_title":"3 reps","level":0,"difficulty":0,"group_challenge":0,"user_id":2,
+//                                        "deadLineLvl":"2017-05-27 12:47:32","inProgress":"0","completedGroups":""}]
+                                        foreach ($data as $db) {
+
+                                            //'category_id','user_id',  'level', 'deadLineLvl', 'inProgress', 'completedGroups'
+                                            $catLevel = CategoryLevel::where('category_id', '=', $db->category_id)
+                                                ->where('user_id', '=', $db->user_id)->first();
+                                            $catLevel->addCompleted($db->group_challenge);
+                                            $catLevel->save();
+
+
+                                            //'title','sub_title', 'category_id', 'level', 'difficulty', 'group_challenge'
+                                            $count = ChallengeLevelUp::where('category_id', '=', $db->category_id)
+                                                ->where('level', '=', $db->level)->groupBy('group_challenge')->count();
+
+
+                                            echo "<br>getCountCompleted:".$catLevel->getCountCompleted();
+                                            echo "<br>count".$count;
+                                            if($catLevel->getCountCompleted() == $count){
+                                                $catLevel->level = $catLevel->level+1;
+                                                $catLevel->inProgress = "";
+                                                $catLevel->completedGroups = "";
+                                                $catLevel->failedGroups = "";
+                                                $catLevel->deadLineLvl = null;
+                                                $catLevel->save();
+                                            }
+                                        }
+                                    });
+                            }
+                        });
+
+                        array_push($challengesIds, $challenge->id);
+
+                        $users = DB::table('users')
+                            ->whereIn('id', function ($query) use ($sonChallengesIds) {
+                                $query->from('files')
+                                    ->whereIn('id', $sonChallengesIds)
+                                    ->select('files.user_id')
+                                    ->groupBy('files.user_id');
+                            })
+                            ->get();
+
+                        foreach ($users as $usertmp) {
+                            $user = User::find($usertmp->id);
+                            $achievements = $user->achievements;
+                            if ($achievements == NULL) {
+                                $achievements = array('totalCompleted' => 1);
+                            } else {
+                                $achievements = json_decode($achievements, true);
+                                if (!array_key_exists('totalCompleted', $achievements)) {
+                                    $achievements['totalCompleted'] = 1;
+                                } else {
+                                    $achievements['totalCompleted'] = $achievements['totalCompleted'] + 1;
+                                }
+                            }
+                            $user->achievements = json_encode($achievements);
+                            $user->xp = $user->xp + 100;
+                            $user->save();
+
+                            $notificationManager = new NotificationManager();
+                            $notification = new LikedChallengeNotification(['recipient_id' => $user->id, 'sender_id' => $user->id, 'unread' => 1,
+                                'type' => Notification::TYPE_XP, 'parameters' => $challenge->title, 'reference_id' => $challenge->uuid]);
+                            $notificationManager->add($notification);
+
+                        }
                     }
                 }
-            }
-        });
+            });
+            echo "challengesIds:".json_encode($challengesIds);
+            Challenge::whereIn('id', $challengesIds)
+                ->update([
+                    'judged' => true
+                ]);
 
 
-        Challenge::where('closed', '=', 0)->chunk(100, function ($ongoingChallenges) use ($now) {
-            foreach ($ongoingChallenges as $challenge) {
-                //
-                $deadLine = new DateTime($challenge->deadLine);
-                $isValid = $now < $deadLine;
+            Challenge::where('closed', '=', 0)->chunk(100, function ($ongoingChallenges) use ($now) {
+                foreach ($ongoingChallenges as $challenge) {
+                    //
+                    $deadLine = new DateTime($challenge->deadLine);
+                    $isValid = $now < $deadLine;
 
-                if (!$isValid) {
-                    //we end challenge
-                    $challenge->closed = true;
-                    $challenge->save();
+                    if (!$isValid) {
+                        //we end challenge
+                        $challenge->closed = true;
+                        $challenge->save();
+                    }
                 }
-            }
-        });
+            });
 
-
-
+        }catch (\Exception $ex){
+            Log::info('Exception catch');
+            Log::info('Exception '. $ex->getMessage());
+        }
         return "ok";
     }
 
@@ -1327,68 +1422,8 @@ class HomeController extends Controller
 
     public function testemail()
     {
-        $email = "joaosampaio30@gmail.com";
-//        $link = "#";
-//        $suc = Mail::queueOn('emails','mail.emailSignUpBrand', ['name' => "Joao", 'email' => $email], function ($m) use ($email, $link) {
-//            $m->from('noreply@hiolegends.com');
-//
-//            $m->to($email)->subject('HIO - Welcome to HIO');
-//        });
-
-
-
-
-//        print("<pre>");
-//        $xportlist = stream_get_transports();
-//        print_r($xportlist);
-//        return;
-
-
-
-
-//        $challenge = Challenge::find(64);
-        $challenge = Challenge::find(153);
-        $date = $challenge->deadLine;
-        $createDate = new DateTime($date);
-        $deadline = $createDate->format('Y-m-d');
-        $nameCreator = "nao interessa";
-
-
-        $array = $challenge->toArray();
-
-
-//        $suc =Mail::send( 'mail.emailChallenge', ['array' => $array, 'email' => $email,
-//            'nameCreator' => $nameCreator, 'nameUser' => '', 'deadline' => $deadline],
-//            function ($m) use ( $array, $nameCreator, $email, $deadline) {
-//                $m->from('hio@hiolegends.com', 'HIO - Challenge');
-//
-//                $m->to($email)->subject("$nameCreator challenged you! - " . $array['title']);
-//            });
-
-        Mail::queueOn('emails',  'mail.emailChallenge', ['array' => $array, 'email' => $email,
-                'nameCreator' => $nameCreator, 'nameUser' => '', 'deadline' => $deadline],
-            function ($m) use ( $array, $nameCreator, $email, $deadline) {
-                $m->from('hio@hiolegends.com', 'HIO - Challenge');
-
-                $m->to($email)->subject("$nameCreator challenged you! - " . $array['title']);
-            });
-
-
-//
-//        foreach ($emails as $email) {
-//            Mail::queueOn('emails', 'mail.emailChallenge', ['array' => $array, 'email' => $email,
-//                    'nameCreator' => $nameCreator, 'total' => $total, 'nameUser' => '', 'deadline' => $deadline],
-//                function ($m) use ($total, $array, $nameCreator, $email, $deadline) {
-//                    $m->from('hio@hiolegends.com', 'HIO - Challenge');
-//
-//                    $m->to($email)->subject("$nameCreator challenged you! - " . $array['title']);
-//                });
-
-
-
-
-
-//        echo $suc;
+        $completed = multiexplode(array(","),"0");
+       echo "c->".count($completed);
 
     }
 

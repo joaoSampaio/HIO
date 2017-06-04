@@ -369,7 +369,7 @@ padding: 50px 20px;
 
                     <div class="intro-lead-in"  style="    margin-top: 25px;">
                         <div>
-                            @if( !$challenge->closed && $isValid && !$participating)
+                            @if( !$challenge->closed && $isValid && !$participating && $challenge->challenge_lvl_up_id == 0)
                                 <button id="join" class="btn btn-xl btn-header" style="margin-bottom: 25px" >Accept challenge</button>
                             @endif
                             <div class="col-md-12" style="    margin-bottom: 25px;">
