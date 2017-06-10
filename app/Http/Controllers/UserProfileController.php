@@ -693,9 +693,9 @@ class UserProfileController extends Controller
                     $canRetry = true;
                 }
 
-
-
-
+            }else{
+                //ainda não está criado o lvlup
+                $canRetry = true;
             }
             $levelUpChallenges = ChallengeLevelUp::where('category_id',Auth::User()->selected_category_id)
                 ->where('level',$userLevelCategory)->orderBy('group_challenge', 'asc')->get();
