@@ -10,6 +10,7 @@ use App\Model\FileHio;
 use Carbon\Carbon;
 use Auth;
 //use Illuminate\Support\Facades\Auth;
+use DateTime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -647,8 +648,9 @@ class UserProfileController extends Controller
         $selectedProfileCategory = null;
         $levelUpChallenges = null;
         $userLevelCategory = 0;
-        $deadLine = null;
         $categoryLevel = null;
+        $hasFailed = false;
+        $canRetry = false;
 
         if(Auth::User()->selected_category_id > 0){
             $selectedProfileCategory = DB::table('challenge_category')->find(Auth::User()->selected_category_id);
@@ -658,24 +660,56 @@ class UserProfileController extends Controller
                 $deadLine = $categoryLevel->deadLineLvl;
 
 
+                //se o deadline exceder em 37 horas a data actual e não tiver completado todos os desafios, então pode ser fechado
+                if($deadLine > 0 ){
+                    $deadLine = Carbon::parse($deadLine);
+                    $now = new DateTime();
+
+                    //pode voltar a tentar fazer o desafio
+                    $isValid = $now < $deadLine;
+                    if ($isValid ||  $categoryLevel->deadLineLvl == 0) {
+                        $canRetry = true;
+                    }
+
+                    //add hour 37 em vez de 36 pelo sim pelo nao
+                    $deadLine = $deadLine->addHours(36);
+
+                    $isValid = $now < $deadLine;
+                    if (!$isValid) {
+
+
+                        //'title','sub_title', 'category_id', 'level', 'difficulty', 'group_challenge'
+                        $groups = ChallengeLevelUp::where('category_id', '=', $categoryLevel->category_id)
+                            ->where('level', '=', $categoryLevel->level)->groupBy('group_challenge')->get();
+
+                        echo "<br>getCountCompleted:".$categoryLevel->getCountCompleted();
+                        echo "<br>count".count($groups);
+                        if($categoryLevel->getCountCompleted() < count($groups)){
+                            $hasFailed = true;
+                        }
+                    }
+                }else{
+                    //o deadline está a 0000 pode começar de novo
+                    $canRetry = true;
+                }
+
+
+
 
             }
             $levelUpChallenges = ChallengeLevelUp::where('category_id',Auth::User()->selected_category_id)
                 ->where('level',$userLevelCategory)->orderBy('group_challenge', 'asc')->get();
 
-
-
             $levelUpChallenges = new ChallengeLevelUpGroup($levelUpChallenges);
-            //return json_encode($list);
-
-//            echo json_encode($levelUpChallenges);
         }
 
         return view('levelup')
             ->with('levelUpChallenges', $levelUpChallenges)
             ->with('selectedProfileCategory', $selectedProfileCategory)
             ->with('level', $userLevelCategory)
-            ->with('categoryLevel', $categoryLevel);
+            ->with('categoryLevel', $categoryLevel)
+            ->with('hasFailed', $hasFailed)
+            ->with('canRetry', $canRetry);
     }
 
 
@@ -688,6 +722,23 @@ class UserProfileController extends Controller
         return redirect()->action('UserProfileController@userProfile', 'me');
     }
 
+
+    public function resetLvlUp(Request $request){
+
+        if(Auth::User()->selected_category_id > 0) {
+            $selectedProfileCategory = DB::table('challenge_category')->find(Auth::User()->selected_category_id);
+
+            if ($categoryLevel = CategoryLevel::where('user_id', Auth::User()->id)->where('category_id', $selectedProfileCategory->id)->first()) {
+                $categoryLevel->inProgress = "";
+                $categoryLevel->completedGroups = "";
+                $categoryLevel->failedGroups = "";
+                $categoryLevel->deadLineLvl = null;
+                $categoryLevel->save();
+            }
+
+        }
+        return redirect()->action('UserProfileController@showLvlUp');
+    }
 
 
     public function createCategoryChallenge(Request $request){

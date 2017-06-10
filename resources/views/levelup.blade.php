@@ -348,7 +348,7 @@
 
                             <h3 class="challenge-subtitle">Once you accept one challenge you have one week to complete all challenges to level up.</h3>
 
-                            <div class="col-sm-12 col-md-12">
+                            <div class="col-sm-12 col-md-12" style="{{!$canRetry? "display:none;" : ""}}">
                                 <div id="clockdiv">
                                   <div>
                                     <span class="days">7</span>
@@ -369,8 +369,12 @@
                                   </div>
                                 </div>
                                </div>
+                            </div>
 
-                        </div>
+                            @if(!$canRetry)
+
+                                <h3  class="challenge-subtitle" style="margin-top: 30px">Your LVL UP will be decided after the 36 hours voting period.</h3>
+                            @endif
 
                     </div>
                 </div>
@@ -435,6 +439,15 @@
                 <section  >
                     <div class="container" >
 
+                        @if($hasFailed)
+                            <div class="col-sm-12 col-xs-12 col-md-8 col-md-offset-2" style="text-align: center;margin-bottom: 50px">
+                                {!! Form::open(array('action' => array('UserProfileController@resetLvlUp'))) !!}
+                                <button type="submit" class="btn btn-accept btn-accept-lvl">Try Again</button>
+                                </form>
+                            </div>
+
+                        @endif
+
                         <div class="col-sm-12 col-xs-12 col-md-8 col-md-offset-2" style="text-align: center;">
 
                             <div class="col-sm-4 col-xs-12 col-lg-4 small-margin" >Choose Difficulty</div>
@@ -480,8 +493,14 @@
                                         @elseif(array_key_exists($challenge->group_challenge, $completedGroups))
                                             <span><a href="/challenge/{{$completedGroups[$challenge->group_challenge]}}" class="portfolio-link" title="{{$challenge->title}}">Completed</a></span>
 
-                                        @elseif(array_key_exists($challenge->group_challenge, $failedGroups))
+                                        @elseif(array_key_exists($challenge->group_challenge, $failedGroups) && $canRetry)
                                             <button class="btn btn-accept btn-accept-lvl" href="#" data-id="{{$challenge->id}}">Failed Retry?</button>
+                                        @elseif(array_key_exists($challenge->group_challenge, $failedGroups) && !$canRetry)
+                                        {{--nao posaso fazer retry--}}
+                                            <span><a href="/challenge/{{$failedGroups[$challenge->group_challenge]}}" class="portfolio-link" title="{{$challenge->title}}">Failed</a></span>
+                                        @elseif(!$canRetry)
+                                        {{--ja acabou o deadline nao pode aceitar--}}
+                                            <span>deadline acabou</span>
                                         @else
                                             <button class="btn btn-accept btn-accept-lvl" href="#" data-id="{{$challenge->id}}">Accept</button>
                                         @endif

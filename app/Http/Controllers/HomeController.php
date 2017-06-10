@@ -922,7 +922,10 @@ class HomeController extends Controller
     {
         try {
             $now = new DateTime();
-            Log::info('end_approve_challenge called nova versao - 23/04');
+            Log::info('end_approve_challenge called nova versao - 04/06/2017');
+
+
+
             $challengesIds = array();
             Challenge::where('judged', '=', 0)->chunk(100, function ($challenges) use ($now, &$challengesIds) {
                 foreach ($challenges as $challenge) {
@@ -970,6 +973,64 @@ class HomeController extends Controller
                             ]);
 
 
+                        //se a prova pertence a um desafio de lvl up, entao vai actualizar os inprogress e os completed
+                        FileHio::whereIn('id', $sonChallengesIds)->chunk(100, function ($files) {
+                            foreach ($files as $file) {
+
+                                DB::table('challenges')->where('challenges.id', '=', $file->challenge_id)->where('challenges.challenge_lvl_up_id', '!=', '0')
+                                    ->join('challenge_levelup', 'challenges.challenge_lvl_up_id', '=', 'challenge_levelup.id')
+                                    ->join('category_level', function($join) use ($file)
+                                    {
+                                        $join->on('category_level.user_id', '=',  DB::raw("'".$file->user_id."'"));
+                                        $join->on('category_level.category_id','=', 'challenge_levelup.category_id');
+                                    })->chunk(100, function($data) {
+                                        // Process the records...
+                                        echo "data:".json_encode($data);
+                                        //[{"id":1,"uuid":"ee5249c7-58fd-4cc1-bcc0-de70edecf609",
+//                                        "title":"Leg press 40kg","public":1,"description":"Leg press 40kg 3 reps",
+//                                        "reward":"","penalty":"","deadLine":"2017-05-18 14:47:18",
+//                                        "created_at":"2017-05-20 12:47:32","updated_at":"2017-05-20 12:47:32","closed":1,"creator_id":2,
+//                                        "judged":0,"reminded":0,"rank":0,"secret":0,"category_id":1,"challenge_lvl_up_id":1,
+//                                        "sub_title":"3 reps","level":0,"difficulty":0,"group_challenge":0,"user_id":2,
+//                                        "deadLineLvl":"2017-05-27 12:47:32","inProgress":"0","completedGroups":""}]
+                                        foreach ($data as $db) {
+
+                                            //'category_id','user_id',  'level', 'deadLineLvl', 'inProgress', 'completedGroups'
+                                            $catLevel = CategoryLevel::where('category_id', '=', $db->category_id)
+                                                ->where('user_id', '=', $db->user_id)->first();
+                                            $catLevel->addCompleted($db->group_challenge);
+                                            $catLevel->save();
+
+
+                                            //'title','sub_title', 'category_id', 'level', 'difficulty', 'group_challenge'
+                                            $groups = ChallengeLevelUp::where('category_id', '=', $db->category_id)
+                                                ->where('level', '=', $db->level)->groupBy('group_challenge')->get();
+
+                                            Log::info('getCountCompleted:'.$catLevel->getCountCompleted());
+                                            Log::info('ChallengeLevelUp total groups count:'.count($groups));
+                                            echo "<br>getCountCompleted:".$catLevel->getCountCompleted();
+                                            echo "<br>count".count($groups);
+                                            if($catLevel->getCountCompleted() == count($groups)){
+                                                $catLevel->level = $catLevel->level+1;
+                                                $catLevel->inProgress = "";
+                                                $catLevel->completedGroups = "";
+                                                $catLevel->failedGroups = "";
+                                                $catLevel->deadLineLvl = null;
+                                                $catLevel->save();
+                                            }
+                                        }
+                                    });
+                            }
+                        });
+
+                        array_push($challengesIds, $challenge->id);
+
+
+
+
+
+                        //
+                        //Check failed proofs after successful files
                         //check if challenge is level up and has any proofs
                         $numProofs = DB::table('files')->where('files.challenge_id', $challenge->id)->count();
                         echo "<br>numProofs->".$numProofs;
@@ -1004,62 +1065,16 @@ class HomeController extends Controller
                                             $catLevel->addFailed($db->group_challenge);
                                             $catLevel->save();
                                         }
-                                });
-                            }
-                        });
-                        echo "<br>qwe1111";
-
-
-                        //se a prova pertence a um desafio de lvl up, entao vai actualizar os inprogress e os completed
-                        FileHio::whereIn('id', $sonChallengesIds)->chunk(100, function ($files) {
-                            foreach ($files as $file) {
-
-                                DB::table('challenges')->where('challenges.id', '=', $file->challenge_id)->where('challenges.challenge_lvl_up_id', '!=', '0')
-                                    ->join('challenge_levelup', 'challenges.challenge_lvl_up_id', '=', 'challenge_levelup.id')
-                                    ->join('category_level', function($join) use ($file)
-                                    {
-                                        $join->on('category_level.user_id', '=',  DB::raw("'".$file->user_id."'"));
-                                        $join->on('category_level.category_id','=', 'challenge_levelup.category_id');
-                                    })->chunk(100, function($data) {
-                                        // Process the records...
-                                        echo "data:".json_encode($data);
-                                        //[{"id":1,"uuid":"ee5249c7-58fd-4cc1-bcc0-de70edecf609",
-//                                        "title":"Leg press 40kg","public":1,"description":"Leg press 40kg 3 reps",
-//                                        "reward":"","penalty":"","deadLine":"2017-05-18 14:47:18",
-//                                        "created_at":"2017-05-20 12:47:32","updated_at":"2017-05-20 12:47:32","closed":1,"creator_id":2,
-//                                        "judged":0,"reminded":0,"rank":0,"secret":0,"category_id":1,"challenge_lvl_up_id":1,
-//                                        "sub_title":"3 reps","level":0,"difficulty":0,"group_challenge":0,"user_id":2,
-//                                        "deadLineLvl":"2017-05-27 12:47:32","inProgress":"0","completedGroups":""}]
-                                        foreach ($data as $db) {
-
-                                            //'category_id','user_id',  'level', 'deadLineLvl', 'inProgress', 'completedGroups'
-                                            $catLevel = CategoryLevel::where('category_id', '=', $db->category_id)
-                                                ->where('user_id', '=', $db->user_id)->first();
-                                            $catLevel->addCompleted($db->group_challenge);
-                                            $catLevel->save();
-
-
-                                            //'title','sub_title', 'category_id', 'level', 'difficulty', 'group_challenge'
-                                            $count = ChallengeLevelUp::where('category_id', '=', $db->category_id)
-                                                ->where('level', '=', $db->level)->groupBy('group_challenge')->count();
-
-
-                                            echo "<br>getCountCompleted:".$catLevel->getCountCompleted();
-                                            echo "<br>count".$count;
-                                            if($catLevel->getCountCompleted() == $count){
-                                                $catLevel->level = $catLevel->level+1;
-                                                $catLevel->inProgress = "";
-                                                $catLevel->completedGroups = "";
-                                                $catLevel->failedGroups = "";
-                                                $catLevel->deadLineLvl = null;
-                                                $catLevel->save();
-                                            }
-                                        }
                                     });
                             }
                         });
 
-                        array_push($challengesIds, $challenge->id);
+
+
+
+
+
+
 
                         $users = DB::table('users')
                             ->whereIn('id', function ($query) use ($sonChallengesIds) {

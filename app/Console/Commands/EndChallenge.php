@@ -93,46 +93,6 @@ class EndChallenge extends Command
                             ]);
 
 
-                        //check if challenge is level up and has any proofs
-                        $numProofs = DB::table('files')->where('files.challenge_id', $challenge->id)->count();
-                        echo "<br>numProofs->".$numProofs;
-                        if($numProofs == 0){
-                            $catLevel = CategoryLevel::where('category_id', '=', $challenge->category_id)
-                                ->where('user_id', '=', $challenge->creator_id)->first();
-
-                            //get the ChallengeLevelUp by the id stored in the challenge
-                            if($challengeLevelUp = ChallengeLevelUp::find($challenge->challenge_lvl_up_id)){
-                                $catLevel->addFailed($challengeLevelUp->group_challenge);
-                                $catLevel->save();
-                            }
-                        }
-                        echo "<br>qwe";
-                        echo "<br>".json_encode($failedProofs);
-                        echo "<br>count failed->".count($failedProofs);
-                        //failed proofs
-                        FileHio::whereIn('id', $failedProofs)->chunk(100, function ($files) {
-                            foreach ($files as $file) {
-                                echo "<br>inside";
-                                DB::table('challenges')->where('challenges.id', '=', $file->challenge_id)->where('challenges.challenge_lvl_up_id', '!=', '0')
-                                    ->join('challenge_levelup', 'challenges.challenge_lvl_up_id', '=', 'challenge_levelup.id')
-                                    ->join('category_level', function($join) use ($file)
-                                    {
-                                        $join->on('category_level.user_id', '=',  DB::raw("'".$file->user_id."'"));
-                                        $join->on('category_level.category_id','=', 'challenge_levelup.category_id');
-                                    })->chunk(100, function($data) {
-
-                                        foreach ($data as $db) {
-                                            $catLevel = CategoryLevel::where('category_id', '=', $db->category_id)
-                                                ->where('user_id', '=', $db->user_id)->first();
-                                            $catLevel->addFailed($db->group_challenge);
-                                            $catLevel->save();
-                                        }
-                                    });
-                            }
-                        });
-                        echo "<br>qwe1111";
-
-
                         //se a prova pertence a um desafio de lvl up, entao vai actualizar os inprogress e os completed
                         FileHio::whereIn('id', $sonChallengesIds)->chunk(100, function ($files) {
                             foreach ($files as $file) {
@@ -184,6 +144,57 @@ class EndChallenge extends Command
                         });
 
                         array_push($challengesIds, $challenge->id);
+
+
+
+
+
+                        //
+                        //Check failed proofs after successful files
+                        //check if challenge is level up and has any proofs
+                        $numProofs = DB::table('files')->where('files.challenge_id', $challenge->id)->count();
+                        echo "<br>numProofs->".$numProofs;
+                        if($numProofs == 0){
+                            $catLevel = CategoryLevel::where('category_id', '=', $challenge->category_id)
+                                ->where('user_id', '=', $challenge->creator_id)->first();
+
+                            //get the ChallengeLevelUp by the id stored in the challenge
+                            if($challengeLevelUp = ChallengeLevelUp::find($challenge->challenge_lvl_up_id)){
+                                $catLevel->addFailed($challengeLevelUp->group_challenge);
+                                $catLevel->save();
+                            }
+                        }
+                        echo "<br>qwe";
+                        echo "<br>".json_encode($failedProofs);
+                        echo "<br>count failed->".count($failedProofs);
+                        //failed proofs
+                        FileHio::whereIn('id', $failedProofs)->chunk(100, function ($files) {
+                            foreach ($files as $file) {
+                                echo "<br>inside";
+                                DB::table('challenges')->where('challenges.id', '=', $file->challenge_id)->where('challenges.challenge_lvl_up_id', '!=', '0')
+                                    ->join('challenge_levelup', 'challenges.challenge_lvl_up_id', '=', 'challenge_levelup.id')
+                                    ->join('category_level', function($join) use ($file)
+                                    {
+                                        $join->on('category_level.user_id', '=',  DB::raw("'".$file->user_id."'"));
+                                        $join->on('category_level.category_id','=', 'challenge_levelup.category_id');
+                                    })->chunk(100, function($data) {
+
+                                        foreach ($data as $db) {
+                                            $catLevel = CategoryLevel::where('category_id', '=', $db->category_id)
+                                                ->where('user_id', '=', $db->user_id)->first();
+                                            $catLevel->addFailed($db->group_challenge);
+                                            $catLevel->save();
+                                        }
+                                    });
+                            }
+                        });
+
+
+
+
+
+
+
 
                         $users = DB::table('users')
                             ->whereIn('id', function ($query) use ($sonChallengesIds) {
